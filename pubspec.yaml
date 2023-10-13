@@ -1,0 +1,86 @@
+name: ics
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  sdk: '>=2.19.0 <3.0.0'
+
+dependencies: 
+  # CACHED IMAGE
+  cached_network_image: ^3.2.3
+
+  # FONT SIZE, WIDGETS HEIGHT AND WIDTH
+  sizer: ^2.0.15
+
+  # GetCLi
+  get: 4.6.5
+  # graphql flutter (API)
+  graphql_flutter: ^5.1.2
+
+  # shared_preferences (local storage)
+  shared_preferences: ^2.2.0
+ # for app icon
+  flutter_launcher_icons: ^0.13.1
+ # for notification 
+  flutter_local_notifications: ^15.1.0+1
+  # for permission
+  permission_handler: ^10.4.3
+  # for location 
+
+  #FOR UTIL
+  logger:
+  flutter_svg: ^1.1.6
+  #FOR On bording
+  smooth_page_indicator: ^1.1.0
+
+  cupertino_icons: ^1.0.2
+  #For toast message
+  bot_toast: ^4.0.4
+
+
+
+
+
+  
+dev_dependencies:
+  flutter_lints: 2.0.2
+  build_runner:
+  flutter_gen_runner:
+  #dart run build_runner build
+  flutter_test:
+    sdk: flutter
+
+
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logos/ics.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  adaptive_icon_background: "#ffffff"
+  remove_alpha_ios: true
+  background_color_ios: "#ffffff"
+
+
+
+
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/logos/
+    - assets/icons/
+  fonts:
+#jost
+    - family: Jost
+      fonts:
+        - asset: assets/fonts/jost/Jost-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/jost/Jost-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/jost/Jost-Regular.ttf
+          weight: 400
+
+
