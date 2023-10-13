@@ -1,23 +1,43 @@
 import 'package:get/get.dart';
+import 'package:ics/app/common/app_toasts.dart';
+import 'package:ics/app/config/theme/app_assets.dart';
+import 'package:ics/app/routes/app_pages.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SplashController extends GetxController {
-  //TODO: Implement SplashController
+  final String splasehimage = AppAssets.splasehimage2;
 
-  final count = 0.obs;
   @override
   void onInit() {
+    waitAndNavigate();
+
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  waitAndNavigate() async {
+    bool hasShownToast = false;
+
+    while (true) {
+      await Future.delayed(const Duration(seconds: 1));
+
+      final notificationPermissionStatus =
+          await requestNotificationPermission();
+
+      if (notificationPermissionStatus == PermissionStatus.granted) {
+        Get.offAllNamed(Routes.ON_BORDING);
+        break;
+      } else {
+        if (!hasShownToast) {
+          AppToasts.showError("Please Enable Permissions");
+          await openAppSettings();
+          hasShownToast = true;
+        }
+      }
+    }
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  Future<PermissionStatus> requestNotificationPermission() async {
+    final status = await Permission.notification.request();
+    return status;
   }
-
-  void increment() => count.value++;
 }

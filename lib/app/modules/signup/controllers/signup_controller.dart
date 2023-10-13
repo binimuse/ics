@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class SpalshController extends GetxController {
-  //TODO: Implement SpalshController
+class SignupController extends GetxController {
+  //TODO: Implement SignupController
 
   final count = 0.obs;
   @override
