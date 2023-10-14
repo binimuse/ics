@@ -7,6 +7,7 @@ import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/signup/views/widget/terms_view.dart';
 import 'package:ics/app/routes/app_pages.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -180,7 +181,7 @@ class OnBordingView extends GetView<OnBordingController> {
           ),
           GestureDetector(
             onTap: () {
-              //  Get.to(TermsView());
+              Get.to(TermsView());
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

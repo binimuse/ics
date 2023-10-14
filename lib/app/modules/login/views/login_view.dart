@@ -264,6 +264,7 @@ class LoginView extends GetView<LoginController> {
             FocusScope.of(context).requestFocus(controller.passwordFocusNode);
           });
         } else {
+          Get.toNamed(Routes.HOME);
           // Handle login logic
         }
       },

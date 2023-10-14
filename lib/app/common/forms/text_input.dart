@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
@@ -48,13 +47,6 @@ class _TextInputLoginState extends State<TextInputAll> {
     if (widget.focusNode != null) {
       widget.focusNode!.addListener(_onFocusChange);
     }
-  }
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    widget.focusNode!.removeListener(_onFocusChange);
-    super.dispose();
   }
 
   void _onFocusChange() {

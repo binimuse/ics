@@ -9,6 +9,7 @@ abstract class Routes {
   static const ON_BORDING = _Paths.ON_BORDING;
   static const LOGIN = _Paths.LOGIN;
   static const SIGNUP = _Paths.SIGNUP;
+  static const EMAIL_VERIFICATION = _Paths.EMAIL_VERIFICATION;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const ON_BORDING = '/on-bording';
   static const LOGIN = '/login';
   static const SIGNUP = '/signup';
+  static const EMAIL_VERIFICATION = '/email-verification';
 }
