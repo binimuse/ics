@@ -24,7 +24,7 @@ class NewPassportView extends GetView<NewPassportController> {
         child: ListView(
           children: [
             SizedBox(
-              height: 3.h,
+              height: 1.h,
             ),
             buildName(context),
             buildAdditionalCard(),
@@ -38,7 +38,7 @@ class NewPassportView extends GetView<NewPassportController> {
 
   buildActionButtons() {
     return Padding(
-      padding: EdgeInsets.all(16.sp),
+      padding: EdgeInsets.all(8.sp),
       child: Column(
         children: [
           Obx(() => CustomNormalButton(
@@ -56,7 +56,7 @@ class NewPassportView extends GetView<NewPassportController> {
                   horizontal: AppSizes.mp_w_6,
                 ),
                 onPressed: () {
-                  //    Get.to(NewpassportForm());
+                  Get.to(MyFormBuilderStepper());
                 },
               )),
         ],
@@ -88,112 +88,107 @@ class NewPassportView extends GetView<NewPassportController> {
   }
 
   Widget buildAdditionalCard() {
-    return SizedBox(
-      height: 60.h,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-                'Please ensure that you have the following documents before proceeding.',
-                style: AppTextStyles.headlineRegular.copyWith(
-                  color: AppColors.grayDark,
-                )),
-            SizedBox(height: 2.h),
-            FutureBuilder<List<ConfirmationModel>>(
-              future: controller.fetchConfirmationModelCar(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
-                  final List<ConfirmationModel> confirmationList =
-                      snapshot.data!;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+              'Please ensure that you have the following documents before proceeding.',
+              style: AppTextStyles.headlineRegular.copyWith(
+                color: AppColors.grayDark,
+              )),
+          SizedBox(height: 2.h),
+          FutureBuilder<List<ConfirmationModel>>(
+            future: controller.fetchConfirmationModelCar(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primary,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                final List<ConfirmationModel> confirmationList = snapshot.data!;
 
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: confirmationList.length,
-                    itemBuilder: (context, index) {
-                      final confirmation = confirmationList[index];
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: confirmationList.length,
+                  itemBuilder: (context, index) {
+                    final confirmation = confirmationList[index];
 
-                      return Obx(() => Container(
-                            margin: const EdgeInsets.symmetric(vertical: 8.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
-                              border: Border.all(
-                                color: AppColors.grayLight.withOpacity(0.9),
-                                width: 1.0,
-                              ),
-                              color: !controller.isTermChecked(index)
-                                  ? Colors.transparent
-                                  : AppColors.primary.withOpacity(0.2),
+                    return Obx(() => Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                            border: Border.all(
+                              color: AppColors.grayLight.withOpacity(0.9),
+                              width: 1.0,
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SvgPicture.asset(
-                                        confirmation.image,
-                                        color: !controller.isTermChecked(index)
-                                            ? AppColors.grayLight
-                                            : AppColors.primary,
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            confirmation.name,
-                                            style: AppTextStyles.bodySmallBold
-                                                .copyWith(
-                                              color: AppColors.black,
-                                            ),
+                            color: !controller.isTermChecked(index)
+                                ? Colors.transparent
+                                : AppColors.primary.withOpacity(0.2),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SvgPicture.asset(
+                                      confirmation.image,
+                                      color: !controller.isTermChecked(index)
+                                          ? AppColors.grayLight
+                                          : AppColors.primary,
+                                    ),
+                                    SizedBox(width: 2.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          confirmation.name,
+                                          style: AppTextStyles.bodySmallBold
+                                              .copyWith(
+                                            color: AppColors.black,
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: MyCheckBox(
-                                    isInitSelected:
-                                        controller.isTermChecked(index),
-                                    checkBoxSize: CheckBoxSize.MEDIUM,
-                                    onChanged: (isChecked) {
-                                      controller.toggleTerm(index);
-                                    },
-                                    text: "",
-                                  ),
-                                )
-                              ],
-                            ),
-                          ));
-                    },
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
-          ],
-        ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: MyCheckBox(
+                                  isInitSelected:
+                                      controller.isTermChecked(index),
+                                  checkBoxSize: CheckBoxSize.MEDIUM,
+                                  onChanged: (isChecked) {
+                                    controller.toggleTerm(index);
+                                  },
+                                  text: "",
+                                ),
+                              )
+                            ],
+                          ),
+                        ));
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ],
       ),
     );
   }
