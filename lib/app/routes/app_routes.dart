@@ -10,6 +10,11 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const SIGNUP = _Paths.SIGNUP;
   static const EMAIL_VERIFICATION = _Paths.EMAIL_VERIFICATION;
+  static const MY_ORDER = _Paths.MY_ORDER;
+  static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
+  static const SETTING = _Paths.SETTING;
+  static const MAIN_PAGE = _Paths.MAIN_PAGE;
+  static const NEW_PASSPORT = _Paths.NEW_PASSPORT;
 }
 
 abstract class _Paths {
@@ -21,4 +26,9 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const SIGNUP = '/signup';
   static const EMAIL_VERIFICATION = '/email-verification';
+  static const MY_ORDER = '/my-order';
+  static const NOTIFICATIONS = '/notifications';
+  static const SETTING = '/setting';
+  static const MAIN_PAGE = '/main-page';
+  static const NEW_PASSPORT = '/new-passport';
 }

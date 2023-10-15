@@ -39,7 +39,9 @@ dependencies:
   connectivity: ^3.0.6
   flutter_bounce: ^1.1.0
   carousel_slider: ^4.2.1
-  floating_bottom_navigation_bar: ^1.5.2
+  flutter_form_builder: ^7.7.0
+  form_builder_validators: ^8.6.1
+
 
 
 

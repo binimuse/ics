@@ -354,6 +354,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/order.svg
   String get order => 'assets/icons/order.svg';
 
+  /// File path: assets/icons/origin.svg
+  String get origin => 'assets/icons/origin.svg';
+
   /// File path: assets/icons/paper.svg
   String get paper => 'assets/icons/paper.svg';
 
@@ -371,6 +374,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/paper_upload.svg
   String get paperUpload => 'assets/icons/paper_upload.svg';
+
+  /// File path: assets/icons/passport.svg
+  String get passport => 'assets/icons/passport.svg';
 
   /// File path: assets/icons/pay.svg
   String get pay => 'assets/icons/pay.svg';
@@ -740,12 +746,14 @@ class $AssetsIconsGen {
         on,
         one,
         order,
+        origin,
         paper,
         paperDownload,
         paperFail,
         paperNegative,
         paperPlus,
         paperUpload,
+        passport,
         pay,
         pin,
         plus,
@@ -833,20 +841,43 @@ class $AssetsIconsGen {
       ];
 }
 
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/onbording1.png
+  AssetGenImage get onbording1 =>
+      const AssetGenImage('assets/images/onbording1.png');
+
+  /// File path: assets/images/onbording2.png
+  AssetGenImage get onbording2 =>
+      const AssetGenImage('assets/images/onbording2.png');
+
+  /// File path: assets/images/onbording3.png
+  AssetGenImage get onbording3 =>
+      const AssetGenImage('assets/images/onbording3.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [onbording1, onbording2, onbording3];
+}
+
 class $AssetsLogosGen {
   const $AssetsLogosGen();
 
   /// File path: assets/logos/ics.png
   AssetGenImage get ics => const AssetGenImage('assets/logos/ics.png');
 
+  /// File path: assets/logos/ics_logo.png
+  AssetGenImage get icsLogo => const AssetGenImage('assets/logos/ics_logo.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [ics];
+  List<AssetGenImage> get values => [ics, icsLogo];
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLogosGen logos = $AssetsLogosGen();
 }
 

@@ -6,8 +6,18 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/main_page/bindings/main_page_binding.dart';
+import '../modules/main_page/views/main_page_view.dart';
+import '../modules/my_order/bindings/my_order_binding.dart';
+import '../modules/my_order/views/my_order_view.dart';
+import '../modules/new_passport/bindings/new_passport_binding.dart';
+import '../modules/new_passport/views/new_passport_view.dart';
+import '../modules/notifications/bindings/notifications_binding.dart';
+import '../modules/notifications/views/notifications_view.dart';
 import '../modules/on_bording/bindings/on_bording_binding.dart';
 import '../modules/on_bording/views/on_bording_view.dart';
+import '../modules/setting/bindings/setting_binding.dart';
+import '../modules/setting/views/setting_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -18,7 +28,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.MAIN_PAGE;
 
   static final routes = [
     GetPage(
@@ -50,6 +60,31 @@ class AppPages {
       name: _Paths.EMAIL_VERIFICATION,
       page: () => const EmailVerificationView(),
       binding: EmailVerificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.MY_ORDER,
+      page: () => const MyOrderView(),
+      binding: MyOrderBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATIONS,
+      page: () => const NotificationsView(),
+      binding: NotificationsBinding(),
+    ),
+    GetPage(
+      name: _Paths.SETTING,
+      page: () => const SettingView(),
+      binding: SettingBinding(),
+    ),
+    GetPage(
+      name: _Paths.MAIN_PAGE,
+      page: () => const MainPageView(),
+      binding: MainPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.NEW_PASSPORT,
+      page: () => const NewPassportView(),
+      binding: NewPassportBinding(),
     ),
   ];
 }

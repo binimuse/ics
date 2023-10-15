@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:ics/app/config/theme/app_colors.dart';
+import 'package:ics/gen/assets.gen.dart';
 
 class HomeController extends GetxController {
   //banner
@@ -11,4 +13,31 @@ class HomeController extends GetxController {
   ];
   RxInt index = 0.obs;
   RxString action = "Home".obs;
+  //for passport card
+  final List<String> svgPaths = [
+    Assets.icons.passport,
+    Assets.icons.passport,
+    Assets.icons.passport,
+    Assets.icons.origin,
+    Assets.icons.origin,
+    Assets.icons.origin,
+  ];
+
+  final List<String> titles = [
+    'New \n Passport',
+    'Renew \n Passport',
+    'Passport \n Correction',
+    'New \n Origin Id',
+    'Renew  \n Origin Id',
+    'Origin Id \n Correction',
+  ];
+
+  final List<Color> color = [
+    AppColors.success,
+    AppColors.warning,
+    AppColors.secondary,
+    AppColors.primary,
+    AppColors.accent,
+    AppColors.black,
+  ];
 }
