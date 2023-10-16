@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/app_icon_button.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/forms/check_box.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/model/confirmation_model.dart';
+import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controllers/new_passport_controller.dart';
@@ -56,7 +58,7 @@ class NewPassportView extends GetView<NewPassportController> {
                   horizontal: AppSizes.mp_w_6,
                 ),
                 onPressed: () {
-                  Get.to(MyFormBuilderStepper());
+                  Get.to(StepperWithFormExample());
                 },
               )),
         ],
@@ -65,25 +67,29 @@ class NewPassportView extends GetView<NewPassportController> {
   }
 
   buildName(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Row(
-        children: [
-          Text(
-            'New',
-            style: AppTextStyles.bodyLargeBold
-                .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
-          ),
-          SizedBox(
-            width: 1.w,
-          ),
-          Text(
-            'Passport',
-            style: AppTextStyles.bodyLargeBold.copyWith(
-                fontSize: AppSizes.font_16, color: AppColors.grayDark),
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        AppSvgButton(
+          imagePath: Assets.icons.arrowleft,
+          onPressed: () {
+            Get.back();
+          },
+          size: AppSizes.icon_size_8 * 0.7,
+        ),
+        Text(
+          'New',
+          style: AppTextStyles.bodyLargeBold
+              .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
+        ),
+        SizedBox(
+          width: 1.w,
+        ),
+        Text(
+          'Passport instruction',
+          style: AppTextStyles.bodyLargeBold
+              .copyWith(fontSize: AppSizes.font_16, color: AppColors.grayDark),
+        ),
+      ],
     );
   }
 
@@ -95,7 +101,7 @@ class NewPassportView extends GetView<NewPassportController> {
         children: [
           Text(
               'Please ensure that you have the following documents before proceeding.',
-              style: AppTextStyles.headlineRegular.copyWith(
+              style: AppTextStyles.bodySmallRegular.copyWith(
                 color: AppColors.grayDark,
               )),
           SizedBox(height: 2.h),

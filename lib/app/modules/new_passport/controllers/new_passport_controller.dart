@@ -1,6 +1,7 @@
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:ics/gen/assets.gen.dart';
-
+import 'package:flutter/material.dart';
 import '../model/confirmation_model.dart';
 
 class NewPassportController extends GetxController {
@@ -49,4 +50,32 @@ class NewPassportController extends GetxController {
     }
     return true;
   }
+
+  //form
+  final TextEditingController addressController = TextEditingController();
+  int currentStep = 0;
+
+  List<List<FormBuilderFieldOption>> stepOptions = [
+    [
+      FormBuilderFieldOption(value: 'Option 1'),
+      FormBuilderFieldOption(value: 'Option 2'),
+      FormBuilderFieldOption(value: 'Option 3'),
+    ],
+    [
+      FormBuilderFieldOption(value: 'Option A'),
+      FormBuilderFieldOption(value: 'Option B'),
+      FormBuilderFieldOption(value: 'Option C'),
+    ],
+    [
+      FormBuilderFieldOption(value: 'Option X'),
+      FormBuilderFieldOption(value: 'Option Y'),
+      FormBuilderFieldOption(value: 'Option Z'),
+    ],
+  ];
+
+  List<String> stepFields = [
+    'field1',
+    'field2',
+    'field3',
+  ];
 }
