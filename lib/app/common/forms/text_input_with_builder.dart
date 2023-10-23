@@ -60,6 +60,7 @@ class _TextInputLoginState extends State<TextFormBuilder> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FormBuilderTextField(
+          textInputAction: TextInputAction.next,
           cursorColor: AppColors.primary,
           controller: widget.controller,
           autofocus: widget.autoFocus ?? false,

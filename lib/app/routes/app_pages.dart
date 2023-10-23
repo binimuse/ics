@@ -16,6 +16,8 @@ import '../modules/notifications/bindings/notifications_binding.dart';
 import '../modules/notifications/views/notifications_view.dart';
 import '../modules/on_bording/bindings/on_bording_binding.dart';
 import '../modules/on_bording/views/on_bording_view.dart';
+import '../modules/renew_passport/bindings/renew_passport_binding.dart';
+import '../modules/renew_passport/views/renew_passport_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
 import '../modules/setting/views/setting_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
@@ -85,6 +87,11 @@ class AppPages {
       name: _Paths.NEW_PASSPORT,
       page: () => const NewPassportView(),
       binding: NewPassportBinding(),
+    ),
+    GetPage(
+      name: _Paths.RENEW_PASSPORT,
+      page: () => const RenewPassportView(),
+      binding: RenewPassportBinding(),
     ),
   ];
 }

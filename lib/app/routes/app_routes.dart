@@ -15,6 +15,7 @@ abstract class Routes {
   static const SETTING = _Paths.SETTING;
   static const MAIN_PAGE = _Paths.MAIN_PAGE;
   static const NEW_PASSPORT = _Paths.NEW_PASSPORT;
+  static const RENEW_PASSPORT = _Paths.RENEW_PASSPORT;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const SETTING = '/setting';
   static const MAIN_PAGE = '/main-page';
   static const NEW_PASSPORT = '/new-passport';
+  static const RENEW_PASSPORT = '/renew-passport';
 }
