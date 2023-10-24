@@ -21,12 +21,7 @@ class SettingView extends GetView<SettingController> {
               height: 3.h,
             ),
             buildName(context),
-            _buildSettingCard(
-              icon: Icons.person,
-              title: 'Language'.tr,
-              subtitle: 'Change Language'.tr,
-              ontaps: () {},
-            ),
+
             _buildSettingCard(
               icon: Icons.person,
               title: 'Account'.tr,
@@ -66,12 +61,15 @@ class SettingView extends GetView<SettingController> {
               subtitle: 'Leave a rating and review'.tr,
               ontaps: () {},
             ),
+                                      
             _buildSettingCard(
               icon: Icons.logout,
               title: 'Logout'.tr,
               subtitle: 'Sign out of your account'.tr,
               ontaps: () {},
             ),
+
+            // Add more notification cards here
             // Add more cards here
           ],
         ),

@@ -25,11 +25,11 @@ class MyOrderView extends GetView<MyOrderController> {
                 height: 3.h,
               ),
               buildName(context),
-              buildcard(context, "New Passport", "29 Jun 2023 12:00 PM",
+              buildcard(context, "ReNew Passport", "29 Jun 2023 12:00 PM",
                   "Pending", "ID: 123456789"),
-              buildcard(context, "Renew Passport", "29 Jun 2023 12:00 PM",
+              buildcard(context, "New Passport", "29 Jun 2023 12:00 PM",
                   "Delivered", "ID: 123456789"),
-              buildcard(context, "Renew Passport", "29 Jun 2023 12:00 PM",
+              buildcard(context, "New Passport", "29 Jun 2023 12:00 PM",
                   "Delivered", "ID: 123456789"),
             ],
           ),
@@ -64,7 +64,7 @@ class MyOrderView extends GetView<MyOrderController> {
   buildcard(BuildContext context, String title, String date, String status,
       String id) {
     return Container(
-      height: 25.h,
+      height: 21.h,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -115,9 +115,14 @@ class MyOrderView extends GetView<MyOrderController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text(
+                    date,
+                    style: AppTextStyles.bodySmallBold.copyWith(
+                      color: AppColors.grayDark,
+                      fontSize: AppSizes.font_10,
+                    ),
+                  ),
                   Container(
-                    height: 4.h,
-                    width: 40.w,
                     decoration: BoxDecoration(
                       color: AppColors.primaryLighter.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12.0),
@@ -125,7 +130,7 @@ class MyOrderView extends GetView<MyOrderController> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        date,
+                        id,
                         style: AppTextStyles.bodySmallBold.copyWith(
                           color: AppColors.primary,
                           fontSize: AppSizes.font_10,
@@ -134,21 +139,6 @@ class MyOrderView extends GetView<MyOrderController> {
                     ),
                   ),
                 ],
-              ),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSizes.mp_w_8 * 0.7,
-              ),
-              child: Text(
-                id,
-                style: AppTextStyles.bodySmallBold.copyWith(
-                  color: AppColors.grayDefault,
-                  fontSize: AppSizes.font_10,
-                ),
               ),
             ),
             SizedBox(

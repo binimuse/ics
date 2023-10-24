@@ -31,8 +31,8 @@ class NotificationsView extends GetView<NotificationsController> {
             ),
             _buildCard(
               icon: Icons.notifications,
-              title: 'Reminder',
-              subtitle: 'Meeting at 2:00 PM',
+              title: 'New Message',
+              subtitle: '2:00 PM',
               time: '1:45 PM',
               date: 'Sep 1, 2023',
             ),

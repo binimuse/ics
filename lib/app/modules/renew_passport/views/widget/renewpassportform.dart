@@ -14,6 +14,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
+import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:sizer/sizer.dart';
@@ -38,10 +39,6 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  void deleteVideo(int index) {
-    controller.selectedVideos.removeAt(index);
   }
 
   final SignatureController _controller = SignatureController(
@@ -71,7 +68,11 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm() async {
+    AppToasts.showSuccess("Form submitted ,\n check my order page");
+
+    await Future.delayed(const Duration(milliseconds: 400));
+    Get.offAndToNamed(Routes.MAIN_PAGE);
     if (_formKey.currentState!.saveAndValidate()) {
       // Get form data
       Map<String, dynamic> formData = _formKey.currentState!.value;
@@ -477,6 +478,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.videocam,
@@ -490,7 +492,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
                     ),
                   ),
                   SizedBox(
-                    height: 2,
+                    height: 2.h,
                   )
                 ],
               ),
@@ -575,15 +577,21 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
     final videoPlayerController = controller.videoController;
 
     return Padding(
-      padding: const EdgeInsets.only(right: 12.0),
+      padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => _showVideoInPopup(videoFile!),
+        onTap: () {
+          if (videoFile != null) {
+            _showVideoInPopup(videoFile);
+          } else {
+            _getFromCamera();
+          }
+        },
         child: Stack(
           children: [
             if (videoPlayerController != null)
               Container(
-                width: 9.h,
-                height: 13.h,
+                width: 26.w,
+                height: 15.h,
                 child: FutureBuilder(
                   future: videoPlayerController.initialize(),
                   builder: (context, snapshot) {
@@ -627,7 +635,16 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
                 right: 5,
                 child: GestureDetector(
                   onTap: () {
-                    deleteVideo(0); // Assuming only one video is displayed
+                    print(videoFile);
+                    if (videoFile != null) {
+                      setState(() {
+                        controller.selectedVideos.removeAt(0);
+                        controller.videoController = null;
+                      });
+                    } else {
+                      AppToasts.showError("No video selected");
+                    }
+                    // Assuming only one video is displayed
                   },
                   child: const Icon(
                     Icons.delete,
