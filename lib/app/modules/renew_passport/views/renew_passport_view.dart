@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -148,11 +150,10 @@ class RenewPassportView extends GetView<RenewPassportController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(16.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
                                       confirmation.image,
@@ -164,12 +165,27 @@ class RenewPassportView extends GetView<RenewPassportController> {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           confirmation.name,
                                           style: AppTextStyles.bodySmallBold
                                               .copyWith(
                                             color: AppColors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 30.h,
+                                          child: Text(
+                                            overflow: TextOverflow.fade,
+                                            maxLines: 2,
+                                            confirmation.description,
+                                            style: AppTextStyles.captionRegular
+                                                .copyWith(
+                                              color: AppColors.black,
+                                              fontSize: 10.sp,
+                                            ),
                                           ),
                                         ),
                                       ],

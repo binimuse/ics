@@ -16,22 +16,32 @@ class RenewPassportController extends GetxController {
     List<Map<String, dynamic>> data = [
       {
         "name": "Green Card",
+        "description":
+            "Green Card Description larem ipsum larem ipsum larem ipsum larem ipsum",
         "image": Assets.icons.paper,
       },
       {
         "name": "Residence ID",
+        "description":
+            "Residence ID Description larem ipsum larem ipsum larem ipsum larem ipsum",
         "image": Assets.icons.origin,
       },
       {
         "name": "Birth certificate",
+        "description":
+            "Birth certificate Description larem ipsum larem ipsum larem ipsum larem ipsum",
         "image": Assets.icons.paper,
       },
       {
         "name": "Passport",
+        "description":
+            "Passport Description larem ipsum larem ipsum larem ipsum larem ipsum",
         "image": Assets.icons.passport,
       },
       {
         "name": "Phone camera",
+        "description":
+            "Phone camera Description larem ipsum larem ipsum larem ipsum larem ipsum",
         "image": Assets.icons.camera,
       },
     ];

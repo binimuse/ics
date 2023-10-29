@@ -32,10 +32,11 @@ class HomeView extends GetView<HomeController> {
               //passport
               buildPassport(context),
 
-              buildcards(),
-              SizedBox(
-                height: 2.h,
-              ),
+              buildcardsPassport(),
+
+              buildOrgin(context),
+
+              buildOriginId(),
               //ID
               // buildOriginId(context),
               // buildcardsOrigin(),
@@ -100,21 +101,55 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  buildcards() {
+  buildcardsPassport() {
     return Container(
-      height: 80.h,
+      height: 40.h,
       child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.all(8),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
         ),
-        itemCount: 6, // Replace with the actual number of cards
+        itemCount: 4, // Replace with the actual number of cards
         itemBuilder: (BuildContext context, int index) {
           return CardWidget(
               svgPath: controller.svgPaths[index],
               title: controller.titles[index],
+              iconColor: controller.color[index],
+              onPressed: () {
+                if (index == 0) {
+                } else if (index == 1) {
+                  Get.toNamed(Routes.RENEW_PASSPORT);
+                } else if (index == 2) {
+                } else if (index == 3) {
+                } else if (index == 4) {
+                } else if (index == 5) {}
+              });
+        },
+      ),
+    );
+  }
+
+  buildOriginId() {
+    return Container(
+      height: 40.h,
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.all(8),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: 4, // Replace with the actual number of cards
+        itemBuilder: (BuildContext context, int index) {
+          return CardWidget(
+              svgPath: controller.svgPathsOrgin[index],
+              title: controller.Orgintitles[index],
               iconColor: controller.color[index],
               onPressed: () {
                 if (index == 0) {
@@ -136,9 +171,34 @@ class HomeView extends GetView<HomeController> {
       child: Row(
         children: [
           Text(
-            'Services',
+            'Passport ',
             style: AppTextStyles.bodyLargeBold
                 .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
+          ),
+          Text(
+            'Services',
+            style: AppTextStyles.bodyLargeBold.copyWith(
+                fontSize: AppSizes.font_16, color: AppColors.grayDark),
+          ),
+        ],
+      ),
+    );
+  }
+
+  buildOrgin(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Row(
+        children: [
+          Text(
+            'Orgin Id ',
+            style: AppTextStyles.bodyLargeBold
+                .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
+          ),
+          Text(
+            'Services',
+            style: AppTextStyles.bodyLargeBold.copyWith(
+                fontSize: AppSizes.font_16, color: AppColors.grayDark),
           ),
         ],
       ),

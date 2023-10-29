@@ -89,6 +89,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           IconStepper(
             activeStep: controller.currentStep,
             activeStepColor: AppColors.primary,
+            
             icons: [
               Icon(
                 Icons.person,
@@ -111,6 +112,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
                 color: AppColors.whiteOff,
               ),
             ],
+         
             onStepReached: (index) {
               setState(() {
                 controller.currentStep = index;

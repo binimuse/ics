@@ -22,7 +22,7 @@ class MyOrderView extends GetView<MyOrderController> {
           child: Column(
             children: [
               SizedBox(
-                height: 3.h,
+                height: 1.h,
               ),
               buildName(context),
               buildcard(context, "ReNew Passport", "29 Jun 2023 12:00 PM",
@@ -64,7 +64,7 @@ class MyOrderView extends GetView<MyOrderController> {
   buildcard(BuildContext context, String title, String date, String status,
       String id) {
     return Container(
-      height: 21.h,
+      height: 25.h,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
