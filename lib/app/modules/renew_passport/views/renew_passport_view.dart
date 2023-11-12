@@ -161,7 +161,7 @@ class RenewPassportView extends GetView<RenewPassportController> {
                                           ? AppColors.grayLight
                                           : AppColors.primary,
                                     ),
-                                    SizedBox(width: 2.w),
+                                    SizedBox(width: 3.w),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -176,7 +176,7 @@ class RenewPassportView extends GetView<RenewPassportController> {
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 30.h,
+                                          width: 25.h,
                                           child: Text(
                                             overflow: TextOverflow.fade,
                                             maxLines: 2,

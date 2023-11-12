@@ -29,7 +29,7 @@ class _NewsCarouselSliderState extends State<BannerCarouselSlider> {
             autoPlayAnimationDuration: const Duration(milliseconds: 500),
             viewportFraction: 1.0,
             aspectRatio: 1.0,
-            height: 28.h,
+            height: 22.h,
             onPageChanged: (index, str) {
               setState(() {
                 currentIndex = index;

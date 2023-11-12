@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -8,6 +10,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/routes/app_pages.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../gen/assets.gen.dart';
 import '../controllers/home_controller.dart';
 import 'widget/featured_news_item.dart';
 import 'widget/news_carousel_slider.dart';
@@ -22,6 +25,8 @@ class HomeView extends GetView<HomeController> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 height: 3.h,
@@ -80,21 +85,48 @@ class HomeView extends GetView<HomeController> {
 
   buildName(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
       child: Row(
         children: [
-          Text(
-            'Hello,',
-            style: AppTextStyles.bodyLargeBold
-                .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hello,',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.primary),
+              ),
+              SizedBox(
+                width: 1.w,
+              ),
+              Text(
+                'Biniyam musema',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.grayDark),
+              ),
+            ],
           ),
-          SizedBox(
-            width: 1.w,
-          ),
-          Text(
-            'Biniyam musema',
-            style: AppTextStyles.bodyLargeBold.copyWith(
-                fontSize: AppSizes.font_16, color: AppColors.grayDark),
+          Spacer(),
+          Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(15.0), // Adjust the radius as needed
+                color: AppColors.primary),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    color: AppColors.whiteOff,
+                    Assets.icons.questionmark,
+                    height: 6.w,
+                    width: 6.w,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -103,7 +135,7 @@ class HomeView extends GetView<HomeController> {
 
   buildcardsPassport() {
     return Container(
-      height: 40.h,
+      height: 30.h,
       child: GridView.builder(
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),
@@ -168,17 +200,36 @@ class HomeView extends GetView<HomeController> {
   buildPassport(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Passport ',
-            style: AppTextStyles.bodyLargeBold
-                .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
+          Row(
+            children: [
+              Text(
+                'Passport ',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.primary),
+              ),
+              Text(
+                'Services',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.grayDark),
+              ),
+            ],
           ),
-          Text(
-            'Services',
-            style: AppTextStyles.bodyLargeBold.copyWith(
-                fontSize: AppSizes.font_16, color: AppColors.grayDark),
+          SizedBox(
+            height: 1.h,
+          ),
+          SizedBox(
+            width: 80.w,
+            child: Text(
+              'Your passport is an essential document in international travel and for identification purposes.',
+              style: AppTextStyles.captionRegular.copyWith(
+                  fontSize: AppSizes.font_14, color: AppColors.grayDark),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
@@ -188,17 +239,36 @@ class HomeView extends GetView<HomeController> {
   buildOrgin(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Orgin Id ',
-            style: AppTextStyles.bodyLargeBold
-                .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
+          Row(
+            children: [
+              Text(
+                'Origin Id ',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.primary),
+              ),
+              Text(
+                'Services',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.grayDark),
+              ),
+            ],
           ),
-          Text(
-            'Services',
-            style: AppTextStyles.bodyLargeBold.copyWith(
-                fontSize: AppSizes.font_16, color: AppColors.grayDark),
+          SizedBox(
+            height: 1.h,
+          ),
+          SizedBox(
+            width: 80.w,
+            child: Text(
+              'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+              style: AppTextStyles.captionRegular.copyWith(
+                  fontSize: AppSizes.font_14, color: AppColors.grayDark),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
