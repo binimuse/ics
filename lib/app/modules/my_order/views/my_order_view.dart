@@ -64,7 +64,7 @@ class MyOrderView extends GetView<MyOrderController> {
   buildcard(BuildContext context, String title, String date, String status,
       String id) {
     return Container(
-      height: 25.h,
+      height: 20.h,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -83,12 +83,13 @@ class MyOrderView extends GetView<MyOrderController> {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IconButton(
                     icon: SvgPicture.asset(
@@ -105,83 +106,68 @@ class MyOrderView extends GetView<MyOrderController> {
                       style: AppTextStyles.bodyLargeBold.copyWith(
                         fontWeight: FontWeight.w600,
                       )),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSizes.mp_w_8 * 0.7,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    date,
-                    style: AppTextStyles.bodySmallBold.copyWith(
-                      color: AppColors.grayDark,
-                      fontSize: AppSizes.font_10,
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryLighter.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        id,
-                        style: AppTextStyles.bodySmallBold.copyWith(
-                          color: AppColors.primary,
-                          fontSize: AppSizes.font_10,
-                        ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 4.h,
+                      width: 22.w,
+                      decoration: BoxDecoration(
+                        color: status.contains("Pending")
+                            ? AppColors.warning
+                            : AppColors.success,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            status,
+                            style: AppTextStyles.bodySmallBold.copyWith(
+                              color: AppColors.whiteOff,
+                              fontSize: AppSizes.font_10,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ],
+              ),
+            ),
+            Container(
+              width: 100.w,
+              decoration: BoxDecoration(
+                color: AppColors.primaryLighter.withOpacity(0.2),
+                // borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  id,
+                  style: AppTextStyles.bodySmallBold.copyWith(
+                    color: AppColors.primary,
+                    fontSize: AppSizes.font_10,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
             SizedBox(
               height: 2.h,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSizes.mp_w_8 * 0.7,
-              ),
-              child: Container(
-                height: 4.h,
-                width: 26.w,
-                decoration: BoxDecoration(
-                  color: status.contains("Pending")
-                      ? AppColors.warning
-                      : AppColors.success,
-                  borderRadius: BorderRadius.circular(12.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  date,
+                  style: AppTextStyles.displayOneRegular.copyWith(
+                    color: AppColors.grayDark,
+                    fontSize: AppSizes.font_10,
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.circle,
-                        color: AppColors.whiteOff,
-                        size: 15,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSizes.mp_w_1 * 0.9,
-                      ),
-                      child: Text(
-                        status,
-                        style: AppTextStyles.bodySmallBold.copyWith(
-                          color: AppColors.whiteOff,
-                          fontSize: AppSizes.font_10,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ],
             ),
           ],
         ),

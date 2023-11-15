@@ -135,7 +135,7 @@ class HomeView extends GetView<HomeController> {
 
   buildcardsPassport() {
     return Container(
-      height: 30.h,
+      height: 32.h,
       child: GridView.builder(
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),

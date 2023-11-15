@@ -88,66 +88,86 @@ class MainPageView extends GetView<MainPageController> {
             ),
           ],
         ),
-        child: BottomAppBar(
-          color: Colors.transparent,
-          elevation: 0,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: AppSizes.mp_v_1, horizontal: AppSizes.mp_v_1),
-            child: Obx(() {
-              return WillPopScope(
-                onWillPop: () async {
-                  if (controller.currentPageIndex.value == 0) {
-                    // Ask the user if they want to exit the app if they are on the home page
-                    exit(0);
-                  } else {
-                    // Go back to the home page if the user presses the back button on any other page
-                    controller.changeBottomPage(0);
-                    return false;
-                  }
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    buildBottomAppBarButton(
-                      Icons.home,
-                      "Home".tr,
-                      0,
-                      context,
-                    ),
-                    SizedBox(
-                      width: AppSizes.mp_w_10,
-                    ),
-                    buildBottomAppBarButton(
-                      Icons.list_alt_outlined,
-                      "Reports".tr,
-                      1,
-                      context,
-                    ),
-                    SizedBox(
-                      width: AppSizes.mp_w_10,
-                    ),
-                    buildBottomAppBarButton(
-                      Icons.notifications,
-                      "Notifications".tr,
-                      2,
-                      context,
-                    ),
-                    SizedBox(
-                      width: AppSizes.mp_w_10,
-                    ),
-                    buildBottomAppBarButton(
-                      Icons.settings_outlined,
-                      "Setting".tr,
-                      3,
-                      context,
-                    ),
-                  ],
-                ),
-              );
-            }),
+        child: Stack(clipBehavior: Clip.none, children: [
+          BottomAppBar(
+            color: Colors.transparent,
+            elevation: 0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: AppSizes.mp_v_1, horizontal: AppSizes.mp_v_1),
+              child: Obx(() {
+                return WillPopScope(
+                  onWillPop: () async {
+                    if (controller.currentPageIndex.value == 0) {
+                      // Ask the user if they want to exit the app if they are on the home page
+                      exit(0);
+                    } else {
+                      // Go back to the home page if the user presses the back button on any other page
+                      controller.changeBottomPage(0);
+                      return false;
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buildBottomAppBarButton(
+                        Icons.home,
+                        "Home".tr,
+                        0,
+                        context,
+                      ),
+                      SizedBox(
+                        width: AppSizes.mp_w_10,
+                      ),
+                      buildBottomAppBarButton(
+                        Icons.list_alt_outlined,
+                        "Reports".tr,
+                        1,
+                        context,
+                      ),
+                      SizedBox(
+                        width: AppSizes.mp_w_10,
+                      ),
+                      buildBottomAppBarButton(
+                        Icons.notifications,
+                        "Notifications".tr,
+                        2,
+                        context,
+                      ),
+                      SizedBox(
+                        width: AppSizes.mp_w_10,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ),
           ),
-        ),
+          Positioned(
+            bottom: 40.0,
+            right: 40.0,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: AppColors.primaryDark,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes the position of the shadow
+                  ),
+                ],
+              ),
+              child: buildBottomAppBarButton(
+                Icons.settings_outlined,
+                "Setting".tr,
+                3,
+                context,
+              ),
+            ),
+          ),
+        ]),
       ),
     );
   }
