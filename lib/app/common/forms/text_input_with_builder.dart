@@ -67,7 +67,7 @@ class _TextInputLoginState extends State<TextFormBuilder> {
           style: AppTextStyles.titleBold.copyWith(
             color: AppColors.blackLight,
             fontSize:
-                checkIsPassword() ? AppSizes.font_14 * 0.9 : AppSizes.font_16,
+                checkIsPassword() ? AppSizes.font_14 * 0.9 : AppSizes.font_14,
           ),
           obscureText: checkIsPassword(),
           obscuringCharacter: '⬤',
@@ -81,10 +81,10 @@ class _TextInputLoginState extends State<TextFormBuilder> {
             ),
             labelText: _isFocused ? widget.hint : null,
             hintText: _isFocused ? null : widget.hint,
-            hintStyle:
-                AppTextStyles.titleBold.copyWith(color: AppColors.grayLighter),
-            labelStyle:
-                AppTextStyles.captionBold.copyWith(color: AppColors.grayLight),
+            hintStyle: AppTextStyles.titleBold.copyWith(
+                color: AppColors.grayLighter, fontSize: AppSizes.font_12),
+            labelStyle: AppTextStyles.captionBold.copyWith(
+                color: AppColors.grayLight, fontSize: AppSizes.font_12 * 1.1),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             suffixIconConstraints: BoxConstraints(
               maxWidth: AppSizes.icon_size_10,

@@ -88,8 +88,9 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
         children: [
           IconStepper(
             activeStep: controller.currentStep,
+            lineColor: AppColors.secondary,
+            stepColor: AppColors.grayDefault,
             activeStepColor: AppColors.primary,
-            
             icons: [
               Icon(
                 Icons.person,
@@ -112,7 +113,6 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
                 color: AppColors.whiteOff,
               ),
             ],
-         
             onStepReached: (index) {
               setState(() {
                 controller.currentStep = index;
@@ -125,18 +125,20 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
               padding: EdgeInsets.all(16.0),
               child: FormBuilder(
                 key: _formKey,
-                child: Column(
-                  children: [
-                    if (controller.currentStep == 0) buildStep1(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (controller.currentStep == 0) buildStep1(),
 
-                    if (controller.currentStep == 1) buildStep2(),
-                    if (controller.currentStep == 2) buildStep3(),
-                    if (controller.currentStep == 3) buildStep4(),
-                    if (controller.currentStep == 4) buildStep5(),
-                    // Add this line
+                      if (controller.currentStep == 1) buildStep2(),
+                      if (controller.currentStep == 2) buildStep3(),
+                      if (controller.currentStep == 3) buildStep4(),
+                      if (controller.currentStep == 4) buildStep5(),
+                      // Add this line
 
-                    // Add more form fields as needed for each step
-                  ],
+                      // Add more form fields as needed for each step
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -154,7 +156,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
                   buttoncolor: controller.areAllTermsSelected()
                       ? AppColors.primary
                       : AppColors.grayLight,
-                  borderRadius: AppSizes.radius_8,
+                  borderRadius: AppSizes.radius_16,
                   padding: EdgeInsets.symmetric(
                     vertical: AppSizes.mp_v_2,
                     horizontal: AppSizes.mp_w_6,
@@ -176,7 +178,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
                 buttoncolor: controller.currentStep == 4
                     ? AppColors.primary
                     : AppColors.grayLight,
-                borderRadius: AppSizes.radius_8,
+                borderRadius: AppSizes.radius_16,
                 padding: EdgeInsets.symmetric(
                   vertical: AppSizes.mp_v_2,
                   horizontal: AppSizes.mp_w_6,
@@ -230,7 +232,35 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
 
   buildStep1() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Step 1',
+            style: AppTextStyles.bodyLargeBold
+                .copyWith(fontSize: AppSizes.font_14, color: AppColors.primary),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+            style: AppTextStyles.bodySmallRegular.copyWith(
+                fontSize: AppSizes.font_12, color: AppColors.grayDark),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
         TextFormBuilder(
           controller: controller.firstNameController,
           hint: 'First name',
@@ -267,7 +297,35 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
 
   buildStep2() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Step 2',
+            style: AppTextStyles.bodyLargeBold
+                .copyWith(fontSize: AppSizes.font_14, color: AppColors.primary),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+            style: AppTextStyles.bodySmallRegular.copyWith(
+                fontSize: AppSizes.font_12, color: AppColors.grayDark),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
         TextFormBuilder(
           controller: controller.addressController,
           hint: 'Street details/Address line 1',
@@ -321,7 +379,35 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
 
   buildStep3() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Step 3',
+            style: AppTextStyles.bodyLargeBold
+                .copyWith(fontSize: AppSizes.font_14, color: AppColors.primary),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+            style: AppTextStyles.bodySmallRegular.copyWith(
+                fontSize: AppSizes.font_12, color: AppColors.grayDark),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
         TextFormBuilder(
           controller: controller.mobilePhoneController,
           hint: 'Mobile',
@@ -355,7 +441,35 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
 
   buildStep4() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Step 4',
+            style: AppTextStyles.bodyLargeBold
+                .copyWith(fontSize: AppSizes.font_14, color: AppColors.primary),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+            style: AppTextStyles.bodySmallRegular.copyWith(
+                fontSize: AppSizes.font_12, color: AppColors.grayDark),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
         TextFormBuilder(
           controller: controller.passportnumberController,
           hint: 'Passport number',
@@ -398,16 +512,47 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
   }
 
   buildStep5() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          GetvideoFromCamera(),
-          SizedBox(
-            height: 2.h,
-          ),
-          getSignuture(),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            SizedBox(
+              width: 80.w,
+              child: Text(
+                'Step 5',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_14, color: AppColors.primary),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            SizedBox(
+              height: 2.h,
+            ),
+            SizedBox(
+              width: 80.w,
+              child: Text(
+                'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+                style: AppTextStyles.bodySmallRegular.copyWith(
+                    fontSize: AppSizes.font_12, color: AppColors.grayDark),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            SizedBox(
+              height: 2.h,
+            ),
+
+            //
+          ],
+        ),
+        GetvideoFromCamera(),
+        SizedBox(
+          height: 2.h,
+        ),
+        getSignuture(),
+      ],
     );
   }
 
@@ -458,47 +603,33 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
         _getFromCamera();
       },
       child: Container(
+        width: 100.w,
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3), // changes the position of the shadow
-            ),
-          ],
-          border: Border.all(
-            color: Colors.black,
-            width: 1,
-          ),
+          color: AppColors.primaryLighter.withOpacity(0.3),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.videocam,
-                    color: AppColors.primary,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Take Video'.tr,
-                    style: AppTextStyles.bodySmallBold.copyWith(
-                      color: AppColors.grayDark,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  )
-                ],
+              Icon(
+                Icons.videocam,
+                color: AppColors.primary,
               ),
-              getVideo()
+              const SizedBox(width: 4),
+              Text(
+                'Take Video'.tr,
+                style: AppTextStyles.bodySmallBold.copyWith(
+                  color: AppColors.primary,
+                ),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              controller.selectedVideos.isNotEmpty ? getVideo() : SizedBox()
             ],
           ),
         ),
@@ -507,31 +638,30 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
   }
 
   getSignuture() {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
+    return Container(
+      width: 100.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.edit,
-                      color: AppColors.primary,
+              Row(
+                children: [
+                  Icon(
+                    Icons.edit,
+                    color: AppColors.primary,
+                  ),
+                  Text(
+                    'Sign here'.tr,
+                    style: AppTextStyles.bodySmallBold.copyWith(
+                      color: AppColors.grayDark,
                     ),
-                    Text(
-                      'Sign here'.tr,
-                      style: AppTextStyles.bodySmallBold.copyWith(
-                        color: AppColors.grayDark,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+              Spacer(),
               GestureDetector(
                 onTap: () {
                   _controller.clear();
@@ -543,11 +673,31 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
               ),
             ],
           ),
-          Signature(
-            controller: _controller,
-            height: 200,
-            width: 300,
-            backgroundColor: AppColors.primaryDark,
+          SizedBox(
+            height: 2.h,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.whiteOff,
+              borderRadius: BorderRadius.all(Radius.circular(90)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(3, 3), // changes the shadow position
+                ),
+              ],
+            ),
+            child: Signature(
+              controller: _controller,
+              height: 200,
+              width: 300.w,
+              backgroundColor: AppColors.grayLighter,
+            ),
+          ),
+          SizedBox(
+            height: 2.h,
           ),
         ],
       ),
