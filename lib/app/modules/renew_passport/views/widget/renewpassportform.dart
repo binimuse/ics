@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:edge_detection/edge_detection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -17,6 +18,9 @@ import 'package:ics/app/modules/renew_passport/controllers/renew_passport_contro
 import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:im_stepper/stepper.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 import 'package:signature/signature.dart';
 
@@ -32,6 +36,8 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final RenewPassportController controller =
       Get.find<RenewPassportController>();
+
+  String? _imagePath;
 
   XFile? image;
 
@@ -60,7 +66,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
               height: 1.h,
             ),
             buildName(context),
-            buildForm(),
+            buildForm(context),
             // Spacer(),
           ],
         ),
@@ -81,7 +87,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
     }
   }
 
-  buildForm() {
+  buildForm(BuildContext context) {
     return Container(
       height: 80.h,
       child: Column(
@@ -132,8 +138,8 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
 
                       if (controller.currentStep == 1) buildStep2(),
                       if (controller.currentStep == 2) buildStep3(),
-                      if (controller.currentStep == 3) buildStep4(),
-                      if (controller.currentStep == 4) buildStep5(),
+                      if (controller.currentStep == 3) buildStep4(context),
+                      if (controller.currentStep == 4) buildStep5(context),
                       // Add this line
 
                       // Add more form fields as needed for each step
@@ -439,7 +445,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
     );
   }
 
-  buildStep4() {
+  buildStep4(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -507,11 +513,97 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           autoFocus: true,
           onChanged: (value) {},
         ),
+        getImageFromCameraa(),
       ],
     );
   }
 
-  buildStep5() {
+  getImageFromCameraa() {
+    return InkWell(
+      onTap: () {
+        openImageScanner();
+      },
+      child: Container(
+        width: 100.w,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.primaryLighter.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.document_scanner,
+                color: AppColors.primary,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                'Document Scan'.tr,
+                style: AppTextStyles.bodySmallBold.copyWith(
+                  color: AppColors.primary,
+                ),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              _imagePath != null ? getImage() : SizedBox()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> openImageScanner() async {
+    bool isCameraGranted = await Permission.camera.request().isGranted;
+    if (!isCameraGranted) {
+      isCameraGranted =
+          await Permission.camera.request() == PermissionStatus.granted;
+    }
+
+    if (!isCameraGranted) {
+      // Have not permission to camera
+      return;
+    }
+
+    // Generate filepath for saving
+    String imagePath = join((await getApplicationSupportDirectory()).path,
+        "${(DateTime.now().millisecondsSinceEpoch / 1000).round()}.jpeg");
+
+    bool success = false;
+
+    try {
+      //Make sure to await the call to detectEdge.
+      success = await EdgeDetection.detectEdge(
+        imagePath,
+        canUseGallery: true,
+        androidScanTitle: 'Scanning', // use custom localizations for android
+        androidCropTitle: 'Crop',
+        androidCropBlackWhiteTitle: 'Black White',
+        androidCropReset: 'Reset',
+      );
+      print("success: $success");
+    } catch (e) {
+      print(e);
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      if (success) {
+        _imagePath = imagePath;
+      }
+    });
+  }
+
+  buildStep5(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -547,7 +639,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
             //
           ],
         ),
-        GetvideoFromCamera(),
+        GetvideoFromCamera(context),
         SizedBox(
           height: 2.h,
         ),
@@ -597,7 +689,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
     }
   }
 
-  GetvideoFromCamera() {
+  GetvideoFromCamera(BuildContext context) {
     return InkWell(
       onTap: () {
         _getFromCamera();
@@ -629,7 +721,9 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
               SizedBox(
                 height: 2.h,
               ),
-              controller.selectedVideos.isNotEmpty ? getVideo() : SizedBox()
+              controller.selectedVideos.isNotEmpty
+                  ? getVideo(context)
+                  : SizedBox()
             ],
           ),
         ),
@@ -704,7 +798,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
     );
   }
 
-  getVideo() {
+  getVideo(BuildContext context) {
     final videoFile = controller.selectedVideos.isNotEmpty
         ? controller.selectedVideos.first
         : null;
@@ -733,7 +827,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
       child: GestureDetector(
         onTap: () {
           if (videoFile != null) {
-            _showVideoInPopup(videoFile);
+            _showVideoInPopup(videoFile, context);
           } else {
             _getFromCamera();
           }
@@ -810,7 +904,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
     );
   }
 
-  void _showVideoInPopup(File videoFile) {
+  void _showVideoInPopup(File videoFile, BuildContext context) {
     final videoController = VideoPlayerController.file(videoFile);
 
     showDialog(
@@ -863,6 +957,18 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           ),
         );
       },
+    );
+  }
+
+  getImage() {
+    return Visibility(
+      visible: _imagePath != null,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.file(
+          File(_imagePath ?? ''),
+        ),
+      ),
     );
   }
 }
