@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
@@ -13,6 +13,7 @@ class PhoneNumberInput extends StatefulWidget {
   const PhoneNumberInput({
     Key? key,
     required this.hint,
+    required this.labelText,
     required this.controller,
     required this.onChanged,
     this.validator,
@@ -21,6 +22,7 @@ class PhoneNumberInput extends StatefulWidget {
   }) : super(key: key);
 
   final String hint;
+  final String labelText;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final FocusNode focusNode;
@@ -70,10 +72,14 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
           controller: widget.controller,
           textInputAction: TextInputAction.next,
           keyboardType: TextInputType.phone,
+          inputFormatters: [
+            PhoneNumberInputFormatter(
+                maxLength: 10), // Set maximum length to 10 characters
+          ],
           style: AppTextStyles.titleBold.copyWith(color: AppColors.blackLight),
           validator: widget.validator,
           decoration: InputDecoration(
-            // labelText: widget.hint,
+            labelText: widget.labelText,
             hintText: _isFocused ? null : widget.hint,
             hintStyle: AppTextStyles.titleBold.copyWith(
                 color: AppColors.grayLighter, fontSize: AppSizes.font_16),
@@ -151,6 +157,30 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
           focusNode: widget.focusNode,
         ),
       ],
+    );
+  }
+}
+
+class PhoneNumberInputFormatter extends TextInputFormatter {
+  final int maxLength;
+
+  PhoneNumberInputFormatter({required this.maxLength});
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Remove any non-digit characters from the input
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // Apply maximum length restriction
+    final limitedDigits = maxLength != null && digitsOnly.length > maxLength
+        ? digitsOnly.substring(0, maxLength)
+        : digitsOnly;
+
+    // Set the new value with the limited digits
+    return TextEditingValue(
+      text: limitedDigits,
+      selection: TextSelection.collapsed(offset: limitedDigits.length),
     );
   }
 }

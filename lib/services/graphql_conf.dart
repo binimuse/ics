@@ -6,7 +6,7 @@ import 'package:ics/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GraphQLConfiguration {
-  static const String _baseUrl = "http://159.223.227.87:8888/v1/graphql";
+  static const String _baseUrl = "http://196.189.30.108:8000/v1/graphql";
   static const String _websocketUrl = "ws://159.223.227.87:8888/v1/graphql";
   static const String xhasurarole = "user";
 
@@ -61,7 +61,7 @@ class GraphQLConfiguration {
 }
 
 class GraphQLConfigurationForauth {
-  static HttpLink httpLink = HttpLink("http://159.223.227.87:8888/v1/graphql");
+  static HttpLink httpLink = HttpLink("http://196.189.30.108:8000/v1/graphql");
 
   ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(

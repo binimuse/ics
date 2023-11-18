@@ -8,6 +8,7 @@ import 'package:ics/app/common/navigation/top_nav_back_text.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/signup/controllers/signup_controller.dart';
+import 'package:ics/app/modules/signup/views/widget/phone_varfication.dart';
 import 'package:ics/app/routes/app_pages.dart';
 
 class SignUpUserName extends StatefulWidget {
@@ -102,7 +103,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
                         ? "Next"
                         : "Enter your name",
                     onTap: () {
-                      Get.toNamed(Routes.EMAIL_VERIFICATION);
+                      Get.to(PhoneNumberVarfication());
                     },
                   ),
                   SizedBox(
