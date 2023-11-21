@@ -146,24 +146,30 @@ class MainPageView extends GetView<MainPageController> {
           Positioned(
             bottom: 40.0,
             right: 40.0,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: AppColors.primaryDark,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes the position of the shadow
-                  ),
-                ],
-              ),
-              child: buildBottomAppBarButton(
-                Icons.settings_outlined,
-                "Setting".tr,
-                3,
-                context,
+            child: GestureDetector(
+              onTap: () {
+                controller.changeBottomPage(3);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.primaryDark,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 7,
+                      offset:
+                          Offset(0, 1), // changes the position of the shadow
+                    ),
+                  ],
+                ),
+                child: buildBottomAppBarButton(
+                  Icons.settings_outlined,
+                  "Setting".tr,
+                  3,
+                  context,
+                ),
               ),
             ),
           ),
@@ -193,7 +199,9 @@ class MainPageView extends GetView<MainPageController> {
               icon,
               color: controller.currentPageIndex.value == pageIndex
                   ? AppColors.primary
-                  : AppColors.grayLight,
+                  : label == "Setting"
+                      ? AppColors.whiteOff
+                      : AppColors.grayLight,
               size: AppSizes.icon_size_8 * 0.8,
             ),
             const SizedBox(

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/logout/views/logout_view.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controllers/setting_controller.dart';
@@ -61,12 +62,14 @@ class SettingView extends GetView<SettingController> {
               subtitle: 'Leave a rating and review'.tr,
               ontaps: () {},
             ),
-                                      
+
             _buildSettingCard(
               icon: Icons.logout,
               title: 'Logout'.tr,
               subtitle: 'Sign out of your account'.tr,
-              ontaps: () {},
+              ontaps: () {
+                Get.dialog(LogoutView());
+              },
             ),
 
             // Add more notification cards here

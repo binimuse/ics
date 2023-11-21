@@ -17,6 +17,7 @@ abstract class Routes {
   static const NEW_PASSPORT = _Paths.NEW_PASSPORT;
   static const RENEW_PASSPORT = _Paths.RENEW_PASSPORT;
   static const OTP_VARIFICATION = _Paths.OTP_VARIFICATION;
+  static const LOGOUT = _Paths.LOGOUT;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const NEW_PASSPORT = '/new-passport';
   static const RENEW_PASSPORT = '/renew-passport';
   static const OTP_VARIFICATION = '/otp-varification';
+  static const LOGOUT = '/logout';
 }

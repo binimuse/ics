@@ -6,6 +6,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/logout/bindings/logout_binding.dart';
+import '../modules/logout/views/logout_view.dart';
 import '../modules/main_page/bindings/main_page_binding.dart';
 import '../modules/main_page/views/main_page_view.dart';
 import '../modules/my_order/bindings/my_order_binding.dart';
@@ -99,6 +101,11 @@ class AppPages {
       name: _Paths.OTP_VARIFICATION,
       page: () => const OtpVarificationView(),
       binding: OtpVarificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGOUT,
+      page: () => LogoutView(),
+      binding: LogoutBinding(),
     ),
   ];
 }

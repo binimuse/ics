@@ -2,7 +2,9 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/routes/app_pages.dart';
+import 'package:ics/utils/constants.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashController extends GetxController {
   final String splasehimage = AppAssets.splasehimage2;
@@ -24,7 +26,7 @@ class SplashController extends GetxController {
           await requestNotificationPermission();
 
       if (notificationPermissionStatus == PermissionStatus.granted) {
-        Get.offAllNamed(Routes.ON_BORDING);
+        checkifSignedin();
         break;
       } else {
         if (!hasShownToast) {
@@ -39,5 +41,21 @@ class SplashController extends GetxController {
   Future<PermissionStatus> requestNotificationPermission() async {
     final status = await Permission.notification.request();
     return status;
+  }
+
+  void checkifSignedin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final acc = prefs.getString(Constants.userAccessTokenKey);
+    final verifyEmail = prefs.getString(Constants.verifyEmail);
+
+    if (acc == null && verifyEmail == null) {
+      Future.delayed(const Duration(seconds: 1), () {
+        Get.offAndToNamed(Routes.ON_BORDING);
+      });
+    } else {
+      Future.delayed(const Duration(seconds: 1), () {
+        Get.offNamed(Routes.MAIN_PAGE);
+      });
+    }
   }
 }
