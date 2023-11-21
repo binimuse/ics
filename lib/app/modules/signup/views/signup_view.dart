@@ -52,9 +52,11 @@ class SignupView extends GetView<SignupController> {
                               SizedBox(height: 1.h),
 
                               // Show Password field only when Next is pressed
-                              if (controller.isNextPressed.value ||
-                                  controller.passwordController.text.isNotEmpty)
-                                buildPasswordinput()
+
+                              controller.isNextPressed.value &&
+                                      controller.isEmailValidated.value
+                                  ? buildPasswordinput()
+                                  : SizedBox()
                             ],
                           ),
                         ),
@@ -134,7 +136,7 @@ class SignupView extends GetView<SignupController> {
       hint: 'Password',
       moreInstructions: const [
         "Minimum 8 letters,",
-        "English + number + special character",
+        "number + special character",
       ],
       isPassword: true,
       onChanged: (value) {
@@ -143,10 +145,6 @@ class SignupView extends GetView<SignupController> {
         controller.isPasswordValid.value = isValid;
 
         // Check if the password is valid and display the appropriate text
-        if (isValid) {
-          controller
-              .isNextPressed(true); // Set to true but don't hide password field
-        }
       },
       validator: (value) {
         if (value!.isEmpty) {
@@ -188,8 +186,11 @@ class SignupView extends GetView<SignupController> {
           controller.isNextPressed(true);
           // Change the button text to "Enter password"
         } else {
+          if (controller.isPasswordValid.value) {
+            Get.to(SignUpUserName());
+            // Change the button text to "Enter password"
+          }
           // Handle final next logic
-          Get.to(SignUpUserName());
         }
       },
     );

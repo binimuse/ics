@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ics/app/common/app_toasts.dart';
-import 'package:ics/app/common/button/button_gray_scale_outline_without_icon.dart';
 import 'package:ics/app/common/button/button_primary_fill.dart';
 import 'package:ics/app/common/forms/phone_number_input.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
@@ -12,9 +10,8 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/signup/controllers/signup_controller.dart';
-import 'package:ics/app/routes/app_pages.dart';
+
 import 'package:sizer/sizer.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
 class PhoneNumberVarfication extends StatefulWidget {
@@ -37,6 +34,7 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
           children: [
             ///APP BAR
             const TopNavCloseText(
+              
               centerTitle: '',
               rightText: '',
               useHomeIcon: false,
@@ -99,32 +97,32 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
                       SizedBox(
                         height: AppSizes.mp_v_1,
                       ),
-                      Obx(() => controller.isPhoneValid.value &&
-                              controller.isNextPressed.value
-                          ? buildOTPNumber(context)
-                          : const SizedBox()),
-                      SizedBox(
-                        height: AppSizes.mp_v_1,
-                      ),
-                      Obx(() => controller.isPhoneValid.value &&
-                              controller.isNextPressed.value &&
-                              !controller.isOtpValid.value
-                          ? Align(
-                              alignment: Alignment.topLeft,
-                              child: ButtonGrayScaleOutlineWithOutIcon(
-                                  buttonSizeType: ButtonSizeType.SMALL,
-                                  text: 'Send',
-                                  onTap: () {
-                                    if (controller.isNotAvalableCountry.value) {
-                                      AppToasts.showError(
-                                          "Error, Not a valid country");
-                                    } else {}
-                                  },
-                                  isDisabled: controller.isPhoneValid.value
-                                      ? false
-                                      : true),
-                            )
-                          : const SizedBox()),
+                      // Obx(() => controller.isPhoneValid.value &&
+                      //         controller.isNextPressed.value
+                      //     ? buildOTPNumber(context)
+                      //     : const SizedBox()),
+                      // SizedBox(
+                      //   height: AppSizes.mp_v_1,
+                      // ),
+                      // Obx(() => controller.isPhoneValid.value &&
+                      //         controller.isNextPressed.value &&
+                      //         !controller.isOtpValid.value
+                      //     ? Align(
+                      //         alignment: Alignment.topLeft,
+                      //         child: ButtonGrayScaleOutlineWithOutIcon(
+                      //             buttonSizeType: ButtonSizeType.SMALL,
+                      //             text: 'Send',
+                      //             onTap: () {
+                      //               if (controller.isNotAvalableCountry.value) {
+                      //                 AppToasts.showError(
+                      //                     "Error, Not a valid country");
+                      //               } else {}
+                      //             },
+                      //             isDisabled: controller.isPhoneValid.value
+                      //                 ? false
+                      //                 : true),
+                      //       )
+                      //     : const SizedBox()),
                     ],
                   ),
                 ),
@@ -143,27 +141,17 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
                         child: ButtonPrimaryFill(
                           isterms: false,
                           buttonSizeType: ButtonSizeType.LARGE,
-                          isDisabled: !controller.isPhoneValid.value ||
-                              (controller.isNextPressed.value &&
-                                  !controller.isOtpValid.value),
+                          isDisabled: !controller.isPhoneValid.value,
                           text: !controller.isPhoneValid.value
                               ? "Enter your phone number"
-                              : controller.isNextPressed.value
-                                  ? !controller.isOtpValid.value
-                                      ? "Enter the 6-digit code you’ve got."
-                                      : "Done"
-                                  : "Next",
+                              : "Next",
                           onTap: () {
                             if (!controller.isPhoneValid.value) {
                               // Logic for when the "Enter your phone number" button is pressed
                             } else if (!controller.isNextPressed.value) {
                               controller.isNextPressed(true);
-                              FocusScope.of(context)
-                                  .requestFocus(controller.otpFocusNode);
 
                               // Logic for when the "Next" button is pressed
-                            } else if (!controller.isOtpValid.value) {
-                              // Logic for when the "Enter 6-digit code" button is pressed
                             } else {
                               //  Get.toNamed(Routes.EMAIL_VERIFICATION);
                               //   Get.to(const ForgotEmailtDone());
@@ -186,8 +174,16 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
     return Center(
       child: CountryCodePicker(
         flagDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(7),
-        ),
+            borderRadius: BorderRadius.circular(5),
+            color: AppColors.primaryDark,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(3, 3), // changes the shadow position
+              ),
+            ]),
         onChanged: (element) {
           debugPrint(element.dialCode);
 
@@ -199,6 +195,8 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
             controller.isNotAvalableCountry(false);
           }
         },
+        initialSelection: 'IT',
+        textOverflow: TextOverflow.fade,
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
 
         // optional. Shows only country name and flag
@@ -237,32 +235,5 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
         return null;
       },
     ));
-  }
-
-  buildOTPNumber(BuildContext context) {
-    return PinCodeTextField(
-      focusNode: controller.otpFocusNode,
-      length: 6,
-      autoDisposeControllers: false,
-      controller: controller.otpController,
-      keyboardType: TextInputType.number,
-      cursorColor: AppColors.primary,
-      animationType: AnimationType.none,
-      animationDuration: Duration.zero,
-      pinTheme: PinTheme(
-        activeColor: AppColors.grayDark,
-        inactiveColor: AppColors.grayLight,
-        selectedColor: AppColors.grayDark,
-      ),
-      onCompleted: (pin) {},
-      onChanged: (pin) {
-        if (pin.length == 6) {
-          controller.isOtpValid(true);
-        } else {
-          controller.isOtpValid(false);
-        }
-      },
-      appContext: context,
-    );
   }
 }

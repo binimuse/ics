@@ -5,6 +5,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:flutter/services.dart';
 
 class TextInputAll extends StatefulWidget {
   const TextInputAll({
@@ -13,6 +14,7 @@ class TextInputAll extends StatefulWidget {
     this.isPassword,
     this.moreInstructions,
     required this.controller,
+    required this.textInputAction,
     this.autoFocus,
     this.focusNode,
     required this.showClearButton,
@@ -24,6 +26,7 @@ class TextInputAll extends StatefulWidget {
   final bool showClearButton;
   final List<String>? moreInstructions;
   final TextEditingController controller;
+  final TextInputAction textInputAction;
   final bool? autoFocus;
   final FocusNode? focusNode;
   final void Function(String)? onChanged; // Callback when the text changes
@@ -59,6 +62,10 @@ class _TextInputLoginState extends State<TextInputAll> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp(r"\s\b|\b\s")),
+          ],
+          textInputAction: TextInputAction.next,
           cursorColor: AppColors.primary,
           controller: widget.controller,
           autofocus: widget.autoFocus ?? false,

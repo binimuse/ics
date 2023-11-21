@@ -99,41 +99,6 @@ class _TextInputLoginState extends State<TextInputSignup> {
               maxWidth: AppSizes.icon_size_10,
               maxHeight: AppSizes.icon_size_10,
             ),
-            suffixIcon: widget.focusNode!.hasFocus && _showClearButton
-                ? Bounce(
-                    // padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        widget.controller.clear();
-                        _showClearButton = false;
-
-                        bool isValid = widget.signupController!.validateEmail();
-                        widget.signupController!.isEmailValidated.value =
-                            isValid;
-
-                        if (isValid) {
-                          widget.signupController!
-                              .isNextPressed(false); // Reset Next button
-                        } else {
-                          widget.signupController!.isNextPressed(false);
-                        }
-                        //  widget.logincontroller!.isPasswordValid(false);
-                      });
-                    },
-                    duration: const Duration(milliseconds: 120),
-                    // padding: EdgeInsets.zero,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: AppSizes.mp_v_1,
-                      ),
-                      child: SvgPicture.asset(
-                        Assets.icons.cancel,
-                        color: AppColors.grayLight,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  )
-                : null,
             disabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
                 color: AppColors.grayLight,

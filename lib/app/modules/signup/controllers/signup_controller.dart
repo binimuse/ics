@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/modules/signup/data/mutation/signup_mutuation.dart';
+
+import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/services/graphql_conf.dart';
 
 class SignupController extends GetxController {
@@ -18,10 +20,12 @@ class SignupController extends GetxController {
 
   final FocusNode passwordFocusNode = FocusNode(); // Added password focus node
   final emailFocusNode = FocusNode();
+  GraphQLConfigurationForauth graphQLConfiguration =
+      GraphQLConfigurationForauth();
 
   var isEmailValidated = false.obs;
   var isNextPressed = false.obs;
-  var countryCode = "";
+  var countryCode = "+39";
   var isNotAvalableCountry = false.obs;
 
   var isPasswordValid = false.obs;
@@ -38,8 +42,6 @@ class SignupController extends GetxController {
     lNameController = TextEditingController();
 
     phoneController = TextEditingController();
-    otpController = TextEditingController();
-    isjustForinit(true);
   }
 
   bool validateEmail() {
@@ -59,13 +61,26 @@ class SignupController extends GetxController {
 
   bool validatePassword() {
     final password = passwordController.text;
+    bool hasNumber = false;
+    bool hasSpecialCharacter = false;
+
     if (password.length >= 8) {
-      isPasswordValid(true);
-      return true;
-    } else {
-      isPasswordValid(false);
-      return false;
+      for (int i = 0; i < password.length; i++) {
+        if (password[i].isNumericOnly) {
+          hasNumber = true;
+        } else if (!password[i].isAlphabetOnly) {
+          hasSpecialCharacter = true;
+        }
+      }
+
+      if (hasNumber && hasSpecialCharacter) {
+        isPasswordValid(true);
+        return true;
+      }
     }
+
+    isPasswordValid(false);
+    return false;
   }
 
   var isUsernameCorrect = false.obs;
@@ -79,39 +94,11 @@ class SignupController extends GetxController {
     }
   }
 
-  //mobile varification
-
-  final phoneFocusNode = FocusNode();
-  FocusNode otpFocusNode = FocusNode();
-  TextEditingController otpController = TextEditingController();
-  List<TextEditingController> otpControllers =
-      List.generate(6, (index) => TextEditingController());
-  var isPhoneValid = false.obs;
-  var isNextPressedMobile = false.obs;
-  var isOtpValid = false.obs;
-  var isjustForinit = false.obs;
-
-  bool validatPhone() {
-    final password = phoneController.text;
-    if (password.length >= 8) {
-      isPhoneValid(true);
-      return true;
-    } else {
-      isPhoneValid(false);
-      return false;
-    }
-  }
-
   //signupp
   var signingUp = false.obs;
-  var otpverfy = false.obs;
+
   void signUp() async {
-    final bool isConnected = await isInternetConnected();
-    if (!isConnected) {
-      signingUp(false);
-      AppToasts.showError("No internet, Please connect to internet and retry");
-    } else {
-      // other validation checks
+    try {
       if (phoneController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
           passwordController.text.isNotEmpty &&
@@ -124,14 +111,28 @@ class SignupController extends GetxController {
 
             signingUp(false);
 
-            AppToasts.showSuccess("Successfully registered");
+            //  AppToasts.showSuccess("Successfully registered");
+
+            Get.offAllNamed(Routes.OTP_VARIFICATION);
           } else {
             print(result);
             // error handling
             signingUp(false);
 
             //  AppToasts.showError("Phone number is already registered");
-            AppToasts.showError("Something went wrong");
+            //    AppToasts.showError("Something went wrong");
+
+            if (result.exception!.graphqlErrors.isNotEmpty) {
+              if (result.exception!.graphqlErrors[0].message
+                  .contains("CREDENTIALS_IS_ALREADY_IN_USE")) {
+                AppToasts.showError("Email has already been taken");
+
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  Get.back();
+                  Get.back();
+                });
+              }
+            }
           }
         }).catchError((error) {
           print(error);
@@ -146,7 +147,28 @@ class SignupController extends GetxController {
 
         AppToasts.showError("Something went wrong");
       }
+    } on Exception catch (e) {
+      print(e);
+      // TODO
     }
+  }
+
+  Future<QueryResult> signUpMutation() async {
+    GraphQLClient client = graphQLConfiguration.clientToQuery();
+
+    return client.mutate(
+      MutationOptions(
+        document: gql(SignupQueryMutation.register),
+        variables: <String, dynamic>{
+          'object': {
+            'email': emailController.text,
+            'name': fNameController.text + "" + lNameController.text,
+            'password': passwordController.text,
+            'phone_number': countryCode.toString() + phoneController.text,
+          }
+        },
+      ),
+    );
   }
 
   Future<bool> isInternetConnected() async {
@@ -158,19 +180,16 @@ class SignupController extends GetxController {
     return connectivityResult != ConnectivityResult.none;
   }
 
-  Future<QueryResult> signUpMutation() async {
-    GraphQLClient client = GraphQLProvider.of(Get.context!).value;
-
-    return client.mutate(
-      MutationOptions(
-        document: gql(SignupQueryMutation.register),
-        variables: <String, dynamic>{
-          'email': emailController.text,
-          'name': fNameController.text + lNameController.text,
-          'password': passwordController.text,
-          'phone_number': countryCode.toString() + phoneController.text,
-        },
-      ),
-    );
+  final phoneFocusNode = FocusNode();
+  var isPhoneValid = false.obs;
+  bool validatPhone() {
+    final password = phoneController.text;
+    if (password.length >= 8) {
+      isPhoneValid(true);
+      return true;
+    } else {
+      isPhoneValid(false);
+      return false;
+    }
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ics/app/common/app_icon_button.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/gen/assets.gen.dart';
-
 
 class TopNavCloseText extends StatelessWidget {
   const TopNavCloseText(
@@ -33,8 +33,10 @@ class TopNavCloseText extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AppSvgButton(
-                  imagePath: Assets.icons.close,
-                  onPressed: () {},
+                  imagePath: Assets.icons.arrowleft,
+                  onPressed: () {
+                    Get.back();
+                  },
                   size: AppSizes.icon_size_8 * 0.9,
                 ),
                 SizedBox(

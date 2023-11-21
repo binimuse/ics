@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/button_primary_fill.dart';
 import 'package:ics/app/common/forms/text_input.dart';
 import 'package:ics/app/common/navigation/top_nav_back_text.dart';
@@ -55,6 +56,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
                     TextInputAll(
                       controller: controller.fNameController,
                       hint: 'First name',
+                      textInputAction: TextInputAction.next,
                       showClearButton: false,
                       autoFocus: true,
                       onChanged: (value) {
@@ -71,6 +73,7 @@ class _SignUpUserNameState extends State<SignUpUserName> {
                       height: AppSizes.mp_v_2,
                     ),
                     TextInputAll(
+                      textInputAction: TextInputAction.next,
                       controller: controller.lNameController,
                       hint: 'Last name',
                       showClearButton: false,
@@ -103,7 +106,11 @@ class _SignUpUserNameState extends State<SignUpUserName> {
                         ? "Next"
                         : "Enter your name",
                     onTap: () {
-                      Get.to(PhoneNumberVarfication());
+                      if (controller.isUsernameCorrect.value) {
+                        Get.to(PhoneNumberVarfication());
+                      } else {
+                        AppToasts.showError("Enter your Full Name");
+                      }
                     },
                   ),
                   SizedBox(

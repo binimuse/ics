@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:ics/app/common/app_icon_button.dart';
+import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/button_primary_fill.dart';
 import 'package:ics/app/common/forms/check_box.dart';
 import 'package:ics/app/common/navigation/top_nav_back_icon.dart';
@@ -172,6 +173,8 @@ class _TermsViewState extends State<TermsView> {
                         if (allTermsChecked.value) {
                           // Only navigate if all terms are checked
                           Get.toNamed(Routes.SIGNUP);
+                        } else {
+                          AppToasts.showError("All Terms are not Checked");
                         }
                       },
                     ),
