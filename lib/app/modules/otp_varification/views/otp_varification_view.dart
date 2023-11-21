@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/button_gray_scale_outline_without_icon.dart';
 import 'package:ics/app/common/button/button_primary_fill.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
@@ -66,14 +69,37 @@ class OtpVarificationView extends GetView<OtpVarificationController> {
                       SizedBox(
                         height: AppSizes.mp_v_1,
                       ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: ButtonGrayScaleOutlineWithOutIcon(
-                            buttonSizeType: ButtonSizeType.SMALL,
-                            text: 'Resend',
-                            onTap: () {},
-                            isDisabled: true),
-                      )
+                      Obx(() => !controller.resendotpstarted.value
+                          ? Align(
+                              alignment: Alignment.topLeft,
+                              child: ButtonGrayScaleOutlineWithOutIcon(
+                                  buttonSizeType: ButtonSizeType.SMALL,
+                                  text: !controller.makeButtonEnable.value
+                                      ? 'Resend in ' +
+                                          controller.countdownValue.value
+                                              .toString() +
+                                          ' seconds'
+                                      : 'Resend',
+                                  onTap: () {
+                                    if (controller.makeButtonEnable.value) {
+                                      controller.resendOtp();
+                                    }
+                                  },
+                                  isDisabled: controller.makeButtonEnable.value
+                                      ? false
+                                      : true),
+                            )
+                          : Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.primary),
+                                ),
+                              ),
+                            )),
                     ],
                   ),
                 ),
@@ -84,7 +110,7 @@ class OtpVarificationView extends GetView<OtpVarificationController> {
             ),
             Column(
               children: [
-                Obx(() => controller.otpverfy.isFalse
+                Obx(() => controller.verificationOtp.isFalse
                     ? Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: AppSizes.mp_w_8,
@@ -100,6 +126,7 @@ class OtpVarificationView extends GetView<OtpVarificationController> {
                             if (!controller.isOtpValid.value) {
                               // Logic for when the "Enter 6-digit code" button is pressed
                             } else {
+                              controller.verification();
                               //  Get.toNamed(Routes.EMAIL_VERIFICATION);
                               //   Get.to(const ForgotEmailtDone());
                               //   controller.signUp();
@@ -107,7 +134,17 @@ class OtpVarificationView extends GetView<OtpVarificationController> {
                           },
                         ),
                       )
-                    : CustomLoadingWidget()),
+                    : Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.primary),
+                          ),
+                        ),
+                      )),
                 SizedBox(height: 2.h),
               ],
             ),
@@ -136,8 +173,10 @@ class OtpVarificationView extends GetView<OtpVarificationController> {
       onChanged: (pin) {
         if (pin.length == 6) {
           controller.isOtpValid(true);
+          controller.otp.value = pin;
         } else {
           controller.isOtpValid(false);
+          // AppToasts.showError("Invalid OTP");
         }
       },
       appContext: context,

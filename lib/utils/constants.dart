@@ -3,9 +3,10 @@
 class Constants {
   //static const String userAccessTokenKey = 'USER_ACCESS_TOKEN';
   static const String userAccessTokenKey = 'access_token';
+  static const String refreshTokenKey = 'refresh_token';
   static const String userId = 'userId';
   static const String verifyEmail = 'verifyEmail';
-  static const String refreshTokenKey = 'refresh_token';
+
   static const int laborsPageSize = 10;
 
   ///

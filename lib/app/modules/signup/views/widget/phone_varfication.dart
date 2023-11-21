@@ -34,7 +34,6 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
           children: [
             ///APP BAR
             const TopNavCloseText(
-              
               centerTitle: '',
               rightText: '',
               useHomeIcon: false,
@@ -160,7 +159,15 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
                           },
                         ),
                       )
-                    : CustomLoadingWidget()),
+                    : SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(AppColors.primary),
+                        ),
+                      )),
                 SizedBox(height: 2.h),
               ],
             ),

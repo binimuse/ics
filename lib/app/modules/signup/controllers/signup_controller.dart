@@ -110,10 +110,13 @@ class SignupController extends GetxController {
             // success handling
 
             signingUp(false);
-
-            //  AppToasts.showSuccess("Successfully registered");
-
-            Get.offAllNamed(Routes.OTP_VARIFICATION);
+            AppToasts.showSuccess("Successfully registered");
+            Future.delayed(const Duration(milliseconds: 300), () {
+              AppToasts.showSuccess("Verify otp");
+              Get.toNamed(Routes.OTP_VARIFICATION, arguments: {
+                "email": emailController.text,
+              });
+            });
           } else {
             print(result);
             // error handling

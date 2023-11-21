@@ -252,22 +252,37 @@ class LoginView extends GetView<LoginController> {
       }
     }
 
-    return ButtonPrimaryFillLogin(
-      buttonSizeType: ButtonSizeTypeLogin.MEDIUM,
-      isDisabled: isDisabled,
-      buttonColor: buttonColors,
-      text: buttonText,
-      onTap: () {
-        if (isEmailValidated && !isNextPressed) {
-          controller.isNextPressed(true);
-          Future.delayed(const Duration(milliseconds: 100), () {
-            FocusScope.of(context).requestFocus(controller.passwordFocusNode);
-          });
-        } else {
-          Get.offAllNamed(Routes.MAIN_PAGE);
-          // Handle login logic
-        }
-      },
-    );
+    return !controller.signingIn.value
+        ? ButtonPrimaryFillLogin(
+            buttonSizeType: ButtonSizeTypeLogin.MEDIUM,
+            isDisabled: isDisabled,
+            buttonColor: buttonColors,
+            text: buttonText,
+            onTap: () {
+              if (isEmailValidated && !isNextPressed) {
+                controller.isNextPressed(true);
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  FocusScope.of(context)
+                      .requestFocus(controller.passwordFocusNode);
+                });
+              } else if (isEmailValidated && isPasswordValid) {
+                controller.signIn(context);
+                // Handle login logic
+              } else {
+                print(isEmailValidated);
+                print(isNextPressed);
+                //  Get.offAllNamed(Routes.MAIN_PAGE);
+                // Handle login logic
+              }
+            },
+          )
+        : SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            ),
+          );
   }
 }

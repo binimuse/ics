@@ -3,7 +3,6 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
-import '../../../../config/theme/app_assets.dart';
 
 class ScreenSignUpDone extends StatelessWidget {
   const ScreenSignUpDone({Key? key}) : super(key: key);
