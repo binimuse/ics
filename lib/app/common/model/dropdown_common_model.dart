@@ -2,12 +2,14 @@
 // ignore_for_file: non_constant_identifier_names
 
 class DropDownCommonModel {
-  late String id;
+
   late String name;
+  late String description;
 
   DropDownCommonModel({
-    required this.id,
+
     required this.name,
+    required this.description,
     //education
   });
 }

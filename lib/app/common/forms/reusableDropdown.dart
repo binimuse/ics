@@ -7,17 +7,22 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 class ReusableDropdown extends StatelessWidget {
   final String labelText;
   final List<DropdownMenuItem<String>> items;
-  final void Function(String?)? onChanged;
 
+  final void Function(String?)? onChanged;
+  final void Function(String?)? onsave;
+  final String? Function(String?)? validator;
   ReusableDropdown({
     required this.labelText,
     required this.items,
     this.onChanged,
+    this.onsave,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
     return FormBuilderDropdown(
+      validator: validator!,
       decoration: InputDecoration(
         labelText: labelText,
         disabledBorder: UnderlineInputBorder(
@@ -48,6 +53,7 @@ class ReusableDropdown extends StatelessWidget {
       ),
       items: items,
       onChanged: onChanged,
+      onSaved: onsave,
       name: '',
     );
   }

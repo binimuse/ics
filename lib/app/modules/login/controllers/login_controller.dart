@@ -92,7 +92,7 @@ class LoginController extends GetxController {
       await prefs.setString(Constants.userAccessTokenKey,
           result.data!["login"]["tokens"]["access_token"]);
 
-      await prefs.setString(Constants.userAccessTokenKey,
+      await prefs.setString(Constants.refreshTokenKey,
           result.data!["login"]["tokens"]["refresh_token"]);
 
       await prefs.setString(

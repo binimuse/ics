@@ -12,10 +12,12 @@ class TextFormBuilder extends StatefulWidget {
   const TextFormBuilder({
     Key? key,
     required this.hint,
+    this.labelText,
     this.isPassword,
     this.moreInstructions,
     required this.controller,
     this.autoFocus,
+    this.validator,
     this.focusNode,
     required this.showClearButton,
     this.onChanged, // Added onChanged callback
@@ -23,6 +25,7 @@ class TextFormBuilder extends StatefulWidget {
   }) : super(key: key);
 
   final String hint;
+  final String? labelText;
   final bool? isPassword;
   final bool showClearButton;
   final List<String>? moreInstructions;
@@ -30,6 +33,7 @@ class TextFormBuilder extends StatefulWidget {
   final bool? autoFocus;
   final FocusNode? focusNode;
   final void Function(String)? onChanged; // Callback when the text changes
+  final String? Function(String?)? validator;
   final VoidCallback? onTap; // Callback when the text changes
 
   @override
@@ -63,6 +67,7 @@ class _TextInputLoginState extends State<TextFormBuilder> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FormBuilderTextField(
+          validator: widget.validator,
           textInputAction: TextInputAction.next,
           cursorColor: AppColors.primary,
           controller: widget.controller,
@@ -82,10 +87,10 @@ class _TextInputLoginState extends State<TextFormBuilder> {
                   : AppSizes.mp_v_1 / 2,
               top: AppSizes.mp_v_1 / 2,
             ),
-            labelText: _isFocused ? widget.hint : null,
+            labelText: widget.labelText,
             hintText: _isFocused ? null : widget.hint,
             hintStyle: AppTextStyles.titleBold.copyWith(
-                color: AppColors.grayLighter, fontSize: AppSizes.font_12),
+                color: AppColors.grayDark, fontSize: AppSizes.font_12),
             labelStyle: AppTextStyles.captionBold.copyWith(
                 color: AppColors.grayLight, fontSize: AppSizes.font_12 * 1.1),
             floatingLabelBehavior: FloatingLabelBehavior.auto,

@@ -1,13 +1,19 @@
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:ics/app/modules/new_passport/model/confirmation_model.dart';
+import 'package:ics/app/common/data/graphql_common_api.dart';
+import 'package:ics/app/common/model/dropdown_common_model.dart';
+import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
+
 import 'package:ics/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
-import 'package:video_player/video_player.dart';
 import 'dart:async';
 import 'dart:io';
 
 import 'package:mime/mime.dart';
+
+import '../data/quary/get_all.dart';
 
 class NewPassportController extends GetxController {
   Future<List<NewConfirmationModel>> fetchConfirmationModelCar() async {
@@ -69,6 +75,8 @@ class NewPassportController extends GetxController {
     return true;
   }
 
+  final newPassportformKey = GlobalKey<FormBuilderState>();
+
   //Step 1
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController fatherNameController = TextEditingController();
@@ -77,31 +85,28 @@ class NewPassportController extends GetxController {
 
   final TextEditingController dateofbirth = TextEditingController();
 
+  final RxString birthCountryvalue = ''.obs;
+
+  final Rxn<DropDownCommonModel> gendervalue = Rxn<DropDownCommonModel>();
+
   var selectedDate = DateTime.now().obs;
 
   void updateSelectedDate(DateTime newDate) {
     selectedDate.value = newDate;
   }
 
-  //Step 1
+  //Step 2
 
   final TextEditingController height = TextEditingController();
-  //address
+  final RxString occupationvalue = ''.obs;
+  final RxString haircolorvalue = ''.obs;
+  final RxString eyecolorvalue = ''.obs;
+  final RxString maritalstatusvalue = ''.obs;
+  //Step 3
+  final TextEditingController phonenumber = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
-  final TextEditingController zipController = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
-  final TextEditingController stateController = TextEditingController();
-
-  //contact detail
-  final TextEditingController mobilePhoneController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-//Passport detail
-  final TextEditingController passportnumberController =
-      TextEditingController();
-  final TextEditingController placeOfIssueController = TextEditingController();
-  final TextEditingController validtyPerdiodController =
-      TextEditingController();
+  final RxString countryvalue = ''.obs;
 
   final reasonController = TextEditingController();
 
@@ -120,16 +125,33 @@ class NewPassportController extends GetxController {
     return VideoTypenew.unknown;
   }
 
-  RxList<File> selectedVideos = <File>[].obs;
-  VideoPlayerController? videoController;
+  @override
+  void onInit() {
+    getGender();
+    super.onInit();
+  }
 
   int currentStep = 0;
 
+  final Rxn<Basemodel> baseData = Rxn<Basemodel>();
+  GetallQuery getGenderQuery = GetallQuery();
+  GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
+
+  Future<void> getGender() async {
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
+
+      baseData.value = Basemodel.fromJson(result);
+    } catch (e) {
+      print(">>>>>>>>>>>>>>>>>> $e");
+    }
+  }
+
   List<String> gender = ['Male', 'Female'];
-  List<String> occupation = [
+  List<String> occupations = [
     'Waiter',
     'Dentist',
-    'Nurse',
     'Nurse',
     'Doctor',
     'Surgeon',
@@ -157,6 +179,45 @@ class NewPassportController extends GetxController {
     'Separated',
     'Divorced',
     'Single',
+  ];
+
+  List<String> bcountries = [
+    'Afghanistan',
+    'Albania',
+    'Algeria',
+    'Andorra',
+    'Angola',
+    'Argentina',
+    'Australia',
+    'Austria',
+    'Azerbaijan',
+    'Bahamas',
+    'Bahrain',
+    'Bangladesh',
+    'Barbados',
+    'Belarus',
+    'Belgium',
+    'Belize',
+    'Benin',
+  ];
+  List<String> countries = [
+    'Afghanistan',
+    'Albania',
+    'Algeria',
+    'Andorra',
+    'Angola',
+    'Argentina',
+    'Australia',
+    'Austria',
+    'Azerbaijan',
+    'Bahamas',
+    'Bahrain',
+    'Bangladesh',
+    'Barbados',
+    'Belarus',
+    'Belgium',
+    'Belize',
+    'Benin',
   ];
 }
 

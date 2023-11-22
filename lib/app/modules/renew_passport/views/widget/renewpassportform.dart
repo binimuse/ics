@@ -421,16 +421,6 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           autoFocus: true,
           onChanged: (value) {},
         ),
-        // FormBuilderDropdown(
-        //     name: controller.stepFields[controller.currentStep],
-        //     decoration: InputDecoration(labelText: 'Select an option'),
-        //     // validator: FormBuilderValidators.required(),
-        //     items: controller.stepOptions[controller.currentStep]
-        //         .map((option) => DropdownMenuItem(
-        //               value: option.value,
-        //               child: Text(option.value),
-        //             ))
-        //         .toList())
         SizedBox(
           height: 2.h,
         ),
