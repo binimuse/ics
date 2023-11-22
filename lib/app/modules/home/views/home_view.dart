@@ -156,6 +156,7 @@ class HomeView extends GetView<HomeController> {
               iconColor: controller.color[index],
               onPressed: () {
                 if (index == 0) {
+                  Get.toNamed(Routes.NEW_PASSPORT);
                 } else if (index == 1) {
                   Get.toNamed(Routes.RENEW_PASSPORT);
                 } else if (index == 2) {

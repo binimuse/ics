@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -18,6 +19,7 @@ class TextFormBuilder extends StatefulWidget {
     this.focusNode,
     required this.showClearButton,
     this.onChanged, // Added onChanged callback
+    this.onTap, // Added onChanged callback
   }) : super(key: key);
 
   final String hint;
@@ -28,6 +30,7 @@ class TextFormBuilder extends StatefulWidget {
   final bool? autoFocus;
   final FocusNode? focusNode;
   final void Function(String)? onChanged; // Callback when the text changes
+  final VoidCallback? onTap; // Callback when the text changes
 
   @override
   State<TextFormBuilder> createState() => _TextInputLoginState();
@@ -143,11 +146,7 @@ class _TextInputLoginState extends State<TextFormBuilder> {
               widget.onChanged!(value!); // Call the onChanged callback
             }
           },
-          onTap: () {
-            setState(() {
-              _isFocused = true;
-            });
-          },
+          onTap: widget.onTap,
           name: '',
         ),
 

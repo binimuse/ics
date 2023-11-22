@@ -46,10 +46,8 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
       });
     });
 
-    if (widget.focusNode != null) {
-      widget.focusNode.addListener(_onFocusChange);
+    widget.focusNode.addListener(_onFocusChange);
     }
-  }
 
   void _onFocusChange() {
     setState(() {});
@@ -149,11 +147,9 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
               _isFocused = true;
             });
 
-            if (widget.focusNode != null) {
-              // Request focus for the field
-              FocusScope.of(context).requestFocus(widget.focusNode);
-            }
-          },
+            // Request focus for the field
+            FocusScope.of(context).requestFocus(widget.focusNode);
+                    },
           focusNode: widget.focusNode,
         ),
       ],
@@ -173,7 +169,7 @@ class PhoneNumberInputFormatter extends TextInputFormatter {
     final digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
 
     // Apply maximum length restriction
-    final limitedDigits = maxLength != null && digitsOnly.length > maxLength
+    final limitedDigits = digitsOnly.length > maxLength
         ? digitsOnly.substring(0, maxLength)
         : digitsOnly;
 

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/button/button_primary_fill.dart';
 import 'package:ics/app/common/forms/phone_number_input.dart';
-import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/common/navigation/top_nav_close_text.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';

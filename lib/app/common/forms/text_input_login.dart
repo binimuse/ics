@@ -49,10 +49,8 @@ class _TextInputLoginState extends State<TextInputLogin> {
       });
     });
 
-    if (widget.focusNode != null) {
-      widget.focusNode.addListener(_onFocusChange);
+    widget.focusNode.addListener(_onFocusChange);
     }
-  }
 
   void _onFocusChange() {
     setState(() {});
@@ -72,7 +70,7 @@ class _TextInputLoginState extends State<TextInputLogin> {
         TextFormField(
           cursorColor: AppColors.primary,
           controller: widget.controller,
-          autofocus: widget.autofocus ?? false,
+          autofocus: widget.autofocus,
           style: AppTextStyles.titleBold.copyWith(
             color: AppColors.blackLight,
             fontSize:
@@ -154,11 +152,9 @@ class _TextInputLoginState extends State<TextInputLogin> {
             setState(() {
               _isFocused = true;
             });
-            if (widget.focusNode != null) {
-              // Request focus for the field
-              FocusScope.of(context).requestFocus(widget.focusNode);
-            }
-            // Request focus for the password field when tapping
+            // Request focus for the field
+            FocusScope.of(context).requestFocus(widget.focusNode);
+                      // Request focus for the password field when tapping
           },
           focusNode: widget.focusNode,
         ),

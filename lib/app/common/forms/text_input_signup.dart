@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
@@ -36,7 +35,6 @@ class TextInputSignup extends StatefulWidget {
 }
 
 class _TextInputLoginState extends State<TextInputSignup> {
-  bool _showClearButton = false;
   bool _isFocused = false;
   bool isPasswordVisible = false; // Added property
 
@@ -45,7 +43,6 @@ class _TextInputLoginState extends State<TextInputSignup> {
     super.initState();
     widget.controller.addListener(() {
       setState(() {
-        _showClearButton = widget.controller.text.isNotEmpty;
       });
     });
 
