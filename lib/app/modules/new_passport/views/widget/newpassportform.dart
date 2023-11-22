@@ -277,56 +277,16 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         ),
         ReusableDropdown(
           labelText: 'Occupation',
-          items: [
-            DropdownMenuItem(
-              value: 'Waiter',
+          items: controller.occupation.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
               child: Text(
-                'Waiter',
+                value,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
-            ),
-            DropdownMenuItem(
-              value: 'Dentist',
-              child: Text(
-                'Dentist',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Nurse',
-              child: Text(
-                'Nurse',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Doctor',
-              child: Text(
-                'Doctor',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Surgeon',
-              child: Text(
-                'Surgeon',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Postman',
-              child: Text(
-                'Postman',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-          ],
+            );
+          }).toList(),
           onChanged: (value) {
             print(value);
           },
@@ -336,48 +296,35 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         ),
         ReusableDropdown(
           labelText: 'Hair Color',
-          items: [
-            DropdownMenuItem(
-              value: 'Black',
+          items: controller.haircolor.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
               child: Text(
-                'Black',
+                value,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
-            ),
-            DropdownMenuItem(
-              value: 'Brown',
+            );
+          }).toList(),
+          onChanged: (value) {
+            print(value);
+          },
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        ReusableDropdown(
+          labelText: 'Eye Color',
+          items: controller.eyecolor.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
               child: Text(
-                'Brown',
+                value,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
-            ),
-            DropdownMenuItem(
-              value: 'Blonde ',
-              child: Text(
-                'Blonde ',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Red ',
-              child: Text(
-                'Red ',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Gray and White Hair',
-              child: Text(
-                'Gray and White Hair',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-          ],
+            );
+          }).toList(),
           onChanged: (value) {
             print(value);
           },
@@ -387,48 +334,16 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         ),
         ReusableDropdown(
           labelText: 'Martial status',
-          items: [
-            DropdownMenuItem(
-              value: 'Married ',
+          items: controller.martial.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
               child: Text(
-                'Married ',
+                value,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
-            ),
-            DropdownMenuItem(
-              value: 'Widowed ',
-              child: Text(
-                'Widowed ',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Separated  ',
-              child: Text(
-                'Separated  ',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Divorced  ',
-              child: Text(
-                'Divorced  ',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'Single ',
-              child: Text(
-                'Single ',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-          ],
+            );
+          }).toList(),
           onChanged: (value) {
             print(value);
           },
@@ -436,33 +351,12 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         SizedBox(
           height: 2.h,
         ),
-        buildDateOfBirth(context),
-        SizedBox(
-          height: 4.h,
-        ),
-        ReusableDropdown(
-          labelText: 'Select an option',
-          items: [
-            DropdownMenuItem(
-              value: 'male',
-              child: Text(
-                'Male',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-            DropdownMenuItem(
-              value: 'female',
-              child: Text(
-                'Female',
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            ),
-          ],
-          onChanged: (value) {
-            print(value);
-          },
+        TextFormBuilder(
+          controller: controller.height,
+          hint: 'Height(cm)',
+          showClearButton: false,
+          autoFocus: false,
+          onChanged: (value) {},
         ),
       ],
     );
@@ -529,12 +423,27 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         SizedBox(
           height: 2.h,
         ),
-        buildDateOfBirth(context),
+        ReusableDropdown(
+          labelText: 'Gender',
+          items: controller.gender.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: AppTextStyles.captionBold
+                    .copyWith(color: AppColors.grayDark),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            print(value);
+          },
+        ),
         SizedBox(
-          height: 4.h,
+          height: 2.h,
         ),
         ReusableDropdown(
-          labelText: 'Select an option',
+          labelText: 'Birth country',
           items: [
             DropdownMenuItem(
               value: 'male',
@@ -557,6 +466,13 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
             print(value);
           },
         ),
+        SizedBox(
+          height: 2.h,
+        ),
+        buildDateOfBirth(context),
+        SizedBox(
+          height: 2.h,
+        ),
       ],
     );
   }
@@ -569,7 +485,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         SizedBox(
           width: 80.w,
           child: Text(
-            'Step 2',
+            'Step 3',
             style: AppTextStyles.bodyLargeBold
                 .copyWith(fontSize: AppSizes.font_14, color: AppColors.primary),
             maxLines: 4,
@@ -1236,7 +1152,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
       controller: controller.dateofbirth,
       hint: 'Birthdate',
       showClearButton: false,
-      autoFocus: true,
+      autoFocus: false,
       onTap: () {
         KeyboardUtil.hideKeyboard(context);
         _selectDate(context);

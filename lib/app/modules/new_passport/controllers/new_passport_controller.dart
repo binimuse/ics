@@ -69,7 +69,7 @@ class NewPassportController extends GetxController {
     return true;
   }
 
-  //form
+  //Step 1
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController fatherNameController = TextEditingController();
   final TextEditingController grandFatherNameController =
@@ -83,6 +83,9 @@ class NewPassportController extends GetxController {
     selectedDate.value = newDate;
   }
 
+  //Step 1
+
+  final TextEditingController height = TextEditingController();
   //address
   final TextEditingController addressController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
@@ -122,28 +125,38 @@ class NewPassportController extends GetxController {
 
   int currentStep = 0;
 
-  // List<List<FormBuilderFieldOption>> stepOptions = [
-  //   [
-  //     FormBuilderFieldOption(value: 'Option 1'),
-  //     FormBuilderFieldOption(value: 'Option 2'),
-  //     FormBuilderFieldOption(value: 'Option 3'),
-  //   ],
-  //   [
-  //     FormBuilderFieldOption(value: 'Option A'),
-  //     FormBuilderFieldOption(value: 'Option B'),
-  //     FormBuilderFieldOption(value: 'Option C'),
-  //   ],
-  //   [
-  //     FormBuilderFieldOption(value: 'Option X'),
-  //     FormBuilderFieldOption(value: 'Option Y'),
-  //     FormBuilderFieldOption(value: 'Option Z'),
-  //   ],
-  // ];
+  List<String> gender = ['Male', 'Female'];
+  List<String> occupation = [
+    'Waiter',
+    'Dentist',
+    'Nurse',
+    'Nurse',
+    'Doctor',
+    'Surgeon',
+    'Postman',
+  ];
 
-  List<String> stepFields = [
-    'field1',
-    'field2',
-    'field3',
+  List<String> haircolor = [
+    'Black',
+    'Brown',
+    'Blonde',
+    'Red',
+    'Gray and White Hair',
+  ];
+
+  List<String> eyecolor = [
+    'Black',
+    'Brown',
+    'Blue',
+    'Other',
+  ];
+
+  List<String> martial = [
+    'Married',
+    'Widowed',
+    'Separated',
+    'Divorced',
+    'Single',
   ];
 }
 
