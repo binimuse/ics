@@ -1,7 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
+import 'package:ics/app/modules/home/data/models/user_model.dart';
+import 'package:ics/app/modules/home/data/quary/configartion_quary.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:ics/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
   //banner
@@ -50,4 +55,47 @@ class HomeController extends GetxController {
     AppColors.accent,
     AppColors.secondary,
   ];
+
+  @override
+  void onInit() {
+    getUser();
+    super.onInit();
+  }
+
+  GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
+
+  late UserModel usersModel = UserModel();
+  var startGetUser = false.obs;
+  var hasGetUser = false.obs;
+  GetUser_byPk_Query getUser_byPk_Query = GetUser_byPk_Query();
+
+  void getUser() async {
+    startGetUser(true);
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getString(Constants.userId);
+
+    if (id != null) {
+      print("object0");
+      try {
+        dynamic result =
+            await graphQLCommonApi.query(getUser_byPk_Query.fetchData(id), {});
+        startGetUser(false);
+
+        if (result != null) {
+          print("object");
+          usersModel = UserModel.fromJson(result["users_by_pk"]);
+
+          hasGetUser(true);
+        } else {
+          print("object1");
+        }
+      } catch (e) {
+        print("object2");
+        print(e);
+        hasGetUser(false);
+        startGetUser(false);
+      }
+    } else {}
+    print("object3");
+  }
 }

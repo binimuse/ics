@@ -46,6 +46,7 @@ class SplashController extends GetxController {
   void checkifSignedin() async {
     final prefs = await SharedPreferences.getInstance();
     final acc = prefs.getString(Constants.userAccessTokenKey);
+    print(acc);
     final verifyEmail = prefs.getString(Constants.verifyEmail);
 
     if (acc == null && verifyEmail == null) {
