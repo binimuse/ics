@@ -7,7 +7,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:flutter/services.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step2 extends StatelessWidget {
@@ -138,8 +138,12 @@ class Step2 extends StatelessWidget {
           height: 2.h,
         ),
         TextFormBuilder(
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'^[ሀ-፿]+$')),
+          ],
           controller: controller.height,
           hint: 'Height(cm)',
+          keyboardType: TextInputType.name,
           labelText: 'Height(cm)',
           validator: ValidationBuilder().required('Height is required').build(),
           showClearButton: false,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
@@ -11,6 +10,7 @@ import 'package:sizer/sizer.dart';
 import 'package:form_validator/form_validator.dart';
 import '../../../../../config/theme/app_sizes.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 class Step1 extends StatelessWidget {
   final NewPassportController controller = Get.find<NewPassportController>();
@@ -52,6 +52,9 @@ class Step1 extends StatelessWidget {
               ValidationBuilder().required('First name is required').build(),
           labelText: "First name",
           controller: controller.firstNameController,
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp(r"\s")),
+          ],
           hint: 'First name',
           showClearButton: false,
           autoFocus: false,
@@ -116,7 +119,7 @@ class Step1 extends StatelessWidget {
           validator:
               ValidationBuilder().required('birth Country is required').build(),
           labelText: controller.birthCountryvalue.value.isEmpty
-              ? 'birth Country'
+              ? 'Birth Country'
               : controller.birthCountryvalue.value,
           items: controller.bcountries.map((String value) {
             return DropdownMenuItem<String>(

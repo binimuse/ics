@@ -6,6 +6,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:flutter/services.dart';
 
 class TextFormBuilder extends StatefulWidget {
   const TextFormBuilder({
@@ -18,6 +19,8 @@ class TextFormBuilder extends StatefulWidget {
     this.autoFocus,
     this.validator,
     this.focusNode,
+    this.keyboardType,
+    this.inputFormatters,
     required this.showClearButton,
     this.onChanged, // Added onChanged callback
     this.onTap, // Added onChanged callback
@@ -31,6 +34,8 @@ class TextFormBuilder extends StatefulWidget {
   final TextEditingController controller;
   final bool? autoFocus;
   final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
   final void Function(String)? onChanged; // Callback when the text changes
   final String? Function(String?)? validator;
   final VoidCallback? onTap; // Callback when the text changes
@@ -66,6 +71,9 @@ class _TextInputLoginState extends State<TextFormBuilder> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FormBuilderTextField(
+          inputFormatters: widget.inputFormatters,
+
+          keyboardType: widget.keyboardType,
           validator: widget.validator,
           textInputAction: TextInputAction.next,
           cursorColor: AppColors.primary,

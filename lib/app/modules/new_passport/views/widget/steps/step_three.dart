@@ -7,7 +7,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:flutter/services.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step3 extends StatelessWidget {
@@ -87,6 +87,10 @@ class Step3 extends StatelessWidget {
               ValidationBuilder().required('Phone number is required').build(),
           hint: 'Phone number',
           labelText: 'Phone number',
+          keyboardType: TextInputType.phone,
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp(r"\s")),
+          ],
           showClearButton: false,
           autoFocus: false,
           onChanged: (value) {},

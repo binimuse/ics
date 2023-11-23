@@ -8,13 +8,13 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
+import 'package:ics/app/modules/new_passport/views/widget/profile_view.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../common/forms/check_box.dart';
 import '../controllers/new_passport_controller.dart';
-import 'widget/newpassportform.dart';
 
 class NewPassportView extends GetView<NewPassportController> {
   const NewPassportView({Key? key}) : super(key: key);
@@ -59,7 +59,7 @@ class NewPassportView extends GetView<NewPassportController> {
                 ),
                 onPressed: () {
                   if (controller.areAllTermsSelected()) {
-                    Get.to(() => NewPassportForm());
+                    Get.to(() => ProfileView());
                   } else {
                     AppToasts.showError("Error, Please select all terms");
                   }
