@@ -58,7 +58,7 @@ class NewPassportView extends GetView<NewPassportController> {
                   horizontal: AppSizes.mp_w_6,
                 ),
                 onPressed: () {
-                  if (controller.areAllTermsSelected()) {
+                  if (!controller.areAllTermsSelected()) {
                     Get.to(() => ProfileView());
                   } else {
                     AppToasts.showError("Error, Please select all terms");

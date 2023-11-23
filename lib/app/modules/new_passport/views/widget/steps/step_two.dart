@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
@@ -45,12 +46,10 @@ class Step2 extends StatelessWidget {
         SizedBox(
           height: 2.h,
         ),
-        ReusableDropdown(
+        FormBuilderDropdown(
           validator:
               ValidationBuilder().required('Occupation is required').build(),
-          labelText: controller.occupationvalue.value.isEmpty
-              ? 'Occupation'
-              : controller.occupationvalue.value,
+          decoration: ReusableInputDecoration.getDecoration('Occupation'),
           items: controller.occupations.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -64,16 +63,15 @@ class Step2 extends StatelessWidget {
           onChanged: (value) {
             controller.occupationvalue.value = value!;
           },
+          name: 'Country',
         ),
         SizedBox(
           height: 2.h,
         ),
-        ReusableDropdown(
+        FormBuilderDropdown(
           validator:
               ValidationBuilder().required('Hair Color is required').build(),
-          labelText: controller.haircolorvalue.value.isEmpty
-              ? 'Hair Color'
-              : controller.haircolorvalue.value,
+          decoration: ReusableInputDecoration.getDecoration('Hair Color'),
           items: controller.haircolor.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -87,15 +85,14 @@ class Step2 extends StatelessWidget {
           onChanged: (value) {
             controller.haircolorvalue.value = value!;
           },
+          name: 'Hair',
         ),
         SizedBox(
           height: 2.h,
         ),
-        ReusableDropdown(
+        FormBuilderDropdown(
           validator: ValidationBuilder().required('Eye Color').build(),
-          labelText: controller.eyecolorvalue.value.isEmpty
-              ? 'Eye Color'
-              : controller.eyecolorvalue.value,
+          decoration: ReusableInputDecoration.getDecoration('Eye Color'),
           items: controller.eyecolor.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -109,17 +106,16 @@ class Step2 extends StatelessWidget {
           onChanged: (value) {
             controller.eyecolorvalue.value = value!;
           },
+          name: 'Hair',
         ),
         SizedBox(
           height: 2.h,
         ),
-        ReusableDropdown(
+        FormBuilderDropdown(
           validator: ValidationBuilder()
               .required('Martial status is required')
               .build(),
-          labelText: controller.maritalstatusvalue.value.isEmpty
-              ? 'Martial status'
-              : controller.maritalstatusvalue.value,
+          decoration: ReusableInputDecoration.getDecoration('Martial statusr'),
           items: controller.martial.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -133,13 +129,14 @@ class Step2 extends StatelessWidget {
           onChanged: (value) {
             controller.maritalstatusvalue.value = value!;
           },
+          name: 'Martial',
         ),
         SizedBox(
           height: 2.h,
         ),
         TextFormBuilder(
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'^[ሀ-፿]+$')),
+            FilteringTextInputFormatter.deny(RegExp(r"\s")),
           ],
           controller: controller.height,
           hint: 'Height(cm)',

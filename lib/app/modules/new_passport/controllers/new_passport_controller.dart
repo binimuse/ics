@@ -1,7 +1,6 @@
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
-import 'package:ics/app/common/model/dropdown_common_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
 
@@ -140,13 +139,11 @@ class NewPassportController extends GetxController {
 
   List<String> bcountries = [];
   List<String> gender = [];
-
+  var isfeched = false.obs;
   Future<void> getGender() async {
     try {
       dynamic result =
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
-
-          
 
       baseData.value = Basemodel.fromJson(result);
       gender = baseData.value!.base_genders.map((e) => e.name).toList();
@@ -155,7 +152,9 @@ class NewPassportController extends GetxController {
 
       bcountries =
           baseData.value!.base_countries.map((e) => e.name_json).toList();
+      isfeched(true);
     } catch (e) {
+      isfeched(false);
       print(">>>>>>>>>>>>>>>>>> $e");
     }
   }

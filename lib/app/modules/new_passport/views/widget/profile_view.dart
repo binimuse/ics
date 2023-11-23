@@ -7,7 +7,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/views/widget/newpassportform.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 
@@ -20,19 +20,14 @@ class ProfileView extends GetView<NewPassportController> {
       backgroundColor: AppColors.whiteOff,
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: ListView(
+        child: Column(
           children: [
             SizedBox(
-              height: 1.h,
+              height: 5.h,
             ),
             buildName(context),
             buildOrgin(context),
-            SquareButton(
-              icon: Icons.add,
-              onPressed: () {
-                // Handle button press here
-              },
-            ),
+            buildCard(),
             buildActionButtons(),
           ],
         ),
@@ -67,24 +62,30 @@ class ProfileView extends GetView<NewPassportController> {
       padding: EdgeInsets.all(8.sp),
       child: Column(
         children: [
-          Obx(() => CustomNormalButton(
-                text: 'Continue',
-                textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                  color: AppColors.whiteOff,
-                ),
-                textcolor: AppColors.whiteOff,
-                buttoncolor: controller.areAllTermsSelected()
-                    ? AppColors.primary
-                    : AppColors.grayLight,
-                borderRadius: AppSizes.radius_8,
-                padding: EdgeInsets.symmetric(
-                  vertical: AppSizes.mp_v_2,
-                  horizontal: AppSizes.mp_w_6,
-                ),
-                onPressed: () {
-                  Get.to(() => NewPassportForm());
-                },
-              )),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CustomNormalButton(
+              text: 'Add new',
+              textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                color: AppColors.whiteOff,
+              ),
+              leftIcon: Icon(
+                Icons.add,
+                color: AppColors.whiteOff,
+                size: AppSizes.icon_size_8 * 0.8,
+              ),
+              textcolor: AppColors.whiteOff,
+              buttoncolor: AppColors.primary,
+              borderRadius: AppSizes.radius_8,
+              padding: EdgeInsets.symmetric(
+                vertical: AppSizes.mp_v_2,
+                horizontal: AppSizes.mp_w_6,
+              ),
+              onPressed: () {
+                Get.to(() => NewPassportForm());
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -116,25 +117,111 @@ class ProfileView extends GetView<NewPassportController> {
       ],
     );
   }
-}
 
-class SquareButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  SquareButton({required this.icon, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.toastMessageBackground,
-        borderRadius: BorderRadius.circular(AppSizes.radius_4),
+  buildCard() {
+    return Expanded(
+      child: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.mp_w_6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: AppSizes.mp_v_2 * 1.5),
+                    buildCompanyInfoItem(
+                      name: "Biniyam",
+                      email: "bini@biniyam.com",
+                      phone: "0923798644",
+                    ),
+                    SizedBox(height: AppSizes.mp_v_2 * 1.5),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
+    );
+  }
 
-      width: 20.w, // Set the desired width of the button
-      height: 20.w, // Set the desired height of the button
-      child: Icon(icon),
+  Widget buildCompanyInfoItem({
+    required String name,
+    required String email,
+    required String phone,
+  }) {
+    return Container(
+      height: 13.h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(
+          color: AppColors.grayLight,
+          width: 1.0,
+        ),
+        color: AppColors.whiteOff,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              color: AppColors.grayLighter,
+            ),
+            height: 5.h,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 3.w,
+                ),
+                SvgPicture.asset(
+                  Assets.icons.profile,
+                  color: AppColors.grayDark,
+                  width: AppSizes.icon_size_6,
+                ),
+                SizedBox(
+                  width: AppSizes.mp_v_1,
+                ),
+                Text(
+                  name,
+                  style: AppTextStyles.bodySmallBold.copyWith(
+                      color: AppColors.grayDark,
+                      fontSize: AppSizes.font_12 * 1.0),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: AppSizes.mp_v_4,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, top: 9.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  email,
+                  style: AppTextStyles.bodySmallRegular.copyWith(
+                    color: AppColors.grayDark,
+                  ),
+                ),
+                Text(
+                  phone,
+                  style: AppTextStyles.bodySmallRegular.copyWith(
+                    color: AppColors.grayDark,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

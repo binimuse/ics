@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
@@ -45,12 +46,10 @@ class Step3 extends StatelessWidget {
         SizedBox(
           height: 4.h,
         ),
-        ReusableDropdown(
+        FormBuilderDropdown(
           validator:
               ValidationBuilder().required('Country is required').build(),
-          labelText: controller.countryvalue.value.isEmpty
-              ? 'Country'
-              : controller.countryvalue.value,
+          decoration: ReusableInputDecoration.getDecoration('Country'),
           items: controller.countries.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -64,6 +63,7 @@ class Step3 extends StatelessWidget {
           onChanged: (value) {
             controller.countryvalue.value = value!;
           },
+          name: 'Country',
         ),
         SizedBox(
           height: 2.h,
@@ -75,6 +75,9 @@ class Step3 extends StatelessWidget {
           validator:
               ValidationBuilder().required('Address is required').build(),
           showClearButton: false,
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp(r"\s")),
+          ],
           autoFocus: false,
           onChanged: (value) {},
         ),
