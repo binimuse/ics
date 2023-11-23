@@ -86,8 +86,7 @@ class NewPassportController extends GetxController {
   final TextEditingController dateofbirth = TextEditingController();
 
   final RxString birthCountryvalue = ''.obs;
-
-  final Rxn<DropDownCommonModel> gendervalue = Rxn<DropDownCommonModel>();
+  final RxString gendervalue = ''.obs;
 
   var selectedDate = DateTime.now().obs;
 
@@ -137,18 +136,30 @@ class NewPassportController extends GetxController {
   GetallQuery getGenderQuery = GetallQuery();
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
 
+  List<String> martial = [];
+
+  List<String> bcountries = [];
+  List<String> gender = [];
+
   Future<void> getGender() async {
     try {
       dynamic result =
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
 
+          
+
       baseData.value = Basemodel.fromJson(result);
+      gender = baseData.value!.base_genders.map((e) => e.name).toList();
+      martial =
+          baseData.value!.base_marital_statuses.map((e) => e.name).toList();
+
+      bcountries =
+          baseData.value!.base_countries.map((e) => e.name_json).toList();
     } catch (e) {
       print(">>>>>>>>>>>>>>>>>> $e");
     }
   }
 
-  List<String> gender = ['Male', 'Female'];
   List<String> occupations = [
     'Waiter',
     'Dentist',
@@ -173,33 +184,6 @@ class NewPassportController extends GetxController {
     'Other',
   ];
 
-  List<String> martial = [
-    'Married',
-    'Widowed',
-    'Separated',
-    'Divorced',
-    'Single',
-  ];
-
-  List<String> bcountries = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Argentina',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-  ];
   List<String> countries = [
     'Afghanistan',
     'Albania',

@@ -87,23 +87,28 @@ class Step1 extends StatelessWidget {
         SizedBox(
           height: 2.h,
         ),
-        ReusableDropdown(
-          validator: ValidationBuilder().required('gender is required').build(),
-          labelText: 'gender',
-          items: controller.gender.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            controller.gendervalue.value!.name = value!;
-          },
-        ),
+        Obx(() => ReusableDropdown(
+              initialValue: controller.gendervalue.value.isEmpty
+                  ? ""
+                  : controller.gendervalue.value,
+              validator:
+                  ValidationBuilder().required('gender is required').build(),
+              labelText: 'Gender',
+              items: controller.gender.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: AppTextStyles.captionBold
+                        .copyWith(color: AppColors.grayDark),
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                print(controller.gendervalue.value);
+                controller.gendervalue.value = value!;
+              },
+            )),
         SizedBox(
           height: 2.h,
         ),

@@ -6,6 +6,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 
 class ReusableDropdown extends StatelessWidget {
   final String labelText;
+  final String? initialValue;
   final List<DropdownMenuItem<String>> items;
 
   final void Function(String?)? onChanged;
@@ -17,11 +18,13 @@ class ReusableDropdown extends StatelessWidget {
     this.onChanged,
     this.onsave,
     this.validator,
+    this.initialValue,
   });
 
   @override
   Widget build(BuildContext context) {
     return FormBuilderDropdown(
+      initialValue: initialValue,
       validator: validator!,
       decoration: InputDecoration(
         labelText: labelText,
