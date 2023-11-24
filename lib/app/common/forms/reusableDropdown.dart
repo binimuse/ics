@@ -29,7 +29,7 @@ class ReusableInputDecoration {
       ),
       labelStyle: AppTextStyles.captionBold.copyWith(
         color: AppColors.grayLight,
-        fontSize: AppSizes.font_14,
+        fontSize: AppSizes.font_12,
       ),
       contentPadding: EdgeInsets.zero,
       filled: true,

@@ -7,11 +7,13 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/app_icon_button.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
+
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
@@ -76,10 +78,10 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
       Map<String, dynamic> formData =
           controller.newPassportformKey.currentState!.value;
       // Process form data or submit to an API
-      print(formData);
+      controller.check();
     }
 
-    Get.offAndToNamed(Routes.MAIN_PAGE);
+    //  Get.offAndToNamed(Routes.MAIN_PAGE);
   }
 
   buildForm(BuildContext context) {
@@ -112,30 +114,34 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
               });
             },
             enableNextPreviousButtons: false,
+            enableStepTapping: false,
+            stepReachedAnimationDuration: Duration.zero,
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: FormBuilder(
-                key: controller.newPassportformKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                clearValueOnUnregister: false,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      if (controller.currentStep == 0) Step1(),
-                      // Add the Step1 class here
+          Obx(() => controller.isfeched.value
+              ? Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: FormBuilder(
+                      key: controller.newPassportformKey,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      skipDisabled: true,
+                      clearValueOnUnregister: false,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            if (controller.currentStep == 0) Step1(),
 
-                      if (controller.currentStep == 1) Step2(),
-                      if (controller.currentStep == 2) Step3(),
+                            if (controller.currentStep == 1) Step2(),
+                            if (controller.currentStep == 2) Step3(),
 
-                      // Add more form fields as needed for each step
-                    ],
+                            // Add more form fields as needed for each step
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ),
+                )
+              : Center(child: CustomLoadingWidget())),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -177,7 +183,8 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                   horizontal: AppSizes.mp_w_6,
                 ),
                 onPressed: () {
-                  if (controller.newPassportformKey.currentState!.validate()) {
+                  if (controller.newPassportformKey.currentState!
+                      .saveAndValidate()) {
                     if (controller.currentStep == 2) {
                       // Handle form submission
                       _submitForm();

@@ -7,13 +7,21 @@ import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
+import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter/services.dart';
 import '../../../../../config/theme/app_sizes.dart';
+import 'package:flutter/services.dart';
 
-class Step2 extends StatelessWidget {
+class Step2 extends StatefulWidget {
+  @override
+  State<Step2> createState() => _Step2State();
+}
+
+class _Step2State extends State<Step2> {
   final NewPassportController controller = Get.find<NewPassportController>();
+
   // other properties go here
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -63,7 +71,7 @@ class Step2 extends StatelessWidget {
           onChanged: (value) {
             controller.occupationvalue.value = value!;
           },
-          name: 'Country',
+          name: 'Occupation',
         ),
         SizedBox(
           height: 2.h,
@@ -112,10 +120,31 @@ class Step2 extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
+          validator: ValidationBuilder().required('Skin Color').build(),
+          decoration: ReusableInputDecoration.getDecoration('Skin Color'),
+          items: controller.SkinColor.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: AppTextStyles.captionBold
+                    .copyWith(color: AppColors.grayDark),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            controller.skincolorvalue.value = value!;
+          },
+          name: 'Skin',
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        FormBuilderDropdown(
           validator: ValidationBuilder()
               .required('Martial status is required')
               .build(),
-          decoration: ReusableInputDecoration.getDecoration('Martial statusr'),
+          decoration: ReusableInputDecoration.getDecoration('Martial status'),
           items: controller.martial.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -136,11 +165,11 @@ class Step2 extends StatelessWidget {
         ),
         TextFormBuilder(
           inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp(r"\s")),
+            HeightInputFormatter(),
           ],
           controller: controller.height,
           hint: 'Height(cm)',
-          keyboardType: TextInputType.name,
+          keyboardType: TextInputType.number,
           labelText: 'Height(cm)',
           validator: ValidationBuilder().required('Height is required').build(),
           showClearButton: false,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
+import 'package:ics/app/common/forms/phone_number_input.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
@@ -14,7 +15,7 @@ import '../../../../../config/theme/app_sizes.dart';
 class Step3 extends StatelessWidget {
   final NewPassportController controller = Get.find<NewPassportController>();
   // other properties go here
-  @override
+
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -92,7 +93,7 @@ class Step3 extends StatelessWidget {
           labelText: 'Phone number',
           keyboardType: TextInputType.phone,
           inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp(r"\s")),
+            PhoneNumberInputFormatter(maxLength: 16),
           ],
           showClearButton: false,
           autoFocus: false,
