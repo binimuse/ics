@@ -13,11 +13,11 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
+import 'package:ics/app/modules/new_passport/views/widget/steps/step_four.dart';
 
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
-import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:sizer/sizer.dart';
@@ -75,8 +75,6 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
     if (controller.newPassportformKey.currentState!.saveAndValidate()) {
       // Get form data
-      Map<String, dynamic> formData =
-          controller.newPassportformKey.currentState!.value;
       // Process form data or submit to an API
       controller.check();
     }
@@ -100,11 +98,15 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                 color: AppColors.whiteOff,
               ),
               Icon(
-                Icons.edit_document,
+                Icons.person,
                 color: AppColors.whiteOff,
               ),
               Icon(
                 Icons.location_on,
+                color: AppColors.whiteOff,
+              ),
+              Icon(
+                Icons.edit_document,
                 color: AppColors.whiteOff,
               ),
             ],
@@ -133,6 +135,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
                             if (controller.currentStep == 1) Step2(),
                             if (controller.currentStep == 2) Step3(),
+                            if (controller.currentStep == 3) Step4(),
 
                             // Add more form fields as needed for each step
                           ],
@@ -169,12 +172,12 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                   },
                 ),
               CustomNormalButton(
-                text: controller.currentStep == 2 ? 'Submit' : 'Next',
+                text: controller.currentStep == 3 ? 'Submit' : 'Next',
                 textStyle: AppTextStyles.bodyLargeBold.copyWith(
                   color: AppColors.whiteOff,
                 ),
                 textcolor: AppColors.whiteOff,
-                buttoncolor: controller.currentStep == 2
+                buttoncolor: controller.currentStep == 3
                     ? AppColors.primary
                     : AppColors.grayLight,
                 borderRadius: AppSizes.radius_16,
@@ -185,7 +188,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                 onPressed: () {
                   if (controller.newPassportformKey.currentState!
                       .saveAndValidate()) {
-                    if (controller.currentStep == 2) {
+                    if (controller.currentStep == 3) {
                       // Handle form submission
                       _submitForm();
                     } else {

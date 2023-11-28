@@ -1,4 +1,5 @@
 {
     "editor.acceptSuggestionOnEnter": "on",
-    "dart.flutterSdkPath": "C:\\src\\flutter\\flutter"
+    "dart.flutterSdkPath": "C:\\src\\flutter\\flutter",
+    "editor.inlineSuggest.showToolbar": "onHover"
 }

@@ -6,6 +6,7 @@ import 'package:ics/app/modules/login/data/mutation/signin_mutuation.dart';
 import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/services/graphql_conf.dart';
 import 'package:ics/utils/constants.dart';
+import 'package:ics/utils/encryption.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
@@ -89,11 +90,15 @@ class LoginController extends GetxController {
 
     if (!result.hasException) {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(Constants.userAccessTokenKey,
-          result.data!["login"]["tokens"]["access_token"]);
+      await prefs.setString(
+          Constants.userAccessTokenKey,
+          EncryptionUtil.encrypt(
+              result.data!["login"]["tokens"]["access_token"]));
 
-      await prefs.setString(Constants.refreshTokenKey,
-          result.data!["login"]["tokens"]["refresh_token"]);
+      await prefs.setString(
+          Constants.refreshTokenKey,
+          EncryptionUtil.encrypt(
+              result.data!["login"]["tokens"]["refresh_token"]));
 
       await prefs.setString(
           Constants.userId, result.data!["login"]["user_id"].toString());

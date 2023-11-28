@@ -3,6 +3,7 @@ import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/utils/constants.dart';
+import 'package:ics/utils/encryption.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,7 +46,8 @@ class SplashController extends GetxController {
 
   void checkifSignedin() async {
     final prefs = await SharedPreferences.getInstance();
-    final acc = prefs.getString(Constants.userAccessTokenKey);
+    final acc =
+        EncryptionUtil.decrypt(prefs.getString(Constants.userAccessTokenKey));
     print(acc);
     final verifyEmail = prefs.getString(Constants.verifyEmail);
 

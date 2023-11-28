@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -22,6 +23,7 @@ class NewPassportController extends GetxController {
   final TextEditingController AmfirstNameController = TextEditingController();
   final TextEditingController AmgrandFatherNameController =
       TextEditingController();
+  RxList<PlatformFile> selectedFile = <PlatformFile>[].obs;
 
   List<String> SkinColor = [
     'Black',
@@ -33,30 +35,15 @@ class NewPassportController extends GetxController {
   final TextEditingController addressController = TextEditingController();
   final Rxn<Basemodel> baseData = Rxn<Basemodel>();
   List<CommonJsonModel> bcountries = [];
+  List<CommonIDModel> base_document_types = [];
+  List<PassportDocuments> documents = [];
   final RxString birthCountryvalue = ''.obs;
   final RxString birthCountryvalueId = ''.obs;
-  List<String> countries = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Argentina',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-  ];
 
   final TextEditingController countryController = TextEditingController();
   final RxString countryvalue = ''.obs;
+  final RxString CountryvalueId = ''.obs;
+
   int currentStep = 0;
   final TextEditingController dateofbirth = TextEditingController();
   final TextEditingController dayController = TextEditingController();
@@ -93,6 +80,7 @@ class NewPassportController extends GetxController {
   final TextEditingController height = TextEditingController();
 
   var isSend = false.obs;
+  var isSendDoc = false.obs;
   var isfeched = false.obs;
   final RxString maritalstatusvalue = ''.obs;
   List<String> martial = [];
@@ -122,7 +110,7 @@ class NewPassportController extends GetxController {
 
   @override
   void onInit() {
-    getGender();
+    getAll();
     super.onInit();
   }
 
@@ -208,7 +196,7 @@ class NewPassportController extends GetxController {
     return VideoTypenew.unknown;
   }
 
-  Future<void> getGender() async {
+  Future<void> getAll() async {
     try {
       dynamic result =
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
@@ -219,6 +207,13 @@ class NewPassportController extends GetxController {
           baseData.value!.base_marital_statuses.map((e) => e.name).toList();
 
       bcountries = baseData.value!.base_countries.map((e) => e).toList();
+      base_document_types =
+          baseData.value!.base_document_types.map((e) => e).toList();
+
+      for (var documentType in base_document_types) {
+        documents
+            .add(PassportDocuments(documentTypeId: documentType.id, files: []));
+      }
       isfeched(true);
     } catch (e) {
       isfeched(false);
@@ -236,6 +231,7 @@ class NewPassportController extends GetxController {
   }
 
   Future<void> send() async {
+    print(birthCountryvalueId.toString());
     try {
       isSend(true);
       DateTime dateOfBirth = DateTime(
@@ -266,12 +262,15 @@ class NewPassportController extends GetxController {
               'occupation': occupationvalue.value,
               'hair_colour': haircolorvalue.value,
               'eye_colour': eyecolorvalue.value,
-              'marital_status': base_marital_statuses_enum.Married,
+              'marital_status': maritalstatusvalue.value,
               'height': height.text,
               'skin_colour': skincolorvalue.value,
-              'abroad_country_id': birthCountryvalueId.value,
+              'abroad_country_id': CountryvalueId.value,
               'abroad_address': addressController.text,
               'abroad_phone_number': phonenumber.text,
+              'new_applications': {
+                "data": {"delivery_date": null}
+              }
             }
           },
         ),
@@ -282,10 +281,53 @@ class NewPassportController extends GetxController {
         print(result.exception.toString());
       } else {
         isSend(false);
-        print('Mutation successful.');
+
+        var newApplications = result.data!['insert_ics_citizens']['returning']
+            ['new_applications'];
+        var newApplicationId = newApplications['id'];
+        print('New application ID: $newApplicationId');
+        base_document_types.forEach((element) {
+          sendDoc(newApplicationId, element.id);
+        });
       }
     } catch (e) {
       isSend(false);
+      print('Error: $e');
+    }
+  }
+
+  Future<void> sendDoc(newApplicationId, String id) async {
+    try {
+      isSendDoc(true);
+
+      GraphQLClient graphQLClient;
+
+      graphQLClient = GraphQLConfiguration().clientToQuery();
+
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(NewDocApplications.newDoc),
+          variables: <String, dynamic>{
+            'objects': {
+              'new_application_id': newApplicationId,
+              'File': documents,
+              'document_type_id': id,
+            }
+          },
+        ),
+      );
+
+      if (result.hasException) {
+        isSendDoc(false);
+        print(result.exception.toString());
+      } else {
+        isSendDoc(false);
+
+        print('  sendDoc(); successful.');
+      }
+    } catch (e) {
+      print(e.toString());
+      isSendDoc(false);
       print('Error: $e');
     }
   }
@@ -322,4 +364,14 @@ enum VideoTypenew { video, image, audio, unknown }
 
 enum base_marital_statuses_enum {
   Married,
+}
+
+class PassportDocuments {
+  final documentTypeId;
+  final List<PlatformFile> files;
+
+  const PassportDocuments({
+    required this.documentTypeId,
+    required this.files,
+  });
 }

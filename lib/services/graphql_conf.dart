@@ -3,6 +3,8 @@
 import "package:flutter/material.dart";
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/utils/constants.dart';
+import 'package:ics/utils/encryption.dart';
+import 'package:ics/utils/prefrence_utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GraphQLConfiguration {
@@ -17,7 +19,7 @@ class GraphQLConfiguration {
   static AuthLink authLink = AuthLink(getToken: () async {
     final prefs = await SharedPreferences.getInstance();
 
-    return "Bearer ${prefs.getString(Constants.userAccessTokenKey)}";
+    return "Bearer ${EncryptionUtil.decrypt(prefs.getString(Constants.userAccessTokenKey))}";
   });
 
   static WebSocketLink websocketLink = WebSocketLink(
@@ -28,8 +30,10 @@ class GraphQLConfiguration {
       initialPayload: () async {
         final prefs = await SharedPreferences.getInstance();
         late String token;
-        if (prefs.getString('access_token')!.isNotEmpty) {
-          token = prefs.getString('access_token').toString();
+        if (EncryptionUtil.decrypt(prefs.getString('access_token'))
+            .isNotEmpty) {
+          token = EncryptionUtil.decrypt(prefs.getString('access_token'))
+              .toString();
         }
         return {
           'headers': {'Authorization': 'Bearer $token'},
@@ -76,6 +80,31 @@ class GraphQLConfigurationForauth {
     return GraphQLClient(
       cache: GraphQLCache(),
       link: link,
+    );
+  }
+}
+
+class GraphQLConfigurationRefresh {
+  static HttpLink httpLink = HttpLink(
+    "http://196.189.30.108:8000/v1/graphql",
+    defaultHeaders: {
+      'x-hasura-role': "anonymous",
+    },
+  );
+
+  ValueNotifier<GraphQLClient> client = ValueNotifier(
+    GraphQLClient(
+      link: httpLink,
+      cache: GraphQLCache(),
+    ),
+  );
+
+  GraphQLClient clientToQuery() {
+    return GraphQLClient(
+      cache: GraphQLCache(),
+      link: AuthLink(getToken: () async {
+        return "Bearer ${EncryptionUtil.decrypt(PreferenceUtils.getString(Constants.refreshTokenKey))}";
+      }).concat(httpLink),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
+import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/services.dart';
 import '../../../../../config/theme/app_sizes.dart';
@@ -48,21 +49,20 @@ class Step3 extends StatelessWidget {
           height: 4.h,
         ),
         FormBuilderDropdown(
-          validator:
-              ValidationBuilder().required('Country is required').build(),
           decoration: ReusableInputDecoration.getDecoration('Country'),
-          items: controller.countries.map((String value) {
-            return DropdownMenuItem<String>(
+          items: controller.bcountries.map((CommonJsonModel value) {
+            return DropdownMenuItem<CommonJsonModel>(
               value: value,
               child: Text(
-                value,
+                value.name_json,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
             );
           }).toList(),
           onChanged: (value) {
-            controller.countryvalue.value = value!;
+            controller.countryvalue.value = value!.name_json;
+            controller.CountryvalueId.value = value.id;
           },
           name: 'Country',
         ),

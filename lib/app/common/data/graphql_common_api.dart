@@ -1,28 +1,51 @@
 // ignore_for_file: constant_identifier_names, depend_on_referenced_packages
 
-import 'package:get/get.dart';
+import 'dart:async';
+import 'dart:io';
+
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/services/graphql_conf.dart';
+import 'package:ics/services/user_token_refresher.dart';
 
-import '../../modules/logout/controllers/logout_controller.dart';
 
 class GraphQLCommonApi {
+  final ConfigurationRole configurationRole;
+  final snackBarInterval = const Duration(seconds: 5);
+
+  GraphQLCommonApi({
+    this.configurationRole = ConfigurationRole.USER,
+  });
+
   Future<bool> isInternetConnected() async {
     final ConnectivityResult connectivityResult =
         await Connectivity().checkConnectivity();
+    if (Platform.isIOS) {
+      return true;
+    }
     return connectivityResult != ConnectivityResult.none;
   }
 
+  bool isSnackBarShown = false;
   Future<Map<String, dynamic>?> query(
       String queryStr, Map<String, dynamic> variables) async {
     /// CHECK INTERNET CONNECTIVITY
     final bool isConnected = await isInternetConnected();
 
     if (!isConnected) {
-      AppToasts.showError("No internet");
+      if (!isSnackBarShown) {
+        AppToasts.showError("No internet");
+        isSnackBarShown = true;
+
+        // Using Timer
+        Timer(snackBarInterval, () {
+          isSnackBarShown = false;
+        });
+      }
     } else {
+      isSnackBarShown = false;
+
       /// GET GRAPHQL CLIENT
       GraphQLClient graphQLClient;
 
@@ -41,10 +64,18 @@ class GraphQLCommonApi {
         return result.data;
       } else {
         print("API RESPONSE => CALLED ${result.exception}");
-        if (result.exception.toString().contains('JWTExpired')) {
-          final LogoutController logoutController = Get.put(LogoutController());
+        UserTokenCheckerResponse userTokenCheckerResponse =
+            await UserTokenChecker.checkTokenNew(result.exception, queryStr);
 
-          logoutController.logout();
+        if (userTokenCheckerResponse ==
+            UserTokenCheckerResponse.NETWORK_ERROR) {
+          throw result.exception!;
+        }
+
+        if (userTokenCheckerResponse ==
+            UserTokenCheckerResponse.TOKEN_REFRESHED_SUCCESS) {
+          ///CALL FUNCTION AGAIN
+          query(queryStr, variables);
         }
       }
     }
@@ -75,15 +106,28 @@ class GraphQLCommonApi {
 
         return result.data;
       } else {
-        print("API RESPONSE => CALLED ${result.exception}");
-        if (result.exception.toString().contains('JWTExpired')) {
-          final LogoutController logoutController = Get.put(LogoutController());
+        UserTokenCheckerResponse userTokenCheckerResponse =
+            await UserTokenChecker.checkTokenNew(result.exception, queryStr);
 
-          logoutController.logout();
+        if (userTokenCheckerResponse ==
+            UserTokenCheckerResponse.NETWORK_ERROR) {
+          throw result.exception!;
+        }
+
+        if (userTokenCheckerResponse ==
+            UserTokenCheckerResponse.TOKEN_REFRESHED_SUCCESS) {
+          ///CALL FUNCTION AGAIN
+          query(queryStr, variables);
         }
       }
     }
 
     return null;
   }
+}
+
+enum GraphQLCommonStatus { LOADING, ERROR }
+
+enum ConfigurationRole {
+  USER,
 }
