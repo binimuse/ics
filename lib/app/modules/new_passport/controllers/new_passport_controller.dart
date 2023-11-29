@@ -25,7 +25,6 @@ import 'dart:io';
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
 import '../data/quary/get_all.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:http_parser/http_parser.dart';
 
@@ -91,8 +90,6 @@ class NewPassportController extends GetxController {
   //Step 2
 
   final TextEditingController height = TextEditingController();
-
-  var isSend = false.obs;
 
   var isfeched = false.obs;
   final RxString maritalstatusvalue = ''.obs;
@@ -259,21 +256,17 @@ class NewPassportController extends GetxController {
     }
   }
 
-  void checkdoc() {
+  void checkdoc() async {
     if (documents.isEmpty) {
       AppToasts.showError("Document are empty");
       return;
     } else if (documents.any((element) => element.files.isEmpty)) {
-      AppToasts.showError("Files are empty");
+      AppToasts.showError("Document must not be empty");
       return;
     } else {
-      documents.forEach((element) {
-        geturl(
-          element.documentTypeId,
-          element.files.first,
-        );
-      });
-      // Call report() when the form is valid
+      await Future.delayed(const Duration(seconds: 1));
+      AppToasts.showSuccess("New Passport Sent successfully");
+      Get.offAllNamed(Routes.MAIN_PAGE);
     }
   }
 
@@ -286,12 +279,7 @@ class NewPassportController extends GetxController {
         await graphQLCommonApi.query(geturlQuery.fetchData("pdf", ""), {});
 
     getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
-
-// {
-//   file: getUrlModel
-
-// }
-
+    isSendDocStarted(true);
     sendUrl(documentTypeId, getUrlModel.value!.url, files);
     try {
       isfeched(true);
@@ -301,6 +289,7 @@ class NewPassportController extends GetxController {
     }
   }
 
+  var isGetDocUrlStarted = false.obs;
   void sendUrl(
     String? documentTypeId,
     String? url,
@@ -315,6 +304,7 @@ class NewPassportController extends GetxController {
     });
 
     try {
+      isGetDocUrlStarted(true);
       var response = await dio.put(url, data: formData);
       if (response.statusCode == 200) {
         print('File uploaded successfully');
@@ -326,17 +316,23 @@ class NewPassportController extends GetxController {
 
         print(response);
       } else {
+        isGetDocUrlStarted(false);
         print('Failed to upload file. Error: ${response.statusCode}');
       }
     } catch (e) {
+      isGetDocUrlStarted(false);
       print('Error uploading file: $e');
     }
   }
 
+  var isSend = false.obs;
+  var isSendStared = false.obs;
   var newApplicationId;
   Future<void> send() async {
     print(birthCountryvalueId.toString());
+
     try {
+      isSendStared.value = true;
       DateTime dateOfBirth = DateTime(
         int.parse(yearController.text),
         int.parse(monthController.text),
@@ -382,18 +378,19 @@ class NewPassportController extends GetxController {
       if (result.hasException) {
         isSend.value = false;
         print(result.exception.toString());
+        isSendStared.value = false;
       } else {
         print(result.data);
         print("""object""");
         isSend.value = true;
+        isSendStared.value = false;
 
         newApplicationId = result.data!['insert_ics_citizens']['returning'][0]
                 ['new_applications'][0]['id']
             .toString();
-
-        print(newApplicationId.toString());
       }
     } catch (e) {
+      isSendStared.value = false;
       isSend.value = false;
       print('Error: $e');
     }
@@ -408,8 +405,6 @@ class NewPassportController extends GetxController {
   ) async {
     try {
       //file upload
-
-      isSendDocStarted(true);
 
       GraphQLClient graphQLClient;
 
@@ -435,56 +430,13 @@ class NewPassportController extends GetxController {
         isSendDocSuccess(true);
         isSendDocStarted(false);
 
-        AppToasts.showSuccess("NeW Passport successfully sent");
-        await Future.delayed(const Duration(seconds: 2));
-
-        //   Get.offAllNamed(Routes.MY_ORDER);
+        AppToasts.showSuccess("Documnet uploaded successfully");
       }
     } catch (e) {
       print(e.toString());
       isSendDocStarted(false);
       print('Error: $e');
     }
-  }
-
-  Future<List<http.MultipartFile>> uploadFilesDoc(
-      List<PlatformFile> files) async {
-    List<http.MultipartFile> uploadedFiles = [];
-
-    for (PlatformFile platformFile in files) {
-      final File file = File(platformFile.path!);
-
-      if (!file.existsSync()) {
-        print('File does not exist: ${file.path}');
-        continue;
-      }
-
-      final fileName = file.path.split('/').last;
-      final mimeType = lookupMimeType(file.path);
-
-      if (mimeType != null) {
-        try {
-          final fileStream = http.ByteStream(file.openRead());
-          final fileLength = await file.length();
-
-          final uploadedFile = http.MultipartFile(
-            'files',
-            fileStream,
-            fileLength,
-            filename: fileName,
-            contentType: MediaType.parse(mimeType),
-          );
-
-          uploadedFiles.add(uploadedFile);
-        } catch (e) {
-          print('Error processing file: $fileName - $e');
-        }
-      } else {
-        print('Could not determine mime type for file: $fileName');
-      }
-    }
-
-    return uploadedFiles;
   }
 
   Map<String, dynamic> firstnameToJson() {

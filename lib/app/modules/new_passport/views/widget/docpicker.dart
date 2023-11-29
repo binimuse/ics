@@ -1,6 +1,7 @@
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -45,6 +46,11 @@ class _BuildDocState extends State<BuildDoc> {
                   (element) => element.documentTypeId == widget.documentType.id)
               .files
               .add(file);
+
+          widget.controller.geturl(
+            widget.controller.documents.first.documentTypeId,
+            widget.controller.documents.first.files.first,
+          );
         });
       } else {
         AppToasts.showError("Invalid File!!");
@@ -57,8 +63,12 @@ class _BuildDocState extends State<BuildDoc> {
 
   @override
   Widget build(BuildContext context) {
+    // Add a flag to track loading state
+
     return InkWell(
-      onTap: openPdfPicker,
+      onTap: () {
+        openPdfPicker();
+      },
       child: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -81,45 +91,52 @@ class _BuildDocState extends State<BuildDoc> {
               ),
             ),
             SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
                 scrollDirection: Axis.vertical,
-                itemCount: widget.controller.documents
-                    .firstWhere((element) =>
-                        element.documentTypeId == widget.documentType.id)
-                    .files
-                    .length,
-                itemBuilder: (BuildContext context, int index) {
-                  final file = widget.controller.documents
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: widget.controller.documents
                       .firstWhere((element) =>
                           element.documentTypeId == widget.documentType.id)
-                      .files[index];
-                  return Stack(
-                    children: [
-                      Container(
-                        height: 25.h,
-                        child: PDFView(
-                          filePath: file.path!,
-                        ),
-                      ),
-                      Positioned(
-                        top: 8.0,
-                        right: 8.0,
-                        child: GestureDetector(
-                          onTap: () => deleteFile(index),
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.red,
+                      .files
+                      .length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final file = widget.controller.documents
+                        .firstWhere((element) =>
+                            element.documentTypeId == widget.documentType.id)
+                        .files[index];
+                    return Stack(
+                      children: [
+                        Obx(() => !widget.controller.isSendDocStarted.value
+                            ? Container(
+                                height: 25.h,
+                                child: PDFView(
+                                  filePath: file.path!,
+                                ),
+                              )
+                            : Container(
+                                height: 25.h,
+                                color: Colors.black54,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )),
+                        Positioned(
+                          top: 8.0,
+                          right: 8.0,
+                          child: GestureDetector(
+                            onTap: () => deleteFile(index),
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
+                      ],
+                    );
+                  },
+                ))
           ],
         ),
       ),

@@ -71,7 +71,8 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
   buildForm(BuildContext context) {
     return Container(
-      height: 80.h,
+      color: AppColors.grayLighter.withOpacity(0.2),
+      height: 85.h,
       child: Column(
         children: [
           IconStepper(
@@ -133,68 +134,93 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                   ),
                 )
               : Center(child: CustomLoadingWidget())),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (controller.currentStep > 0)
-                CustomNormalButton(
-                  text: 'Back',
-                  textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                    color: AppColors.whiteOff,
+          Container(
+            color: AppColors.whiteOff,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (controller.currentStep > 0)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomNormalButton(
+                      text: 'Back',
+                      textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                        color: AppColors.whiteOff,
+                      ),
+                      textcolor: AppColors.whiteOff,
+                      buttoncolor: controller.areAllTermsSelected()
+                          ? AppColors.primary
+                          : AppColors.grayLight,
+                      borderRadius: AppSizes.radius_16,
+                      padding: EdgeInsets.symmetric(
+                        vertical: AppSizes.mp_v_1,
+                        horizontal: AppSizes.mp_w_6,
+                      ),
+                      onPressed: () {
+                        if (controller.currentStep > 0) {
+                          setState(() {
+                            controller.currentStep--;
+                          });
+                        }
+                      },
+                    ),
                   ),
-                  textcolor: AppColors.whiteOff,
-                  buttoncolor: controller.areAllTermsSelected()
-                      ? AppColors.primary
-                      : AppColors.grayLight,
-                  borderRadius: AppSizes.radius_16,
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSizes.mp_v_1,
-                    horizontal: AppSizes.mp_w_6,
-                  ),
-                  onPressed: () {
-                    if (controller.currentStep > 0) {
-                      setState(() {
-                        controller.currentStep--;
-                      });
-                    }
-                  },
-                ),
-              CustomNormalButton(
-                  text: controller.currentStep == 3 ? 'Submit' : 'Next',
-                  textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                    color: AppColors.whiteOff,
-                  ),
-                  textcolor: AppColors.whiteOff,
-                  buttoncolor: controller.currentStep == 3
-                      ? AppColors.primary
-                      : AppColors.grayLight,
-                  borderRadius: AppSizes.radius_16,
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSizes.mp_v_1,
-                    horizontal: AppSizes.mp_w_6,
-                  ),
-                  onPressed: () async {
-                    if (controller.currentStep == 2) {
-                      controller.send();
-                      await Future.delayed(const Duration(milliseconds: 400));
-                      // Handle form submission
-                      if (controller.isSend.value) {
-                        setState(() {
-                          controller.currentStep++;
-                        });
-                      } else {
-                        AppToasts.showError("Some things went wrong");
-                      }
-                    } else if (controller.currentStep == 3) {
-                      controller.checkdoc();
-                    } else {
-                      setState(() {
-                        controller.currentStep++;
-                      });
-                      _scrollToBottom();
-                    }
-                  }),
-            ],
+                Obx(() => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomNormalButton(
+                          text: controller.isSendStared.value
+                              ? ""
+                              : controller.currentStep == 3
+                                  ? 'Submit'
+                                  : 'Next',
+                          textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                            color: AppColors.whiteOff,
+                          ),
+                          rightIcon: controller.isSendStared.value
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                  color: AppColors.whiteOff,
+                                  strokeWidth: 1,
+                                ))
+                              : SizedBox(),
+                          textcolor: AppColors.whiteOff,
+                          buttoncolor: controller.currentStep == 3
+                              ? AppColors.primary
+                              : AppColors.grayLight,
+                          borderRadius: AppSizes.radius_16,
+                          padding: EdgeInsets.symmetric(
+                            vertical: AppSizes.mp_v_1,
+                            horizontal: AppSizes.mp_w_6,
+                          ),
+                          onPressed: () async {
+                            if (controller.currentStep == 2) {
+                              controller.send();
+                              await Future.delayed(const Duration(seconds: 1));
+                              // Handle form submission
+                              if (controller.isSend.value) {
+                                setState(() {
+                                  controller.currentStep++;
+                                });
+                              } else {
+                                AppToasts.showError("Some things went wrong");
+                              }
+                            } else if (controller.currentStep == 3) {
+                              controller.checkdoc();
+                            } else {
+                              if (controller.newPassportformKey.currentState!
+                                  .saveAndValidate()) {
+                                setState(() {
+                                  controller.currentStep++;
+                                });
+                              } else {
+                                _scrollToBottom();
+                              }
+                            }
+                          }),
+                    )),
+              ],
+            ),
           ),
         ],
       ),
