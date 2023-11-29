@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/app_icon_button.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -25,8 +26,8 @@ class ProfileView extends GetView<NewPassportController> {
             SizedBox(
               height: 5.h,
             ),
-            buildName(context),
-            buildOrgin(context),
+            buildAppBar(context),
+            buildDiscription(context),
             buildCard(),
             buildActionButtons(),
           ],
@@ -35,7 +36,7 @@ class ProfileView extends GetView<NewPassportController> {
     );
   }
 
-  buildOrgin(BuildContext context) {
+  buildDiscription(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -45,7 +46,7 @@ class ProfileView extends GetView<NewPassportController> {
           SizedBox(
             width: 80.w,
             child: Text(
-              'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+              'Your origin  is an essential document while living in Ethiopia for identification purposes.',
               style: AppTextStyles.captionRegular.copyWith(
                   fontSize: AppSizes.font_14, color: AppColors.grayDark),
               maxLines: 4,
@@ -91,7 +92,7 @@ class ProfileView extends GetView<NewPassportController> {
     );
   }
 
-  buildName(BuildContext context) {
+  buildAppBar(BuildContext context) {
     return Row(
       children: [
         AppSvgButton(
@@ -124,23 +125,37 @@ class ProfileView extends GetView<NewPassportController> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: AppSizes.mp_w_6),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: AppSizes.mp_v_2 * 1.5),
-                    buildCompanyInfoItem(
-                      name: "Biniyam",
-                      email: "bini@biniyam.com",
-                      phone: "0923798644",
-                    ),
-                    SizedBox(height: AppSizes.mp_v_2 * 1.5),
-                  ],
-                ),
-              ),
+              Obx(() => controller.isfechediCitizens.isTrue
+                  ? Container(
+                      width: double.infinity,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: AppSizes.mp_w_6),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: AppSizes.mp_v_2 * 1.5),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.icsCitizens.length,
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: AppSizes.mp_v_2 * 1.5),
+                            itemBuilder: (context, index) {
+                              var citizen = controller.icsCitizens[index];
+                              return buildInfoItem(
+                                name: citizen.firstName.toString() +
+                                    " " +
+                                    citizen.father_name.toString(),
+                                email: citizen.abroadAddress.toString(),
+                                phone: citizen.abroadPhoneNumber.toString(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  : Center(child: CustomLoadingWidget()))
             ],
           ),
         ),
@@ -148,7 +163,7 @@ class ProfileView extends GetView<NewPassportController> {
     );
   }
 
-  Widget buildCompanyInfoItem({
+  Widget buildInfoItem({
     required String name,
     required String email,
     required String phone,

@@ -102,7 +102,7 @@ class HomeView extends GetView<HomeController> {
               ),
               Obx(() => controller.hasGetUser.value
                   ? Text(
-                      controller.usersModel.data!.usersByPk.name.toString(),
+                      controller.usersModel.name.toString(),
                       style: AppTextStyles.bodyLargeBold.copyWith(
                           fontSize: AppSizes.font_16,
                           color: AppColors.grayDark),

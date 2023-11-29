@@ -1,6 +1,6 @@
 class RefreshTokenMutation {
   static const String refreshtoken = '''
-mutation refreshToken(){
+mutation refreshToken{
   refreshToken {
     message
     user_id
@@ -9,7 +9,7 @@ mutation refreshToken(){
       refresh_token
     }
   }
-}
+
   }
  ''';
 }

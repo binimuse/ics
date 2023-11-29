@@ -47,7 +47,7 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
     });
 
     widget.focusNode.addListener(_onFocusChange);
-    }
+  }
 
   void _onFocusChange() {
     setState(() {});
@@ -74,15 +74,16 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
             PhoneNumberInputFormatter(
                 maxLength: 10), // Set maximum length to 10 characters
           ],
-          style: AppTextStyles.titleBold.copyWith(color: AppColors.blackLight),
+          style: AppTextStyles.titleBold.copyWith(
+              color: AppColors.blackLight, fontSize: AppSizes.font_12),
           validator: widget.validator,
           decoration: InputDecoration(
             labelText: widget.labelText,
             hintText: _isFocused ? null : widget.hint,
             hintStyle: AppTextStyles.titleBold.copyWith(
-                color: AppColors.grayLighter, fontSize: AppSizes.font_16),
-            labelStyle:
-                AppTextStyles.captionBold.copyWith(color: AppColors.grayLight),
+                color: AppColors.grayLighter, fontSize: AppSizes.font_12),
+            labelStyle: AppTextStyles.captionBold.copyWith(
+                color: AppColors.grayLight, fontSize: AppSizes.font_12),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             suffixIconConstraints: BoxConstraints(
               maxWidth: AppSizes.icon_size_10,
@@ -149,7 +150,7 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
 
             // Request focus for the field
             FocusScope.of(context).requestFocus(widget.focusNode);
-                    },
+          },
           focusNode: widget.focusNode,
         ),
       ],

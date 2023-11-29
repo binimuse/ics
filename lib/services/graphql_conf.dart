@@ -87,9 +87,6 @@ class GraphQLConfigurationForauth {
 class GraphQLConfigurationRefresh {
   static HttpLink httpLink = HttpLink(
     "http://196.189.30.108:8000/v1/graphql",
-    defaultHeaders: {
-      'x-hasura-role': "anonymous",
-    },
   );
 
   ValueNotifier<GraphQLClient> client = ValueNotifier(
@@ -105,6 +102,32 @@ class GraphQLConfigurationRefresh {
       link: AuthLink(getToken: () async {
         return "Bearer ${EncryptionUtil.decrypt(PreferenceUtils.getString(Constants.refreshTokenKey))}";
       }).concat(httpLink),
+    );
+  }
+}
+
+class GraphQLConfigurationFileUpload {
+  final String httpLinks;
+
+  GraphQLConfigurationFileUpload({
+    required this.httpLinks,
+  });
+
+  static HttpLink httpLink = HttpLink("");
+
+  ValueNotifier<GraphQLClient> client = ValueNotifier(
+    GraphQLClient(
+      link: httpLink,
+      cache: GraphQLCache(),
+    ),
+  );
+
+  Link get link => HttpLink(httpLinks);
+
+  GraphQLClient clientToQuery() {
+    return GraphQLClient(
+      cache: GraphQLCache(),
+      link: link,
     );
   }
 }

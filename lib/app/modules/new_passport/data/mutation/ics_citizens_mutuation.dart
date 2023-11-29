@@ -3,7 +3,7 @@ class IcscitizensMutation {
     mutation($objects: [ics_citizens_insert_input]!) {
       insert_ics_citizens(objects: $objects) {
          returning {
-      id
+                id
         new_applications
           {
             id

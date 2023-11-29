@@ -9,7 +9,6 @@ import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/services/graphql_conf.dart';
 import 'package:ics/services/user_token_refresher.dart';
 
-
 class GraphQLCommonApi {
   final ConfigurationRole configurationRole;
   final snackBarInterval = const Duration(seconds: 5);

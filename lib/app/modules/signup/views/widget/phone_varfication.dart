@@ -233,10 +233,10 @@ class _PhoneNumberVarficationState extends State<PhoneNumberVarfication> {
       },
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Please enter your Password';
+          return 'Please enter your Phone Number';
         }
         if (!controller.isPhoneValid.value) {
-          return 'Password must be at least 8 characters';
+          return 'Invalid phone number';
         }
         return null;
       },

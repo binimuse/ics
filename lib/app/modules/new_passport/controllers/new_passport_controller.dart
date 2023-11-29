@@ -1,11 +1,19 @@
+import 'package:dio/dio.dart' as Mydio;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
+import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
+import 'package:ics/app/modules/new_passport/data/quary/get_url.dart';
+import 'package:ics/app/modules/new_passport/data/quary/ics_citizens.dart';
+import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +25,9 @@ import 'dart:io';
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
 import '../data/quary/get_all.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:http_parser/http_parser.dart';
 
 class NewPassportController extends GetxController {
   final TextEditingController AmfatherNameController = TextEditingController();
@@ -62,6 +73,8 @@ class NewPassportController extends GetxController {
   List<String> gender = [];
   final RxString gendervalue = ''.obs;
   GetallQuery getGenderQuery = GetallQuery();
+  GetUrlQuery geturlQuery = GetUrlQuery();
+  Getaicscitizens getaicscitizens = Getaicscitizens();
   final TextEditingController grandFatherNameController =
       TextEditingController();
 
@@ -80,12 +93,26 @@ class NewPassportController extends GetxController {
   final TextEditingController height = TextEditingController();
 
   var isSend = false.obs;
-  var isSendDoc = false.obs;
+
   var isfeched = false.obs;
   final RxString maritalstatusvalue = ''.obs;
   List<String> martial = [];
   final TextEditingController monthController = TextEditingController();
   final newPassportformKey = GlobalKey<FormBuilderState>();
+  var countryCode = "+39";
+  final phoneFocusNode = FocusNode();
+  var isPhoneValid = false.obs;
+  bool validatPhone() {
+    final password = phonenumber.text;
+    if (password.length >= 8) {
+      isPhoneValid(true);
+      return true;
+    } else {
+      isPhoneValid(false);
+      return false;
+    }
+  }
+
   List<String> occupations = [
     'Waiter',
     'Dentist',
@@ -111,6 +138,7 @@ class NewPassportController extends GetxController {
   @override
   void onInit() {
     getAll();
+    getCitizene();
     super.onInit();
   }
 
@@ -225,15 +253,90 @@ class NewPassportController extends GetxController {
     final isValid = newPassportformKey.currentState!.validate();
     if (!isValid) {
       return;
+    } else {
+      newPassportformKey.currentState!.save();
+      send(); // Call report() when the form is valid
     }
-    newPassportformKey.currentState!.save();
-    send(); // Call report() when the form is valid
   }
 
+  void checkdoc() {
+    if (documents.isEmpty) {
+      AppToasts.showError("Document are empty");
+      return;
+    } else if (documents.any((element) => element.files.isEmpty)) {
+      AppToasts.showError("Files are empty");
+      return;
+    } else {
+      documents.forEach((element) {
+        geturl(
+          element.documentTypeId,
+          element.files.first,
+        );
+      });
+      // Call report() when the form is valid
+    }
+  }
+
+  final Rxn<GetUrlModel> getUrlModel = Rxn<GetUrlModel>();
+  Future<void> geturl(
+    documentTypeId,
+    PlatformFile files,
+  ) async {
+    dynamic result =
+        await graphQLCommonApi.query(geturlQuery.fetchData("pdf", ""), {});
+
+    getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
+
+// {
+//   file: getUrlModel
+
+// }
+
+    sendUrl(documentTypeId, getUrlModel.value!.url, files);
+    try {
+      isfeched(true);
+    } catch (e) {
+      isfeched(false);
+      print(">>>>>>>>>>>>>>>>>> $e");
+    }
+  }
+
+  void sendUrl(
+    String? documentTypeId,
+    String? url,
+    PlatformFile files,
+  ) async {
+    print(Uri.parse(url!).toString());
+    var dio = Mydio.Dio();
+
+    Mydio.FormData formData = Mydio.FormData.fromMap({
+      'file': await Mydio.MultipartFile.fromFile(files.path!,
+          contentType: MediaType('application', 'octet-stream')),
+    });
+
+    try {
+      var response = await dio.put(url, data: formData);
+      if (response.statusCode == 200) {
+        print('File uploaded successfully');
+        sendDoc(
+          newApplicationId,
+          documentTypeId,
+          url,
+        );
+
+        print(response);
+      } else {
+        print('Failed to upload file. Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error uploading file: $e');
+    }
+  }
+
+  var newApplicationId;
   Future<void> send() async {
     print(birthCountryvalueId.toString());
     try {
-      isSend(true);
       DateTime dateOfBirth = DateTime(
         int.parse(yearController.text),
         int.parse(monthController.text),
@@ -267,7 +370,7 @@ class NewPassportController extends GetxController {
               'skin_colour': skincolorvalue.value,
               'abroad_country_id': CountryvalueId.value,
               'abroad_address': addressController.text,
-              'abroad_phone_number': phonenumber.text,
+              'abroad_phone_number': countryCode.toString() + phonenumber.text,
               'new_applications': {
                 "data": {"delivery_date": null}
               }
@@ -277,28 +380,36 @@ class NewPassportController extends GetxController {
       );
 
       if (result.hasException) {
-        isSend(false);
+        isSend.value = false;
         print(result.exception.toString());
       } else {
-        isSend(false);
+        print(result.data);
+        print("""object""");
+        isSend.value = true;
 
-        var newApplications = result.data!['insert_ics_citizens']['returning']
-            ['new_applications'];
-        var newApplicationId = newApplications['id'];
-        print('New application ID: $newApplicationId');
-        base_document_types.forEach((element) {
-          sendDoc(newApplicationId, element.id);
-        });
+        newApplicationId = result.data!['insert_ics_citizens']['returning'][0]
+                ['new_applications'][0]['id']
+            .toString();
+
+        print(newApplicationId.toString());
       }
     } catch (e) {
-      isSend(false);
+      isSend.value = false;
       print('Error: $e');
     }
   }
 
-  Future<void> sendDoc(newApplicationId, String id) async {
+  var isSendDocStarted = false.obs;
+  var isSendDocSuccess = false.obs;
+  Future<void> sendDoc(
+    dynamic newApplicationId,
+    var documentTypeId,
+    var url,
+  ) async {
     try {
-      isSendDoc(true);
+      //file upload
+
+      isSendDocStarted(true);
 
       GraphQLClient graphQLClient;
 
@@ -310,26 +421,70 @@ class NewPassportController extends GetxController {
           variables: <String, dynamic>{
             'objects': {
               'new_application_id': newApplicationId,
-              'File': documents,
-              'document_type_id': id,
+              'files': url,
+              'document_type_id': documentTypeId,
             }
           },
         ),
       );
 
       if (result.hasException) {
-        isSendDoc(false);
+        isSendDocStarted(false);
         print(result.exception.toString());
       } else {
-        isSendDoc(false);
+        isSendDocSuccess(true);
+        isSendDocStarted(false);
 
-        print('  sendDoc(); successful.');
+        AppToasts.showSuccess("NeW Passport successfully sent");
+        await Future.delayed(const Duration(seconds: 2));
+
+        //   Get.offAllNamed(Routes.MY_ORDER);
       }
     } catch (e) {
       print(e.toString());
-      isSendDoc(false);
+      isSendDocStarted(false);
       print('Error: $e');
     }
+  }
+
+  Future<List<http.MultipartFile>> uploadFilesDoc(
+      List<PlatformFile> files) async {
+    List<http.MultipartFile> uploadedFiles = [];
+
+    for (PlatformFile platformFile in files) {
+      final File file = File(platformFile.path!);
+
+      if (!file.existsSync()) {
+        print('File does not exist: ${file.path}');
+        continue;
+      }
+
+      final fileName = file.path.split('/').last;
+      final mimeType = lookupMimeType(file.path);
+
+      if (mimeType != null) {
+        try {
+          final fileStream = http.ByteStream(file.openRead());
+          final fileLength = await file.length();
+
+          final uploadedFile = http.MultipartFile(
+            'files',
+            fileStream,
+            fileLength,
+            filename: fileName,
+            contentType: MediaType.parse(mimeType),
+          );
+
+          uploadedFiles.add(uploadedFile);
+        } catch (e) {
+          print('Error processing file: $fileName - $e');
+        }
+      } else {
+        print('Could not determine mime type for file: $fileName');
+      }
+    }
+
+    return uploadedFiles;
   }
 
   Map<String, dynamic> firstnameToJson() {
@@ -357,6 +512,28 @@ class NewPassportController extends GetxController {
     };
 
     return nameJson;
+  }
+
+  RxList<IcsCitizenModel> icsCitizens = List<IcsCitizenModel>.of([]).obs;
+  var isfechediCitizens = false.obs;
+  void getCitizene() async {
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getaicscitizens.fetchData(), {});
+
+      if (result != null) {
+        icsCitizens.value = (result['ics_citizens'] as List)
+            .map((e) => IcsCitizenModel.fromJson(e))
+            .toList();
+
+        // countLabours.value = getlabour.value.length;
+      }
+
+      isfechediCitizens(true);
+    } catch (e) {
+      isfechediCitizens(false);
+      print(">>>>>>>>>>>>>>>>>> $e");
+    }
   }
 }
 

@@ -3,7 +3,7 @@ class GetUser_byPk_Query {
     return """
         query{        
   users_by_pk(id: "$id") {
-       created_at
+       
     email
     name
     id

@@ -5,6 +5,7 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:intl/intl.dart';
 
 class DateTextPickerInput extends StatefulWidget {
   const DateTextPickerInput({
@@ -52,7 +53,16 @@ class _DateTextPickerInputState extends State<DateTextPickerInput> {
       children: [
         Expanded(
           child: TextFormField(
-            validator: widget.dateValidator,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Invalid day';
+              }
+              int? day = int.tryParse(value);
+              if (day == null || day < 1 || day > 31) {
+                return 'Invalid day';
+              }
+              return null; // Return null if validation succeeds
+            },
             textAlign: TextAlign.center,
             maxLength: 2,
             controller: widget.controller.dayController,
@@ -120,7 +130,16 @@ class _DateTextPickerInputState extends State<DateTextPickerInput> {
         ),
         Expanded(
           child: TextFormField(
-            validator: widget.monthValidator,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Invalid month';
+              }
+              int? month = int.tryParse(value);
+              if (month == null || month < 1 || month > 12) {
+                return 'Invalid month';
+              }
+              return null; // Return null if validation succeeds
+            },
             controller: widget.controller.monthController,
             maxLength: 2,
             textAlign: TextAlign.center,
@@ -188,7 +207,25 @@ class _DateTextPickerInputState extends State<DateTextPickerInput> {
         ),
         Expanded(
           child: TextFormField(
-            validator: widget.yearValidator,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'enter a year';
+              }
+              if (value.length != 4) {
+                return 'Invalid year';
+              }
+              int? year = int.tryParse(value);
+              int currentYear = int.parse(DateFormat('yyyy')
+                  .format(DateTime.now())); // Get the current year
+              if (year == null ||
+                  year < 0 ||
+                  year < 150 ||
+                  year > currentYear) {
+                return 'Invalid year';
+              }
+
+              return null; // Return null if validation succeeds
+            },
             controller: widget.controller.yearController,
             maxLength: 4,
             textAlign: TextAlign.center,

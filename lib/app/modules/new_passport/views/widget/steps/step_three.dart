@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
@@ -85,21 +86,93 @@ class Step3 extends StatelessWidget {
         SizedBox(
           height: 2.h,
         ),
-        TextFormBuilder(
-          controller: controller.phonenumber,
-          validator:
-              ValidationBuilder().required('Phone number is required').build(),
-          hint: 'Phone number',
-          labelText: 'Phone number',
-          keyboardType: TextInputType.phone,
-          inputFormatters: [
-            PhoneNumberInputFormatter(maxLength: 16),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Column(
+              children: [
+                buildCountryCode(),
+                SizedBox(
+                  height: AppSizes.mp_v_1,
+                ),
+                SizedBox(
+                  width: 34.w,
+                  child: Divider(
+                    color: AppColors.grayLighter,
+                    thickness: 1,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              width: AppSizes.mp_w_4,
+            ),
+            buildPhonenumber(),
           ],
-          showClearButton: false,
-          autoFocus: false,
-          onChanged: (value) {},
         ),
       ],
     );
+  }
+
+  buildCountryCode() {
+    return Center(
+      child: CountryCodePicker(
+        flagDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: AppColors.primaryDark,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(3, 3), // changes the shadow position
+              ),
+            ]),
+        onChanged: (element) {
+          debugPrint(element.dialCode);
+
+          controller.countryCode = element.dialCode.toString();
+        },
+        initialSelection: 'IT',
+        textOverflow: TextOverflow.fade,
+        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+
+        // optional. Shows only country name and flag
+        showCountryOnly: false,
+        // optional. Shows only country name and flag when popup is closed.
+        showOnlyCountryWhenClosed: false,
+        // optional. aligns the flag and the Text left
+        alignLeft: false,
+      ),
+    );
+  }
+
+  buildPhonenumber() {
+    return Expanded(
+        child: PhoneNumberInput(
+      hint: 'Phone number',
+      labelText: "Phone number",
+      focusNode: controller.phoneFocusNode,
+      autofocus: false,
+      controller: controller.phonenumber,
+      onChanged: (value) {
+        // Validate password on type
+        bool isValid =
+            controller.validatPhone(); // Pass the value to validatePassword
+        controller.isPhoneValid.value = isValid;
+
+        // Check if the password is valid and display the appropriate text
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Please enter your Phone Number';
+        }
+        if (!controller.isPhoneValid.value) {
+          return 'Invalid phone number';
+        }
+        return null;
+      },
+    ));
   }
 }

@@ -22,8 +22,9 @@ class UserTokenChecker {
             logout();
           }
 
-          if (element.message.contains('JWTExpired')) {
+          if (element.message.contains('Could not verify JWT: JWTExpired')) {
             bool isRefreshed = await refreshToken();
+
             if (isRefreshed) {
               return UserTokenCheckerResponse.TOKEN_REFRESHED_SUCCESS;
             } else {
@@ -116,12 +117,14 @@ class UserTokenChecker {
   }
 
   static logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
     ///SET TOKEN INVALID STATE
-    await PreferenceUtils.setString(
+    await prefs.setString(
       Constants.REFRESHER_STATE,
       EnumToString.convertToString(AppTokenRefresherState.OTHER),
     );
-    final prefs = await SharedPreferences.getInstance();
+
     final acc = await prefs.remove(Constants.userAccessTokenKey);
     final ref = await prefs.remove(Constants.refreshTokenKey);
     final bio = await prefs.remove('BioID');
@@ -141,67 +144,67 @@ class UserTokenChecker {
   }
 
   static Future<bool> refreshToken() async {
-    String refreshToken = EncryptionUtil.decrypt(
-        PreferenceUtils.getString(Constants.refreshTokenKey));
+    final prefs = await SharedPreferences.getInstance();
 
-    // Check if the refresh token is expired
+    String refreshToken =
+        EncryptionUtil.decrypt(prefs.getString(Constants.refreshTokenKey));
+
     bool isRefreshTokenExpired = JwtDecoder.isExpired(refreshToken);
+
     if (isRefreshTokenExpired) {
-      // If the refresh token is expired, you can't refresh the JWT token
-      // You should handle this situation according to your app's requirements
-      // For example, you can log out the user or show a message asking them to log in again
       logout();
       return false;
-    }
-
-    // If the refresh token is not expired, proceed with the refresh process
-    GraphQLConfigurationRefresh graphQLConfiguration =
-        GraphQLConfigurationRefresh();
-
-    GraphQLClient client = graphQLConfiguration.clientToQuery();
-    QueryResult result = await client.mutate(
-      MutationOptions(
-        document: gql(RefreshTokenMutation.refreshtoken),
-      ),
-    );
-
-    if (!result.hasException) {
-      // If the refresh process is successful, update the JWT token and refresh token
-      String encryptToken = EncryptionUtil.encrypt(
-        result.data!["refreshToken"]["tokens"]["access_token"],
-      );
-
-      String encryptRefreshToken = EncryptionUtil.encrypt(
-        result.data!["refreshToken"]["tokens"]["refresh_token"],
-      );
-
-      await PreferenceUtils.setString(
-          Constants.userAccessTokenKey, encryptToken);
-
-      await PreferenceUtils.setString(
-        Constants.refreshTokenKey,
-        encryptRefreshToken,
-      );
-
-      return true;
     } else {
-      // If the refresh process failed, handle the error
-      // For example, you can log out the user or show an error message
+      print("TOKEN REFRESH Start ======== else 0");
+      // If the refresh token is not expired, proceed with the refresh process
+      GraphQLConfigurationRefresh graphQLConfiguration =
+          GraphQLConfigurationRefresh();
 
-      if (result.exception!.graphqlErrors.isNotEmpty) {
-        for (var element in result.exception!.graphqlErrors) {
-          if (element.message.contains('TOKEN_INVALID')) {
-            logout();
-            return false;
+      GraphQLClient client = graphQLConfiguration.clientToQuery();
+      QueryResult result = await client.mutate(
+        MutationOptions(
+          document: gql(RefreshTokenMutation.refreshtoken),
+        ),
+      );
+
+      if (!result.hasException) {
+        print("TOKEN REFRESH Start ======== else");
+        // If the refresh process is successful, update the JWT token and refresh token
+        String encryptToken = EncryptionUtil.encrypt(
+          result.data!["refreshToken"]["tokens"]["access_token"],
+        );
+
+        String encryptRefreshToken = EncryptionUtil.encrypt(
+          result.data!["refreshToken"]["tokens"]["refresh_token"],
+        );
+
+        await prefs.setString(Constants.userAccessTokenKey, encryptToken);
+
+        await prefs.setString(
+          Constants.refreshTokenKey,
+          encryptRefreshToken,
+        );
+
+        return true;
+      } else {
+        // If the refresh process failed, handle the error
+        // For example, you can log out the user or show an error message
+
+        if (result.exception!.graphqlErrors.isNotEmpty) {
+          for (var element in result.exception!.graphqlErrors) {
+            if (element.message.contains('TOKEN_INVALID')) {
+              logout();
+              return false;
+            }
           }
         }
-      }
 
-      // If the refresh process failed for another reason, handle it accordingly
-      // For example, you can log the error or show an error message
-      print(
-          "TOKEN REFRESH TEST ======== refreshToken error TOKEN REFRESH TEST");
-      return false;
+        // If the refresh process failed for another reason, handle it accordingly
+        // For example, you can log the error or show an error message
+        print(
+            "TOKEN REFRESH TEST ======== refreshToken error TOKEN REFRESH TEST");
+        return false;
+      }
     }
   }
 }

@@ -64,7 +64,7 @@ class HomeController extends GetxController {
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
 
-  late UserModel usersModel = UserModel();
+  late UsersByPk usersModel = UsersByPk();
   var startGetUser = false.obs;
   var hasGetUser = false.obs;
   GetUser_byPk_Query getUser_byPk_Query = GetUser_byPk_Query();
@@ -75,27 +75,24 @@ class HomeController extends GetxController {
     final id = prefs.getString(Constants.userId);
 
     if (id != null) {
-      print("object0");
-      try {
-        dynamic result =
-            await graphQLCommonApi.query(getUser_byPk_Query.fetchData(id), {});
+      dynamic result =
+          await graphQLCommonApi.query(getUser_byPk_Query.fetchData(id), {});
+      startGetUser(false);
+
+      if (result != null) {
+        print("object");
+        usersModel = UsersByPk.fromJson(result["users_by_pk"]);
+
+        hasGetUser(true);
+      } else {
+        hasGetUser(false);
         startGetUser(false);
-
-        if (result != null) {
-          print("object");
-          usersModel = UserModel.fromJson(result["users_by_pk"]);
-
-          hasGetUser(true);
-        } else {
-          print("object1");
-        }
-      } catch (e) {
-        print("object2");
+      }
+      try {} catch (e) {
         print(e);
         hasGetUser(false);
         startGetUser(false);
       }
     } else {}
-    print("object3");
   }
 }

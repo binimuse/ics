@@ -46,18 +46,27 @@ class SplashController extends GetxController {
 
   void checkifSignedin() async {
     final prefs = await SharedPreferences.getInstance();
-    final acc =
-        EncryptionUtil.decrypt(prefs.getString(Constants.userAccessTokenKey));
-    print(acc);
-    final verifyEmail = prefs.getString(Constants.verifyEmail);
 
-    if (acc == null && verifyEmail == null) {
-      Future.delayed(const Duration(seconds: 1), () {
-        Get.offAndToNamed(Routes.ON_BORDING);
-      });
+    if (prefs.getString(Constants.userAccessTokenKey) != null) {
+      var acc =
+          EncryptionUtil.decrypt(prefs.getString(Constants.userAccessTokenKey));
+
+      print(acc);
+
+      final verifyEmail = prefs.getString(Constants.verifyEmail);
+
+      if (acc == null && verifyEmail == null) {
+        Future.delayed(const Duration(seconds: 1), () {
+          Get.offAndToNamed(Routes.ON_BORDING);
+        });
+      } else {
+        Future.delayed(const Duration(seconds: 1), () {
+          Get.offNamed(Routes.MAIN_PAGE);
+        });
+      }
     } else {
       Future.delayed(const Duration(seconds: 1), () {
-        Get.offNamed(Routes.MAIN_PAGE);
+        Get.offAndToNamed(Routes.ON_BORDING);
       });
     }
   }

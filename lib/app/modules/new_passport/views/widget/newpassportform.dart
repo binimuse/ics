@@ -32,6 +32,7 @@ class NewPassportForm extends StatefulWidget {
 
 class _StepperWithFormExampleState extends State<NewPassportForm> {
   final NewPassportController controller = Get.find<NewPassportController>();
+  final ScrollController _scrollController = ScrollController();
 
   XFile? image;
 
@@ -66,20 +67,6 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         ),
       ),
     );
-  }
-
-  void _submitForm() async {
-    AppToasts.showSuccess("Form submitted ,\n check my order page");
-
-    await Future.delayed(const Duration(milliseconds: 400));
-
-    if (controller.newPassportformKey.currentState!.saveAndValidate()) {
-      // Get form data
-      // Process form data or submit to an API
-      controller.check();
-    }
-
-    //  Get.offAndToNamed(Routes.MAIN_PAGE);
   }
 
   buildForm(BuildContext context) {
@@ -129,6 +116,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                       skipDisabled: true,
                       clearValueOnUnregister: false,
                       child: SingleChildScrollView(
+                        controller: _scrollController,
                         child: Column(
                           children: [
                             if (controller.currentStep == 0) Step1(),
@@ -172,37 +160,52 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                   },
                 ),
               CustomNormalButton(
-                text: controller.currentStep == 3 ? 'Submit' : 'Next',
-                textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                  color: AppColors.whiteOff,
-                ),
-                textcolor: AppColors.whiteOff,
-                buttoncolor: controller.currentStep == 3
-                    ? AppColors.primary
-                    : AppColors.grayLight,
-                borderRadius: AppSizes.radius_16,
-                padding: EdgeInsets.symmetric(
-                  vertical: AppSizes.mp_v_1,
-                  horizontal: AppSizes.mp_w_6,
-                ),
-                onPressed: () {
-                  if (controller.newPassportformKey.currentState!
-                      .saveAndValidate()) {
-                    if (controller.currentStep == 3) {
+                  text: controller.currentStep == 3 ? 'Submit' : 'Next',
+                  textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                    color: AppColors.whiteOff,
+                  ),
+                  textcolor: AppColors.whiteOff,
+                  buttoncolor: controller.currentStep == 3
+                      ? AppColors.primary
+                      : AppColors.grayLight,
+                  borderRadius: AppSizes.radius_16,
+                  padding: EdgeInsets.symmetric(
+                    vertical: AppSizes.mp_v_1,
+                    horizontal: AppSizes.mp_w_6,
+                  ),
+                  onPressed: () async {
+                    if (controller.currentStep == 2) {
+                      controller.send();
+                      await Future.delayed(const Duration(milliseconds: 400));
                       // Handle form submission
-                      _submitForm();
+                      if (controller.isSend.value) {
+                        setState(() {
+                          controller.currentStep++;
+                        });
+                      } else {
+                        AppToasts.showError("Some things went wrong");
+                      }
+                    } else if (controller.currentStep == 3) {
+                      controller.checkdoc();
                     } else {
                       setState(() {
                         controller.currentStep++;
                       });
+                      _scrollToBottom();
                     }
-                  }
-                },
-              ),
+                  }),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
     );
   }
 
