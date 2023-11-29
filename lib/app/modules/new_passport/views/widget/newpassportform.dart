@@ -13,6 +13,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
+import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_four.dart';
 
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
@@ -26,6 +27,11 @@ import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NewPassportForm extends StatefulWidget {
+  final IcsCitizenModel? citizenModel;
+
+  const NewPassportForm({
+    this.citizenModel,
+  });
   @override
   _StepperWithFormExampleState createState() => _StepperWithFormExampleState();
 }
@@ -120,7 +126,10 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                         controller: _scrollController,
                         child: Column(
                           children: [
-                            if (controller.currentStep == 0) Step1(),
+                            if (controller.currentStep == 0)
+                              Step1(
+                                citizenModel: widget.citizenModel,
+                              ),
 
                             if (controller.currentStep == 1) Step2(),
                             if (controller.currentStep == 2) Step3(),

@@ -442,7 +442,7 @@ class NewPassportController extends GetxController {
   Map<String, dynamic> firstnameToJson() {
     Map<String, dynamic> nameJson = {
       "en": "${firstNameController.text}",
-      "am": "${firstNameController.text}",
+      "am": "${AmfirstNameController.text}",
     };
 
     return nameJson;
@@ -459,7 +459,7 @@ class NewPassportController extends GetxController {
 
   Map<String, dynamic> gfathernameToJson() {
     Map<String, dynamic> nameJson = {
-      "en": "${fatherNameController.text}",
+      "en": "${grandFatherNameController.text}",
       "am": "${AmgrandFatherNameController.text}",
     };
 

@@ -10,18 +10,54 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/utils/keyboard.dart';
 import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step1 extends StatefulWidget {
+  final IcsCitizenModel? citizenModel;
+
+  const Step1({
+    this.citizenModel,
+  });
+
   @override
   State<Step1> createState() => _Step1State();
 }
 
 class _Step1State extends State<Step1> {
   final NewPassportController controller = Get.find<NewPassportController>();
+
+  @override
+  void initState() {
+    if (widget.citizenModel != null) {
+      controller.firstNameController.text = widget.citizenModel!.firstName!;
+      controller.fatherNameController.text = widget.citizenModel!.father_name!;
+      controller.grandFatherNameController.text =
+          widget.citizenModel!.grandFatherNameJson!.en!;
+
+      //amharic
+
+      controller.AmfirstNameController.text =
+          widget.citizenModel!.firstNameJson!.am!;
+      controller.AmfatherNameController.text =
+          widget.citizenModel!.fatherNameJson!.am!;
+      controller.AmgrandFatherNameController.text =
+          widget.citizenModel!.grandFatherNameJson!.am!;
+
+      //gender
+    } else {
+      controller.firstNameController.clear();
+      controller.fatherNameController.clear();
+      controller.grandFatherNameController.clear();
+      controller.AmfirstNameController.clear();
+      controller.AmfatherNameController.clear();
+      controller.AmgrandFatherNameController.clear();
+    }
+    super.initState();
+  }
 
   // other properties go here
   @override
@@ -172,7 +208,7 @@ class _Step1State extends State<Step1> {
           validator: ValidationBuilder().required('gender is required').build(),
           decoration: ReusableInputDecoration.getDecoration('Gender'),
           items: controller.gender.map((String value) {
-            print(value);
+         
             return DropdownMenuItem<String>(
               value: value,
               child: Text(
@@ -186,11 +222,14 @@ class _Step1State extends State<Step1> {
             controller.gendervalue.value = value!;
           },
           name: 'Gender',
+          initialValue:
+              widget.citizenModel != null ? widget.citizenModel!.gender! : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
+          
           decoration: ReusableInputDecoration.getDecoration('Birth Country'),
           items: controller.bcountries.map((CommonJsonModel value) {
             return DropdownMenuItem<CommonJsonModel>(
