@@ -84,6 +84,10 @@ class ProfileView extends GetView<NewPassportController> {
                 horizontal: AppSizes.mp_w_6,
               ),
               onPressed: () {
+                clearforstep1();
+                clearforstep2();
+                clearforstep3();
+
                 Get.to(() => NewPassportForm());
               },
             ),
@@ -240,5 +244,26 @@ class ProfileView extends GetView<NewPassportController> {
         ),
       ),
     );
+  }
+
+  void clearforstep1() {
+    controller.firstNameController.clear();
+    controller.fatherNameController.clear();
+    controller.grandFatherNameController.clear();
+    controller.AmfirstNameController.clear();
+    controller.AmfatherNameController.clear();
+    controller.AmgrandFatherNameController.clear();
+    controller.dayController.clear();
+    controller.monthController.clear();
+    controller.yearController.clear();
+  }
+
+  void clearforstep2() {
+    controller.height.clear();
+  }
+
+  void clearforstep3() {
+    controller.addressController.clear();
+    controller.phonenumber.clear();
   }
 }

@@ -47,14 +47,22 @@ class _Step1State extends State<Step1> {
       controller.AmgrandFatherNameController.text =
           widget.citizenModel!.grandFatherNameJson!.am!;
 
-      //gender
-    } else {
-      controller.firstNameController.clear();
-      controller.fatherNameController.clear();
-      controller.grandFatherNameController.clear();
-      controller.AmfirstNameController.clear();
-      controller.AmfatherNameController.clear();
-      controller.AmgrandFatherNameController.clear();
+      //country
+      controller.birthCountryvalue.value = controller.bcountries
+          .firstWhere((e) => e.id == widget.citizenModel!.birthCountryId);
+
+      controller.gendervalue.value = controller.gender
+          .firstWhere((e) => e.name == widget.citizenModel!.gender);
+
+      // day
+      controller.dayController.text =
+          widget.citizenModel!.dateOfBirth!.day.toString();
+      // month
+      controller.monthController.text =
+          widget.citizenModel!.dateOfBirth!.month.toString();
+      // year
+      controller.yearController.text =
+          widget.citizenModel!.dateOfBirth!.year.toString();
     }
     super.initState();
   }
@@ -205,14 +213,13 @@ class _Step1State extends State<Step1> {
           height: 1.h,
         ),
         FormBuilderDropdown(
-          validator: ValidationBuilder().required('gender is required').build(),
-          decoration: ReusableInputDecoration.getDecoration('Gender'),
-          items: controller.gender.map((String value) {
-         
-            return DropdownMenuItem<String>(
+          decoration:
+              ReusableInputDecoration.getDecoration('Gender is required'),
+          items: controller.gender.map((CommonModel value) {
+            return DropdownMenuItem<CommonModel>(
               value: value,
               child: Text(
-                value,
+                value.name,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
@@ -222,14 +229,14 @@ class _Step1State extends State<Step1> {
             controller.gendervalue.value = value!;
           },
           name: 'Gender',
-          initialValue:
-              widget.citizenModel != null ? widget.citizenModel!.gender! : null,
+          initialValue: widget.citizenModel != null
+              ? controller.gendervalue.value!
+              : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
-          
           decoration: ReusableInputDecoration.getDecoration('Birth Country'),
           items: controller.bcountries.map((CommonJsonModel value) {
             return DropdownMenuItem<CommonJsonModel>(
@@ -242,10 +249,12 @@ class _Step1State extends State<Step1> {
             );
           }).toList(),
           onChanged: (value) {
-            controller.birthCountryvalue.value = value!.name_json;
-            controller.birthCountryvalueId.value = value.id;
+            controller.birthCountryvalue.value = value;
           },
           name: 'birth',
+          initialValue: widget.citizenModel != null
+              ? controller.birthCountryvalue.value!
+              : null,
         ),
         SizedBox(
           height: 2.h,

@@ -10,14 +10,36 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/services.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
-class Step3 extends StatelessWidget {
-  final NewPassportController controller = Get.find<NewPassportController>();
-  // other properties go here
+class Step3 extends StatefulWidget {
+  final IcsCitizenModel? citizenModel;
 
+  const Step3({
+    this.citizenModel,
+  });
+  @override
+  State<Step3> createState() => _Step3State();
+}
+
+class _Step3State extends State<Step3> {
+  final NewPassportController controller = Get.find<NewPassportController>();
+
+  void initState() {
+    if (widget.citizenModel != null) {
+      controller.countryvalue.value = controller.bcountries
+          .firstWhere((e) => e.id == widget.citizenModel!.abroadCountryId);
+
+      controller.addressController.text = widget.citizenModel!.abroadAddress!;
+      controller.phonenumber.text = widget.citizenModel!.abroadPhoneNumber!;
+    }
+    super.initState();
+  }
+
+  // other properties go here
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -62,10 +84,12 @@ class Step3 extends StatelessWidget {
             );
           }).toList(),
           onChanged: (value) {
-            controller.countryvalue.value = value!.name_json;
-            controller.CountryvalueId.value = value.id;
+            controller.countryvalue.value = value!;
           },
           name: 'Country',
+          initialValue: widget.citizenModel != null
+              ? controller.countryvalue.value!
+              : null,
         ),
         SizedBox(
           height: 2.h,
@@ -86,71 +110,13 @@ class Step3 extends StatelessWidget {
         SizedBox(
           height: 2.h,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Column(
-              children: [
-                buildCountryCode(),
-                SizedBox(
-                  height: AppSizes.mp_v_1,
-                ),
-                SizedBox(
-                  width: 34.w,
-                  child: Divider(
-                    color: AppColors.grayLighter,
-                    thickness: 1,
-                    height: 1,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              width: AppSizes.mp_w_4,
-            ),
-            buildPhonenumber(),
-          ],
-        ),
+        buildPhonenumber(),
       ],
     );
   }
 
-  buildCountryCode() {
-    return Center(
-      child: CountryCodePicker(
-        flagDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: AppColors.primaryDark,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(3, 3), // changes the shadow position
-              ),
-            ]),
-        onChanged: (element) {
-          debugPrint(element.dialCode);
-
-          controller.countryCode = element.dialCode.toString();
-        },
-        initialSelection: 'IT',
-        textOverflow: TextOverflow.fade,
-        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-
-        // optional. Shows only country name and flag
-        showCountryOnly: false,
-        // optional. Shows only country name and flag when popup is closed.
-        showOnlyCountryWhenClosed: false,
-        // optional. aligns the flag and the Text left
-        alignLeft: false,
-      ),
-    );
-  }
-
   buildPhonenumber() {
-    return Expanded(
-        child: PhoneNumberInput(
+    return PhoneNumberInput(
       hint: 'Phone number',
       labelText: "Phone number",
       focusNode: controller.phoneFocusNode,
@@ -173,6 +139,6 @@ class Step3 extends StatelessWidget {
         }
         return null;
       },
-    ));
+    );
   }
 }

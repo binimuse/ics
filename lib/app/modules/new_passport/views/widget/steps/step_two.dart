@@ -7,18 +7,33 @@ import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
+import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
-import 'package:flutter/services.dart';
 
 class Step2 extends StatefulWidget {
+  final IcsCitizenModel? citizenModel;
+
+  const Step2({
+    this.citizenModel,
+  });
   @override
   State<Step2> createState() => _Step2State();
 }
 
 class _Step2State extends State<Step2> {
   final NewPassportController controller = Get.find<NewPassportController>();
+
+  void initState() {
+    if (widget.citizenModel != null) {
+      controller.height.text = widget.citizenModel!.height!.toString();
+      controller.maritalstatusvalue.value = controller.martial
+          .firstWhere((e) => e.name == widget.citizenModel!.maritalStatus);
+    }
+    super.initState();
+  }
 
   // other properties go here
 
@@ -72,6 +87,9 @@ class _Step2State extends State<Step2> {
             controller.occupationvalue.value = value!;
           },
           name: 'Occupation',
+          initialValue: widget.citizenModel != null
+              ? widget.citizenModel!.occupation!
+              : null,
         ),
         SizedBox(
           height: 2.h,
@@ -94,6 +112,9 @@ class _Step2State extends State<Step2> {
             controller.haircolorvalue.value = value!;
           },
           name: 'Hair',
+          initialValue: widget.citizenModel != null
+              ? widget.citizenModel!.hairColour!
+              : null,
         ),
         SizedBox(
           height: 2.h,
@@ -114,7 +135,10 @@ class _Step2State extends State<Step2> {
           onChanged: (value) {
             controller.eyecolorvalue.value = value!;
           },
-          name: 'Hair',
+          name: 'Eye',
+          initialValue: widget.citizenModel != null
+              ? widget.citizenModel!.eyeColour!
+              : null,
         ),
         SizedBox(
           height: 2.h,
@@ -136,20 +160,20 @@ class _Step2State extends State<Step2> {
             controller.skincolorvalue.value = value!;
           },
           name: 'Skin',
+          initialValue: widget.citizenModel != null
+              ? widget.citizenModel!.skinColour!
+              : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator: ValidationBuilder()
-              .required('Martial status is required')
-              .build(),
           decoration: ReusableInputDecoration.getDecoration('Martial status'),
-          items: controller.martial.map((String value) {
-            return DropdownMenuItem<String>(
+          items: controller.martial.map((CommonModel value) {
+            return DropdownMenuItem<CommonModel>(
               value: value,
               child: Text(
-                value,
+                value.name,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
@@ -159,6 +183,9 @@ class _Step2State extends State<Step2> {
             controller.maritalstatusvalue.value = value!;
           },
           name: 'Martial',
+          initialValue: widget.citizenModel != null
+              ? controller.maritalstatusvalue.value!
+              : null,
         ),
         SizedBox(
           height: 2.h,

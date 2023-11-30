@@ -47,12 +47,12 @@ class NewPassportController extends GetxController {
   List<CommonJsonModel> bcountries = [];
   List<CommonIDModel> base_document_types = [];
   List<PassportDocuments> documents = [];
-  final RxString birthCountryvalue = ''.obs;
-  final RxString birthCountryvalueId = ''.obs;
+
+  final Rxn<CommonJsonModel> birthCountryvalue = Rxn<CommonJsonModel>();
 
   final TextEditingController countryController = TextEditingController();
-  final RxString countryvalue = ''.obs;
-  final RxString CountryvalueId = ''.obs;
+
+  final Rxn<CommonJsonModel> countryvalue = Rxn<CommonJsonModel>();
 
   int currentStep = 0;
   final TextEditingController dateofbirth = TextEditingController();
@@ -69,8 +69,6 @@ class NewPassportController extends GetxController {
   //Step 1
   final TextEditingController firstNameController = TextEditingController();
 
-  List<String> gender = [];
-  final RxString gendervalue = ''.obs;
   GetallQuery getGenderQuery = GetallQuery();
   GetUrlQuery geturlQuery = GetUrlQuery();
   Getaicscitizens getaicscitizens = Getaicscitizens();
@@ -92,11 +90,15 @@ class NewPassportController extends GetxController {
   final TextEditingController height = TextEditingController();
 
   var isfeched = false.obs;
-  final RxString maritalstatusvalue = ''.obs;
-  List<String> martial = [];
+
+  final Rxn<CommonModel> maritalstatusvalue = Rxn<CommonModel>();
+  final Rxn<CommonModel> gendervalue = Rxn<CommonModel>();
+
+  List<CommonModel> martial = [];
+  List<CommonModel> gender = [];
   final TextEditingController monthController = TextEditingController();
   final newPassportformKey = GlobalKey<FormBuilderState>();
-  var countryCode = "+39";
+
   final phoneFocusNode = FocusNode();
   var isPhoneValid = false.obs;
   bool validatPhone() {
@@ -227,9 +229,8 @@ class NewPassportController extends GetxController {
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
 
       baseData.value = Basemodel.fromJson(result);
-      gender = baseData.value!.base_genders.map((e) => e.name).toList();
-      martial =
-          baseData.value!.base_marital_statuses.map((e) => e.name).toList();
+      gender = baseData.value!.base_genders.map((e) => e).toList();
+      martial = baseData.value!.base_marital_statuses.map((e) => e).toList();
 
       bcountries = baseData.value!.base_countries.map((e) => e).toList();
       base_document_types =
@@ -329,8 +330,6 @@ class NewPassportController extends GetxController {
   var isSendStared = false.obs;
   var newApplicationId;
   Future<void> send() async {
-    print(birthCountryvalueId.toString());
-
     try {
       isSendStared.value = true;
       DateTime dateOfBirth = DateTime(
@@ -354,19 +353,19 @@ class NewPassportController extends GetxController {
               'first_name_json': firstnameToJson(),
               'father_name_json': fathernameToJson(),
               'grand_father_name_json': gfathernameToJson(),
-              'gender': gendervalue.value,
-              'birth_place': birthCountryvalue.value,
-              'birth_country_id': birthCountryvalueId.value,
+              'gender': gendervalue.value!.name,
+              'birth_place': birthCountryvalue.value!.name_json,
+              'birth_country_id': birthCountryvalue.value!.id,
               'date_of_birth': formattedDateOfBirth,
               'occupation': occupationvalue.value,
               'hair_colour': haircolorvalue.value,
               'eye_colour': eyecolorvalue.value,
-              'marital_status': maritalstatusvalue.value,
+              'marital_status': maritalstatusvalue.value!.name,
               'height': height.text,
               'skin_colour': skincolorvalue.value,
-              'abroad_country_id': CountryvalueId.value,
+              'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
-              'abroad_phone_number': countryCode.toString() + phonenumber.text,
+              'abroad_phone_number': phonenumber.text,
               'new_applications': {
                 "data": {"delivery_date": null}
               }

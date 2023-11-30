@@ -131,8 +131,14 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                                 citizenModel: widget.citizenModel,
                               ),
 
-                            if (controller.currentStep == 1) Step2(),
-                            if (controller.currentStep == 2) Step3(),
+                            if (controller.currentStep == 1)
+                              Step2(
+                                citizenModel: widget.citizenModel,
+                              ),
+                            if (controller.currentStep == 2)
+                              Step3(
+                                citizenModel: widget.citizenModel,
+                              ),
                             if (controller.currentStep == 3) Step4(),
 
                             // Add more form fields as needed for each step
