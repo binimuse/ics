@@ -27,3 +27,17 @@ class NewDocApplications {
     }
   ''';
 }
+
+class DeleteDocApplications {
+  static String deleteDoc(String documentTypeId) {
+    return '''
+      mutation MyMutation {
+        delete_ics_new_application_documents(where: {document_type_id: {_eq: "$documentTypeId"}}) {
+          returning {
+            id
+          }
+        }
+      }
+    ''';
+  }
+}

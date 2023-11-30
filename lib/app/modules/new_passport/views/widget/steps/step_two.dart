@@ -28,7 +28,19 @@ class _Step2State extends State<Step2> {
 
   void initState() {
     if (widget.citizenModel != null) {
+      controller.occupationvalue.value =
+          widget.citizenModel!.occupation!.toString();
+      controller.haircolorvalue.value =
+          widget.citizenModel!.hairColour!.toString();
+
+      controller.eyecolorvalue.value =
+          widget.citizenModel!.eyeColour!.toString();
+
+      controller.skincolorvalue.value =
+          widget.citizenModel!.skinColour!.toString();
+
       controller.height.text = widget.citizenModel!.height!.toString();
+
       controller.maritalstatusvalue.value = controller.martial
           .firstWhere((e) => e.name == widget.citizenModel!.maritalStatus);
     }

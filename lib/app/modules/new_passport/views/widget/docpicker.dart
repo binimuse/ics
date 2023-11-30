@@ -48,7 +48,7 @@ class _BuildDocState extends State<BuildDoc> {
               .add(file);
 
           widget.controller.geturl(
-            widget.controller.documents.first.documentTypeId,
+            widget.documentType.id,
             widget.controller.documents.first.files.first,
           );
         });
@@ -143,13 +143,15 @@ class _BuildDocState extends State<BuildDoc> {
     );
   }
 
-  void deleteFile(int index) {
+  void deleteFile(int index) async {
+    widget.controller.deleteDoc(widget.documentType.id);
+
     setState(() {
       widget.controller.documents
-          .firstWhere(
-              (element) => element.documentTypeId == widget.documentType.id)
-          .files
-          .removeAt(index);
+          .where((element) => element.documentTypeId == widget.documentType.id)
+          .forEach((element) {
+        element.files.removeAt(index);
+      });
     });
   }
 }

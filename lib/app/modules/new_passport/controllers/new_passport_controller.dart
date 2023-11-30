@@ -397,6 +397,7 @@ class NewPassportController extends GetxController {
 
   var isSendDocStarted = false.obs;
   var isSendDocSuccess = false.obs;
+  var newDocId;
   Future<void> sendDoc(
     dynamic newApplicationId,
     var documentTypeId,
@@ -434,6 +435,38 @@ class NewPassportController extends GetxController {
     } catch (e) {
       print(e.toString());
       isSendDocStarted(false);
+      print('Error: $e');
+    }
+  }
+
+  var isDeleteDocSuccess = false.obs;
+  Future<void> deleteDoc(
+    var documentTypeId,
+  ) async {
+    try {
+      //file upload
+
+      GraphQLClient graphQLClient;
+
+      graphQLClient = GraphQLConfiguration().clientToQuery();
+
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(DeleteDocApplications.deleteDoc(documentTypeId)),
+        ),
+      );
+
+      if (result.hasException) {
+        isDeleteDocSuccess(false);
+        print(result.exception.toString());
+      } else {
+        isDeleteDocSuccess(true);
+
+        AppToasts.showSuccess("Documnet Deleted successfully");
+      }
+    } catch (e) {
+      print(e.toString());
+      isDeleteDocSuccess(false);
       print('Error: $e');
     }
   }
