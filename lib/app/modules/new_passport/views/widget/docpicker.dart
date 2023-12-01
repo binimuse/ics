@@ -8,6 +8,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:sizer/sizer.dart';
+import 'dart:io';
 
 class BuildDoc extends StatefulWidget {
   final CommonIDModel documentType;
@@ -22,36 +23,53 @@ class BuildDoc extends StatefulWidget {
 class _BuildDocState extends State<BuildDoc> {
   bool isUploading = false;
   double uploadProgress = 0.0;
+  bool hasError = false;
 
   Future<void> openPdfPicker() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: [
-        'pdf',
-      ],
+      allowedExtensions: ['pdf'],
     );
+
     if (result != null) {
       PlatformFile file = result.files.first;
 
       if (file.extension == 'pdf') {
-        setState(() {
-          widget.controller.documents
-              .firstWhere(
-                  (element) => element.documentTypeId == widget.documentType.id)
-              .files
-              .clear(); // Clear the existing files
+        File pickedFile = File(file.path!);
+        int fileSize = await pickedFile.length();
 
-          widget.controller.documents
-              .firstWhere(
-                  (element) => element.documentTypeId == widget.documentType.id)
-              .files
-              .add(file);
+        if (fileSize <= 10 * 1024 * 1024) {
+          // Check if file size is within the limit
+          try {
+            setState(() {
+              widget.controller.documents
+                  .firstWhere((element) =>
+                      element.documentTypeId == widget.documentType.id)
+                  .files
+                  .clear(); // Clear the existing files
 
-          widget.controller.geturl(
-            widget.documentType.id,
-            widget.controller.documents.first.files.first,
-          );
-        });
+              widget.controller.documents
+                  .firstWhere((element) =>
+                      element.documentTypeId == widget.documentType.id)
+                  .files
+                  .add(file);
+
+              widget.controller.geturl(
+                widget.documentType.id,
+                widget.controller.documents.first.files.first,
+              );
+            });
+          } catch (e) {
+            setState(() {
+              hasError = true;
+            });
+            AppToasts.showError("error  while getting the URL.");
+
+            print("Error in geturl: $e");
+          }
+        } else {
+          AppToasts.showError("File size exceeds the limit of 10MB!");
+        }
       } else {
         AppToasts.showError("Invalid File!!");
       }
@@ -69,89 +87,169 @@ class _BuildDocState extends State<BuildDoc> {
       onTap: () {
         openPdfPicker();
       },
-      child: Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppColors.primaryLighter.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.file_copy,
-              color: AppColors.primary,
-            ),
-            SizedBox(height: 1.h),
-            Text(
-              'Upload ${widget.documentType.name}',
-              style: AppTextStyles.bodySmallBold.copyWith(
-                color: AppColors.primary,
+      child: hasError
+          ? Container() // Return an empty Container when there's an error
+          : Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.primaryLighter.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(8),
               ),
-            ),
-            SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: widget.controller.documents
-                      .firstWhere((element) =>
-                          element.documentTypeId == widget.documentType.id)
-                      .files
-                      .length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final file = widget.controller.documents
-                        .firstWhere((element) =>
-                            element.documentTypeId == widget.documentType.id)
-                        .files[index];
-                    return Stack(
-                      children: [
-                        Obx(() => !widget.controller.isSendDocStarted.value
-                            ? Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.file_copy,
+                    color: AppColors.primary,
+                  ),
+                  SizedBox(height: 1.h),
+                  Text(
+                    'Upload ${widget.documentType.name}',
+                    style: AppTextStyles.bodySmallBold.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: widget.controller.documents
+                            .firstWhere((element) =>
+                                element.documentTypeId ==
+                                widget.documentType.id)
+                            .files
+                            .length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final file = widget.controller.documents
+                              .firstWhere((element) =>
+                                  element.documentTypeId ==
+                                  widget.documentType.id)
+                              .files[index];
+                          return Stack(
+                            children: [
+                              Container(
                                 height: 25.h,
                                 child: PDFView(
                                   filePath: file.path!,
                                 ),
-                              )
-                            : Container(
-                                height: 25.h,
-                                color: Colors.black54,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
+                              ),
+                              Positioned(
+                                top: 8.0,
+                                right: 8.0,
+                                child: GestureDetector(
+                                  onTap: () => deleteFile(index),
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
                                 ),
-                              )),
-                        Positioned(
-                          top: 8.0,
-                          right: 8.0,
-                          child: GestureDetector(
-                            onTap: () => deleteFile(index),
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ))
-          ],
-        ),
-      ),
+                              ),
+                            ],
+                          );
+                        },
+                      ))
+                ],
+              ),
+            ),
     );
   }
 
   void deleteFile(int index) async {
-    widget.controller.deleteDoc(widget.documentType.id);
+    bool confirmDelete = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Confirm Delete".tr,
+            style: AppTextStyles.bodyLargeBold,
+          ),
+          content: Text(
+            "Are you sure you want to delete the file?".tr,
+            textAlign: TextAlign.start,
+            style: AppTextStyles.captionRegular,
+          ),
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .pop(false); // Return false if cancel is pressed
+              },
+              child: Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                height: 5.h,
+                width: 25.w,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.primary,
+                      AppColors.primary,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(22)),
+                ),
+                child: Center(
+                  child: Text(
+                    "Cancel".tr,
+                    style: AppTextStyles.bodyLargeBold
+                        .copyWith(color: AppColors.whiteOff),
+                  ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .pop(true); // Return true if delete is pressed
+              },
+              child: Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                height: 5.h,
+                width: 25.w,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.danger,
+                      AppColors.danger,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(22)),
+                ),
+                child: Center(
+                  child: Text(
+                    "Delete".tr,
+                    style: AppTextStyles.bodyLargeBold
+                        .copyWith(color: AppColors.whiteOff),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
 
-    setState(() {
-      widget.controller.documents
-          .where((element) => element.documentTypeId == widget.documentType.id)
-          .forEach((element) {
-        element.files.removeAt(index);
+    if (confirmDelete == true) {
+      widget.controller.deleteDoc(widget.documentType.id);
+
+      setState(() {
+        widget.controller.documents
+            .where(
+                (element) => element.documentTypeId == widget.documentType.id)
+            .forEach((element) {
+          element.files.removeAt(index);
+        });
       });
-    });
+    }
   }
 }

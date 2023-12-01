@@ -58,7 +58,7 @@ class NewPassportView extends GetView<NewPassportController> {
                   horizontal: AppSizes.mp_w_6,
                 ),
                 onPressed: () {
-                  if (!controller.areAllTermsSelected()) {
+                  if (controller.areAllTermsSelected()) {
                     Get.to(() => ProfileView());
                   } else {
                     AppToasts.showError("Error, Please select all terms");
@@ -177,7 +177,7 @@ class NewPassportView extends GetView<NewPassportController> {
                                           width: 25.h,
                                           child: Text(
                                             overflow: TextOverflow.fade,
-                                            maxLines: 2,
+                                            maxLines: 5,
                                             confirmation.description,
                                             style: AppTextStyles.captionRegular
                                                 .copyWith(

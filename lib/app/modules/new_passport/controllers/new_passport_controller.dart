@@ -128,8 +128,12 @@ class NewPassportController extends GetxController {
   final reasonController = TextEditingController();
   var selectedDate = DateTime.now().obs;
   final RxString skincolorvalue = ''.obs;
-  final List<bool> termCheckedList =
-      [false, false, false, false, false, false].obs;
+  final List<bool> termCheckedList = [
+    false,
+    false,
+    false,
+    false,
+  ].obs;
 
   //for birthDate
   final TextEditingController yearController = TextEditingController();
@@ -147,30 +151,7 @@ class NewPassportController extends GetxController {
     // This is the dummy data
     List<Map<String, dynamic>> data = [
       {
-        "name": " Ethiopian National",
-        "description":
-            "This Passport application form is applied only by Ethiopian National",
-        "image": Assets.icons.paper,
-      },
-      {
-        "name": "Passport",
-        "description": "To use more than one passport is strictly prohibited",
-        "image": Assets.icons.origin,
-      },
-      {
-        "name": "Already have Passport?",
-        "description":
-            "Ordinary passport Applicant who have already passport should not be apply for new passport",
-        "image": Assets.icons.paper,
-      },
-      {
-        "name": "Documents",
-        "description":
-            "Bring your original documents including your passport during collection.",
-        "image": Assets.icons.passport,
-      },
-      {
-        "name": "New applicants?",
+        "name": "New applicants",
         "description":
             "New applicants who are unable to attend on the appointment date will apply again.",
         "image": Assets.icons.camera,
@@ -178,8 +159,19 @@ class NewPassportController extends GetxController {
       {
         "name": "Amharic Keybord",
         "description":
-            "New applicants who are unable to attend on the appointment date will apply again.",
+            "make sure you have amahric keybord installed on your Phone.",
         "image": Assets.icons.batteryLow,
+      },
+      {
+        "name": "Document in PDF Fromat",
+        "description":
+            "we only accept documents in PDF format. This requirement ensures that the application forms are standardized and can be easily processed",
+        "image": Assets.icons.paper,
+      },
+      {
+        "name": "Passport",
+        "description": "To use more than one passport is strictly prohibited",
+        "image": Assets.icons.origin,
       },
     ];
 
@@ -276,17 +268,19 @@ class NewPassportController extends GetxController {
     documentTypeId,
     PlatformFile files,
   ) async {
-    dynamic result =
-        await graphQLCommonApi.query(geturlQuery.fetchData("pdf", ""), {});
-
-    getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
-    isSendDocStarted(true);
-    sendUrl(documentTypeId, getUrlModel.value!.url, files);
     try {
+      dynamic result = await graphQLCommonApi.query(
+        geturlQuery.fetchData("pdf", ""),
+        {},
+      );
+
+      getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
+      isSendDocStarted(true);
+      sendUrl(documentTypeId, getUrlModel.value!.url, files);
       isfeched(true);
     } catch (e) {
       isfeched(false);
-      print(">>>>>>>>>>>>>>>>>> $e");
+      print("Error occurred while getting URL: $e");
     }
   }
 
@@ -296,15 +290,17 @@ class NewPassportController extends GetxController {
     String? url,
     PlatformFile files,
   ) async {
-    print(Uri.parse(url!).toString());
-    var dio = Mydio.Dio();
-
-    Mydio.FormData formData = Mydio.FormData.fromMap({
-      'file': await Mydio.MultipartFile.fromFile(files.path!,
-          contentType: MediaType('application', 'octet-stream')),
-    });
-
     try {
+      print(Uri.parse(url!).toString());
+      var dio = Mydio.Dio();
+
+      Mydio.FormData formData = Mydio.FormData.fromMap({
+        'file': await Mydio.MultipartFile.fromFile(
+          files.path!,
+          contentType: MediaType('application', 'octet-stream'),
+        ),
+      });
+
       isGetDocUrlStarted(true);
       var response = await dio.put(url, data: formData);
       if (response.statusCode == 200) {
@@ -404,7 +400,7 @@ class NewPassportController extends GetxController {
     var url,
   ) async {
     try {
-      //file upload
+      // file upload
 
       GraphQLClient graphQLClient;
 
@@ -430,10 +426,9 @@ class NewPassportController extends GetxController {
         isSendDocSuccess(true);
         isSendDocStarted(false);
 
-        AppToasts.showSuccess("Documnet uploaded successfully");
+        AppToasts.showSuccess("Document uploaded successfully");
       }
     } catch (e) {
-      print(e.toString());
       isSendDocStarted(false);
       print('Error: $e');
     }
