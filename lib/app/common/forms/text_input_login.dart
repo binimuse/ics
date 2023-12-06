@@ -1,11 +1,10 @@
-
 // ignore_for_file: deprecated_member_use
 
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
-
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
@@ -54,7 +53,7 @@ class _TextInputLoginState extends State<TextInputLogin> {
     });
 
     widget.focusNode.addListener(_onFocusChange);
-    }
+  }
 
   void _onFocusChange() {
     setState(() {});
@@ -72,7 +71,11 @@ class _TextInputLoginState extends State<TextInputLogin> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          maxLength: 30,
           cursorColor: AppColors.primary,
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp(r'\s')), // Deny spaces
+          ],
           controller: widget.controller,
           autofocus: widget.autofocus,
           style: AppTextStyles.titleBold.copyWith(
@@ -158,7 +161,7 @@ class _TextInputLoginState extends State<TextInputLogin> {
             });
             // Request focus for the field
             FocusScope.of(context).requestFocus(widget.focusNode);
-                      // Request focus for the password field when tapping
+            // Request focus for the password field when tapping
           },
           focusNode: widget.focusNode,
         ),

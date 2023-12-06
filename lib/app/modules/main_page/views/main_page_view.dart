@@ -53,7 +53,6 @@ class MainPageView extends GetView<MainPageController> {
         key: controller.keyforall,
         bottomNavigationBar: buildBottomAppBar(context),
         extendBody: false,
-        backgroundColor: AppColors.whiteOff,
         body: SafeArea(
           child: Obx(() {
             return IndexedStack(

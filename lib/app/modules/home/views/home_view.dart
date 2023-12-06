@@ -65,21 +65,14 @@ class HomeView extends GetView<HomeController> {
         )
         .toList();
 
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: AppSizes.mp_v_2),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          BannerCarouselSlider(
-            items: controller.featuredNews,
-            showIndicator: true,
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        BannerCarouselSlider(
+          items: controller.featuredNews,
+          showIndicator: true,
+        ),
+      ],
     );
   }
 
@@ -138,15 +131,15 @@ class HomeView extends GetView<HomeController> {
 
   buildcardsPassport() {
     return Container(
-      height: 32.h,
+      height: 28.h,
       child: GridView.builder(
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.all(8),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 2,
         ),
         itemCount: 4, // Replace with the actual number of cards
         itemBuilder: (BuildContext context, int index) {

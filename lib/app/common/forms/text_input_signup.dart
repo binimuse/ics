@@ -5,6 +5,7 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/signup/controllers/signup_controller.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:flutter/services.dart';
 
 class TextInputSignup extends StatefulWidget {
   const TextInputSignup({
@@ -42,8 +43,7 @@ class _TextInputLoginState extends State<TextInputSignup> {
   void initState() {
     super.initState();
     widget.controller.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
 
     if (widget.focusNode != null) {
@@ -67,6 +67,9 @@ class _TextInputLoginState extends State<TextInputSignup> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp(r'\s')), // Deny spaces
+          ],
           cursorColor: AppColors.primary,
           controller: widget.controller,
           autofocus: widget.autofocus,

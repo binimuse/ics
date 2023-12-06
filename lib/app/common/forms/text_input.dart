@@ -64,6 +64,7 @@ class _TextInputLoginState extends State<TextInputAll> {
         TextFormField(
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp(r"\s\b|\b\s")),
+            
           ],
           textInputAction: TextInputAction.next,
           cursorColor: AppColors.primary,
