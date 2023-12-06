@@ -26,6 +26,14 @@ query
     id
     name_json
   }
+      base_allowed_countries {
+    
+    
+    country {
+      id
+      name_json
+    }
+  }
 
 } 
    """;

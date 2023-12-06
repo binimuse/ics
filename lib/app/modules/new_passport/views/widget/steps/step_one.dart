@@ -213,8 +213,7 @@ class _Step1State extends State<Step1> {
           height: 1.h,
         ),
         FormBuilderDropdown(
-          decoration:
-              ReusableInputDecoration.getDecoration('Gender is required'),
+          decoration: ReusableInputDecoration.getDecoration('Gender'),
           items: controller.gender.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,

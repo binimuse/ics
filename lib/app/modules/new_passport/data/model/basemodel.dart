@@ -2,6 +2,7 @@ class Basemodel {
   final List<CommonModel> base_genders;
   final List<CommonModel> base_marital_statuses;
   final List<CommonJsonModel> base_countries;
+  final List<AllowedContreyModel> allowed_countries;
   final List<CommonIDModel> base_document_types;
 
   Basemodel({
@@ -9,6 +10,7 @@ class Basemodel {
     required this.base_marital_statuses,
     required this.base_countries,
     required this.base_document_types,
+    required this.allowed_countries,
   });
 
   factory Basemodel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,9 @@ class Basemodel {
           .toList(),
       base_document_types: List.of(json["base_document_types"])
           .map((i) => CommonIDModel.fromJson(i))
+          .toList(),
+      allowed_countries: List.of(json["base_allowed_countries"])
+          .map((i) => AllowedContreyModel.fromJson(i))
           .toList(),
     );
   }
@@ -56,6 +61,23 @@ class CommonJsonModel {
     return CommonJsonModel(
       id: json['id'],
       name_json: json['name_json']['name'],
+    );
+  }
+}
+
+class AllowedContreyModel {
+  final String id;
+  final String name_json;
+
+  const AllowedContreyModel({
+    required this.id,
+    required this.name_json,
+  });
+
+  factory AllowedContreyModel.fromJson(Map<String, dynamic> json) {
+    return AllowedContreyModel(
+      id: json['country']['id'],
+      name_json: json['country']['name_json']['name'],
     );
   }
 }

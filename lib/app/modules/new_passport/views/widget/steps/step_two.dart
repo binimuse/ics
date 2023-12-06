@@ -210,19 +210,6 @@ class _Step2State extends State<Step2> {
           hint: 'Height(cm)',
           keyboardType: TextInputType.number,
           labelText: 'Height(cm)',
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Height is required';
-            }
-            if (value.length != 4 || !value.contains('.')) {
-              return 'Please enter a height in the format x.xx';
-            }
-            double? height = double.tryParse(value);
-            if (height == null || height < 0.54 || height > 2.51) {
-              return 'Please enter a valid height (0.54-2.51 m)';
-            }
-            return null; // Return null if validation succeeds
-          },
           showClearButton: false,
           autoFocus: false,
           onChanged: (value) {},

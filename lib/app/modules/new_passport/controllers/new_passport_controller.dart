@@ -11,6 +11,7 @@ import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
+import 'package:ics/app/modules/new_passport/data/quary/get_emabassies.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_url.dart';
 import 'package:ics/app/modules/new_passport/data/quary/ics_citizens.dart';
 import 'package:ics/app/routes/app_pages.dart';
@@ -45,14 +46,16 @@ class NewPassportController extends GetxController {
   final TextEditingController addressController = TextEditingController();
   final Rxn<Basemodel> baseData = Rxn<Basemodel>();
   List<CommonJsonModel> bcountries = [];
+  List<AllowedContreyModel> allwoedCountries = [];
   List<CommonIDModel> base_document_types = [];
   List<PassportDocuments> documents = [];
 
   final Rxn<CommonJsonModel> birthCountryvalue = Rxn<CommonJsonModel>();
+  final Rxn<CommonJsonModel> embassiesvalue = Rxn<CommonJsonModel>();
 
   final TextEditingController countryController = TextEditingController();
 
-  final Rxn<CommonJsonModel> countryvalue = Rxn<CommonJsonModel>();
+  final Rxn<AllowedContreyModel> countryvalue = Rxn<AllowedContreyModel>();
 
   int currentStep = 0;
   final TextEditingController dateofbirth = TextEditingController();
@@ -72,6 +75,7 @@ class NewPassportController extends GetxController {
   GetallQuery getGenderQuery = GetallQuery();
   GetUrlQuery geturlQuery = GetUrlQuery();
   Getaicscitizens getaicscitizens = Getaicscitizens();
+  GetEmbassiesQuery getEmbassiesQuery = GetEmbassiesQuery();
   final TextEditingController grandFatherNameController =
       TextEditingController();
 
@@ -225,6 +229,8 @@ class NewPassportController extends GetxController {
       martial = baseData.value!.base_marital_statuses.map((e) => e).toList();
 
       bcountries = baseData.value!.base_countries.map((e) => e).toList();
+      allwoedCountries =
+          baseData.value!.allowed_countries.map((e) => e).toList();
       base_document_types =
           baseData.value!.base_document_types.map((e) => e).toList();
 
@@ -361,6 +367,7 @@ class NewPassportController extends GetxController {
               'skin_colour': skincolorvalue.value,
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
+              'embassy_id': embassiesvalue.value!.id,
               'abroad_phone_number': phonenumber.text,
               'new_applications': {
                 "data": {"delivery_date": null}
@@ -511,6 +518,28 @@ class NewPassportController extends GetxController {
       isfechediCitizens(true);
     } catch (e) {
       isfechediCitizens(false);
+      print(">>>>>>>>>>>>>>>>>> $e");
+    }
+  }
+
+  var isfechedEmbassies = false.obs;
+  RxList<CommonJsonModel> base_embassies = List<CommonJsonModel>.of([]).obs;
+  void getEmbassies(String id) async {
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getEmbassiesQuery.fetchData(id), {});
+
+      if (result != null) {
+        base_embassies.value = (result['base_embassies'] as List)
+            .map((e) => CommonJsonModel.fromJson(e))
+            .toList();
+
+        // countLabours.value = getlabour.value.length;
+      }
+
+      isfechedEmbassies(true);
+    } catch (e) {
+      isfechedEmbassies(false);
       print(">>>>>>>>>>>>>>>>>> $e");
     }
   }

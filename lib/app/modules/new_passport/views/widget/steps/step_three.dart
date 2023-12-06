@@ -30,7 +30,7 @@ class _Step3State extends State<Step3> {
 
   void initState() {
     if (widget.citizenModel != null) {
-      controller.countryvalue.value = controller.bcountries
+      controller.countryvalue.value = controller.allwoedCountries
           .firstWhere((e) => e.id == widget.citizenModel!.abroadCountryId);
 
       controller.addressController.text = widget.citizenModel!.abroadAddress!;
@@ -73,8 +73,8 @@ class _Step3State extends State<Step3> {
         ),
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Country'),
-          items: controller.bcountries.map((CommonJsonModel value) {
-            return DropdownMenuItem<CommonJsonModel>(
+          items: controller.allwoedCountries.map((AllowedContreyModel value) {
+            return DropdownMenuItem<AllowedContreyModel>(
               value: value,
               child: Text(
                 value.name_json,
@@ -85,12 +85,41 @@ class _Step3State extends State<Step3> {
           }).toList(),
           onChanged: (value) {
             controller.countryvalue.value = value!;
+            setState(() {
+              controller.getEmbassies(controller.countryvalue.value!.id);
+              controller.embassiesvalue.value = null;
+            });
           },
           name: 'Country',
           initialValue: widget.citizenModel != null
               ? controller.countryvalue.value!
               : null,
         ),
+        SizedBox(
+          height: 2.h,
+        ),
+        Obx(() => controller.isfechedEmbassies.value
+            ? FormBuilderDropdown(
+                decoration: ReusableInputDecoration.getDecoration('Embassies'),
+                items: controller.base_embassies.map((CommonJsonModel value) {
+                  return DropdownMenuItem<CommonJsonModel>(
+                    value: value,
+                    child: Text(
+                      value.name_json,
+                      style: AppTextStyles.captionBold
+                          .copyWith(color: AppColors.grayDark),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  controller.embassiesvalue.value = value;
+                },
+                name: 'Embassies',
+                initialValue: widget.citizenModel != null
+                    ? controller.embassiesvalue.value!
+                    : null,
+              )
+            : SizedBox()),
         SizedBox(
           height: 2.h,
         ),
