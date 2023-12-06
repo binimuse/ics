@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/config/theme/app_assets.dart';

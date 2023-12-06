@@ -50,6 +50,7 @@ class MyCheckBox extends StatelessWidget {
                 padding: EdgeInsets.all(AppSizes.mp_w_1),
                 child: SvgPicture.asset(
                   Assets.icons.check,
+                  // ignore: deprecated_member_use
                   color: isInitSelected
                       ? AppColors.whiteOff
                       : AppColors.grayLighter,

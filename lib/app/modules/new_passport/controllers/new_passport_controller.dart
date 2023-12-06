@@ -367,10 +367,12 @@ class NewPassportController extends GetxController {
               'skin_colour': skincolorvalue.value,
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
-              'embassy_id': embassiesvalue.value!.id,
               'abroad_phone_number': phonenumber.text,
               'new_applications': {
-                "data": {"delivery_date": null}
+                "data": {
+                  "delivery_date": null,
+                  'embassy_id': embassiesvalue.value!.id,
+                }
               }
             }
           },
@@ -534,12 +536,16 @@ class NewPassportController extends GetxController {
             .map((e) => CommonJsonModel.fromJson(e))
             .toList();
 
+        if (base_embassies.isNotEmpty) {
+          isfechedEmbassies.value = true;
+        } else {
+          isfechedEmbassies.value = false;
+        }
+
         // countLabours.value = getlabour.value.length;
       }
-
-      isfechedEmbassies(true);
     } catch (e) {
-      isfechedEmbassies(false);
+      isfechedEmbassies.value = false;
       print(">>>>>>>>>>>>>>>>>> $e");
     }
   }
