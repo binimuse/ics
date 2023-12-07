@@ -28,11 +28,10 @@ class HomeView extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              buildName(context),
               SizedBox(
                 height: 3.h,
               ),
-              buildName(context),
-
               __buildBanner(),
               //passport
               buildPassport(context),

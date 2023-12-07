@@ -146,6 +146,7 @@ class NewPassportController extends GetxController {
   void onInit() {
     getAll();
     getCitizene();
+
     super.onInit();
   }
 
@@ -525,14 +526,15 @@ class NewPassportController extends GetxController {
   }
 
   var isfechedEmbassies = false.obs;
-  RxList<CommonJsonModel> base_embassies = List<CommonJsonModel>.of([]).obs;
+
+  List<CommonJsonModel> base_embassies = [];
   void getEmbassies(String id) async {
     try {
       dynamic result =
           await graphQLCommonApi.query(getEmbassiesQuery.fetchData(id), {});
 
       if (result != null) {
-        base_embassies.value = (result['base_embassies'] as List)
+        base_embassies = (result['base_embassies'] as List)
             .map((e) => CommonJsonModel.fromJson(e))
             .toList();
 

@@ -20,6 +20,7 @@ class IcsCitizenModel {
   NameJson? fatherNameJson;
   NameJson? firstNameJson;
   NameJson? grandFatherNameJson;
+  final List<NewApplicationModel>? newApplicationModel;
 
   IcsCitizenModel({
     this.abroadAddress,
@@ -42,6 +43,7 @@ class IcsCitizenModel {
     this.fatherNameJson,
     this.firstNameJson,
     this.grandFatherNameJson,
+    this.newApplicationModel,
   });
 
   factory IcsCitizenModel.fromJson(Map<String, dynamic> json) {
@@ -75,6 +77,9 @@ class IcsCitizenModel {
       grandFatherNameJson: json['grand_father_name_json'] != null
           ? NameJson.fromJson(json['grand_father_name_json'])
           : null,
+      newApplicationModel: List.of(json["new_applications"])
+          .map((i) => NewApplicationModel.fromJson(i))
+          .toList(),
     );
   }
 }
@@ -92,6 +97,20 @@ class NameJson {
     return NameJson(
       am: json['am'],
       en: json['en'],
+    );
+  }
+}
+
+class NewApplicationModel {
+  final String embassy_id;
+
+  const NewApplicationModel({
+    required this.embassy_id,
+  });
+
+  factory NewApplicationModel.fromJson(Map<String, dynamic> json) {
+    return NewApplicationModel(
+      embassy_id: json['embassy_id'],
     );
   }
 }

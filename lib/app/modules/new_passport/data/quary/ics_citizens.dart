@@ -25,6 +25,9 @@ query MyQuery {
     father_name_json
     first_name_json
     grand_father_name_json
+    new_applications {
+      embassy_id
+    }
   }
 }
 

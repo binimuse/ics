@@ -31,9 +31,17 @@ class _Step3State extends State<Step3> {
     if (widget.citizenModel != null) {
       controller.countryvalue.value = controller.allwoedCountries
           .firstWhere((e) => e.id == widget.citizenModel!.abroadCountryId);
-
+      controller.getEmbassies(controller.countryvalue.value!.id);
       controller.addressController.text = widget.citizenModel!.abroadAddress!;
       controller.phonenumber.text = widget.citizenModel!.abroadPhoneNumber!;
+
+      //   for emabassiy
+      Future.delayed(const Duration(milliseconds: 100), () {
+        controller.embassiesvalue.value = controller.base_embassies.firstWhere(
+            (e) =>
+                e.id ==
+                widget.citizenModel!.newApplicationModel!.first.embassy_id);
+      });
     }
     super.initState();
   }
@@ -115,7 +123,7 @@ class _Step3State extends State<Step3> {
                 },
                 name: 'Embassies',
                 initialValue: widget.citizenModel != null
-                    ? controller.embassiesvalue.value!
+                    ? controller.embassiesvalue.value
                     : null,
               )
             : SizedBox()),
