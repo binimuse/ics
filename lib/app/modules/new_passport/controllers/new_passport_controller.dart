@@ -169,8 +169,7 @@ class NewPassportController extends GetxController {
       },
       {
         "name": "Document in PDF Fromat",
-        "description":
-            "we only accept documents in PDF format. This requirement ensures that the application forms are standardized and can be easily processed",
+        "description": "we only accept documents in PDF format. ",
         "image": Assets.icons.paper,
       },
       {

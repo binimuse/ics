@@ -172,7 +172,7 @@ class ProfileView extends GetView<NewPassportController> {
             ));
       },
       child: Container(
-        height: 13.h,
+        height: 14.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(

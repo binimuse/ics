@@ -47,24 +47,22 @@ class Step4 extends StatelessWidget {
         ),
         Container(
           height: 60.h,
-          child: Expanded(
-            child: ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: controller.base_document_types.length,
-              itemBuilder: (BuildContext context, int index) {
-                CommonIDModel documentType =
-                    controller.base_document_types[index];
-                return BuildDoc(
-                  documentType: documentType,
-                  controller: controller,
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                    height: 8.0); // Adjust the space between items as needed
-              },
-            ),
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: controller.base_document_types.length,
+            itemBuilder: (BuildContext context, int index) {
+              CommonIDModel documentType =
+                  controller.base_document_types[index];
+              return BuildDoc(
+                documentType: documentType,
+                controller: controller,
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                  height: 8.0); // Adjust the space between items as needed
+            },
           ),
         ),
         SizedBox(

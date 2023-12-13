@@ -170,6 +170,7 @@ class NewPassportView extends GetView<NewPassportController> {
                                           confirmation.name,
                                           style: AppTextStyles.bodySmallBold
                                               .copyWith(
+                                            fontSize: 12.sp,
                                             color: AppColors.black,
                                           ),
                                         ),
@@ -177,12 +178,12 @@ class NewPassportView extends GetView<NewPassportController> {
                                           width: 25.h,
                                           child: Text(
                                             overflow: TextOverflow.fade,
-                                            maxLines: 5,
+                                            maxLines: 6,
                                             confirmation.description,
                                             style: AppTextStyles.captionRegular
                                                 .copyWith(
                                               color: AppColors.black,
-                                              fontSize: 10.sp,
+                                              fontSize: 9.sp,
                                             ),
                                           ),
                                         ),
@@ -192,7 +193,7 @@ class NewPassportView extends GetView<NewPassportController> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(12.0),
                                 child: MyCheckBox(
                                   isInitSelected:
                                       controller.isTermChecked(index),
