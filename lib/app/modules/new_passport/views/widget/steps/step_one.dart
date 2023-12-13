@@ -18,9 +18,11 @@ import '../../../../../config/theme/app_sizes.dart';
 
 class Step1 extends StatefulWidget {
   final IcsCitizenModel? citizenModel;
+  final GlobalKey<FormState>? key;
 
   const Step1({
     this.citizenModel,
+    this.key,
   });
 
   @override
@@ -32,6 +34,7 @@ class _Step1State extends State<Step1> {
 
   @override
   void initState() {
+    super.initState();
     if (widget.citizenModel != null) {
       controller.firstNameController.text = widget.citizenModel!.firstName!;
       controller.fatherNameController.text = widget.citizenModel!.father_name!;
@@ -64,220 +67,222 @@ class _Step1State extends State<Step1> {
       controller.yearController.text =
           widget.citizenModel!.dateOfBirth!.year.toString();
     }
-    super.initState();
   }
 
   // other properties go here
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 80.w,
-          child: Text(
-            'Step 1',
-            style: AppTextStyles.bodyLargeBold
-                .copyWith(fontSize: AppSizes.font_14, color: AppColors.primary),
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
+    return Form(
+      key: widget.key,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 80.w,
+            child: Text(
+              'Step 1',
+              style: AppTextStyles.bodyLargeBold.copyWith(
+                  fontSize: AppSizes.font_14, color: AppColors.primary),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
-        SizedBox(
-          height: 1.h,
-        ),
-        SizedBox(
-          width: 80.w,
-          child: Text(
-            'Your passport is an essential document in international travel and for identification purposes. ',
-            style: AppTextStyles.bodySmallRegular.copyWith(
-                fontSize: AppSizes.font_12, color: AppColors.grayDark),
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
+          SizedBox(
+            height: 1.h,
           ),
-        ),
-        SizedBox(
-          height: 1.h,
-        ),
-        TextFormBuilder(
-          validator:
-              ValidationBuilder().required('Father Name is required').build(),
-          labelText: "First name",
-          controller: controller.firstNameController,
-          inputFormatters: [
-            NoNumberInputFormatter(),
-          ],
-          hint: 'First name',
-          showClearButton: false,
-          autoFocus: false,
-          onChanged: (value) {},
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-        TextFormBuilder(
-          controller: controller.fatherNameController,
-          validator:
-              ValidationBuilder().required('Father Name is required').build(),
-          hint: 'Father Name',
-          labelText: 'Father Name',
-          inputFormatters: [
-            NoNumberInputFormatter(),
-          ],
-          showClearButton: false,
-          autoFocus: false,
-          onChanged: (value) {},
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-        TextFormBuilder(
-          controller: controller.grandFatherNameController,
-          validator:
-              ValidationBuilder().required('Father Name is required').build(),
-          hint: 'Grand Father Name',
-          labelText: 'Grand Father Name',
-          inputFormatters: [
-            NoNumberInputFormatter(),
-          ],
-          showClearButton: false,
-          autoFocus: false,
-          onChanged: (value) {},
-        ),
-        SizedBox(
-          height: 3.h,
-        ),
-        FormLabelWidget(
-          title: 'Please use Amharic keyboard',
-          isRequired: false,
-          color: AppColors.primary,
-          leftIcon: Icon(
-            Icons.keyboard,
-            color: AppColors.secondary,
-            size: AppSizes.icon_size_6,
+          SizedBox(
+            width: 80.w,
+            child: Text(
+              'Your passport is an essential document in international travel and for identification purposes. ',
+              style: AppTextStyles.bodySmallRegular.copyWith(
+                  fontSize: AppSizes.font_12, color: AppColors.grayDark),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
-        SizedBox(
-          height: 3.h,
-        ),
-        TextFormBuilder(
-          validator:
-              ValidationBuilder().required('Father Name is required').build(),
-          labelText: "የመጀመሪያ ስም",
-          controller: controller.AmfirstNameController,
-          inputFormatters: [
-            AmharicInputFormatter(),
-          ],
-          hint: 'የመጀመሪያ ስም',
-          showClearButton: false,
-          autoFocus: false,
-          onChanged: (value) {},
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-        TextFormBuilder(
-          controller: controller.AmfatherNameController,
-          validator:
-              ValidationBuilder().required('Father Name is required').build(),
-          hint: 'የአባት ስም',
-          labelText: 'የአባት ስም',
-          inputFormatters: [
-            AmharicInputFormatter(),
-          ],
-          showClearButton: false,
-          autoFocus: false,
-          onChanged: (value) {},
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-        TextFormBuilder(
-          controller: controller.AmgrandFatherNameController,
-          validator:
-              ValidationBuilder().required('Father Name is required').build(),
-          hint: 'የአያት ስም',
-          labelText: 'የአያት ስም',
-          inputFormatters: [
-            AmharicInputFormatter(),
-          ],
-          showClearButton: false,
-          autoFocus: false,
-          onChanged: (value) {},
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-        SizedBox(
-          height: 1.h,
-        ),
-        FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Gender'),
-          items: controller.gender.map((CommonModel value) {
-            return DropdownMenuItem<CommonModel>(
-              value: value,
-              child: Text(
-                value.name,
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            controller.gendervalue.value = value!;
-          },
-          name: 'Gender',
-          initialValue: widget.citizenModel != null
-              ? controller.gendervalue.value!
-              : null,
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-        FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Birth Country'),
-          items: controller.bcountries.map((CommonJsonModel value) {
-            return DropdownMenuItem<CommonJsonModel>(
-              value: value,
-              child: Text(
-                value.name_json,
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            controller.birthCountryvalue.value = value;
-          },
-          name: 'birth',
-          initialValue: widget.citizenModel != null
-              ? controller.birthCountryvalue.value!
-              : null,
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-        Text(
-          'Birth date',
-          style: AppTextStyles.captionBold.copyWith(
-            color: AppColors.grayLight,
-            fontSize: AppSizes.font_12,
+          SizedBox(
+            height: 1.h,
           ),
-        ),
-        DateTextPickerInput(
-          yearValidator:
-              ValidationBuilder().required(' year is required').build(),
-          monthValidator:
-              ValidationBuilder().required('monthV is required').build(),
-          dateValidator:
-              ValidationBuilder().required('date is required').build(),
-          controller: controller,
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-      ],
+          TextFormBuilder(
+            validator:
+                ValidationBuilder().required('Father Name is required').build(),
+            labelText: "First name",
+            controller: controller.firstNameController,
+            inputFormatters: [
+              NoNumberInputFormatter(),
+            ],
+            hint: 'First name',
+            showClearButton: false,
+            autoFocus: false,
+            onChanged: (value) {},
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          TextFormBuilder(
+            controller: controller.fatherNameController,
+            validator:
+                ValidationBuilder().required('Father Name is required').build(),
+            hint: 'Father Name',
+            labelText: 'Father Name',
+            inputFormatters: [
+              NoNumberInputFormatter(),
+            ],
+            showClearButton: false,
+            autoFocus: false,
+            onChanged: (value) {},
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          TextFormBuilder(
+            controller: controller.grandFatherNameController,
+            validator:
+                ValidationBuilder().required('Father Name is required').build(),
+            hint: 'Grand Father Name',
+            labelText: 'Grand Father Name',
+            inputFormatters: [
+              NoNumberInputFormatter(),
+            ],
+            showClearButton: false,
+            autoFocus: false,
+            onChanged: (value) {},
+          ),
+          SizedBox(
+            height: 3.h,
+          ),
+          FormLabelWidget(
+            title: 'Please use Amharic keyboard',
+            isRequired: false,
+            color: AppColors.primary,
+            leftIcon: Icon(
+              Icons.keyboard,
+              color: AppColors.secondary,
+              size: AppSizes.icon_size_6,
+            ),
+          ),
+          SizedBox(
+            height: 3.h,
+          ),
+          TextFormBuilder(
+            validator:
+                ValidationBuilder().required('Father Name is required').build(),
+            labelText: "የመጀመሪያ ስም",
+            controller: controller.AmfirstNameController,
+            inputFormatters: [
+              AmharicInputFormatter(),
+            ],
+            hint: 'የመጀመሪያ ስም',
+            showClearButton: false,
+            autoFocus: false,
+            onChanged: (value) {},
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          TextFormBuilder(
+            controller: controller.AmfatherNameController,
+            validator:
+                ValidationBuilder().required('Father Name is required').build(),
+            hint: 'የአባት ስም',
+            labelText: 'የአባት ስም',
+            inputFormatters: [
+              AmharicInputFormatter(),
+            ],
+            showClearButton: false,
+            autoFocus: false,
+            onChanged: (value) {},
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          TextFormBuilder(
+            controller: controller.AmgrandFatherNameController,
+            validator:
+                ValidationBuilder().required('Father Name is required').build(),
+            hint: 'የአያት ስም',
+            labelText: 'የአያት ስም',
+            inputFormatters: [
+              AmharicInputFormatter(),
+            ],
+            showClearButton: false,
+            autoFocus: false,
+            onChanged: (value) {},
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
+          FormBuilderDropdown(
+            decoration: ReusableInputDecoration.getDecoration('Gender'),
+            items: controller.gender.map((CommonModel value) {
+              return DropdownMenuItem<CommonModel>(
+                value: value,
+                child: Text(
+                  value.name,
+                  style: AppTextStyles.captionBold
+                      .copyWith(color: AppColors.grayDark),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              controller.gendervalue.value = value!;
+            },
+            name: 'Gender',
+            initialValue: widget.citizenModel != null
+                ? controller.gendervalue.value!
+                : null,
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          FormBuilderDropdown(
+            decoration: ReusableInputDecoration.getDecoration('Birth Country'),
+            items: controller.bcountries.map((CommonJsonModel value) {
+              return DropdownMenuItem<CommonJsonModel>(
+                value: value,
+                child: Text(
+                  value.name_json,
+                  style: AppTextStyles.captionBold
+                      .copyWith(color: AppColors.grayDark),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              controller.birthCountryvalue.value = value;
+            },
+            name: 'birth',
+            initialValue: widget.citizenModel != null
+                ? controller.birthCountryvalue.value!
+                : null,
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          Text(
+            'Birth date',
+            style: AppTextStyles.captionBold.copyWith(
+              color: AppColors.grayLight,
+              fontSize: AppSizes.font_12,
+            ),
+          ),
+          DateTextPickerInput(
+            yearValidator:
+                ValidationBuilder().required(' year is required').build(),
+            monthValidator:
+                ValidationBuilder().required('monthV is required').build(),
+            dateValidator:
+                ValidationBuilder().required('date is required').build(),
+            controller: controller,
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+        ],
+      ),
     );
   }
 

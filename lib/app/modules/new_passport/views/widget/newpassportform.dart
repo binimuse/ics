@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -14,7 +12,6 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
-
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_four.dart';
@@ -22,18 +19,14 @@ import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
 
-
 import 'package:ics/gen/assets.gen.dart';
 
 import 'package:im_stepper/stepper.dart';
 
 import 'package:sizer/sizer.dart';
 
-
 import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
-
-
 
 class NewPassportForm extends StatefulWidget {
   final IcsCitizenModel? citizenModel;
@@ -50,6 +43,11 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   final ScrollController _scrollController = ScrollController();
 
   XFile? image;
+
+  final _step1Key = GlobalKey<FormState>();
+  final _step2Key = GlobalKey<FormState>();
+  final _step3Key = GlobalKey<FormState>();
+  final _step4Key = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -135,6 +133,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                     children: [
                       if (controller.currentStep == 0)
                         Step1(
+                          key: _step1Key,
                           citizenModel: widget.citizenModel,
                         ),
 

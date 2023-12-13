@@ -2,7 +2,7 @@ class Getaicscitizens {
   dynamic fetchData() {
     return """
 query MyQuery {
-  ics_citizens(order_by: {created_at: desc}) {
+  ics_citizens(order_by: {created_at: desc}, limit: 5) {
     abroad_address
     abroad_country_id
     abroad_phone_number
