@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/my_order/views/widget/orgin_widget.dart';
+import 'package:ics/app/modules/my_order/views/widget/passport_widget.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import '../controllers/my_order_controller.dart';
 
 class MyOrderView extends GetView<MyOrderController> {
@@ -16,23 +18,63 @@ class MyOrderView extends GetView<MyOrderController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteOff,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 1.h,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            buildName(context),
+            Expanded(
+              child: DefaultTabController(
+                length: 2,
+                child: SafeArea(
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SegmentedTabControl(
+                          // Customization of widget
+                          radius: const Radius.circular(3),
+                          backgroundColor: Colors.grey.shade300,
+                          indicatorColor: AppColors.primary,
+                          tabTextColor: Colors.black45,
+                          selectedTabTextColor: Colors.white,
+                          squeezeIntensity: 2,
+                          height: 45,
+                          tabPadding: const EdgeInsets.symmetric(horizontal: 8),
+                          textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                              fontSize: AppSizes.font_16,
+                              color: AppColors.primary),
+                          // Options for selection
+                          // All specified values will override the [SegmentedTabControl] setting
+                          tabs: [
+                            SegmentTab(
+                              label: 'Passport',
+
+                              // For example, this overrides [indicatorColor] from [SegmentedTabControl]
+                            ),
+                            SegmentTab(
+                              label: 'Orgin ID',
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Sample pages
+                      Padding(
+                        padding: const EdgeInsets.only(top: 70),
+                        child: TabBarView(
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            PassportWidget(),
+                            OrginIdWidget(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              buildName(context),
-              buildcard(context, "ReNew Passport", "29 Jun 2023 12:00 PM",
-                  "Pending", "ID: 123456789"),
-              buildcard(context, "New Passport", "29 Jun 2023 12:00 PM",
-                  "Delivered", "ID: 123456789"),
-              buildcard(context, "New Passport", "29 Jun 2023 12:00 PM",
-                  "Delivered", "ID: 123456789"),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -57,120 +99,6 @@ class MyOrderView extends GetView<MyOrderController> {
                 fontSize: AppSizes.font_16, color: AppColors.grayDark),
           ),
         ],
-      ),
-    );
-  }
-
-  buildcard(BuildContext context, String title, String date, String status,
-      String id) {
-    return Container(
-      height: 20.h,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 6,
-            blurRadius: 5,
-            offset: Offset(0, 0),
-          ),
-        ],
-      ),
-      child: Card(
-        elevation: 0.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          side: BorderSide(color: AppColors.grayLighter, width: 0),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconButton(
-                    icon: SvgPicture.asset(
-                      Assets.icons.passport,
-                      color: status.contains("Pending")
-                          ? AppColors.warning
-                          : AppColors.success,
-                    ),
-                    onPressed: () {
-                      //showModal(context);
-                    },
-                  ),
-                  Text(title,
-                      style: AppTextStyles.bodyLargeBold.copyWith(
-                        fontWeight: FontWeight.w600,
-                      )),
-                  Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 4.h,
-                      width: 22.w,
-                      decoration: BoxDecoration(
-                        color: status.contains("Pending")
-                            ? AppColors.warning
-                            : AppColors.success,
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            status,
-                            style: AppTextStyles.bodySmallBold.copyWith(
-                              color: AppColors.whiteOff,
-                              fontSize: AppSizes.font_10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 100.w,
-              decoration: BoxDecoration(
-                color: AppColors.primaryLighter.withOpacity(0.2),
-                // borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  id,
-                  style: AppTextStyles.bodySmallBold.copyWith(
-                    color: AppColors.primary,
-                    fontSize: AppSizes.font_10,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  date,
-                  style: AppTextStyles.displayOneRegular.copyWith(
-                    color: AppColors.grayDark,
-                    fontSize: AppSizes.font_10,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

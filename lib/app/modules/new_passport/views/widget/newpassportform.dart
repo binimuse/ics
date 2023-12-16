@@ -5,8 +5,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
 import 'package:ics/app/common/app_icon_button.dart';
-import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
@@ -18,6 +18,7 @@ import 'package:ics/app/modules/new_passport/views/widget/steps/step_four.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
+import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 
@@ -44,15 +45,19 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
   XFile? image;
 
-  final _step1Key = GlobalKey<FormState>();
-  final _step2Key = GlobalKey<FormState>();
-  final _step3Key = GlobalKey<FormState>();
-  final _step4Key = GlobalKey<FormState>();
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void initState() {
+    super.initState();
+    if (widget.citizenModel != null) {
+      getDataForStep1();
+      getDataForStep2();
+      getDataForStep3();
+    }
   }
 
   final SignatureController _controller = SignatureController(
@@ -66,18 +71,27 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 1.h,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: 1.h,
+                ),
+                buildName(context),
+                buildForm(context),
+                // Spacer(),
+              ],
             ),
-            buildName(context),
-            buildForm(context),
-            // Spacer(),
-          ],
-        ),
+          ),
+          Obx(
+            () => controller.isSendStared.value
+                ? CustomLoadingWidget()
+                : const SizedBox(),
+          ),
+        ],
       ),
     );
   }
@@ -126,24 +140,29 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                 key: controller.newPassportformKey,
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
-                clearValueOnUnregister: true,
+                onWillPop: () async {
+                  _showAreYouSureDialog(context);
+                  return false;
+                },
                 child: SingleChildScrollView(
                   controller: _scrollController,
                   child: Column(
                     children: [
                       if (controller.currentStep == 0)
                         Step1(
-                          key: _step1Key,
                           citizenModel: widget.citizenModel,
+                          controller: controller,
                         ),
 
                       if (controller.currentStep == 1)
                         Step2(
                           citizenModel: widget.citizenModel,
+                          controller: controller,
                         ),
                       if (controller.currentStep == 2)
                         Step3(
                           citizenModel: widget.citizenModel,
+                          controller: controller,
                         ),
                       if (controller.currentStep == 3) Step4(),
 
@@ -186,59 +205,46 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                       },
                     ),
                   ),
-                Obx(() => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomNormalButton(
-                          text: controller.isSendStared.value
-                              ? ""
-                              : controller.currentStep == 3
-                                  ? 'Submit'
-                                  : 'Next',
-                          textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                            color: AppColors.whiteOff,
-                          ),
-                          rightIcon: controller.isSendStared.value
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                  color: AppColors.whiteOff,
-                                  strokeWidth: 1,
-                                ))
-                              : SizedBox(),
-                          textcolor: AppColors.whiteOff,
-                          buttoncolor: controller.currentStep == 3
-                              ? AppColors.primary
-                              : AppColors.grayLight,
-                          borderRadius: AppSizes.radius_16,
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppSizes.mp_v_1,
-                            horizontal: AppSizes.mp_w_6,
-                          ),
-                          onPressed: () async {
-                            if (controller.currentStep == 2) {
-                              controller.send();
-                              await Future.delayed(const Duration(seconds: 1));
-                              // Handle form submission
-                              if (controller.isSend.value) {
-                                setState(() {
-                                  controller.currentStep++;
-                                });
-                              } else {
-                                AppToasts.showError("Some things went wrong");
-                              }
-                            } else if (controller.currentStep == 3) {
-                              controller.checkdoc();
-                            } else {
-                              if (controller.newPassportformKey.currentState!
-                                  .saveAndValidate()) {
-                                setState(() {
-                                  controller.currentStep++;
-                                });
-                              } else {
-                                _scrollToBottom();
-                              }
-                            }
-                          }),
-                    )),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CustomNormalButton(
+                      text: controller.currentStep == 3 ? 'Submit' : 'Next',
+                      textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                        color: AppColors.whiteOff,
+                      ),
+                      textcolor: AppColors.whiteOff,
+                      buttoncolor: controller.currentStep == 3
+                          ? AppColors.primary
+                          : AppColors.grayLight,
+                      borderRadius: AppSizes.radius_16,
+                      padding: EdgeInsets.symmetric(
+                        vertical: AppSizes.mp_v_1,
+                        horizontal: AppSizes.mp_w_6,
+                      ),
+                      onPressed: () async {
+                        if (controller.currentStep == 2) {
+                          controller.send();
+                          await Future.delayed(const Duration(seconds: 1));
+                          // Handle form submission
+                          if (controller.isSend.value) {
+                            setState(() {
+                              controller.currentStep++;
+                            });
+                          }
+                        } else if (controller.currentStep == 3) {
+                          controller.checkdoc();
+                        } else {
+                          if (controller.newPassportformKey.currentState!
+                              .saveAndValidate()) {
+                            setState(() {
+                              controller.currentStep++;
+                            });
+                          } else {
+                            _scrollToBottom();
+                          }
+                        }
+                      }),
+                )
               ],
             ),
           ),
@@ -261,7 +267,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         AppSvgButton(
           imagePath: Assets.icons.arrowleft,
           onPressed: () {
-            Get.back();
+            _showAreYouSureDialog(context);
           },
           size: AppSizes.icon_size_8 * 0.7,
         ),
@@ -280,5 +286,155 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         ),
       ],
     );
+  }
+
+  void _showAreYouSureDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: [
+                Text(
+                  "Are you sure You want to exit ",
+                  style: AppTextStyles.bodyLargeBold,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .pop(false); // Return false if cancel is pressed
+              },
+              child: Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                height: 5.h,
+                width: 25.w,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.primary,
+                      AppColors.primary,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(22)),
+                ),
+                child: Center(
+                  child: Text(
+                    "Cancel".tr,
+                    style: AppTextStyles.bodyLargeBold
+                        .copyWith(color: AppColors.whiteOff),
+                  ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                Get.offAllNamed(Routes.MAIN_PAGE);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                height: 5.h,
+                width: 25.w,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.danger,
+                      AppColors.danger,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(22)),
+                ),
+                child: Center(
+                  child: Text(
+                    "Yes".tr,
+                    style: AppTextStyles.bodyLargeBold
+                        .copyWith(color: AppColors.whiteOff),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void getDataForStep1() {
+    controller.firstNameController.text = widget.citizenModel!.firstName!;
+    controller.fatherNameController.text = widget.citizenModel!.father_name!;
+    controller.grandFatherNameController.text =
+        widget.citizenModel!.grandFatherNameJson!.en!;
+
+    //amharic
+
+    controller.AmfirstNameController.text =
+        widget.citizenModel!.firstNameJson!.am!;
+    controller.AmfatherNameController.text =
+        widget.citizenModel!.fatherNameJson!.am!;
+    controller.AmgrandFatherNameController.text =
+        widget.citizenModel!.grandFatherNameJson!.am!;
+
+    //country
+    controller.birthCountryvalue.value = controller.bcountries
+        .firstWhere((e) => e.id == widget.citizenModel!.birthCountryId);
+
+    controller.gendervalue.value = controller.gender
+        .firstWhere((e) => e.name == widget.citizenModel!.gender);
+
+    // day
+    controller.dayController.text =
+        widget.citizenModel!.dateOfBirth!.day.toString();
+    // month
+    controller.monthController.text =
+        widget.citizenModel!.dateOfBirth!.month.toString();
+    // year
+    controller.yearController.text =
+        widget.citizenModel!.dateOfBirth!.year.toString();
+  }
+
+  void getDataForStep2() {
+    controller.occupationvalue.value =
+        widget.citizenModel!.occupation!.toString();
+    controller.haircolorvalue.value =
+        widget.citizenModel!.hairColour!.toString();
+
+    controller.eyecolorvalue.value = widget.citizenModel!.eyeColour!.toString();
+
+    controller.skincolorvalue.value =
+        widget.citizenModel!.skinColour!.toString();
+
+    controller.height.text = widget.citizenModel!.height!.toString();
+
+    controller.maritalstatusvalue.value = controller.martial
+        .firstWhere((e) => e.name == widget.citizenModel!.maritalStatus);
+  }
+
+  void getDataForStep3() {
+    controller.countryvalue.value = controller.allwoedCountries
+        .firstWhere((e) => e.id == widget.citizenModel!.abroadCountryId);
+    controller.getEmbassies(controller.countryvalue.value!.id);
+    controller.addressController.text = widget.citizenModel!.abroadAddress!;
+    controller.phonenumber.text = widget.citizenModel!.abroadPhoneNumber!;
+
+    //   for emabassiy
+    Future.delayed(const Duration(milliseconds: 100), () {
+      controller.embassiesvalue.value = controller.base_embassies.firstWhere(
+          (e) =>
+              e.id ==
+              widget.citizenModel!.newApplicationModel!.first.embassy_id);
+    });
   }
 }

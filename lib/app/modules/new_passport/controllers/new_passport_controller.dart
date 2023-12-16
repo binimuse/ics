@@ -260,11 +260,15 @@ class NewPassportController extends GetxController {
       AppToasts.showError("Document are empty");
       return;
     } else if (documents.any((element) => element.files.isEmpty)) {
+      isSendStared.value = false;
       AppToasts.showError("Document must not be empty");
       return;
     } else {
+      isSendStared.value = true;
       await Future.delayed(const Duration(seconds: 1));
+      isSendStared.value = false;
       AppToasts.showSuccess("New Passport Sent successfully");
+
       Get.offAllNamed(Routes.MAIN_PAGE);
     }
   }
@@ -275,16 +279,18 @@ class NewPassportController extends GetxController {
     PlatformFile files,
   ) async {
     try {
+      isSendStared.value = true;
       dynamic result = await graphQLCommonApi.query(
         geturlQuery.fetchData("pdf", ""),
         {},
       );
 
       getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
-      isSendDocStarted(true);
+      isSendStared.value = true;
       sendUrl(documentTypeId, getUrlModel.value!.url, files);
       isfeched(true);
     } catch (e) {
+      isSendStared.value = false;
       isfeched(false);
       print("Error occurred while getting URL: $e");
     }
@@ -297,6 +303,7 @@ class NewPassportController extends GetxController {
     PlatformFile files,
   ) async {
     try {
+      isSendStared.value = true;
       print(Uri.parse(url!).toString());
       var dio = Mydio.Dio();
 
@@ -310,6 +317,7 @@ class NewPassportController extends GetxController {
       isGetDocUrlStarted(true);
       var response = await dio.put(url, data: formData);
       if (response.statusCode == 200) {
+        isSendStared.value = false;
         print('File uploaded successfully');
         sendDoc(
           newApplicationId,
@@ -319,10 +327,12 @@ class NewPassportController extends GetxController {
 
         print(response);
       } else {
+        isSendStared.value = false;
         isGetDocUrlStarted(false);
         print('Failed to upload file. Error: ${response.statusCode}');
       }
     } catch (e) {
+      isSendStared.value = false;
       isGetDocUrlStarted(false);
       print('Error uploading file: $e');
     }
@@ -396,11 +406,15 @@ class NewPassportController extends GetxController {
     } catch (e) {
       isSendStared.value = false;
       isSend.value = false;
-      print('Error: $e');
+      print('Errors: $e');
+      if (e.toString().contains("Null ")) {
+        AppToasts.showError("please provide Emabases");
+      } else {
+        AppToasts.showError("Something went wrong");
+      }
     }
   }
 
-  var isSendDocStarted = false.obs;
   var isSendDocSuccess = false.obs;
   var newDocId;
   Future<void> sendDoc(
@@ -409,6 +423,7 @@ class NewPassportController extends GetxController {
     var url,
   ) async {
     try {
+      isSendStared.value = true;
       // file upload
 
       GraphQLClient graphQLClient;
@@ -429,16 +444,17 @@ class NewPassportController extends GetxController {
       );
 
       if (result.hasException) {
-        isSendDocStarted(false);
+        isSendStared.value = false;
+
         print(result.exception.toString());
       } else {
         isSendDocSuccess(true);
-        isSendDocStarted(false);
+        isSendStared.value = false;
 
         AppToasts.showSuccess("Document uploaded successfully");
       }
     } catch (e) {
-      isSendDocStarted(false);
+      isSendStared.value = false;
       print('Error: $e');
     }
   }

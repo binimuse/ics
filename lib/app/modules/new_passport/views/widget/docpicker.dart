@@ -26,6 +26,7 @@ class _BuildDocState extends State<BuildDoc> {
   bool hasError = false;
 
   Future<void> openPdfPicker() async {
+    widget.controller.isSendStared.value = true;
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
@@ -59,21 +60,26 @@ class _BuildDocState extends State<BuildDoc> {
                 widget.controller.documents.first.files.first,
               );
             });
+            widget.controller.isSendStared.value = false;
           } catch (e) {
             setState(() {
               hasError = true;
             });
+            widget.controller.isSendStared.value = false;
             AppToasts.showError("error  while getting the URL.");
 
             print("Error in geturl: $e");
           }
         } else {
+          widget.controller.isSendStared.value = false;
           AppToasts.showError("File size exceeds the limit of 10MB!");
         }
       } else {
+        widget.controller.isSendStared.value = false;
         AppToasts.showError("Invalid File!!");
       }
     } else {
+      widget.controller.isSendStared.value = false;
       AppToasts.showError("File Not picked!!");
       // User canceled the file picking
     }

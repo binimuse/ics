@@ -98,123 +98,138 @@ class NewPassportView extends GetView<NewPassportController> {
   }
 
   Widget buildAdditionalCard() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-              'Please ensure that you have the following documents before proceeding.',
-              style: AppTextStyles.bodySmallRegular.copyWith(
-                color: AppColors.grayDark,
-              )),
-          SizedBox(height: 2.h),
-          FutureBuilder<List<NewConfirmationModel>>(
-            future: controller.fetchConfirmationModelCar(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primary,
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else if (snapshot.hasData) {
-                final List<NewConfirmationModel> confirmationList =
-                    snapshot.data!;
+    return GestureDetector(
+      onTap: () {
+        // controller.toggleTerm(index);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+                'Please ensure that you have the following documents before proceeding.',
+                style: AppTextStyles.bodySmallRegular.copyWith(
+                  color: AppColors.grayDark,
+                )),
+            SizedBox(height: 2.h),
+            FutureBuilder<List<NewConfirmationModel>>(
+              future: controller.fetchConfirmationModelCar(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primary,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final List<NewConfirmationModel> confirmationList =
+                      snapshot.data!;
 
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: confirmationList.length,
-                  itemBuilder: (context, index) {
-                    final confirmation = confirmationList[index];
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: confirmationList.length,
+                    itemBuilder: (context, index) {
+                      final confirmation = confirmationList[index];
 
-                    return Obx(() => Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            border: Border.all(
-                              color: AppColors.grayLight.withOpacity(0.9),
-                              width: 1.0,
-                            ),
-                            color: !controller.isTermChecked(index)
-                                ? Colors.transparent
-                                : AppColors.primary.withOpacity(0.2),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      confirmation.image,
-                                      color: !controller.isTermChecked(index)
-                                          ? AppColors.grayLight
-                                          : AppColors.primary,
-                                    ),
-                                    SizedBox(width: 3.w),
-                                    Column(
+                      return Obx(() => GestureDetector(
+                            onTap: () {
+                              controller.toggleTerm(index);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.0),
+                                border: Border.all(
+                                  color: AppColors.grayLight.withOpacity(0.9),
+                                  width: 1.0,
+                                ),
+                                color: !controller.isTermChecked(index)
+                                    ? Colors.transparent
+                                    : AppColors.primary.withOpacity(0.2),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          confirmation.name,
-                                          style: AppTextStyles.bodySmallBold
-                                              .copyWith(
-                                            fontSize: 12.sp,
-                                            color: AppColors.black,
-                                          ),
+                                        SvgPicture.asset(
+                                          confirmation.image,
+                                          color:
+                                              !controller.isTermChecked(index)
+                                                  ? AppColors.grayLight
+                                                  : AppColors.primary,
                                         ),
-                                        SizedBox(
-                                          width: 25.h,
-                                          child: Text(
-                                            overflow: TextOverflow.fade,
-                                            maxLines: 6,
-                                            confirmation.description,
-                                            style: AppTextStyles.captionRegular
-                                                .copyWith(
-                                              color: AppColors.black,
-                                              fontSize: 9.sp,
+                                        SizedBox(width: 3.w),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              confirmation.name,
+                                              style: AppTextStyles.bodySmallBold
+                                                  .copyWith(
+                                                fontSize: 12.sp,
+                                                color: AppColors.black,
+                                              ),
                                             ),
-                                          ),
+                                            SizedBox(
+                                              width: 25.h,
+                                              child: Text(
+                                                overflow: TextOverflow.fade,
+                                                maxLines: 6,
+                                                confirmation.description,
+                                                style: AppTextStyles
+                                                    .captionRegular
+                                                    .copyWith(
+                                                  color: AppColors.black,
+                                                  fontSize: 9.sp,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: MyCheckBox(
+                                      isInitSelected:
+                                          controller.isTermChecked(index),
+                                      checkBoxSize: CheckBoxSize.MEDIUM,
+                                      onChanged: (isChecked) {
+                                        controller.toggleTerm(index);
+                                      },
+                                      text: "",
+                                    ),
+                                  )
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: MyCheckBox(
-                                  isInitSelected:
-                                      controller.isTermChecked(index),
-                                  checkBoxSize: CheckBoxSize.MEDIUM,
-                                  onChanged: (isChecked) {
-                                    controller.toggleTerm(index);
-                                  },
-                                  text: "",
-                                ),
-                              )
-                            ],
-                          ),
-                        ));
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-        ],
+                            ),
+                          ));
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

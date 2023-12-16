@@ -16,9 +16,11 @@ import '../../../../../config/theme/app_sizes.dart';
 
 class Step3 extends StatefulWidget {
   final IcsCitizenModel? citizenModel;
+  final NewPassportController controller;
 
   const Step3({
     this.citizenModel,
+    required this.controller,
   });
   @override
   State<Step3> createState() => _Step3State();
@@ -26,25 +28,6 @@ class Step3 extends StatefulWidget {
 
 class _Step3State extends State<Step3> {
   final NewPassportController controller = Get.find<NewPassportController>();
-
-  void initState() {
-    if (widget.citizenModel != null) {
-      controller.countryvalue.value = controller.allwoedCountries
-          .firstWhere((e) => e.id == widget.citizenModel!.abroadCountryId);
-      controller.getEmbassies(controller.countryvalue.value!.id);
-      controller.addressController.text = widget.citizenModel!.abroadAddress!;
-      controller.phonenumber.text = widget.citizenModel!.abroadPhoneNumber!;
-
-      //   for emabassiy
-      Future.delayed(const Duration(milliseconds: 100), () {
-        controller.embassiesvalue.value = controller.base_embassies.firstWhere(
-            (e) =>
-                e.id ==
-                widget.citizenModel!.newApplicationModel!.first.embassy_id);
-      });
-    }
-    super.initState();
-  }
 
   // other properties go here
   Widget build(BuildContext context) {
