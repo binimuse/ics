@@ -13,6 +13,7 @@
     "android.permission.WRITE_EXTERNAL_STORAGE" />
    <application
         android:label="ics"
+        android:enableOnBackInvokedCallback="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

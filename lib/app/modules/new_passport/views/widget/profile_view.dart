@@ -209,7 +209,9 @@ class ProfileView extends GetView<NewPassportController> {
                   Text(
                     citizen.firstName.toString() +
                         " " +
-                        citizen.father_name.toString(),
+                        citizen.father_name.toString() +
+                        " " +
+                        citizen.grand_father_name.toString(),
                     style: AppTextStyles.bodySmallBold.copyWith(
                         color: AppColors.grayDark,
                         fontSize: AppSizes.font_12 * 1.0),

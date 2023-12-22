@@ -14,6 +14,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
+import 'package:ics/app/modules/new_passport/views/widget/steps/step_five.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_four.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
@@ -57,6 +58,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
       getDataForStep1();
       getDataForStep2();
       getDataForStep3();
+      getDataForStep4();
     }
   }
 
@@ -121,6 +123,10 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                 color: AppColors.whiteOff,
               ),
               Icon(
+                Icons.family_restroom,
+                color: AppColors.whiteOff,
+              ),
+              Icon(
                 Icons.edit_document,
                 color: AppColors.whiteOff,
               ),
@@ -164,7 +170,13 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
-                      if (controller.currentStep == 3) Step4(),
+                      if (controller.currentStep == 3)
+                        Step4(
+                          citizenModel: widget.citizenModel,
+                          controller: controller,
+                        ),
+
+                      if (controller.currentStep == 4) Step5(),
 
                       // Add more form fields as needed for each step
                     ],
@@ -208,12 +220,12 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomNormalButton(
-                      text: controller.currentStep == 3 ? 'Submit' : 'Next',
+                      text: controller.currentStep == 4 ? 'Submit' : 'Next',
                       textStyle: AppTextStyles.bodyLargeBold.copyWith(
                         color: AppColors.whiteOff,
                       ),
                       textcolor: AppColors.whiteOff,
-                      buttoncolor: controller.currentStep == 3
+                      buttoncolor: controller.currentStep == 4
                           ? AppColors.primary
                           : AppColors.grayLight,
                       borderRadius: AppSizes.radius_16,
@@ -222,7 +234,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                         horizontal: AppSizes.mp_w_6,
                       ),
                       onPressed: () async {
-                        if (controller.currentStep == 2) {
+                        if (controller.currentStep == 3) {
                           controller.send();
                           await Future.delayed(const Duration(seconds: 1));
                           // Handle form submission
@@ -231,7 +243,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                               controller.currentStep++;
                             });
                           }
-                        } else if (controller.currentStep == 3) {
+                        } else if (controller.currentStep == 4) {
                           controller.checkdoc();
                         } else {
                           if (controller.newPassportformKey.currentState!
@@ -376,7 +388,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     controller.firstNameController.text = widget.citizenModel!.firstName!;
     controller.fatherNameController.text = widget.citizenModel!.father_name!;
     controller.grandFatherNameController.text =
-        widget.citizenModel!.grandFatherNameJson!.en!;
+        widget.citizenModel!.grand_father_name!;
 
     //amharic
 
@@ -386,9 +398,15 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         widget.citizenModel!.fatherNameJson!.am!;
     controller.AmgrandFatherNameController.text =
         widget.citizenModel!.grandFatherNameJson!.am!;
+    print(widget.citizenModel!.is_adopted);
+    controller.isAdoption.value = widget.citizenModel!.is_adopted!;
 
     //country
     controller.birthCountryvalue.value = controller.bcountries
+        .firstWhere((e) => e.id == widget.citizenModel!.birthCountryId);
+
+    //country
+    controller.natinalityvalue.value = controller.natinality
         .firstWhere((e) => e.id == widget.citizenModel!.birthCountryId);
 
     controller.gendervalue.value = controller.gender
@@ -406,12 +424,12 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   }
 
   void getDataForStep2() {
-    controller.occupationvalue.value =
-        widget.citizenModel!.occupation!.toString();
-    controller.haircolorvalue.value =
-        widget.citizenModel!.hairColour!.toString();
-
-    controller.eyecolorvalue.value = widget.citizenModel!.eyeColour!.toString();
+    controller.occupationvalue.value = controller.occupations
+        .firstWhere((e) => e.id == widget.citizenModel!.occupation_id);
+    controller.haircolorvalue.value = controller.haircolor
+        .firstWhere((e) => e.name == widget.citizenModel!.hairColour);
+    controller.eyecolorvalue.value = controller.eyecolor
+        .firstWhere((e) => e.name == widget.citizenModel!.eyeColour);
 
     controller.skincolorvalue.value =
         widget.citizenModel!.skinColour!.toString();
@@ -430,11 +448,15 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     controller.phonenumber.text = widget.citizenModel!.abroadPhoneNumber!;
 
     //   for emabassiy
-    Future.delayed(const Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(seconds: 2), () {
       controller.embassiesvalue.value = controller.base_embassies.firstWhere(
           (e) =>
               e.id ==
               widget.citizenModel!.newApplicationModel!.first.embassy_id);
     });
+  }
+
+  void getDataForStep4() {
+    controller.familyModelvalue.value = widget.citizenModel!.familyModel!;
   }
 }

@@ -1,8 +1,11 @@
+import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+
 class IcsCitizenModel {
   String? abroadAddress;
   String? abroadCountryId;
   String? abroadPhoneNumber;
   String? birthCountryId;
+  String? nationality_id;
   String? birthPlace;
   DateTime? createdAt;
   DateTime? dateOfBirth;
@@ -12,38 +15,45 @@ class IcsCitizenModel {
   double? height;
   String? id;
   String? maritalStatus;
-  String? occupation;
+  String? occupation_id;
   String? skinColour;
+  bool? is_adopted;
 
   String? firstName;
   String? father_name;
+  String? grand_father_name;
   NameJson? fatherNameJson;
   NameJson? firstNameJson;
   NameJson? grandFatherNameJson;
   final List<NewApplicationModel>? newApplicationModel;
+  final List<FamilyModel>? familyModel;
 
   IcsCitizenModel({
     this.abroadAddress,
     this.abroadCountryId,
     this.abroadPhoneNumber,
     this.birthCountryId,
+    this.nationality_id,
     this.birthPlace,
     this.createdAt,
     this.dateOfBirth,
     this.eyeColour,
     this.gender,
     this.hairColour,
+    this.is_adopted,
     this.height,
     this.id,
     this.maritalStatus,
-    this.occupation,
+    this.occupation_id,
     this.skinColour,
     this.firstName,
     this.father_name,
+    this.grand_father_name,
     this.fatherNameJson,
     this.firstNameJson,
     this.grandFatherNameJson,
     this.newApplicationModel,
+    this.familyModel,
   });
 
   factory IcsCitizenModel.fromJson(Map<String, dynamic> json) {
@@ -52,6 +62,8 @@ class IcsCitizenModel {
       abroadCountryId: json['abroad_country_id'],
       abroadPhoneNumber: json['abroad_phone_number'],
       birthCountryId: json['birth_country_id'],
+      is_adopted: json['is_adopted'],
+      nationality_id: json['nationality_id'],
       birthPlace: json['birth_place'],
       createdAt:
           json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
@@ -64,10 +76,11 @@ class IcsCitizenModel {
       height: json['height'] != null ? json['height'].toDouble() : null,
       id: json['id'],
       maritalStatus: json['marital_status'],
-      occupation: json['occupation'],
+      occupation_id: json['occupation_id'],
       skinColour: json['skin_colour'],
       firstName: json['first_name'],
       father_name: json['father_name'],
+      grand_father_name: json['grand_father_name'],
       fatherNameJson: json['father_name_json'] != null
           ? NameJson.fromJson(json['father_name_json'])
           : null,
@@ -79,6 +92,9 @@ class IcsCitizenModel {
           : null,
       newApplicationModel: List.of(json["new_applications"])
           .map((i) => NewApplicationModel.fromJson(i))
+          .toList(),
+      familyModel: List.of(json["citizen_families"])
+          .map((i) => FamilyModel.fromJson(i))
           .toList(),
     );
   }
@@ -110,7 +126,7 @@ class NewApplicationModel {
 
   factory NewApplicationModel.fromJson(Map<String, dynamic> json) {
     return NewApplicationModel(
-      embassy_id: json['embassy_id'],
+      embassy_id: json['embassy']["id"],
     );
   }
 }

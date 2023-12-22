@@ -45,12 +45,15 @@ class NewPassportController extends GetxController {
 
   final TextEditingController addressController = TextEditingController();
   final Rxn<Basemodel> baseData = Rxn<Basemodel>();
-  List<CommonJsonModel> bcountries = [];
+  final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
+
   List<AllowedContreyModel> allwoedCountries = [];
   List<CommonIDModel> base_document_types = [];
   List<PassportDocuments> documents = [];
 
   final Rxn<CommonJsonModel> birthCountryvalue = Rxn<CommonJsonModel>();
+  final Rxn<CommonJsonModel> natinalityvalue = Rxn<CommonJsonModel>();
+  final Rxn<CommonJsonModel> familynatinalityvalue = Rxn<CommonJsonModel>();
   final Rxn<CommonJsonModel> embassiesvalue = Rxn<CommonJsonModel>();
 
   final TextEditingController countryController = TextEditingController();
@@ -60,46 +63,45 @@ class NewPassportController extends GetxController {
   int currentStep = 0;
   final TextEditingController dateofbirth = TextEditingController();
   final TextEditingController dayController = TextEditingController();
-  List<String> eyecolor = [
-    'Black',
-    'Brown',
-    'Blue',
-    'Other',
-  ];
+  final Rxn<CommonModel> eyecolorvalue = Rxn<CommonModel>();
 
-  final RxString eyecolorvalue = ''.obs;
   final TextEditingController fatherNameController = TextEditingController();
   //Step 1
   final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController grandFatherNameController =
+      TextEditingController();
 
   GetallQuery getGenderQuery = GetallQuery();
   GetUrlQuery geturlQuery = GetUrlQuery();
   Getaicscitizens getaicscitizens = Getaicscitizens();
   GetEmbassiesQuery getEmbassiesQuery = GetEmbassiesQuery();
-  final TextEditingController grandFatherNameController =
-      TextEditingController();
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
-  List<String> haircolor = [
-    'Black',
-    'Brown',
-    'Blonde',
-    'Red',
-    'Gray and White Hair',
-  ];
+  final Rxn<CommonModel> haircolorvalue = Rxn<CommonModel>();
 
-  final RxString haircolorvalue = ''.obs;
   //Step 2
 
   final TextEditingController height = TextEditingController();
 
+  final TextEditingController familyfirstNameController =
+      TextEditingController();
+  final TextEditingController familyFatherNameController =
+      TextEditingController();
+
   var isfeched = false.obs;
+  var isAdoption = false.obs;
 
   final Rxn<CommonModel> maritalstatusvalue = Rxn<CommonModel>();
   final Rxn<CommonModel> gendervalue = Rxn<CommonModel>();
 
   List<CommonModel> martial = [];
   List<CommonModel> gender = [];
+  List<CommonJsonModel> occupations = [];
+  List<CommonJsonModel> familytype = [];
+  List<CommonJsonModel> bcountries = [];
+  List<CommonJsonModel> natinality = [];
+  List<CommonModel> haircolor = [];
+  List<CommonModel> eyecolor = [];
   final TextEditingController monthController = TextEditingController();
   final newPassportformKey = GlobalKey<FormBuilderState>();
 
@@ -116,16 +118,8 @@ class NewPassportController extends GetxController {
     }
   }
 
-  List<String> occupations = [
-    'Waiter',
-    'Dentist',
-    'Nurse',
-    'Doctor',
-    'Surgeon',
-    'Postman',
-  ];
-
-  final RxString occupationvalue = ''.obs;
+  final Rxn<CommonJsonModel> occupationvalue = Rxn<CommonJsonModel>();
+  final Rxn<CommonJsonModel> familytypevalue = Rxn<CommonJsonModel>();
   //Step 3
   final TextEditingController phonenumber = TextEditingController();
 
@@ -226,9 +220,14 @@ class NewPassportController extends GetxController {
 
       baseData.value = Basemodel.fromJson(result);
       gender = baseData.value!.base_genders.map((e) => e).toList();
-      martial = baseData.value!.base_marital_statuses.map((e) => e).toList();
 
+      eyecolor = baseData.value!.base_eye_colors.map((e) => e).toList();
+      haircolor = baseData.value!.base_hair_colors.map((e) => e).toList();
+      martial = baseData.value!.base_marital_statuses.map((e) => e).toList();
+      occupations = baseData.value!.base_occupations.map((e) => e).toList();
+      familytype = baseData.value!.base_family_types.map((e) => e).toList();
       bcountries = baseData.value!.base_countries.map((e) => e).toList();
+      natinality = baseData.value!.base_countries.map((e) => e).toList();
       allwoedCountries =
           baseData.value!.allowed_countries.map((e) => e).toList();
       base_document_types =
@@ -362,18 +361,21 @@ class NewPassportController extends GetxController {
             'objects': {
               'first_name': firstNameController.text,
               'father_name': fatherNameController.text,
+              'grand_father_name': grandFatherNameController.text,
               'first_name_json': firstnameToJson(),
               'father_name_json': fathernameToJson(),
               'grand_father_name_json': gfathernameToJson(),
               'gender': gendervalue.value!.name,
               'birth_place': birthCountryvalue.value!.name_json,
               'birth_country_id': birthCountryvalue.value!.id,
+              'nationality_id': natinalityvalue.value!.id,
               'date_of_birth': formattedDateOfBirth,
-              'occupation': occupationvalue.value,
-              'hair_colour': haircolorvalue.value,
-              'eye_colour': eyecolorvalue.value,
+              'occupation_id': occupationvalue.value!.id,
+              'hair_colour': haircolorvalue.value!.name,
+              'eye_colour': eyecolorvalue.value!.name,
               'marital_status': maritalstatusvalue.value!.name,
               'height': height.text,
+              'is_adopted': isAdoption.value,
               'skin_colour': skincolorvalue.value,
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
@@ -383,6 +385,10 @@ class NewPassportController extends GetxController {
                   "delivery_date": null,
                   'embassy_id': embassiesvalue.value!.id,
                 }
+              },
+              'citizen_families': {
+                "data":
+                    familyModelvalue.map((element) => element.toJson()).toList()
               }
             }
           },
@@ -390,12 +396,13 @@ class NewPassportController extends GetxController {
       );
 
       if (result.hasException) {
+        print("""objects""");
         isSend.value = false;
         print(result.exception.toString());
         isSendStared.value = false;
       } else {
         print(result.data);
-        print("""object""");
+
         isSend.value = true;
         isSendStared.value = false;
 

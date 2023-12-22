@@ -54,37 +54,34 @@ class Step2 extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator:
-              ValidationBuilder().required('Occupation is required').build(),
           decoration: ReusableInputDecoration.getDecoration('Occupation'),
-          items: controller.occupations.map((String value) {
-            return DropdownMenuItem<String>(
+          items: controller.occupations.map((CommonJsonModel value) {
+            return DropdownMenuItem<CommonJsonModel>(
               value: value,
               child: Text(
-                value,
+                value.name_json,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
             );
           }).toList(),
           onChanged: (value) {
-            controller.occupationvalue.value = value!;
+            controller.occupationvalue.value = value;
           },
           name: 'Occupation',
-          initialValue: citizenModel != null ? citizenModel!.occupation! : null,
+          initialValue:
+              citizenModel != null ? controller.occupationvalue.value! : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator:
-              ValidationBuilder().required('Hair Color is required').build(),
           decoration: ReusableInputDecoration.getDecoration('Hair Color'),
-          items: controller.haircolor.map((String value) {
-            return DropdownMenuItem<String>(
+          items: controller.haircolor.map((CommonModel value) {
+            return DropdownMenuItem<CommonModel>(
               value: value,
               child: Text(
-                value,
+                value.name,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
@@ -93,20 +90,20 @@ class Step2 extends StatelessWidget {
           onChanged: (value) {
             controller.haircolorvalue.value = value!;
           },
-          name: 'Hair',
-          initialValue: citizenModel != null ? citizenModel!.hairColour! : null,
+          name: 'Hair Color',
+          initialValue:
+              citizenModel != null ? controller.haircolorvalue.value! : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator: ValidationBuilder().required('Eye Color').build(),
           decoration: ReusableInputDecoration.getDecoration('Eye Color'),
-          items: controller.eyecolor.map((String value) {
-            return DropdownMenuItem<String>(
+          items: controller.eyecolor.map((CommonModel value) {
+            return DropdownMenuItem<CommonModel>(
               value: value,
               child: Text(
-                value,
+                value.name,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
@@ -115,8 +112,9 @@ class Step2 extends StatelessWidget {
           onChanged: (value) {
             controller.eyecolorvalue.value = value!;
           },
-          name: 'Eye',
-          initialValue: citizenModel != null ? citizenModel!.eyeColour! : null,
+          name: 'Eye Color',
+          initialValue:
+              citizenModel != null ? controller.eyecolorvalue.value! : null,
         ),
         SizedBox(
           height: 2.h,

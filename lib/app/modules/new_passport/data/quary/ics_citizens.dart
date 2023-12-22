@@ -7,6 +7,8 @@ query MyQuery {
     abroad_country_id
     abroad_phone_number
     birth_country_id
+    nationality_id
+    is_adopted
     birth_place
     created_at
     date_of_birth
@@ -16,20 +18,33 @@ query MyQuery {
     height
     id
     marital_status
-    occupation
+    occupation_id
     skin_colour
-    updated_at
-    updated_by_id
     first_name
     father_name
     father_name_json
+    grand_father_name
     first_name_json
     grand_father_name_json
     new_applications {
-      embassy_id
+      embassy {
+        id
+      }
+    }
+    citizen_families {
+      citizen_id
+         family_type
+      {
+        id
+        name_json
+      }
+      nationality_id
+      first_name
+      father_name
     }
   }
 }
+
 
    """;
   }
