@@ -201,7 +201,7 @@ class MainPageView extends GetView<MainPageController> {
                   : label == "Setting"
                       ? AppColors.whiteOff
                       : AppColors.grayLight,
-              size: AppSizes.icon_size_8 * 0.8,
+              size: AppSizes.icon_size_8 * 0.9,
             ),
             const SizedBox(
               height: 5,

@@ -130,7 +130,7 @@ class HomeView extends GetView<HomeController> {
 
   buildcardsPassport() {
     return Container(
-      height: 28.h,
+      height: 29.h,
       child: GridView.builder(
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),
@@ -290,9 +290,11 @@ class CardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed as void Function()?,
       child: Card(
-        elevation: 4,
+        margin: EdgeInsets.all(8),
+        color: AppColors.whiteOff,
+        elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(9),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -301,7 +303,7 @@ class CardWidget extends StatelessWidget {
             SvgPicture.asset(
               color: iconColor,
               svgPath,
-              height: 8.w,
+              height: 6.w,
               width: 8.w,
             ),
             SizedBox(
@@ -310,7 +312,7 @@ class CardWidget extends StatelessWidget {
             Text(
               title,
               style: AppTextStyles.menuBold.copyWith(
-                fontSize: AppSizes.font_12,
+                fontSize: AppSizes.font_10,
               ),
               textAlign: TextAlign.center,
             ),
