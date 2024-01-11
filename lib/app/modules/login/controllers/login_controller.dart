@@ -113,6 +113,7 @@ class LoginController extends GetxController {
   }
 
   void handleException(QueryResult<Object?> result) {
+    print(result);
     if (result.exception != null) {
       if (result.exception!.graphqlErrors.isNotEmpty) {
         handleGraphQLErrors(result.exception!.graphqlErrors);
@@ -135,7 +136,7 @@ class LoginController extends GetxController {
     } else if (errorMessage.contains("INVALID_CREDENTIALS")) {
       AppToasts.showError("Incorrect Email or Password");
     } else {
-      AppToasts.showError("Something went wrong");
+      AppToasts.showError(errorMessage);
       // Handle other GraphQL errors
     }
   }

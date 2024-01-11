@@ -149,7 +149,7 @@ class LoginView extends GetView<LoginController> {
       isPassword: true,
       onChanged: (value) {
         // Validate password on type
-        bool isValid = controller.validatePassword();
+        bool isValid = controller.passwordController.text.isNotEmpty;
         controller.isPasswordValid.value = isValid;
 
         // Check if the password is valid and display the appropriate text
@@ -162,9 +162,7 @@ class LoginView extends GetView<LoginController> {
         if (value!.isEmpty) {
           return 'Please enter your Password';
         }
-        if (!controller.isPasswordValid.value) {
-          return 'Password must be at least 8 characters';
-        }
+
         return null;
       },
       controller: controller.passwordController,
