@@ -18,7 +18,7 @@ class MainPageView extends GetView<MainPageController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (controller.index.value != 0) {
+        if (controller.currentPageIndex.value != 0) {
           controller.changescreen(0);
           return false;
         } else {
@@ -46,7 +46,7 @@ class MainPageView extends GetView<MainPageController> {
             return false;
           }
 
-          return true;
+          exit(0);
         }
       },
       child: Scaffold(
