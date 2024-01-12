@@ -219,7 +219,7 @@ class _Step4State extends State<Step4> {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(vertical: 5),
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 5.h,
+                height: 4.h,
                 width: 25.w,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -266,7 +266,7 @@ class _Step4State extends State<Step4> {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(vertical: 5),
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 5.h,
+                height: 4.h,
                 width: 25.w,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(

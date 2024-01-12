@@ -385,74 +385,73 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   }
 
   void getDataForStep1() {
-    controller.firstNameController.text = widget.citizenModel!.firstName!;
-    controller.fatherNameController.text = widget.citizenModel!.father_name!;
-    controller.grandFatherNameController.text =
-        widget.citizenModel!.grand_father_name!;
+    final citizenModel = widget.citizenModel;
+    final firstName = citizenModel!.firstName!;
+    final fatherName = citizenModel.father_name!;
+    final grandFatherName = citizenModel.grand_father_name!;
+    final firstNameAm = citizenModel.firstNameJson!.am!;
+    final fatherNameAm = citizenModel.fatherNameJson!.am!;
+    final grandFatherNameAm = citizenModel.grandFatherNameJson!.am!;
+    final birthCountryId = citizenModel.birthCountryId;
+    final nationalityId = citizenModel.birthCountryId;
+    final gender = citizenModel.gender;
+    final dateOfBirth = citizenModel.dateOfBirth!;
 
-    //amharic
-
-    controller.AmfirstNameController.text =
-        widget.citizenModel!.firstNameJson!.am!;
-    controller.AmfatherNameController.text =
-        widget.citizenModel!.fatherNameJson!.am!;
-    controller.AmgrandFatherNameController.text =
-        widget.citizenModel!.grandFatherNameJson!.am!;
-    print(widget.citizenModel!.is_adopted);
-    controller.isAdoption.value = widget.citizenModel!.is_adopted!;
-
-    //country
-    controller.birthCountryvalue.value = controller.bcountries
-        .firstWhere((e) => e.id == widget.citizenModel!.birthCountryId);
-
-    //country
-    controller.natinalityvalue.value = controller.natinality
-        .firstWhere((e) => e.id == widget.citizenModel!.birthCountryId);
-
-    controller.gendervalue.value = controller.gender
-        .firstWhere((e) => e.name == widget.citizenModel!.gender);
-
-    // day
-    controller.dayController.text =
-        widget.citizenModel!.dateOfBirth!.day.toString();
-    // month
-    controller.monthController.text =
-        widget.citizenModel!.dateOfBirth!.month.toString();
-    // year
-    controller.yearController.text =
-        widget.citizenModel!.dateOfBirth!.year.toString();
+    controller.firstNameController.text = firstName;
+    controller.fatherNameController.text = fatherName;
+    controller.grandFatherNameController.text = grandFatherName;
+    controller.AmfirstNameController.text = firstNameAm;
+    controller.AmfatherNameController.text = fatherNameAm;
+    controller.AmgrandFatherNameController.text = grandFatherNameAm;
+    controller.isAdoption.value = citizenModel.is_adopted!;
+    controller.birthCountryvalue.value =
+        controller.bcountries.firstWhere((e) => e.id == birthCountryId);
+    controller.natinalityvalue.value =
+        controller.natinality.firstWhere((e) => e.id == nationalityId);
+    controller.gendervalue.value =
+        controller.gender.firstWhere((e) => e.name == gender);
+    controller.dayController.text = dateOfBirth.day.toString();
+    controller.monthController.text = dateOfBirth.month.toString();
+    controller.yearController.text = dateOfBirth.year.toString();
   }
 
   void getDataForStep2() {
-    controller.occupationvalue.value = controller.occupations
-        .firstWhere((e) => e.id == widget.citizenModel!.occupation_id);
-    controller.haircolorvalue.value = controller.haircolor
-        .firstWhere((e) => e.name == widget.citizenModel!.hairColour);
-    controller.eyecolorvalue.value = controller.eyecolor
-        .firstWhere((e) => e.name == widget.citizenModel!.eyeColour);
+    final citizenModel = widget.citizenModel;
+    final occupationId = citizenModel!.occupation_id;
+    final hairColour = citizenModel.hairColour;
+    final eyeColour = citizenModel.eyeColour;
+    final skinColour = citizenModel.skinColour!;
+    final height = citizenModel.height!;
+    final maritalStatus = citizenModel.maritalStatus;
 
-    controller.skincolorvalue.value =
-        widget.citizenModel!.skinColour!.toString();
-
-    controller.height.text = widget.citizenModel!.height!.toString();
-
-    controller.maritalstatusvalue.value = controller.martial
-        .firstWhere((e) => e.name == widget.citizenModel!.maritalStatus);
+    controller.occupationvalue.value =
+        controller.occupations.firstWhere((e) => e.id == occupationId);
+    controller.haircolorvalue.value =
+        controller.haircolor.firstWhere((e) => e.name == hairColour);
+    controller.eyecolorvalue.value =
+        controller.eyecolor.firstWhere((e) => e.name == eyeColour);
+    controller.skincolorvalue.value = skinColour.toString();
+    controller.height.text = height.toString();
+    controller.maritalstatusvalue.value =
+        controller.martial.firstWhere((e) => e.name == maritalStatus);
   }
 
   void getDataForStep3() {
-    controller.countryvalue.value = controller.allwoedCountries
-        .firstWhere((e) => e.id == widget.citizenModel!.abroadCountryId);
-    controller.getEmbassies(controller.countryvalue.value!.id);
-    controller.addressController.text = widget.citizenModel!.abroadAddress!;
-    controller.phonenumber.text = widget.citizenModel!.abroadPhoneNumber!;
+    final citizenModel = widget.citizenModel;
+    final abroadCountryId = citizenModel!.abroadCountryId;
+    final abroadAddress = citizenModel.abroadAddress!;
+    final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
+    final embassyId = citizenModel.newApplicationModel!.first.embassy_id;
 
-    //   for emabassiy
+    controller.countryvalue.value =
+        controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
+    controller.getEmbassies(controller.countryvalue.value!.id);
+    controller.addressController.text = abroadAddress;
+    controller.phonenumber.text = abroadPhoneNumber;
+
     Future.delayed(const Duration(seconds: 2), () {
-      controller.embassiesvalue.value = controller.base_embassies.firstWhere(
-          (e) =>
-              e.id ==
-              widget.citizenModel!.newApplicationModel!.first.embassy_id);
+      controller.embassiesvalue.value =
+          controller.base_embassies.firstWhere((e) => e.id == embassyId);
     });
   }
 

@@ -286,7 +286,7 @@ class NewPassportController extends GetxController {
 
       getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
       isSendStared.value = true;
-      sendUrl(documentTypeId, getUrlModel.value!.url, files);
+      sendUrl(documentTypeId, getUrlModel.value!.path, files);
       isfeched(true);
     } catch (e) {
       isSendStared.value = false;

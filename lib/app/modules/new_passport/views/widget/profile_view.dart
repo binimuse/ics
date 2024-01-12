@@ -223,21 +223,48 @@ class ProfileView extends GetView<NewPassportController> {
               width: AppSizes.mp_v_4,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 15.0, top: 9.0),
+              padding: const EdgeInsets.only(left: 10.0, top: 2.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    citizen.abroadAddress.toString(),
-                    style: AppTextStyles.bodySmallRegular.copyWith(
-                      color: AppColors.grayDark,
-                    ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.pin_drop,
+                        color: AppColors.grayDark,
+                        size: AppSizes.icon_size_8 * 0.8,
+                      ),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      Text(
+                        citizen.abroadAddress.toString(),
+                        style: AppTextStyles.bodySmallRegular.copyWith(
+                          color: AppColors.grayDark,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    citizen.abroadPhoneNumber.toString(),
-                    style: AppTextStyles.bodySmallRegular.copyWith(
-                      color: AppColors.grayDark,
-                    ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.phone,
+                        color: AppColors.grayDark,
+                        size: AppSizes.icon_size_8 * 0.8,
+                      ),
+                      SizedBox(
+                        width: 1.w,
+                      ),
+                      Text(
+                        citizen.abroadPhoneNumber.toString(),
+                        style: AppTextStyles.bodySmallRegular.copyWith(
+                          color: AppColors.grayDark,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
