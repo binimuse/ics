@@ -1,12 +1,22 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PassportWidget extends StatelessWidget {
+  final RxList<IcsNewApplicationModel> icsNewApplicationModel;
+
+  const PassportWidget({
+    required this.icsNewApplicationModel,
+  });
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -17,20 +27,24 @@ class PassportWidget extends StatelessWidget {
             SizedBox(
               height: 1.h,
             ),
-            buildCard(context, "ReNew Passport", "29 Jun 2023 12:00 PM",
-                "Pending", "ID: 123456789"),
-            buildCard(context, "New Passport", "29 Jun 2023 12:00 PM",
-                "Delivered", "ID: 123456789"),
-            buildCard(context, "New Passport", "29 Jun 2023 12:00 PM",
-                "Delivered", "ID: 123456789"),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: icsNewApplicationModel.length,
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: AppSizes.mp_v_2 * 1.5),
+              itemBuilder: (context, index) {
+                var citizen = icsNewApplicationModel[index];
+                return buildCard(citizen);
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildCard(BuildContext context, String title, String date,
-      String status, String id) {
+  Widget buildCard(IcsNewApplicationModel citizen) {
     return Container(
       height: 20.h,
       decoration: BoxDecoration(
@@ -50,27 +64,19 @@ class PassportWidget extends StatelessWidget {
           side: BorderSide(color: AppColors.grayLighter, width: 0),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: SvgPicture.asset(
-                      Assets.icons.passport,
-                      color: status.contains("Pending")
-                          ? AppColors.warning
-                          : AppColors.success,
-                    ),
+                    icon: SvgPicture.asset(Assets.icons.passport,
+                        color: AppColors.success),
                     onPressed: () {
                       // showModal(context);
                     },
                   ),
-                  Text(title,
+                  Text("New Passport",
                       style: AppTextStyles.bodyLargeBold.copyWith(
                         fontWeight: FontWeight.w600,
                       )),
@@ -81,9 +87,7 @@ class PassportWidget extends StatelessWidget {
                       height: 4.h,
                       width: 22.w,
                       decoration: BoxDecoration(
-                        color: status.contains("Pending")
-                            ? AppColors.warning
-                            : AppColors.success,
+                        color: AppColors.warning,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Row(
@@ -91,7 +95,7 @@ class PassportWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            status,
+                            "Pending",
                             style: AppTextStyles.bodySmallBold.copyWith(
                               color: AppColors.whiteOff,
                               fontSize: AppSizes.font_10,
@@ -113,7 +117,7 @@ class PassportWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  id,
+                  citizen.applicationNo.toString(),
                   style: AppTextStyles.bodySmallBold.copyWith(
                     color: AppColors.primary,
                     fontSize: AppSizes.font_10,
@@ -131,7 +135,7 @@ class PassportWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
-                    date,
+                    convertToTimeAgo(citizen.createdAt.toString()),
                     style: AppTextStyles.displayOneRegular.copyWith(
                       color: AppColors.grayDark,
                       fontSize: AppSizes.font_10,
@@ -144,5 +148,10 @@ class PassportWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String convertToTimeAgo(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return timeago.format(dateTime);
   }
 }

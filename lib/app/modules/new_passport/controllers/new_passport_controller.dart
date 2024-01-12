@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
@@ -267,7 +268,8 @@ class NewPassportController extends GetxController {
       await Future.delayed(const Duration(seconds: 1));
       isSendStared.value = false;
       AppToasts.showSuccess("New Passport Sent successfully");
-
+      final MyOrderController controller = Get.put(MyOrderController());
+      controller.GetNewPassport();
       Get.offAllNamed(Routes.MAIN_PAGE);
     }
   }
@@ -286,7 +288,8 @@ class NewPassportController extends GetxController {
 
       getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
       isSendStared.value = true;
-      sendUrl(documentTypeId, getUrlModel.value!.path, files);
+      sendUrl(documentTypeId, getUrlModel.value!.url, getUrlModel.value!.path,
+          files);
       isfeched(true);
     } catch (e) {
       isSendStared.value = false;
@@ -299,6 +302,7 @@ class NewPassportController extends GetxController {
   void sendUrl(
     String? documentTypeId,
     String? url,
+    String? path,
     PlatformFile files,
   ) async {
     try {
@@ -322,6 +326,7 @@ class NewPassportController extends GetxController {
           newApplicationId,
           documentTypeId,
           url,
+          path,
         );
 
         print(response);
@@ -428,6 +433,7 @@ class NewPassportController extends GetxController {
     dynamic newApplicationId,
     var documentTypeId,
     var url,
+    var path,
   ) async {
     try {
       isSendStared.value = true;
@@ -443,7 +449,7 @@ class NewPassportController extends GetxController {
           variables: <String, dynamic>{
             'objects': {
               'new_application_id': newApplicationId,
-              'files': url,
+              'files': path,
               'document_type_id': documentTypeId,
             }
           },

@@ -69,7 +69,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MY_ORDER,
-      page: () => const MyOrderView(),
+      page: () => MyOrderView(),
       binding: MyOrderBinding(),
     ),
     GetPage(

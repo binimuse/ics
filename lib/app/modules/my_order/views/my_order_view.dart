@@ -7,10 +7,14 @@ import 'package:ics/app/modules/my_order/views/widget/orgin_widget.dart';
 import 'package:ics/app/modules/my_order/views/widget/passport_widget.dart';
 import 'package:sizer/sizer.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
+import '../../../common/loading/custom_loading_widget.dart';
 import '../controllers/my_order_controller.dart';
 
+
 class MyOrderView extends GetView<MyOrderController> {
-  const MyOrderView({Key? key}) : super(key: key);
+  MyOrderView({Key? key}) : super(key: key);
+
+  final MyOrderController controller = Get.put(MyOrderController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,16 +60,20 @@ class MyOrderView extends GetView<MyOrderController> {
                         ),
                       ),
                       // Sample pages
-                      Padding(
-                        padding: const EdgeInsets.only(top: 70),
-                        child: TabBarView(
-                          physics: const BouncingScrollPhysics(),
-                          children: [
-                            PassportWidget(),
-                            OrginIdWidget(),
-                          ],
-                        ),
-                      ),
+                      Obx(() => controller.isfechedorder.isTrue
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 70),
+                              child: TabBarView(
+                                physics: const BouncingScrollPhysics(),
+                                children: [
+                                  PassportWidget(
+                                      icsNewApplicationModel:
+                                          controller.icsNewApplication),
+                                  OrginIdWidget(),
+                                ],
+                              ),
+                            )
+                          : Center(child: CustomLoadingWidget()))
                     ],
                   ),
                 ),
@@ -76,6 +84,8 @@ class MyOrderView extends GetView<MyOrderController> {
       ),
     );
   }
+
+
 
   buildName(BuildContext context) {
     return Padding(
