@@ -68,7 +68,7 @@ class FeaturedNewsItem extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.bodySmallBold.copyWith(
-                          fontSize: AppSizes.font_16,
+                          fontSize: AppSizes.font_10,
                           color: AppColors.whiteOff),
                     )),
                     Column(
@@ -78,8 +78,8 @@ class FeaturedNewsItem extends StatelessWidget {
                           date,
                           style: TextStyle(
                             color: AppColors.whiteOff,
-                            fontWeight: FontWeight.w800,
-                            fontSize: AppSizes.font_18,
+                            fontWeight: FontWeight.w600,
+                            fontSize: AppSizes.font_12,
                           ),
                         ),
                         SizedBox(height: AppSizes.mp_v_1 * 0.8),
