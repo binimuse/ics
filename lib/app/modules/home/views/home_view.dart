@@ -17,36 +17,76 @@ import 'widget/news_carousel_slider.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteOff.withOpacity(0.9),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildName(context),
-              SizedBox(
-                height: 3.h,
-              ),
-              __buildBanner(),
-              //passport
-              buildPassport(context),
-
-              buildcardsPassport(),
-
-              buildOrgin(context),
-
-              buildOriginId(),
-              //ID
-              // buildOriginId(context),
-              // buildcardsOrigin(),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 1.h,
+          ),
+          buildName(context),
+          SizedBox(
+            height: 1.h,
+          ),
+          __buildBanner(),
+          TabBar(
+            controller: controller.tabController,
+            labelStyle: AppTextStyles.bodyLargeBold
+                .copyWith(fontSize: AppSizes.font_12, color: AppColors.primary),
+            tabs: [
+              Tab(
+                  text: 'Passport',
+                  icon: SvgPicture.asset(
+                    Assets.icons.passport,
+                    color: AppColors.primary,
+                    fit: BoxFit.contain,
+                  )),
+              Tab(
+                  text: 'Origin ID',
+                  icon: SvgPicture.asset(
+                    Assets.icons.origin,
+                    color: AppColors.primary,
+                    fit: BoxFit.contain,
+                  )),
             ],
           ),
-        ),
+          Expanded(
+            child: TabBarView(
+              controller: controller.tabController,
+              children: [
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildPassport(context),
+                        buildcardsPassport(),
+                      ],
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildOrgin(context),
+                        buildOriginId(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -130,7 +170,7 @@ class HomeView extends GetView<HomeController> {
 
   buildcardsPassport() {
     return Container(
-      height: 29.h,
+      height: 50.h,
       child: GridView.builder(
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),
@@ -176,7 +216,7 @@ class HomeView extends GetView<HomeController> {
         itemCount: 4, // Replace with the actual number of cards
         itemBuilder: (BuildContext context, int index) {
           return CardWidget(
-              svgPath: controller.svgPathsOrgin[index],
+              svgPath: controller.svgPaths[index],
               title: controller.Orgintitles[index],
               iconColor: controller.color[index],
               onPressed: () {
@@ -222,7 +262,7 @@ class HomeView extends GetView<HomeController> {
             child: Text(
               'Your passport is an essential document in international travel and for identification purposes.',
               style: AppTextStyles.captionRegular.copyWith(
-                  fontSize: AppSizes.font_14, color: AppColors.grayDark),
+                  fontSize: AppSizes.font_12, color: AppColors.grayDark),
               maxLines: 4,
               overflow: TextOverflow.ellipsis,
             ),
@@ -261,7 +301,7 @@ class HomeView extends GetView<HomeController> {
             child: Text(
               'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
               style: AppTextStyles.captionRegular.copyWith(
-                  fontSize: AppSizes.font_14, color: AppColors.grayDark),
+                  fontSize: AppSizes.font_12, color: AppColors.grayDark),
               maxLines: 4,
               overflow: TextOverflow.ellipsis,
             ),
@@ -296,25 +336,32 @@ class CardWidget extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
           children: [
-            SvgPicture.asset(
-              color: iconColor,
-              svgPath,
-              height: 6.w,
-              width: 8.w,
-            ),
-            SizedBox(
-              height: 1.h,
-            ),
-            Text(
-              title,
-              style: AppTextStyles.menuBold.copyWith(
-                fontSize: AppSizes.font_10,
+            Positioned(
+              top: -8, // Adjust the top position to move the image upwards
+              child: SvgPicture.asset(
+                svgPath,
+                color: iconColor,
+                height: 12.w,
+                width: 10.w,
               ),
-              textAlign: TextAlign.center,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 4.h),
+                Text(
+                  title,
+                  style: AppTextStyles.menuBold.copyWith(
+                    fontSize: AppSizes.font_10,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ],
         ),

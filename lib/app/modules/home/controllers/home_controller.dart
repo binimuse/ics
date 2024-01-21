@@ -8,7 +8,7 @@ import 'package:ics/gen/assets.gen.dart';
 import 'package:ics/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with SingleGetTickerProviderMixin {
   //banner
   List<Widget> featuredNews = [];
   List<String> images = [
@@ -58,8 +58,17 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    tabController = TabController(length: 2, vsync: this);
     getUser();
     super.onInit();
+  }
+
+  late TabController tabController;
+
+  @override
+  void onClose() {
+    tabController.dispose();
+    super.onClose();
   }
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
