@@ -4,8 +4,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:get/get.dart';
 
-import 'package:ics/app/common/app_icon_button.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
+import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
 
 import 'package:ics/app/config/theme/app_colors.dart';
@@ -21,7 +21,6 @@ import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart'
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
 import 'package:ics/app/routes/app_pages.dart';
 
-import 'package:ics/gen/assets.gen.dart';
 
 import 'package:im_stepper/stepper.dart';
 
@@ -73,6 +72,11 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        title: 'New',
+        title2: "Passport Form",
+        showLeading: true,
+      ),
       body: Stack(
         children: [
           Padding(
@@ -82,7 +86,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                 SizedBox(
                   height: 1.h,
                 ),
-                buildName(context),
+
                 buildForm(context),
                 // Spacer(),
               ],
@@ -270,33 +274,6 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
       _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
-    );
-  }
-
-  buildName(BuildContext context) {
-    return Row(
-      children: [
-        AppSvgButton(
-          imagePath: Assets.icons.arrowleft,
-          onPressed: () {
-            _showAreYouSureDialog(context);
-          },
-          size: AppSizes.icon_size_8 * 0.7,
-        ),
-        Text(
-          'New Passport',
-          style: AppTextStyles.bodyLargeBold
-              .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
-        ),
-        SizedBox(
-          width: 1.w,
-        ),
-        Text(
-          'Application',
-          style: AppTextStyles.bodyLargeBold
-              .copyWith(fontSize: AppSizes.font_16, color: AppColors.grayDark),
-        ),
-      ],
     );
   }
 

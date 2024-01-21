@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/common/empty_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -13,31 +15,23 @@ class NotificationsView extends GetView<NotificationsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        title: 'My',
+        title2: 'Notification',
+        showActions: false,
+        showLeading: false,
+      ),
       backgroundColor: AppColors.whiteOff,
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: ListView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               height: 3.h,
             ),
-            buildName(context),
-            _buildCard(
-              icon: Icons.notifications,
-              title: 'New Message',
-              subtitle: 'You have a new message',
-              time: '10:30 AM',
-              date: 'Aug 31, 2023',
-            ),
-            _buildCard(
-              icon: Icons.notifications,
-              title: 'New Message',
-              subtitle: '2:00 PM',
-              time: '1:45 PM',
-              date: 'Sep 1, 2023',
-            ),
-// Add more notification cards here
-            // Add more cards here
+            EmpityWidget(title: "No Notification Found"),
           ],
         ),
       ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
-import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/logout/views/logout_view.dart';
 import 'package:sizer/sizer.dart';
@@ -14,14 +14,19 @@ class SettingView extends GetView<SettingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        title: 'My',
+        title2: 'Settings',
+        showActions: false,
+        showLeading: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [
             SizedBox(
-              height: 3.h,
+              height: 1.h,
             ),
-            buildName(context),
 
             _buildSettingCard(
               icon: Icons.person,
@@ -29,19 +34,26 @@ class SettingView extends GetView<SettingController> {
               subtitle: 'Manage your Account'.tr,
               ontaps: () {},
             ),
-
+            SizedBox(
+              height: 1.h,
+            ),
             _buildSettingCard(
               icon: Icons.info,
               title: 'About us'.tr,
               subtitle: 'Learn more about us'.tr,
               ontaps: () {},
             ),
-
+            SizedBox(
+              height: 1.h,
+            ),
             _buildSettingCard(
               icon: Icons.message,
               title: 'Contact us'.tr,
               subtitle: 'Get in touch with us'.tr,
               ontaps: () {},
+            ),
+            SizedBox(
+              height: 1.h,
             ),
             _buildSettingCard(
               icon: Icons.document_scanner_sharp,
@@ -49,20 +61,27 @@ class SettingView extends GetView<SettingController> {
               subtitle: 'Read the terms and conditions'.tr,
               ontaps: () {},
             ),
+            SizedBox(
+              height: 1.h,
+            ),
             _buildSettingCard(
               icon: Icons.shield,
               title: 'Privacy Policy'.tr,
               subtitle: 'View our privacy policy'.tr,
               ontaps: () {},
             ),
-
+            SizedBox(
+              height: 1.h,
+            ),
             _buildSettingCard(
               icon: Icons.thumb_up,
               title: 'Rate us'.tr,
               subtitle: 'Leave a rating and review'.tr,
               ontaps: () {},
             ),
-
+            SizedBox(
+              height: 1.h,
+            ),
             _buildSettingCard(
               icon: Icons.logout,
               title: 'Logout'.tr,
@@ -87,6 +106,7 @@ class SettingView extends GetView<SettingController> {
     required VoidCallback ontaps,
   }) {
     return Card(
+      color: AppColors.whiteOff,
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -106,21 +126,6 @@ class SettingView extends GetView<SettingController> {
         ),
         trailing: const Icon(Icons.arrow_forward_ios),
         onTap: ontaps,
-      ),
-    );
-  }
-
-  buildName(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Row(
-        children: [
-          Text(
-            'Settings',
-            style: AppTextStyles.bodyLargeBold.copyWith(
-                fontSize: AppSizes.font_16, color: AppColors.grayDark),
-          ),
-        ],
       ),
     );
   }

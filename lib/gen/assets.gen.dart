@@ -195,6 +195,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/eigtheen_check.svg
   String get eigtheenCheck => 'assets/icons/eigtheen_check.svg';
 
+  /// File path: assets/icons/empty.svg
+  String get empty => 'assets/icons/empty.svg';
+
   /// File path: assets/icons/eraser.svg
   String get eraser => 'assets/icons/eraser.svg';
 
@@ -693,6 +696,7 @@ class $AssetsIconsGen {
         eighteenPlus,
         eighteenplus2,
         eigtheenCheck,
+        empty,
         eraser,
         eye,
         eyeSlash,

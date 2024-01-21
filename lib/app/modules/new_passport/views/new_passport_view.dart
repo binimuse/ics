@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/app_icon_button.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
+import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -20,6 +21,11 @@ class NewPassportView extends GetView<NewPassportController> {
   const NewPassportView({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        title: 'New',
+        title2: "Passport instruction",
+        showLeading: true,
+      ),
       backgroundColor: AppColors.whiteOff,
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -28,7 +34,7 @@ class NewPassportView extends GetView<NewPassportController> {
             SizedBox(
               height: 1.h,
             ),
-            buildName(context),
+
             buildAdditionalCard(),
             // Spacer(),
             buildActionButtons(),
@@ -67,33 +73,6 @@ class NewPassportView extends GetView<NewPassportController> {
               )),
         ],
       ),
-    );
-  }
-
-  buildName(BuildContext context) {
-    return Row(
-      children: [
-        AppSvgButton(
-          imagePath: Assets.icons.arrowleft,
-          onPressed: () {
-            Get.back();
-          },
-          size: AppSizes.icon_size_8 * 0.7,
-        ),
-        Text(
-          'New',
-          style: AppTextStyles.bodyLargeBold
-              .copyWith(fontSize: AppSizes.font_16, color: AppColors.primary),
-        ),
-        SizedBox(
-          width: 1.w,
-        ),
-        Text(
-          'Passport instruction',
-          style: AppTextStyles.bodyLargeBold
-              .copyWith(fontSize: AppSizes.font_16, color: AppColors.grayDark),
-        ),
-      ],
     );
   }
 

@@ -37,7 +37,7 @@ class PassportWidget extends StatelessWidget {
                 var citizen = icsNewApplicationModel[index];
                 return buildCard(citizen);
               },
-            ),
+            )
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -21,13 +22,22 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        title: 'Hello',
+        title2: "welcome",
+        showActions: true,
+        actionIcon: SvgPicture.asset(
+          color: AppColors.primary,
+          Assets.icons.questionmark,
+          height: 6.w,
+          width: 9.w,
+        ),
+        routeName: Routes.HELP,
+        showLeading: false,
+      ),
       backgroundColor: AppColors.whiteOff.withOpacity(0.9),
       body: Column(
         children: [
-          SizedBox(
-            height: 1.h,
-          ),
-          buildName(context),
           SizedBox(
             height: 1.h,
           ),
@@ -115,59 +125,6 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  buildName(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-      child: Row(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Hello,',
-                style: AppTextStyles.bodyLargeBold.copyWith(
-                    fontSize: AppSizes.font_16, color: AppColors.primary),
-              ),
-              SizedBox(
-                width: 1.w,
-              ),
-              Obx(() => controller.hasGetUser.value
-                  ? Text(
-                      controller.usersModel.name.toString(),
-                      style: AppTextStyles.bodyLargeBold.copyWith(
-                          fontSize: AppSizes.font_16,
-                          color: AppColors.grayDark),
-                    )
-                  : SizedBox()),
-            ],
-          ),
-          Spacer(),
-          Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(15.0), // Adjust the radius as needed
-                color: AppColors.primary),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    color: AppColors.whiteOff,
-                    Assets.icons.questionmark,
-                    height: 6.w,
-                    width: 6.w,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   buildcardsPassport() {
     return Container(
       height: 50.h,
@@ -216,7 +173,8 @@ class HomeView extends GetView<HomeController> {
         itemCount: 4, // Replace with the actual number of cards
         itemBuilder: (BuildContext context, int index) {
           return CardWidget(
-              svgPath: controller.svgPaths[index],
+              isOrgin: true,
+              svgPath: controller.svgPathsOrgin[index],
               title: controller.Orgintitles[index],
               iconColor: controller.color[index],
               onPressed: () {
@@ -317,12 +275,14 @@ class CardWidget extends StatelessWidget {
   final String title;
   final Color? iconColor;
   final Function? onPressed;
+  final bool? isOrgin;
 
   CardWidget({
     required this.svgPath,
     required this.title,
     required this.iconColor,
     this.onPressed,
+    this.isOrgin,
   });
 
   @override
@@ -341,7 +301,9 @@ class CardWidget extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             Positioned(
-              top: -8, // Adjust the top position to move the image upwards
+              top: isOrgin != true
+                  ? -8
+                  : 3, // Adjust the top position to move the image upwards
               child: SvgPicture.asset(
                 svgPath,
                 color: iconColor,
@@ -353,7 +315,7 @@ class CardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 4.h),
+                SizedBox(height: 5.h),
                 Text(
                   title,
                   style: AppTextStyles.menuBold.copyWith(

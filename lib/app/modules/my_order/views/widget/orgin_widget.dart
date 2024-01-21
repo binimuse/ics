@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ics/app/config/theme/app_colors.dart';
-import 'package:ics/app/config/theme/app_text_styles.dart';
 
 class OrginIdWidget extends StatelessWidget {
   @override
@@ -11,28 +9,7 @@ class OrginIdWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [buildEmpty()],
-        ),
-      ),
-    );
-  }
-
-  Widget buildEmpty() {
-    return Center(
-      child: Container(
-        color: AppColors.backgroundLight,
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "No Orgin Id Order",
-              style: AppTextStyles.titleBold.copyWith(
-                color: AppColors.grayDark,
-              ),
-            ),
-          ],
+          children: [SizedBox()],
         ),
       ),
     );
