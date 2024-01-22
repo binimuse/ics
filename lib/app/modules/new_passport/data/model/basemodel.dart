@@ -55,16 +55,17 @@ class Basemodel {
 }
 
 class CommonModel {
-  final String description;
+  final String? description;
   final String name;
 
   const CommonModel({
-    required this.description,
+    this.description,
     required this.name,
   });
 
   factory CommonModel.fromJson(Map<String, dynamic> json) {
-    return CommonModel(name: json['name'], description: json['description']);
+    return CommonModel(
+        name: json['name'], description: json['description'] ?? "");
   }
 }
 
@@ -80,7 +81,7 @@ class CommonJsonModel {
   factory CommonJsonModel.fromJson(Map<String, dynamic> json) {
     return CommonJsonModel(
       id: json['id'],
-      name_json: json['name_json']['name'],
+      name_json: json['name_json']['en'],
     );
   }
 }
@@ -97,7 +98,7 @@ class AllowedContreyModel {
   factory AllowedContreyModel.fromJson(Map<String, dynamic> json) {
     return AllowedContreyModel(
       id: json['country']['id'],
-      name_json: json['country']['name_json']['name'],
+      name_json: json['country']['name_json']['en'],
     );
   }
 }

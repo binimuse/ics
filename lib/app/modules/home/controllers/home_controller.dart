@@ -65,12 +65,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   late TabController tabController;
 
-  @override
-  void onClose() {
-    tabController.dispose();
-    super.onClose();
-  }
-
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
 
   late UsersByPk usersModel = UsersByPk();

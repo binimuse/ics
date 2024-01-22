@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:ics/app/common/app_icon_button.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
@@ -11,7 +10,6 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
 import 'package:ics/app/modules/new_passport/views/widget/profile_view.dart';
 
-import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../common/forms/check_box.dart';

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart' as Mydio;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -218,7 +220,7 @@ class NewPassportController extends GetxController {
     try {
       dynamic result =
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
-
+      print(result);
       baseData.value = Basemodel.fromJson(result);
       gender = baseData.value!.base_genders.map((e) => e).toList();
 
@@ -232,16 +234,17 @@ class NewPassportController extends GetxController {
       allwoedCountries =
           baseData.value!.allowed_countries.map((e) => e).toList();
       base_document_types =
-          baseData.value!.base_document_types.map((e) => e).toList();
+          baseData.value!.base_document_types!.map((e) => e).toList();
 
       for (var documentType in base_document_types) {
         documents
             .add(PassportDocuments(documentTypeId: documentType.id, files: []));
       }
       isfeched(true);
-    } catch (e) {
+    } catch (e, s) {
       isfeched(false);
-      print(">>>>>>>>>>>>>>>>>> $e");
+      print(">>>>>>>>>>>>>>>>>> getAll $e");
+      print(">>>>>>>>>>>>>>>>>> getAll $s");
     }
   }
 
@@ -549,7 +552,7 @@ class NewPassportController extends GetxController {
       isfechediCitizens(true);
     } catch (e) {
       isfechediCitizens(false);
-      print(">>>>>>>>>>>>>>>>>> $e");
+      print(">>>>>>>>>>>>>>>>>> getCitizene $e");
     }
   }
 
@@ -576,7 +579,7 @@ class NewPassportController extends GetxController {
       }
     } catch (e) {
       isfechedEmbassies.value = false;
-      print(">>>>>>>>>>>>>>>>>> $e");
+      print(">>>>>>>>>>>>>>>>>> getEmbassies $e");
     }
   }
 }
