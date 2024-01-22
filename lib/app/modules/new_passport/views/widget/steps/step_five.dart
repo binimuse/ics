@@ -52,8 +52,7 @@ class Step5 extends StatelessWidget {
             shrinkWrap: true,
             itemCount: controller.base_document_types.length,
             itemBuilder: (BuildContext context, int index) {
-              CommonIDModel documentType =
-                  controller.base_document_types[index];
+              CommonModel documentType = controller.base_document_types[index];
               return BuildDoc(
                 documentType: documentType,
                 controller: controller,

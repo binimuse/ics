@@ -192,11 +192,11 @@ class Step1 extends StatelessWidget {
           ),
           FormBuilderDropdown(
             decoration: ReusableInputDecoration.getDecoration('Nationality'),
-            items: controller.natinality.map((CommonJsonModel value) {
-              return DropdownMenuItem<CommonJsonModel>(
+            items: controller.natinality.map((CommonModel value) {
+              return DropdownMenuItem<CommonModel>(
                 value: value,
                 child: Text(
-                  value.name_json,
+                  value.name,
                   style: AppTextStyles.captionBold
                       .copyWith(color: AppColors.grayDark),
                 ),
@@ -236,11 +236,11 @@ class Step1 extends StatelessWidget {
           ),
           FormBuilderDropdown(
             decoration: ReusableInputDecoration.getDecoration('Birth Country'),
-            items: controller.bcountries.map((CommonJsonModel value) {
-              return DropdownMenuItem<CommonJsonModel>(
+            items: controller.bcountries.map((CommonModel value) {
+              return DropdownMenuItem<CommonModel>(
                 value: value,
                 child: Text(
-                  value.name_json,
+                  value.name,
                   style: AppTextStyles.captionBold
                       .copyWith(color: AppColors.grayDark),
                 ),

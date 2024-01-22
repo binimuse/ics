@@ -67,7 +67,7 @@ class _Step3State extends State<Step3> {
             return DropdownMenuItem<AllowedContreyModel>(
               value: value,
               child: Text(
-                value.name_json,
+                value.name,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),
@@ -91,11 +91,11 @@ class _Step3State extends State<Step3> {
         Obx(() => controller.isfechedEmbassies.value
             ? FormBuilderDropdown(
                 decoration: ReusableInputDecoration.getDecoration('Embassies'),
-                items: controller.base_embassies.map((CommonJsonModel value) {
-                  return DropdownMenuItem<CommonJsonModel>(
+                items: controller.base_embassies.map((CommonModel value) {
+                  return DropdownMenuItem<CommonModel>(
                     value: value,
                     child: Text(
-                      value.name_json,
+                      value.name,
                       style: AppTextStyles.captionBold
                           .copyWith(color: AppColors.grayDark),
                     ),

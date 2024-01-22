@@ -5,7 +5,8 @@ class GetEmbassiesQuery {
   base_embassies(where: {state: {country_id: {_eq: "$country_id"}}})
   {
     id
-    name_json
+    name
+    description
     
   }
 }

@@ -11,7 +11,7 @@ import 'package:sizer/sizer.dart';
 import 'dart:io';
 
 class BuildDoc extends StatefulWidget {
-  final CommonIDModel documentType;
+  final CommonModel documentType;
   final NewPassportController controller;
 
   const BuildDoc({required this.documentType, required this.controller});

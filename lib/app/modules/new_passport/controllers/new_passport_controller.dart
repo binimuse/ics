@@ -51,13 +51,13 @@ class NewPassportController extends GetxController {
   final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
 
   List<AllowedContreyModel> allwoedCountries = [];
-  List<CommonIDModel> base_document_types = [];
+  List<CommonModel> base_document_types = [];
   List<PassportDocuments> documents = [];
 
-  final Rxn<CommonJsonModel> birthCountryvalue = Rxn<CommonJsonModel>();
-  final Rxn<CommonJsonModel> natinalityvalue = Rxn<CommonJsonModel>();
-  final Rxn<CommonJsonModel> familynatinalityvalue = Rxn<CommonJsonModel>();
-  final Rxn<CommonJsonModel> embassiesvalue = Rxn<CommonJsonModel>();
+  final Rxn<CommonModel> birthCountryvalue = Rxn<CommonModel>();
+  final Rxn<CommonModel> natinalityvalue = Rxn<CommonModel>();
+  final Rxn<CommonModel> familynatinalityvalue = Rxn<CommonModel>();
+  final Rxn<CommonModel> embassiesvalue = Rxn<CommonModel>();
 
   final TextEditingController countryController = TextEditingController();
 
@@ -99,10 +99,10 @@ class NewPassportController extends GetxController {
 
   List<CommonModel> martial = [];
   List<CommonModel> gender = [];
-  List<CommonJsonModel> occupations = [];
-  List<CommonJsonModel> familytype = [];
-  List<CommonJsonModel> bcountries = [];
-  List<CommonJsonModel> natinality = [];
+  List<CommonModel> occupations = [];
+  List<CommonModel> familytype = [];
+  List<CommonModel> bcountries = [];
+  List<CommonModel> natinality = [];
   List<CommonModel> haircolor = [];
   List<CommonModel> eyecolor = [];
   final TextEditingController monthController = TextEditingController();
@@ -121,8 +121,8 @@ class NewPassportController extends GetxController {
     }
   }
 
-  final Rxn<CommonJsonModel> occupationvalue = Rxn<CommonJsonModel>();
-  final Rxn<CommonJsonModel> familytypevalue = Rxn<CommonJsonModel>();
+  final Rxn<CommonModel> occupationvalue = Rxn<CommonModel>();
+  final Rxn<CommonModel> familytypevalue = Rxn<CommonModel>();
   //Step 3
   final TextEditingController phonenumber = TextEditingController();
 
@@ -220,7 +220,7 @@ class NewPassportController extends GetxController {
     try {
       dynamic result =
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
-      print(result);
+
       baseData.value = Basemodel.fromJson(result);
       gender = baseData.value!.base_genders.map((e) => e).toList();
 
@@ -234,17 +234,15 @@ class NewPassportController extends GetxController {
       allwoedCountries =
           baseData.value!.allowed_countries.map((e) => e).toList();
       base_document_types =
-          baseData.value!.base_document_types!.map((e) => e).toList();
+          baseData.value!.base_document_types.map((e) => e).toList();
 
       for (var documentType in base_document_types) {
         documents
             .add(PassportDocuments(documentTypeId: documentType.id, files: []));
       }
       isfeched(true);
-    } catch (e, s) {
+    } catch (e) {
       isfeched(false);
-      print(">>>>>>>>>>>>>>>>>> getAll $e");
-      print(">>>>>>>>>>>>>>>>>> getAll $s");
     }
   }
 
@@ -374,7 +372,7 @@ class NewPassportController extends GetxController {
               'father_name_json': fathernameToJson(),
               'grand_father_name_json': gfathernameToJson(),
               'gender': gendervalue.value!.name,
-              'birth_place': birthCountryvalue.value!.name_json,
+              'birth_place': birthCountryvalue.value!.name,
               'birth_country_id': birthCountryvalue.value!.id,
               'nationality_id': natinalityvalue.value!.id,
               'date_of_birth': formattedDateOfBirth,
@@ -550,15 +548,16 @@ class NewPassportController extends GetxController {
       }
 
       isfechediCitizens(true);
-    } catch (e) {
+    } catch (e, s) {
       isfechediCitizens(false);
       print(">>>>>>>>>>>>>>>>>> getCitizene $e");
+      print(">>>>>>>>>>>>>>>>>> getCitizene $s");
     }
   }
 
   var isfechedEmbassies = false.obs;
 
-  List<CommonJsonModel> base_embassies = [];
+  List<CommonModel> base_embassies = [];
   void getEmbassies(String id) async {
     try {
       dynamic result =
@@ -566,7 +565,7 @@ class NewPassportController extends GetxController {
 
       if (result != null) {
         base_embassies = (result['base_embassies'] as List)
-            .map((e) => CommonJsonModel.fromJson(e))
+            .map((e) => CommonModel.fromJson(e))
             .toList();
 
         if (base_embassies.isNotEmpty) {

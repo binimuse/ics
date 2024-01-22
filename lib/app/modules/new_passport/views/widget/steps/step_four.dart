@@ -297,11 +297,11 @@ class _Step4State extends State<Step4> {
   buildFamilyType() {
     return FormBuilderDropdown(
       decoration: ReusableInputDecoration.getDecoration('Family type'),
-      items: controller.familytype.map((CommonJsonModel value) {
-        return DropdownMenuItem<CommonJsonModel>(
+      items: controller.familytype.map((CommonModel value) {
+        return DropdownMenuItem<CommonModel>(
           value: value,
           child: Text(
-            value.name_json,
+            value.name,
             style:
                 AppTextStyles.captionBold.copyWith(color: AppColors.grayDark),
           ),
@@ -350,11 +350,11 @@ class _Step4State extends State<Step4> {
   buildNationality() {
     return FormBuilderDropdown(
       decoration: ReusableInputDecoration.getDecoration('Nationality'),
-      items: controller.natinality.map((CommonJsonModel value) {
-        return DropdownMenuItem<CommonJsonModel>(
+      items: controller.natinality.map((CommonModel value) {
+        return DropdownMenuItem<CommonModel>(
           value: value,
           child: Text(
-            value.name_json,
+            value.name,
             style:
                 AppTextStyles.captionBold.copyWith(color: AppColors.grayDark),
           ),
@@ -429,7 +429,7 @@ class _Step4State extends State<Step4> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  familyModel.family_type!.name_json.toString(),
+                  familyModel.family_type!.name.toString(),
                   style: AppTextStyles.bodySmallRegular.copyWith(
                     color: AppColors.grayDark,
                   ),

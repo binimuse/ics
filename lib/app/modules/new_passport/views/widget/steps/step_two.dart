@@ -55,11 +55,11 @@ class Step2 extends StatelessWidget {
         ),
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Occupation'),
-          items: controller.occupations.map((CommonJsonModel value) {
-            return DropdownMenuItem<CommonJsonModel>(
+          items: controller.occupations.map((CommonModel value) {
+            return DropdownMenuItem<CommonModel>(
               value: value,
               child: Text(
-                value.name_json,
+                value.name,
                 style: AppTextStyles.captionBold
                     .copyWith(color: AppColors.grayDark),
               ),

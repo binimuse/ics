@@ -36,7 +36,7 @@ query MyQuery {
          family_type
       {
         id
-        name_json
+        name
       }
       nationality_id
       first_name
