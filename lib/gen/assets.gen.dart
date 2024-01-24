@@ -357,6 +357,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/order.svg
   String get order => 'assets/icons/order.svg';
 
+  /// File path: assets/icons/orginId.svg
+  String get orginId => 'assets/icons/orginId.svg';
+
   /// File path: assets/icons/origin.svg
   String get origin => 'assets/icons/origin.svg';
 
@@ -750,6 +753,7 @@ class $AssetsIconsGen {
         on,
         one,
         order,
+        orginId,
         origin,
         paper,
         paperDownload,

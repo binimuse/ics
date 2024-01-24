@@ -36,10 +36,38 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   //for OrginID card
   final List<String> svgPathsOrgin = [
-    Assets.icons.origin,
-    Assets.icons.origin,
-    Assets.icons.origin,
-    Assets.icons.origin,
+    Assets.icons.profileDefault,
+    Assets.icons.profileDefault,
+    Assets.icons.profileDefault,
+    Assets.icons.profileDefault,
+  ];
+  //for evisa card
+  final List<String> evisa = [
+    Assets.icons.paper,
+    Assets.icons.paper,
+  ];
+  //for Service Complaint
+  final List<String> sc = [
+    Assets.icons.question,
+    Assets.icons.question,
+  ];
+
+  final List<String> SCtitles = [
+    'Complaint',
+    'Feedback ',
+  ];
+
+  final List<String> re = [
+    Assets.icons.memo,
+    Assets.icons.memo,
+  ];
+  final List<String> Evisatitles = [
+    'New \n E-Visa',
+    'Extension  \n E-Visa',
+  ];
+  final List<String> REtitles = [
+    'New \n Resident Permit',
+    'Extension  \n Resident Permit',
   ];
 
   final List<String> Orgintitles = [
@@ -58,7 +86,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onInit() {
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 5, vsync: this);
     getUser();
     super.onInit();
   }

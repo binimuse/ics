@@ -44,8 +44,10 @@ class HomeView extends GetView<HomeController> {
           __buildBanner(),
           TabBar(
             controller: controller.tabController,
+            tabAlignment: TabAlignment.start,
+            isScrollable: true,
             labelStyle: AppTextStyles.bodyLargeBold
-                .copyWith(fontSize: AppSizes.font_12, color: AppColors.primary),
+                .copyWith(fontSize: AppSizes.font_10, color: AppColors.primary),
             tabs: [
               Tab(
                   text: 'Passport',
@@ -57,7 +59,28 @@ class HomeView extends GetView<HomeController> {
               Tab(
                   text: 'Origin ID',
                   icon: SvgPicture.asset(
-                    Assets.icons.origin,
+                    Assets.icons.profileDefault,
+                    color: AppColors.primary,
+                    fit: BoxFit.contain,
+                  )),
+              Tab(
+                  text: 'E-Visa',
+                  icon: SvgPicture.asset(
+                    Assets.icons.paper,
+                    color: AppColors.primary,
+                    fit: BoxFit.contain,
+                  )),
+              Tab(
+                  text: 'Resident Permit',
+                  icon: SvgPicture.asset(
+                    Assets.icons.memo,
+                    color: AppColors.primary,
+                    fit: BoxFit.contain,
+                  )),
+              Tab(
+                  text: 'Service Complaint',
+                  icon: SvgPicture.asset(
+                    Assets.icons.question,
                     color: AppColors.primary,
                     fit: BoxFit.contain,
                   )),
@@ -89,6 +112,45 @@ class HomeView extends GetView<HomeController> {
                       children: [
                         buildOrgin(context),
                         buildOriginId(),
+                      ],
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildEVisa(context),
+                        buildEVisaCard(),
+                      ],
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildRE(context),
+                        buildRECard(),
+                      ],
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildSC(context),
+                        buildbuildSCCard(),
                       ],
                     ),
                   ),
@@ -230,6 +292,45 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
+  buildEVisa(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'E-Visa ',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.primary),
+              ),
+              Text(
+                'Services',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.grayDark),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
+          SizedBox(
+            width: 80.w,
+            child: Text(
+              'Your E-Visa is an essential document in international travel and for identification purposes.',
+              style: AppTextStyles.captionRegular.copyWith(
+                  fontSize: AppSizes.font_12, color: AppColors.grayDark),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   buildOrgin(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -268,6 +369,168 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
+
+  buildEVisaCard() {
+    return Container(
+      height: 40.h,
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.all(8),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: 2, // Replace with the actual number of cards
+        itemBuilder: (BuildContext context, int index) {
+          return CardWidget(
+              isOrgin: true,
+              svgPath: controller.evisa[index],
+              title: controller.Evisatitles[index],
+              iconColor: controller.color[index],
+              onPressed: () {
+                if (index == 0) {
+                } else if (index == 1) {}
+              });
+        },
+      ),
+    );
+  }
+
+  buildRE(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'Resident Permit ',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.primary),
+              ),
+              Text(
+                'Services',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.grayDark),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
+          SizedBox(
+            width: 80.w,
+            child: Text(
+              'Your Resident Permit is an essential document in international travel and for identification purposes.',
+              style: AppTextStyles.captionRegular.copyWith(
+                  fontSize: AppSizes.font_12, color: AppColors.grayDark),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  buildRECard() {
+    return Container(
+      height: 40.h,
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.all(8),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: 2, // Replace with the actual number of cards
+        itemBuilder: (BuildContext context, int index) {
+          return CardWidget(
+              isOrgin: false,
+              svgPath: controller.re[index],
+              title: controller.REtitles[index],
+              iconColor: controller.color[index],
+              onPressed: () {
+                if (index == 0) {
+                } else if (index == 1) {}
+              });
+        },
+      ),
+    );
+  }
+
+  buildSC(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'Service Complaint',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.primary),
+              ),
+              Text(
+                'Services',
+                style: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.grayDark),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
+          SizedBox(
+            width: 80.w,
+            child: Text(
+              'Your Service Complaint is an essential document in international travel and for identification purposes.',
+              style: AppTextStyles.captionRegular.copyWith(
+                  fontSize: AppSizes.font_12, color: AppColors.grayDark),
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  buildbuildSCCard() {
+    return Container(
+      height: 40.h,
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.all(8),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: 2, // Replace with the actual number of cards
+        itemBuilder: (BuildContext context, int index) {
+          return CardWidget(
+              isOrgin: true,
+              svgPath: controller.sc[index],
+              title: controller.SCtitles[index],
+              iconColor: controller.color[index],
+              onPressed: () {
+                if (index == 0) {
+                } else if (index == 1) {}
+              });
+        },
+      ),
+    );
+  }
 }
 
 class CardWidget extends StatelessWidget {
@@ -276,6 +539,7 @@ class CardWidget extends StatelessWidget {
   final Color? iconColor;
   final Function? onPressed;
   final bool? isOrgin;
+  final bool? isRe;
 
   CardWidget({
     required this.svgPath,
@@ -283,6 +547,7 @@ class CardWidget extends StatelessWidget {
     required this.iconColor,
     this.onPressed,
     this.isOrgin,
+    this.isRe,
   });
 
   @override
