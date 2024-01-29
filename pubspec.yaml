@@ -59,6 +59,7 @@ dependencies:
   dio: ^5.3.4
   animated_segmented_tab_control: ^1.2.0
   timeago: ^3.6.0
+  syncfusion_flutter_calendar: ^24.1.47
 
 
 

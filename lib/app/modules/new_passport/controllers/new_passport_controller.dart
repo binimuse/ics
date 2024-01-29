@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart' as Mydio;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -145,6 +144,12 @@ class NewPassportController extends GetxController {
 
     super.onInit();
   }
+
+  List<DateTime> occupiedDates = [
+    DateTime(2024, 2, 1),
+    DateTime(2024, 2, 3),
+    // Add more dates...
+  ];
 
   Future<List<NewConfirmationModel>> fetchConfirmationModelCar() async {
     // simulate network delay

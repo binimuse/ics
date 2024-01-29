@@ -17,10 +17,10 @@ import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_five.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_four.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
+import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
 import 'package:ics/app/routes/app_pages.dart';
-
 
 import 'package:im_stepper/stepper.dart';
 
@@ -134,6 +134,10 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                 Icons.edit_document,
                 color: AppColors.whiteOff,
               ),
+              Icon(
+                Icons.calendar_month,
+                color: AppColors.whiteOff,
+              ),
             ],
             onStepReached: (index) {
               setState(() {
@@ -182,6 +186,8 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
                       if (controller.currentStep == 4) Step5(),
 
+                      if (controller.currentStep == 5) Step6(),
+
                       // Add more form fields as needed for each step
                     ],
                   ),
@@ -205,7 +211,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                       ),
                       textcolor: AppColors.whiteOff,
                       buttoncolor: controller.areAllTermsSelected()
-                          ? AppColors.primary
+                          ? AppColors.grayLight
                           : AppColors.grayLight,
                       borderRadius: AppSizes.radius_16,
                       padding: EdgeInsets.symmetric(
@@ -224,14 +230,14 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomNormalButton(
-                      text: controller.currentStep == 4 ? 'Submit' : 'Next',
+                      text: controller.currentStep == 5 ? 'Submit' : 'Next',
                       textStyle: AppTextStyles.bodyLargeBold.copyWith(
                         color: AppColors.whiteOff,
                       ),
                       textcolor: AppColors.whiteOff,
-                      buttoncolor: controller.currentStep == 4
+                      buttoncolor: controller.currentStep == 5
                           ? AppColors.primary
-                          : AppColors.grayLight,
+                          : AppColors.primary,
                       borderRadius: AppSizes.radius_16,
                       padding: EdgeInsets.symmetric(
                         vertical: AppSizes.mp_v_1,
@@ -247,7 +253,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                               controller.currentStep++;
                             });
                           }
-                        } else if (controller.currentStep == 4) {
+                        } else if (controller.currentStep == 5) {
                           controller.checkdoc();
                         } else {
                           if (controller.newPassportformKey.currentState!

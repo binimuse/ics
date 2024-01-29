@@ -46,7 +46,7 @@ class PassportWidget extends StatelessWidget {
 
   Widget buildCard(IcsNewApplicationModel citizen) {
     return Container(
-      height: 20.h,
+      height: 25.h,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
