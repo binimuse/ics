@@ -14,6 +14,8 @@ import '../modules/main_page/bindings/main_page_binding.dart';
 import '../modules/main_page/views/main_page_view.dart';
 import '../modules/my_order/bindings/my_order_binding.dart';
 import '../modules/my_order/views/my_order_view.dart';
+import '../modules/new_origin_id/bindings/new_origin_id_binding.dart';
+import '../modules/new_origin_id/views/new_origin_id_view.dart';
 import '../modules/new_passport/bindings/new_passport_binding.dart';
 import '../modules/new_passport/views/new_passport_view.dart';
 import '../modules/notifications/bindings/notifications_binding.dart';
@@ -113,6 +115,11 @@ class AppPages {
       name: _Paths.HELP,
       page: () => const HelpView(),
       binding: HelpBinding(),
+    ),
+    GetPage(
+      name: _Paths.NEW_ORIGIN_ID,
+      page: () => const NewOriginIdView(),
+      binding: NewOriginIdBinding(),
     ),
   ];
 }

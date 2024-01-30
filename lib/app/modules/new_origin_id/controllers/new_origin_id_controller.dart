@@ -7,14 +7,15 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
-import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
-import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
-import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
-import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
-import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
-import 'package:ics/app/modules/new_passport/data/quary/get_emabassies.dart';
-import 'package:ics/app/modules/new_passport/data/quary/get_url.dart';
-import 'package:ics/app/modules/new_passport/data/quary/ics_citizens.dart';
+import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
+import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
+import 'package:ics/app/modules/new_origin_id/data/model/confirmation_model_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/data/model/fileurl_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/data/mutation/ics_citizens_mutuation_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/data/quary/get_emabassies_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/data/quary/get_url_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/data/quary/ics_citizens_orginid.dart';
+
 import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:ics/gen/assets.gen.dart';
@@ -26,11 +27,11 @@ import 'dart:io';
 
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
-import '../data/quary/get_all.dart';
+import '../data/quary/get_all_orginid.dart';
 
 import 'package:http_parser/http_parser.dart';
 
-class NewPassportController extends GetxController {
+class NewOriginIdController extends GetxController {
   final TextEditingController AmfatherNameController = TextEditingController();
   final TextEditingController AmfirstNameController = TextEditingController();
   final TextEditingController AmgrandFatherNameController =
@@ -45,7 +46,7 @@ class NewPassportController extends GetxController {
   ];
 
   final TextEditingController addressController = TextEditingController();
-  final Rxn<Basemodel> baseData = Rxn<Basemodel>();
+  final Rxn<BasemodelOrginId> baseData = Rxn<BasemodelOrginId>();
   final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
 
   List<AllowedContreyModel> allwoedCountries = [];
@@ -72,10 +73,10 @@ class NewPassportController extends GetxController {
   final TextEditingController grandFatherNameController =
       TextEditingController();
 
-  GetallQuery getGenderQuery = GetallQuery();
-  GetUrlQuery geturlQuery = GetUrlQuery();
-  Getaicscitizens getaicscitizens = Getaicscitizens();
-  GetEmbassiesQuery getEmbassiesQuery = GetEmbassiesQuery();
+  GetallQueryOrginId getGenderQuery = GetallQueryOrginId();
+  GetUrlQueryOrginId geturlQuery = GetUrlQueryOrginId();
+  GetaicscitizensOrginId getaicscitizens = GetaicscitizensOrginId();
+  GetEmbassiesQueryOrginId getEmbassiesQuery = GetEmbassiesQueryOrginId();
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
   final Rxn<CommonModel> haircolorvalue = Rxn<CommonModel>();
@@ -132,6 +133,13 @@ class NewPassportController extends GetxController {
     false,
     false,
     false,
+    false,
+  ].obs;
+
+  final List<bool> orginIDType = [
+    false,
+    false,
+    false,
   ].obs;
 
   //for birthDate
@@ -151,16 +159,64 @@ class NewPassportController extends GetxController {
     // Add more dates...
   ];
 
-  Future<List<NewConfirmationModel>> fetchConfirmationModelCar() async {
+  Future<List<NewOrginIdConfirmationModel>> fetchorginId() async {
     // simulate network delay
 
     // This is the dummy data
     List<Map<String, dynamic>> data = [
       {
-        "name": "New applicants",
+        "name": "Orgin Id For Adults",
         "description":
-            "New applicants who are unable to attend on the appointment date will apply again.",
-        "image": Assets.icons.camera,
+            "Foreign nationals of Ethiopian origin, former Ethiopian citizens with Ethiopian passport or adults with Ethiopian parents.",
+        "image": Assets.icons.paper,
+      },
+      {
+        "name": "Orgin Id For Children",
+        "description":
+            "Foreign nationals of Ethiopian origin under 18 years old, former Ethiopian citizens with Ethiopian passport or children with Ethiopian parents.",
+        "image": Assets.icons.batteryLow,
+      },
+      {
+        "name": "Orgin Id For spouse",
+        "description":
+            "Foreign national who are married to person with Ethiopian origin ID or Ethiopian Yellow Card.",
+        "image": Assets.icons.paper,
+      },
+    ];
+
+    return data
+        .map((item) => NewOrginIdConfirmationModel.fromJson(item))
+        .toList();
+  }
+
+  Future<List<NewOrginIdConfirmationModel>> fetchConfirmationModelCar() async {
+    // simulate network delay
+
+    // This is the dummy data
+    List<Map<String, dynamic>> data = [
+      {
+        "name": "This origin application form",
+        "description":
+            "is applied only by former Ethiopian citizen, and foreign citizen with Ethiopian parents and individual married to person with Origin ID.",
+        "image": Assets.icons.paper,
+      },
+      {
+        "name": "Origin ID Applicant",
+        "description":
+            "who has a previous yellow card should apply for new Origin ID.",
+        "image": Assets.icons.batteryLow,
+      },
+      {
+        "name": "Origin ID ",
+        "description":
+            "Applicant who have already Origin ID should not be apply for new Origin ID.",
+        "image": Assets.icons.paper,
+      },
+      {
+        "name": "Documents",
+        "description":
+            "Bring your original documents including your passport during collection.",
+        "image": Assets.icons.origin,
       },
       {
         "name": "Amharic Keybord",
@@ -168,19 +224,11 @@ class NewPassportController extends GetxController {
             "make sure you have amahric keybord installed on your Phone.",
         "image": Assets.icons.batteryLow,
       },
-      {
-        "name": "Document in PDF Fromat",
-        "description": "we only accept documents in PDF format. ",
-        "image": Assets.icons.paper,
-      },
-      {
-        "name": "Passport",
-        "description": "To use more than one passport is strictly prohibited",
-        "image": Assets.icons.origin,
-      },
     ];
 
-    return data.map((item) => NewConfirmationModel.fromJson(item)).toList();
+    return data
+        .map((item) => NewOrginIdConfirmationModel.fromJson(item))
+        .toList();
   }
 
   bool isTermChecked(int index) {
@@ -225,7 +273,7 @@ class NewPassportController extends GetxController {
       dynamic result =
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
 
-      baseData.value = Basemodel.fromJson(result);
+      baseData.value = BasemodelOrginId.fromJson(result);
       gender = baseData.value!.base_genders.map((e) => e).toList();
 
       eyecolor = baseData.value!.base_eye_colors.map((e) => e).toList();
@@ -279,7 +327,7 @@ class NewPassportController extends GetxController {
     }
   }
 
-  final Rxn<GetUrlModel> getUrlModel = Rxn<GetUrlModel>();
+  final Rxn<GetUrlModelOrginid> getUrlModel = Rxn<GetUrlModelOrginid>();
   Future<void> geturl(
     documentTypeId,
     PlatformFile files,
@@ -291,7 +339,8 @@ class NewPassportController extends GetxController {
         {},
       );
 
-      getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
+      getUrlModel.value =
+          GetUrlModelOrginid.fromJson(result!['getSignedUploadUrl']);
       isSendStared.value = true;
       sendUrl(documentTypeId, getUrlModel.value!.url, getUrlModel.value!.path,
           files);
@@ -366,7 +415,7 @@ class NewPassportController extends GetxController {
 
       final QueryResult result = await graphQLClient.mutate(
         MutationOptions(
-          document: gql(IcscitizensMutation.ics_citizens),
+          document: gql(IcscitizensMutationOrginId.ics_citizens),
           variables: <String, dynamic>{
             'objects': {
               'first_name': firstNameController.text,
@@ -450,7 +499,7 @@ class NewPassportController extends GetxController {
 
       final QueryResult result = await graphQLClient.mutate(
         MutationOptions(
-          document: gql(NewDocApplications.newDoc),
+          document: gql(NewDocApplicationsOrginId.newDoc),
           variables: <String, dynamic>{
             'objects': {
               'new_application_id': newApplicationId,
@@ -490,7 +539,7 @@ class NewPassportController extends GetxController {
 
       final QueryResult result = await graphQLClient.mutate(
         MutationOptions(
-          document: gql(DeleteDocApplications.deleteDoc(documentTypeId)),
+          document: gql(DeleteDocApplicationsOrginId.deleteDoc(documentTypeId)),
         ),
       );
 
@@ -536,7 +585,8 @@ class NewPassportController extends GetxController {
     return nameJson;
   }
 
-  RxList<IcsCitizenModel> icsCitizens = List<IcsCitizenModel>.of([]).obs;
+  RxList<IcsCitizenModelOrginId> icsCitizens =
+      List<IcsCitizenModelOrginId>.of([]).obs;
   var isfechediCitizens = false.obs;
   void getCitizene() async {
     try {
@@ -545,7 +595,7 @@ class NewPassportController extends GetxController {
 
       if (result != null) {
         icsCitizens.value = (result['ics_citizens'] as List)
-            .map((e) => IcsCitizenModel.fromJson(e))
+            .map((e) => IcsCitizenModelOrginId.fromJson(e))
             .toList();
 
         // countLabours.value = getlabour.value.length;

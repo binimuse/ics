@@ -11,15 +11,15 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
+import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_five_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_four_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_one_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_six_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_three_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_two_orginid.dart';
 
-import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
-import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
-import 'package:ics/app/modules/new_passport/views/widget/steps/step_five.dart';
-import 'package:ics/app/modules/new_passport/views/widget/steps/step_four.dart';
-import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
-import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
-import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
-import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
 import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:im_stepper/stepper.dart';
@@ -29,18 +29,18 @@ import 'package:sizer/sizer.dart';
 import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
-class NewPassportForm extends StatefulWidget {
-  final IcsCitizenModel? citizenModel;
+class NewOrginIdForm extends StatefulWidget {
+  final IcsCitizenModelOrginId? citizenModel;
 
-  const NewPassportForm({
+  const NewOrginIdForm({
     this.citizenModel,
   });
   @override
   _StepperWithFormExampleState createState() => _StepperWithFormExampleState();
 }
 
-class _StepperWithFormExampleState extends State<NewPassportForm> {
-  final NewPassportController controller = Get.find<NewPassportController>();
+class _StepperWithFormExampleState extends State<NewOrginIdForm> {
+  final NewOriginIdController controller = Get.find<NewOriginIdController>();
   final ScrollController _scrollController = ScrollController();
 
   XFile? image;
@@ -163,30 +163,30 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                   child: Column(
                     children: [
                       if (controller.currentStep == 0)
-                        Step1(
+                        Step1OrginId(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
 
                       if (controller.currentStep == 1)
-                        Step2(
+                        Step2OrginID(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
                       if (controller.currentStep == 2)
-                        Step3(
+                        Step3OrginId(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
                       if (controller.currentStep == 3)
-                        Step4(
+                        Step4OrginId(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
 
-                      if (controller.currentStep == 4) Step5(),
+                      if (controller.currentStep == 4) Step5OrginId(),
 
-                      if (controller.currentStep == 5) Step6(),
+                      if (controller.currentStep == 5) Step6Orginid(),
 
                       // Add more form fields as needed for each step
                     ],
