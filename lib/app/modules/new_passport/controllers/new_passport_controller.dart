@@ -260,25 +260,6 @@ class NewPassportController extends GetxController {
     }
   }
 
-  void checkdoc() async {
-    if (documents.isEmpty) {
-      AppToasts.showError("Document are empty");
-      return;
-    } else if (documents.any((element) => element.files.isEmpty)) {
-      isSendStared.value = false;
-      AppToasts.showError("Document must not be empty");
-      return;
-    } else {
-      isSendStared.value = true;
-      await Future.delayed(const Duration(seconds: 1));
-      isSendStared.value = false;
-      AppToasts.showSuccess("New Passport Sent successfully");
-      final MyOrderController controller = Get.put(MyOrderController());
-      controller.GetNewPassport();
-      Get.offAllNamed(Routes.MAIN_PAGE);
-    }
-  }
-
   final Rxn<GetUrlModel> getUrlModel = Rxn<GetUrlModel>();
   Future<void> geturl(
     documentTypeId,

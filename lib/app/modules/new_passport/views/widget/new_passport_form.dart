@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/app_toasts.dart';
 
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
@@ -11,6 +12,7 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
@@ -245,16 +247,14 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                       ),
                       onPressed: () async {
                         if (controller.currentStep == 3) {
-                          controller.send();
-                          await Future.delayed(const Duration(seconds: 1));
-                          // Handle form submission
-                          if (controller.isSend.value) {
-                            setState(() {
-                              controller.currentStep++;
-                            });
-                          }
+                          controller.newPassportformKey.currentState!
+                                  .saveAndValidate()
+                              ? createCitizen()
+                              : SizedBox();
+                        } else if (controller.currentStep == 4) {
+                          checkdoc();
                         } else if (controller.currentStep == 5) {
-                          controller.checkdoc();
+                          finalstep();
                         } else {
                           if (controller.newPassportformKey.currentState!
                               .saveAndValidate()) {
@@ -273,6 +273,41 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         ],
       ),
     );
+  }
+
+  void checkdoc() async {
+    if (controller.documents.isEmpty) {
+      AppToasts.showError("Document are empty");
+      return;
+    } else if (controller.documents.any((element) => element.files.isEmpty)) {
+      controller.isSendStared.value = false;
+      AppToasts.showError("Document must not be empty");
+      return;
+    } else {
+      print("object");
+      setState(() {
+        controller.currentStep++;
+      });
+    }
+  }
+
+  void finalstep() {
+    AppToasts.showSuccess("New Passport Sent successfully");
+    final MyOrderController controller = Get.put(MyOrderController());
+    controller.GetNewPassport();
+    Get.offAllNamed(Routes.MAIN_PAGE);
+  }
+
+  void createCitizen() async {
+    controller.send();
+    await Future.delayed(const Duration(seconds: 1));
+    if (controller.isSend.value) {
+      setState(() {
+        controller.currentStep++;
+      });
+    } else {
+      AppToasts.showError("Form submission failed");
+    }
   }
 
   void _scrollToBottom() {
