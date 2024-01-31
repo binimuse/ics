@@ -420,22 +420,25 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   }
 
   void getDataForStep3() {
+    var embassyId;
     final citizenModel = widget.citizenModel;
     final abroadCountryId = citizenModel!.abroadCountryId;
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
-    final embassyId = citizenModel.newApplicationModel!.first.embassy_id;
+
+    if (citizenModel.newApplicationModel!.isNotEmpty) {
+      embassyId = citizenModel.newApplicationModel!.first.embassy_id;
+      Future.delayed(const Duration(seconds: 2), () {
+        controller.embassiesvalue.value =
+            controller.base_embassies.firstWhere((e) => e.id == embassyId);
+      });
+    }
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
     controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
-
-    Future.delayed(const Duration(seconds: 2), () {
-      controller.embassiesvalue.value =
-          controller.base_embassies.firstWhere((e) => e.id == embassyId);
-    });
   }
 
   void getDataForStep4() {

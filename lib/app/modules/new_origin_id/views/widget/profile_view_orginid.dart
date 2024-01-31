@@ -147,6 +147,7 @@ class ProfileViewOrginid extends GetView<NewOriginIdController> {
       onTap: () {
         Get.to(() => NewOrginIdForm(
               citizenModel: citizen,
+              
             ));
       },
       child: Container(

@@ -1,5 +1,3 @@
-import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
-
 class IcsCitizenModelOrginId {
   String? abroadAddress;
   String? abroadCountryId;
@@ -26,7 +24,6 @@ class IcsCitizenModelOrginId {
   NameJson? firstNameJson;
   NameJson? grandFatherNameJson;
   final List<NewOrginIdModel>? newApplicationModel;
-  final List<FamilyModel>? familyModel;
 
   IcsCitizenModelOrginId({
     this.abroadAddress,
@@ -53,7 +50,6 @@ class IcsCitizenModelOrginId {
     this.firstNameJson,
     this.grandFatherNameJson,
     this.newApplicationModel,
-    this.familyModel,
   });
 
   factory IcsCitizenModelOrginId.fromJson(Map<String, dynamic> json) {
@@ -92,9 +88,6 @@ class IcsCitizenModelOrginId {
           : null,
       newApplicationModel: List.of(json["new_applications"])
           .map((i) => NewOrginIdModel.fromJson(i))
-          .toList(),
-      familyModel: List.of(json["citizen_families"])
-          .map((i) => FamilyModel.fromJson(i))
           .toList(),
     );
   }

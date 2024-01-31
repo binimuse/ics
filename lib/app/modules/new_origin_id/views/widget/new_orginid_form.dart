@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/app_toasts.dart';
 
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
@@ -11,6 +12,7 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_five_orginid.dart';
@@ -74,7 +76,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'New',
-        title2: "Passport Form",
+        title2: "Origin ID Form",
         showLeading: true,
       ),
       body: Stack(
@@ -127,7 +129,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                 color: AppColors.whiteOff,
               ),
               Icon(
-                Icons.family_restroom,
+                Icons.copy_all,
                 color: AppColors.whiteOff,
               ),
               Icon(
@@ -151,7 +153,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
             child: Padding(
               padding: EdgeInsets.all(16.0),
               child: FormBuilder(
-                key: controller.newPassportformKey,
+                key: controller.neworginIdformKey,
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
                 canPop: false,
@@ -163,21 +165,24 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                   child: Column(
                     children: [
                       if (controller.currentStep == 0)
+                        //Personal Detail
                         Step1OrginId(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
-
+                      //Personal Detail
                       if (controller.currentStep == 1)
                         Step2OrginID(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
+                      //Address
                       if (controller.currentStep == 2)
                         Step3OrginId(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
+                      //Passport info
                       if (controller.currentStep == 3)
                         Step4OrginId(
                           citizenModel: widget.citizenModel,
@@ -244,19 +249,22 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                         horizontal: AppSizes.mp_w_6,
                       ),
                       onPressed: () async {
-                        if (controller.currentStep == 3) {
-                          controller.send();
-                          await Future.delayed(const Duration(seconds: 1));
-                          // Handle form submission
-                          if (controller.isSend.value) {
-                            setState(() {
-                              controller.currentStep++;
-                            });
-                          }
+                        if (controller.currentStep == 2) {
+                          controller.neworginIdformKey.currentState!
+                                  .saveAndValidate()
+                              ? createCitizen()
+                              : SizedBox();
+                        } else if (controller.currentStep == 3) {
+                          controller.neworginIdformKey.currentState!
+                                  .saveAndValidate()
+                              ? requestOrginID()
+                              : SizedBox();
+                        } else if (controller.currentStep == 4) {
+                          checkdoc();
                         } else if (controller.currentStep == 5) {
-                          controller.checkdoc();
+                          finalstep();
                         } else {
-                          if (controller.newPassportformKey.currentState!
+                          if (controller.neworginIdformKey.currentState!
                               .saveAndValidate()) {
                             setState(() {
                               controller.currentStep++;
@@ -273,6 +281,22 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
         ],
       ),
     );
+  }
+
+  void checkdoc() async {
+    if (controller.documents.isEmpty) {
+      AppToasts.showError("Document are empty");
+      return;
+    } else if (controller.documents.any((element) => element.files.isEmpty)) {
+      controller.isSendStared.value = false;
+      AppToasts.showError("Document must not be empty");
+      return;
+    } else {
+      print("object");
+      setState(() {
+        controller.currentStep++;
+      });
+    }
   }
 
   void _scrollToBottom() {
@@ -420,11 +444,19 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
   }
 
   void getDataForStep3() {
+    var embassyId;
     final citizenModel = widget.citizenModel;
     final abroadCountryId = citizenModel!.abroadCountryId;
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
-    final embassyId = citizenModel.newApplicationModel!.first.embassy_id;
+
+    if (citizenModel.newApplicationModel!.isNotEmpty) {
+      embassyId = citizenModel.newApplicationModel!.first.embassy_id;
+      Future.delayed(const Duration(seconds: 2), () {
+        controller.embassiesvalue.value =
+            controller.base_embassies.firstWhere((e) => e.id == embassyId);
+      });
+    }
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
@@ -432,13 +464,42 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
 
-    Future.delayed(const Duration(seconds: 2), () {
-      controller.embassiesvalue.value =
-          controller.base_embassies.firstWhere((e) => e.id == embassyId);
-    });
+    ;
   }
 
   void getDataForStep4() {
-    controller.familyModelvalue.value = widget.citizenModel!.familyModel!;
+    // controller.familyModelvalue.value = widget.citizenModel!.familyModel!;
+  }
+
+  void createCitizen() async {
+    controller.send();
+    await Future.delayed(const Duration(seconds: 1));
+    if (controller.isSend.value) {
+      setState(() {
+        controller.currentStep++;
+      });
+    } else {
+      AppToasts.showError("Form submission failed");
+    }
+  }
+
+  void requestOrginID() async {
+    controller.requestNewOrginID();
+
+    await Future.delayed(const Duration(seconds: 1));
+    if (controller.isRequestNewOrginIDSuccess.value) {
+      setState(() {
+        controller.currentStep++;
+      });
+    } else {
+      AppToasts.showError("Form submission failed");
+    }
+  }
+
+  void finalstep() {
+    AppToasts.showSuccess("New Origin Id Sent successfully");
+    final MyOrderController controller = Get.put(MyOrderController());
+    controller.GetNewPassport();
+    Get.offAllNamed(Routes.MAIN_PAGE);
   }
 }

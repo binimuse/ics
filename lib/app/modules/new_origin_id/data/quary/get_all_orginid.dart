@@ -2,7 +2,7 @@ class GetallQueryOrginId {
   dynamic fetchData() {
     return """
 {
-  base_document_types(where: {document_category: {code: {_eq: "NEW_APPLICATION"}}}) {
+  base_document_types(where: {document_category: {code: {_eq: "NEW_ORIGIN_ID"}}}) {
     id
     name
     description
@@ -29,12 +29,7 @@ class GetallQueryOrginId {
     id
     }
   }
-    base_family_types
-  {
-    description
-     name
-    id
-  }
+
   base_occupations {
     name
     description
@@ -49,6 +44,12 @@ class GetallQueryOrginId {
     
     description
     name
+  }
+
+  base_visa_types {
+    name
+    id
+    description
   }
 }
    """;

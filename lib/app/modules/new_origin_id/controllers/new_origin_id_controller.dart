@@ -46,15 +46,16 @@ class NewOriginIdController extends GetxController {
   ];
 
   final TextEditingController addressController = TextEditingController();
+
   final Rxn<BasemodelOrginId> baseData = Rxn<BasemodelOrginId>();
-  final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
 
   List<AllowedContreyModel> allwoedCountries = [];
   List<CommonModel> base_document_types = [];
-  List<PassportDocuments> documents = [];
+  List<OrginIDDocuments> documents = [];
 
   final Rxn<CommonModel> birthCountryvalue = Rxn<CommonModel>();
   final Rxn<CommonModel> natinalityvalue = Rxn<CommonModel>();
+  final Rxn<CommonModel> visatypevalue = Rxn<CommonModel>();
   final Rxn<CommonModel> familynatinalityvalue = Rxn<CommonModel>();
   final Rxn<CommonModel> embassiesvalue = Rxn<CommonModel>();
 
@@ -103,9 +104,18 @@ class NewOriginIdController extends GetxController {
   List<CommonModel> bcountries = [];
   List<CommonModel> natinality = [];
   List<CommonModel> haircolor = [];
+  List<CommonModel> visaType = [];
   List<CommonModel> eyecolor = [];
   final TextEditingController monthController = TextEditingController();
-  final newPassportformKey = GlobalKey<FormBuilderState>();
+  final neworginIdformKey = GlobalKey<FormBuilderState>();
+
+  //step 4
+  final TextEditingController passportNumberContoller = TextEditingController();
+  final TextEditingController visanumberContoller = TextEditingController();
+  final TextEditingController passportIssueDateController =
+      TextEditingController();
+  final TextEditingController passportExpiryDateController =
+      TextEditingController();
 
   final phoneFocusNode = FocusNode();
   var isPhoneValid = false.obs;
@@ -121,7 +131,7 @@ class NewOriginIdController extends GetxController {
   }
 
   final Rxn<CommonModel> occupationvalue = Rxn<CommonModel>();
-  final Rxn<CommonModel> familytypevalue = Rxn<CommonModel>();
+
   //Step 3
   final TextEditingController phonenumber = TextEditingController();
 
@@ -278,54 +288,40 @@ class NewOriginIdController extends GetxController {
 
       eyecolor = baseData.value!.base_eye_colors.map((e) => e).toList();
       haircolor = baseData.value!.base_hair_colors.map((e) => e).toList();
+
       martial = baseData.value!.base_marital_statuses.map((e) => e).toList();
       occupations = baseData.value!.base_occupations.map((e) => e).toList();
-      familytype = baseData.value!.base_family_types.map((e) => e).toList();
+
       bcountries = baseData.value!.base_countries.map((e) => e).toList();
       natinality = baseData.value!.base_countries.map((e) => e).toList();
       allwoedCountries =
           baseData.value!.allowed_countries.map((e) => e).toList();
       base_document_types =
           baseData.value!.base_document_types.map((e) => e).toList();
-
+      visaType = baseData.value!.base_visa_types.map((e) => e).toList();
       for (var documentType in base_document_types) {
         documents
-            .add(PassportDocuments(documentTypeId: documentType.id, files: []));
+            .add(OrginIDDocuments(documentTypeId: documentType.id, files: []));
       }
       isfeched(true);
-    } catch (e) {
+    } catch (e, s) {
+      print(e);
+      print(s);
       isfeched(false);
     }
   }
 
   void check() {
-    final isValid = newPassportformKey.currentState!.validate();
+    final isValid = neworginIdformKey.currentState!.validate();
     if (!isValid) {
       return;
     } else {
-      newPassportformKey.currentState!.save();
+      neworginIdformKey.currentState!.save();
       send(); // Call report() when the form is valid
     }
   }
 
-  void checkdoc() async {
-    if (documents.isEmpty) {
-      AppToasts.showError("Document are empty");
-      return;
-    } else if (documents.any((element) => element.files.isEmpty)) {
-      isSendStared.value = false;
-      AppToasts.showError("Document must not be empty");
-      return;
-    } else {
-      isSendStared.value = true;
-      await Future.delayed(const Duration(seconds: 1));
-      isSendStared.value = false;
-      AppToasts.showSuccess("New Passport Sent successfully");
-      final MyOrderController controller = Get.put(MyOrderController());
-      controller.GetNewPassport();
-      Get.offAllNamed(Routes.MAIN_PAGE);
-    }
-  }
+
 
   final Rxn<GetUrlModelOrginid> getUrlModel = Rxn<GetUrlModelOrginid>();
   Future<void> geturl(
@@ -377,7 +373,7 @@ class NewOriginIdController extends GetxController {
         isSendStared.value = false;
         print('File uploaded successfully');
         sendDoc(
-          newApplicationId,
+          neworginID,
           documentTypeId,
           url,
           path,
@@ -398,7 +394,7 @@ class NewOriginIdController extends GetxController {
 
   var isSend = false.obs;
   var isSendStared = false.obs;
-  var newApplicationId;
+  var neworginID;
   Future<void> send() async {
     try {
       isSendStared.value = true;
@@ -439,16 +435,6 @@ class NewOriginIdController extends GetxController {
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
               'abroad_phone_number': phonenumber.text,
-              'new_applications': {
-                "data": {
-                  "delivery_date": null,
-                  'embassy_id': embassiesvalue.value!.id,
-                }
-              },
-              'citizen_families': {
-                "data":
-                    familyModelvalue.map((element) => element.toJson()).toList()
-              }
             }
           },
         ),
@@ -465,8 +451,7 @@ class NewOriginIdController extends GetxController {
         isSend.value = true;
         isSendStared.value = false;
 
-        newApplicationId = result.data!['insert_ics_citizens']['returning'][0]
-                ['new_applications'][0]['id']
+        neworginID = result.data!['insert_ics_citizens']['returning'][0]['id']
             .toString();
       }
     } catch (e) {
@@ -478,6 +463,45 @@ class NewOriginIdController extends GetxController {
       } else {
         AppToasts.showError("Something went wrong");
       }
+    }
+  }
+
+  var isRequestNewOrginIDSuccess = false.obs;
+
+  Future<void> requestNewOrginID() async {
+    try {
+      // file upload
+
+      GraphQLClient graphQLClient;
+
+      graphQLClient = GraphQLConfiguration().clientToQuery();
+
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(IcsnewOrginIdmutation.ics_citizens_orginId),
+          variables: <String, dynamic>{
+            'objects': {
+              'citizen_id': neworginID,
+              'current_passport_expiry_date': passportExpiryDateController.text,
+              'current_passport_issued_date': passportIssueDateController.text,
+              'current_passport_number': passportNumberContoller.text,
+              'visa_type_id': visatypevalue.value!.id,
+              'visa_number': visanumberContoller.text,
+            }
+          },
+        ),
+      );
+
+      if (result.hasException) {
+        isRequestNewOrginIDSuccess.value = false;
+
+        print(result.exception.toString());
+      } else {
+        isRequestNewOrginIDSuccess.value = true;
+      }
+    } catch (e) {
+      isRequestNewOrginIDSuccess.value = false;
+      print('Error: $e');
     }
   }
 
@@ -639,11 +663,11 @@ class NewOriginIdController extends GetxController {
 
 enum VideoTypenew { video, image, audio, unknown }
 
-class PassportDocuments {
+class OrginIDDocuments {
   final documentTypeId;
   final List<PlatformFile> files;
 
-  const PassportDocuments({
+  const OrginIDDocuments({
     required this.documentTypeId,
     required this.files,
   });
