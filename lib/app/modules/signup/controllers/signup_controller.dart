@@ -63,18 +63,15 @@ class SignupController extends GetxController {
   bool validatePassword() {
     final password = passwordController.text;
     bool hasNumber = false;
-    bool hasSpecialCharacter = false;
 
-    if (password.length >= 8) {
+    if (password.length >= 6) {
       for (int i = 0; i < password.length; i++) {
         if (password[i].isNumericOnly) {
           hasNumber = true;
-        } else if (!password[i].isAlphabetOnly) {
-          hasSpecialCharacter = true;
         }
       }
 
-      if (hasNumber && hasSpecialCharacter) {
+      if (hasNumber) {
         isPasswordValid(true);
         return true;
       }
@@ -98,31 +95,25 @@ class SignupController extends GetxController {
   //signupp
   var signingUp = false.obs;
 
-
-   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
+  Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
 
   void signUp() async {
-
     networkStatus.value = NetworkStatus.LOADING;
     try {
       if (phoneController.text.isNotEmpty &&
-          emailController.text.isNotEmpty &&
           passwordController.text.isNotEmpty &&
           lNameController.text.isNotEmpty &&
           fNameController.text.isNotEmpty) {
         signingUp(true);
         signUpMutation().then((result) {
-                networkStatus.value = NetworkStatus.SUCCESS;
+          networkStatus.value = NetworkStatus.SUCCESS;
           if (!result.hasException) {
             // success handling
 
             signingUp(false);
             AppToasts.showSuccess("Successfully registered");
             Future.delayed(const Duration(milliseconds: 300), () {
-              AppToasts.showSuccess("Verify otp");
-              Get.toNamed(Routes.OTP_VARIFICATION, arguments: {
-                "email": emailController.text,
-              });
+              Get.offAllNamed(Routes.LOGIN);
             });
           } else {
             print(result);
@@ -135,7 +126,7 @@ class SignupController extends GetxController {
             if (result.exception!.graphqlErrors.isNotEmpty) {
               if (result.exception!.graphqlErrors[0].message
                   .contains("CREDENTIALS_IS_ALREADY_IN_USE")) {
-                AppToasts.showError("Email has already been taken");
+                AppToasts.showError("Phone has already been taken");
 
                 Future.delayed(const Duration(milliseconds: 300), () {
                   Get.back();
@@ -145,7 +136,7 @@ class SignupController extends GetxController {
             }
           }
         }).catchError((error) {
-            networkStatus.value = NetworkStatus.ERROR;
+          networkStatus.value = NetworkStatus.ERROR;
           print(error);
           // handle error
           signingUp(false);
@@ -153,14 +144,14 @@ class SignupController extends GetxController {
           AppToasts.showError("Something went wrong");
         });
       } else {
-             networkStatus.value = NetworkStatus.ERROR;
+        networkStatus.value = NetworkStatus.ERROR;
         print("am here");
         signingUp(false);
 
         AppToasts.showError("Something went wrong");
       }
     } on Exception catch (e) {
-           networkStatus.value = NetworkStatus.ERROR;
+      networkStatus.value = NetworkStatus.ERROR;
       print(e);
       // TODO
     }
@@ -174,7 +165,7 @@ class SignupController extends GetxController {
         document: gql(SignupQueryMutation.register),
         variables: <String, dynamic>{
           'object': {
-            'email': emailController.text,
+            'email': "",
             'name': fNameController.text + "" + lNameController.text,
             'password': passwordController.text,
             'phone_number': countryCode.toString() + phoneController.text,

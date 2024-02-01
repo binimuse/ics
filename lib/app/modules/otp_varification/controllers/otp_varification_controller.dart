@@ -23,7 +23,7 @@ class OtpVarificationController extends GetxController {
     otpController = TextEditingController();
     isjustForinit(true);
 
-    emailContoller.value = Get.arguments["email"];
+    // emailContoller.value = Get.arguments["email"];
   }
 
   @override
@@ -73,7 +73,6 @@ class OtpVarificationController extends GetxController {
   }
 
   resendOtp() async {
- 
     resendotpstarted(true);
 
     GraphQLClient client = graphQLConfiguration.clientToQuery();
@@ -88,15 +87,15 @@ class OtpVarificationController extends GetxController {
           }
         },
       ),
-    );  
- 
+    );
+
     if (!result.hasException) {
       resendotpstarted(false);
 
-      AppToasts.showSuccess("OTP resent");  
-        makeButtonEnable(false);
-    countdownValue.value = 60;
-    startCountdown();
+      AppToasts.showSuccess("OTP resent");
+      makeButtonEnable(false);
+      countdownValue.value = 60;
+      startCountdown();
     } else {
       resendotpstarted(false);
       print(result.exception);

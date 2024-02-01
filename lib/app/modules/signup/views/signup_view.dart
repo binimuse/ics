@@ -1,387 +1,246 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:get/get.dart';
+import 'package:ics/app/common/button/button_primary_fill.dart';
 
-import 'package:ics/app/common/button/button_primary_fill_signup.dart';
+import 'package:ics/app/common/forms/phone_number_input.dart';
 
-import 'package:ics/app/common/forms/text_input_signup.dart';
-
-import 'package:ics/app/common/navigation/top_nav_back_text.dart';
+import 'package:ics/app/common/navigation/top_nav_close_text.dart';
+import 'package:ics/app/config/theme/app_assets.dart';
+import 'package:ics/app/config/theme/app_colors.dart';
 
 import 'package:ics/app/config/theme/app_sizes.dart';
 
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:sizer/sizer.dart';
 
-
 import '../controllers/signup_controller.dart';
 
-import 'widget/user_name.dart';
-
-
 class SignupView extends GetView<SignupController> {
-
   const SignupView({Key? key}) : super(key: key);
 
-
   @override
-
   Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ///APP BAR
+            const TopNavCloseText(
+              centerTitle: '',
+              rightText: '',
+              useHomeIcon: false,
+            ),
 
-    return WillPopScope(
-
-      onWillPop: () async {
-
-        Get.back();
-
-        return false;
-
-      },
-
-      child: Scaffold(
-
-        //resizeToAvoidBottomInset: false,
-
-        body: SafeArea(
-
-          child: Column(
-
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-
-              const TopNavBackText(
-
-                centerTitle: '',
-
-                rightText: '',
-
-                useHomeIcon: false,
-
-              ),
-
-              SingleChildScrollView(
-
-                child: Padding(
-
-                  padding: EdgeInsets.symmetric(horizontal: 6.w),
-
+            SizedBox(
+              height: 1.h,
+            ),
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Form(
                   child: Column(
-
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-
-                      Text(
-
-                        "Sign up",
-
-                        textAlign: TextAlign.start,
-
-                        style: AppTextStyles.displayOneBold,
-
+                      Image.asset(
+                        AppAssets.splasehimage2,
+                        height: 13.h,
+                        fit: BoxFit.contain,
                       ),
-
-                      SizedBox(height: 2.h),
-
-                      Obx(
-
-                        () => Form(
-
-                          child: Column(
-
+                      Text(
+                        "Mobile verification",
+                        textAlign: TextAlign.start,
+                        style: AppTextStyles.displayOneBold
+                            .copyWith(fontSize: AppSizes.font_14),
+                      ),
+                      SizedBox(
+                        height: AppSizes.mp_v_1,
+                      ),
+                      Text(
+                        "Please Input your phone number to continue",
+                        textAlign: TextAlign.start,
+                        style: AppTextStyles.bodySmallRegular.copyWith(
+                            color: AppColors.grayDark,
+                            fontSize: AppSizes.font_12),
+                      ),
+                      SizedBox(
+                        height: AppSizes.mp_v_1,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Column(
                             children: [
-
-                              buildEmailinput(),
-
-                              SizedBox(height: 1.h),
-
-
-                              // Show Password field only when Next is pressed
-
-
-                              controller.isNextPressed.value &&
-
-                                      controller.isEmailValidated.value
-
-                                  ? buildPasswordinput()
-
-                                  : SizedBox()
-
+                              buildCountryCode(),
+                              SizedBox(
+                                height: AppSizes.mp_v_1,
+                              ),
+                              SizedBox(
+                                width: 34.w,
+                                child: Divider(
+                                  color: AppColors.grayLighter,
+                                  thickness: 1,
+                                  height: 1,
+                                ),
+                              ),
                             ],
-
                           ),
-
-                        ),
-
-                      )
-
+                          SizedBox(
+                            width: AppSizes.mp_w_4,
+                          ),
+                          buildPhonenumber(),
+                        ],
+                      ),
+                      SizedBox(
+                        height: AppSizes.mp_v_1,
+                      ),
+                      // Obx(() => controller.isPhoneValid.value &&
+                      //         controller.isNextPressed.value
+                      //     ? buildOTPNumber(context)
+                      //     : const SizedBox()),
+                      // SizedBox(
+                      //   height: AppSizes.mp_v_1,
+                      // ),
+                      // Obx(() => controller.isPhoneValid.value &&
+                      //         controller.isNextPressed.value &&
+                      //         !controller.isOtpValid.value
+                      //     ? Align(
+                      //         alignment: Alignment.topLeft,
+                      //         child: ButtonGrayScaleOutlineWithOutIcon(
+                      //             buttonSizeType: ButtonSizeType.SMALL,
+                      //             text: 'Send',
+                      //             onTap: () {
+                      //               if (controller.isNotAvalableCountry.value) {
+                      //                 AppToasts.showError(
+                      //                     "Error, Not a valid country");
+                      //               } else {}
+                      //             },
+                      //             isDisabled: controller.isPhoneValid.value
+                      //                 ? false
+                      //                 : true),
+                      //       )
+                      //     : const SizedBox()),
                     ],
-
                   ),
-
                 ),
-
               ),
-
-              const Expanded(child: SizedBox()),
-
-              Column(
-
-                children: [
-
-                  Obx(
-
-                    () => SizedBox(
-
-                      height: controller.isNextPressed.value ||
-
-                              controller.passwordController.text.isNotEmpty
-
-                          ? 0.0
-
-                          : 90,
-
-                    ),
-
-                  ),
-
-                  Padding(
-
-                    padding: EdgeInsets.symmetric(
-
-                      horizontal: AppSizes.mp_w_4,
-
-                      vertical: AppSizes.mp_v_2,
-
-                    ),
-
-                    child: Column(
-
-                      children: [
-
-                        SizedBox(height: 2.h),
-
-                        Obx(
-
-                          () => Padding(
-
-                              padding: const EdgeInsets.all(8.0),
-
-                              child: buildButton(context)),
-
+            ),
+            const Expanded(
+              child: SizedBox(),
+            ),
+            Column(
+              children: [
+                Obx(() => controller.signingUp.isFalse
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSizes.mp_w_8,
                         ),
+                        child: ButtonPrimaryFill(
+                          isterms: false,
+                          buttonSizeType: ButtonSizeType.LARGE,
+                          isDisabled: !controller.isPhoneValid.value,
+                          text: !controller.isPhoneValid.value
+                              ? "Enter your phone number"
+                              : "Next",
+                          onTap: () {
+                            if (!controller.isPhoneValid.value) {
+                              // Logic for when the "Enter your phone number" button is pressed
+                            } else if (!controller.isNextPressed.value) {
+                              controller.isNextPressed(true);
 
-                        SizedBox(height: 2.h),
-
-                      ],
-
-                    ),
-
-                  ),
-
-                ],
-
-              ),
-
-            ],
-
-          ),
-
+                              // Logic for when the "Next" button is pressed
+                            } else {
+                              //  Get.toNamed(Routes.EMAIL_VERIFICATION);
+                              //   Get.to(const ForgotEmailtDone());
+                              // controller.signUp();
+                              Get.toNamed(Routes.OTP_VARIFICATION);
+                            }
+                          },
+                        ),
+                      )
+                    : SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(AppColors.primary),
+                        ),
+                      )),
+                SizedBox(height: 2.h),
+              ],
+            ),
+          ],
         ),
-
       ),
-
     );
-
   }
 
+  buildCountryCode() {
+    return Center(
+      child: CountryCodePicker(
+        flagDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: AppColors.primaryDark,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(3, 3), // changes the shadow position
+              ),
+            ]),
+        onChanged: (element) {
+          debugPrint(element.dialCode);
 
-  buildEmailinput() {
+          controller.countryCode = element.dialCode.toString();
+        },
+        initialSelection: 'IT',
+        textOverflow: TextOverflow.fade,
+        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
 
-    return TextInputSignup(
+        // optional. Shows only country name and flag
+        showCountryOnly: false,
+        // optional. Shows only country name and flag when popup is closed.
+        showOnlyCountryWhenClosed: false,
+        // optional. aligns the flag and the Text left
+        alignLeft: false,
+      ),
+    );
+  }
 
-      hint: 'Email',
-
+  buildPhonenumber() {
+    return Expanded(
+        child: PhoneNumberInput(
+      hint: 'Phone number',
+      labelText: "Phone number",
+      focusNode: controller.phoneFocusNode,
       autofocus: true,
-
-      controller: controller.emailController,
-
-      focusNode: controller.emailFocusNode,
-
-      signupController: controller,
-
+      controller: controller.phoneController,
       onChanged: (value) {
-
-        // Validate email on type
-
-        bool isValid = controller.validateEmail();
-
-        controller.isEmailValidated.value = isValid;
-
-
-        // Check if email is valid and update UI accordingly
-
-        if (isValid) {
-
-          controller.isNextPressed(false); // Reset Next button
-
-        }
-
-      },
-
-      validator: (value) {
-
-        if (value!.isEmpty) {
-
-          return 'Please enter your email';
-
-        }
-
-        if (!controller.isEmailValidated.value) {
-
-          return 'Invalid email';
-
-        }
-
-        return null;
-
-      },
-
-    );
-
-  }
-
-
-  buildPasswordinput() {
-
-    return TextInputSignup(
-
-      hint: 'Password',
-
-      moreInstructions: const [
-
-        "Minimum 8 letters,",
-
-        "number + special character",
-
-      ],
-
-      isPassword: true,
-
-      onChanged: (value) {
-
         // Validate password on type
-
-        bool isValid = controller.validatePassword();
-
-        controller.isPasswordValid.value = isValid;
-
+        bool isValid =
+            controller.validatPhone(); // Pass the value to validatePassword
+        controller.isPhoneValid.value = isValid;
 
         // Check if the password is valid and display the appropriate text
-
       },
-
       validator: (value) {
-
         if (value!.isEmpty) {
-
-          return 'Please enter your Password';
-
+          return 'Please enter your Phone Number';
         }
-
-        if (!controller.isPasswordValid.value) {
-
-          return 'Password must be at least 8 characters';
-
+        if (!controller.isPhoneValid.value) {
+          return 'Invalid phone number';
         }
-
         return null;
-
       },
-
-      controller: controller.passwordController,
-
-      autofocus: controller
-
-          .isNextPressed.value, // Set autofocus to true when Next is pressed
-
-      focusNode: controller.passwordFocusNode, // Pass the password focus node
-
-    );
-
+    ));
   }
-
-
-  buildButton(BuildContext context) {
-
-    return ButtonPrimaryFillSignup(
-
-      buttonSizeType: ButtonSizeTypeSignup.LARGE,
-
-      isDisabled: !controller.isEmailValidated.value ||
-
-          (controller.isEmailValidated.value &&
-
-              !controller.isNextPressed.value),
-
-      text: controller.isEmailValidated.value
-
-          ? controller.isNextPressed.value
-
-              ? controller.isPasswordValid.value
-
-                  ? "Next"
-
-                  : "Enter password"
-
-              : "Next"
-
-          : 'Enter your e-mail address',
-
-      onTap: () {
-
-        if (controller.isEmailValidated.value &&
-
-            !controller.isNextPressed.value) {
-
-          controller.isNextPressed(true);
-
-          Future.delayed(const Duration(milliseconds: 100), () {
-
-            FocusScope.of(context).requestFocus(controller.passwordFocusNode);
-
-          });
-
-        } else if (!controller.isNextPressed.value) {
-
-          controller.isNextPressed(true);
-
-          // Change the button text to "Enter password"
-
-        } else {
-
-          if (controller.isPasswordValid.value) {
-
-            Get.to(SignUpUserName());
-
-            // Change the button text to "Enter password"
-
-          }
-
-          // Handle final next logic
-
-        }
-
-      },
-
-    );
-
-  }
-
 }
-

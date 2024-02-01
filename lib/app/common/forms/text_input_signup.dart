@@ -13,6 +13,7 @@ class TextInputSignup extends StatefulWidget {
   const TextInputSignup({
     Key? key,
     required this.hint,
+    this.maxLength,
     this.isPassword = false,
     required this.controller,
     this.signupController,
@@ -20,15 +21,19 @@ class TextInputSignup extends StatefulWidget {
     this.moreInstructions,
     required this.autofocus,
     this.focusNode,
+    this.keyboardType = TextInputType.text,
     this.onChanged, // Added onChanged callback
   }) : super(key: key);
 
   final String hint;
   final bool isPassword;
   final bool autofocus;
+  final int? maxLength;
   final TextEditingController controller;
   final SignupController? signupController;
   final List<String>? moreInstructions;
+
+  final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final FocusNode? focusNode;
   final void Function(String)? onChanged; // Callback when the text changes
@@ -72,8 +77,11 @@ class _TextInputLoginState extends State<TextInputSignup> {
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp(r'\s')), // Deny spaces
           ],
+          maxLength: widget.maxLength,
           cursorColor: AppColors.primary,
           controller: widget.controller,
+          keyboardType: widget.keyboardType,
+
           autofocus: widget.autofocus,
           style: AppTextStyles.titleBold.copyWith(
             color: AppColors.blackLight,
