@@ -14,15 +14,13 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
-import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
-import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
-import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_five_orginid.dart';
-import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_four_orginid.dart';
-import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_one_orginid.dart';
-import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_seven_orginid.dart';
-import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_six_orginid.dart';
-import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_three_orginid.dart';
-import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_two_orginid.dart';
+import 'package:ics/app/modules/renew_origin_id/controllers/renew_origin_id_controller.dart';
+import 'package:ics/app/modules/renew_origin_id/data/model/citizens_model_renew_orginId.dart';
+import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_five_renew_orginid.dart';
+import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_four_renew_orginid.dart';
+import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_seven_renew_orginid.dart';
+import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_six_renew_orginid.dart';
+import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_two_renew_orginid.dart';
 
 import 'package:ics/app/routes/app_pages.dart';
 
@@ -33,18 +31,22 @@ import 'package:sizer/sizer.dart';
 import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
-class NewOrginIdForm extends StatefulWidget {
-  final IcsCitizenModelOrginId? citizenModel;
+import 'steps/step_one_renew_orginid.dart';
+import 'steps/step_three_renew_orginid.dart';
 
-  const NewOrginIdForm({
+class ReNewOrginIdForm extends StatefulWidget {
+  final IcsCitizenModelReNewOrginId? citizenModel;
+
+  const ReNewOrginIdForm({
     this.citizenModel,
   });
   @override
   _StepperWithFormExampleState createState() => _StepperWithFormExampleState();
 }
 
-class _StepperWithFormExampleState extends State<NewOrginIdForm> {
-  final NewOriginIdController controller = Get.find<NewOriginIdController>();
+class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
+  final RenewOriginIdController controller =
+      Get.find<RenewOriginIdController>();
 
   XFile? image;
 
@@ -76,7 +78,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'New',
+        title: 'ReNew',
         title2: "Origin ID Form",
         showLeading: true,
       ),
@@ -158,7 +160,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
             child: Padding(
               padding: EdgeInsets.all(16.0),
               child: FormBuilder(
-                key: controller.neworginIdformKey,
+                key: controller.reneworginIdformKey,
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
                 canPop: false,
@@ -171,33 +173,33 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                     children: [
                       if (controller.currentStep == 0)
                         //Personal Detail
-                        Step1OrginId(
+                        Step1RenewOrginId(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
                       //Personal Detail
                       if (controller.currentStep == 1)
-                        Step2OrginID(
+                        Step2RenewOrginID(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
                       //Address
                       if (controller.currentStep == 2)
-                        Step3OrginId(
+                        Step3RenewOrginId(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
                       //Passport info
                       if (controller.currentStep == 3)
-                        Step4OrginId(
+                        Step4RenewOrginId(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
 
-                      if (controller.currentStep == 4) Step5OrginId(),
+                      if (controller.currentStep == 4) Step5RenewOrginId(),
 
-                      if (controller.currentStep == 5) Step6Orginid(),
-                      if (controller.currentStep == 6) Step7Orginid(),
+                      if (controller.currentStep == 5) Step6RenewOrginid(),
+                      if (controller.currentStep == 6) Step7RenewOrginid(),
 
                       // Add more form fields as needed for each step
                     ],
@@ -256,21 +258,21 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                       ),
                       onPressed: () async {
                         if (controller.currentStep == 2) {
-                          controller.neworginIdformKey.currentState!
+                          controller.reneworginIdformKey.currentState!
                                   .saveAndValidate()
                               ? createCitizen()
                               : SizedBox();
                         } else if (controller.currentStep == 3) {
-                          controller.neworginIdformKey.currentState!
-                                  .saveAndValidate()
-                              ? requestOrginID()
+                          controller.reneworginIdformKey.currentState!
+                                  .validate()
+                              ? requestRenewOrginID()
                               : SizedBox();
                         } else if (controller.currentStep == 4) {
                           checkdoc();
                         } else if (controller.currentStep == 6) {
                           finalstep();
                         } else {
-                          if (controller.neworginIdformKey.currentState!
+                          if (controller.reneworginIdformKey.currentState!
                               .saveAndValidate()) {
                             setState(() {
                               controller.currentStep++;
@@ -517,8 +519,8 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     }
   }
 
-  void requestOrginID() async {
-    controller.requestNewOrginID();
+  void requestRenewOrginID() async {
+    controller.requestReNewOrginID();
 
     await Future.delayed(const Duration(seconds: 1));
     if (controller.isRequestNewOrginIDSuccess.value) {

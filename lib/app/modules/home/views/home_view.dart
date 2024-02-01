@@ -209,7 +209,6 @@ class HomeView extends GetView<HomeController> {
                 if (index == 0) {
                   Get.toNamed(Routes.NEW_PASSPORT);
                 } else if (index == 1) {
-                  Get.toNamed(Routes.RENEW_PASSPORT);
                 } else if (index == 2) {
                 } else if (index == 3) {
                 } else if (index == 4) {
@@ -243,6 +242,7 @@ class HomeView extends GetView<HomeController> {
                 if (index == 0) {
                   Get.toNamed(Routes.NEW_ORIGIN_ID);
                 } else if (index == 1) {
+                  Get.toNamed(Routes.RENEW_ORIGIN_ID);
                 } else if (index == 2) {
                 } else if (index == 3) {
                 } else if (index == 4) {

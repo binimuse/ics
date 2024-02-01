@@ -24,6 +24,8 @@ import '../modules/on_bording/bindings/on_bording_binding.dart';
 import '../modules/on_bording/views/on_bording_view.dart';
 import '../modules/otp_varification/bindings/otp_varification_binding.dart';
 import '../modules/otp_varification/views/otp_varification_view.dart';
+import '../modules/renew_origin_id/bindings/renew_origin_id_binding.dart';
+import '../modules/renew_origin_id/views/renew_origin_id_view.dart';
 import '../modules/renew_passport/bindings/renew_passport_binding.dart';
 import '../modules/renew_passport/views/renew_passport_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
@@ -120,6 +122,11 @@ class AppPages {
       name: _Paths.NEW_ORIGIN_ID,
       page: () => const NewOriginIdView(),
       binding: NewOriginIdBinding(),
+    ),
+    GetPage(
+      name: _Paths.RENEW_ORIGIN_ID,
+      page: () => const RenewOriginIdView(),
+      binding: RenewOriginIdBinding(),
     ),
   ];
 }

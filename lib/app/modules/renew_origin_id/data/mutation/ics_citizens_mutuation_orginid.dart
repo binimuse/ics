@@ -1,4 +1,4 @@
-class IcscitizensMutationOrginId {
+class IcscitizensMutationReNewOrginId {
   static const String ics_citizens = r'''
     mutation($objects: [ics_citizens_insert_input]!) {
       insert_ics_citizens(objects: $objects) {
@@ -12,10 +12,10 @@ class IcscitizensMutationOrginId {
   ''';
 }
 
-class IcsnewOrginIdmutation {
-  static const String ics_citizens_orginId = r'''
-    mutation($objects: [ics_new_origin_id_applications_insert_input]!) {
-      insert_ics_new_origin_id_applications(objects: $objects) {
+class IcsReNewOrginIdmutation {
+  static const String ics_citizens_reneworginId = r'''
+    mutation($objects: [ics_renewal_origin_id_applications_insert_input!]!) {
+      insert_ics_renewal_origin_id_applications(objects: $objects) {
          returning {
                 citizen_id
     
@@ -26,7 +26,7 @@ class IcsnewOrginIdmutation {
   ''';
 }
 
-class NewDocApplicationsOrginId {
+class ReNewDocApplicationsOrginId {
   static const String newDoc = r'''
     mutation($objects: [ics_new_origin_id_documents_insert_input!]!) {
       insert_ics_new_origin_id_documents(objects: $objects) {
@@ -39,11 +39,11 @@ class NewDocApplicationsOrginId {
   ''';
 }
 
-class DeleteDocApplicationsOrginId {
+class DeleteDocApplicationsReNewOrginId {
   static String deleteDoc(String documentTypeId) {
     return '''
       mutation MyMutation {
-        delete_ics_new_origin_id_documents(where: {document_type_id: {_eq: "$documentTypeId"}}) {
+        delete_ics_new_application_documents(where: {document_type_id: {_eq: "$documentTypeId"}}) {
           returning {
             id
           }

@@ -20,6 +20,7 @@ abstract class Routes {
   static const LOGOUT = _Paths.LOGOUT;
   static const HELP = _Paths.HELP;
   static const NEW_ORIGIN_ID = _Paths.NEW_ORIGIN_ID;
+  static const RENEW_ORIGIN_ID = _Paths.RENEW_ORIGIN_ID;
 }
 
 abstract class _Paths {
@@ -41,4 +42,5 @@ abstract class _Paths {
   static const LOGOUT = '/logout';
   static const HELP = '/help';
   static const NEW_ORIGIN_ID = '/new-origin-id';
+  static const RENEW_ORIGIN_ID = '/renew-origin-id';
 }
