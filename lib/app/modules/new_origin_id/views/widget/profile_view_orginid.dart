@@ -90,6 +90,7 @@ class ProfileViewOrginid extends GetView<NewOriginIdController> {
                 clearforstep1();
                 clearforstep2();
                 clearforstep3();
+                clearforstep4();
 
                 Get.to(() => NewOrginIdForm());
               },
@@ -147,7 +148,6 @@ class ProfileViewOrginid extends GetView<NewOriginIdController> {
       onTap: () {
         Get.to(() => NewOrginIdForm(
               citizenModel: citizen,
-              
             ));
       },
       child: Container(
@@ -273,5 +273,12 @@ class ProfileViewOrginid extends GetView<NewOriginIdController> {
   void clearforstep3() {
     controller.addressController.clear();
     controller.phonenumber.clear();
+  }
+
+  void clearforstep4() {
+    controller.visanumberContoller.clear();
+    controller.passportExpiryDateController.clear();
+    controller.passportIssueDateController.clear();
+    controller.passportNumberContoller.clear();
   }
 }

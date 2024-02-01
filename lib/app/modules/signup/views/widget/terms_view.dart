@@ -10,6 +10,7 @@ import 'package:ics/app/common/forms/check_box.dart';
 import 'package:ics/app/common/navigation/top_nav_back_icon.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/gen/assets.gen.dart';
 

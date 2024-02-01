@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 
 class ButtonPrimaryFill extends StatelessWidget {
   const ButtonPrimaryFill(
@@ -59,5 +60,3 @@ class ButtonPrimaryFill extends StatelessWidget {
     );
   }
 }
-
-enum ButtonSizeType { LARGE, MEDIUM, SMALL }

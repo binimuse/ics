@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
@@ -220,8 +221,11 @@ class NewPassportController extends GetxController {
     return VideoTypenew.unknown;
   }
 
+  Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
   Future<void> getAll() async {
+    networkStatus.value = NetworkStatus.LOADING;
     try {
+      networkStatus.value = NetworkStatus.SUCCESS;
       dynamic result =
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
 
@@ -246,6 +250,7 @@ class NewPassportController extends GetxController {
       }
       isfeched(true);
     } catch (e) {
+      networkStatus.value = NetworkStatus.ERROR;
       isfeched(false);
     }
   }
@@ -520,7 +525,9 @@ class NewPassportController extends GetxController {
   RxList<IcsCitizenModel> icsCitizens = List<IcsCitizenModel>.of([]).obs;
   var isfechediCitizens = false.obs;
   void getCitizene() async {
+    networkStatus.value = NetworkStatus.LOADING;
     try {
+      networkStatus.value = NetworkStatus.SUCCESS;
       dynamic result =
           await graphQLCommonApi.query(getaicscitizens.fetchData(), {});
 
@@ -534,6 +541,7 @@ class NewPassportController extends GetxController {
 
       isfechediCitizens(true);
     } catch (e, s) {
+      networkStatus.value = NetworkStatus.ERROR;
       isfechediCitizens(false);
       print(">>>>>>>>>>>>>>>>>> getCitizene $e");
       print(">>>>>>>>>>>>>>>>>> getCitizene $s");
@@ -567,8 +575,6 @@ class NewPassportController extends GetxController {
     }
   }
 }
-
-enum VideoTypenew { video, image, audio, unknown }
 
 class PassportDocuments {
   final documentTypeId;

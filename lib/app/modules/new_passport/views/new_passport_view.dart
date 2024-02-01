@@ -7,6 +7,7 @@ import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
 import 'package:ics/app/modules/new_passport/views/widget/profile_view.dart';
 

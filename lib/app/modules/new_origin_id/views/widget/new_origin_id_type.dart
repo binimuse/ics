@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:ics/app/common/app_icon_button.dart';
+import 'package:ics/app/common/app_toasts.dart';
+import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/common/forms/check_box.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/confirmation_model_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/profile_view_orginid.dart';
-import 'package:ics/gen/assets.gen.dart';
 
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,7 +22,7 @@ class NewOriginIdViewType extends GetView<NewOriginIdController> {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'New',
-        title2: "Origin ID Type",
+        title2: "Origin ID instruction",
         showLeading: true,
       ),
       backgroundColor: AppColors.whiteOff,
@@ -34,8 +36,41 @@ class NewOriginIdViewType extends GetView<NewOriginIdController> {
 
             buildAdditionalCard(),
             // Spacer(),
+            buildActionButtons(),
           ],
         ),
+      ),
+    );
+  }
+
+  buildActionButtons() {
+    return Padding(
+      padding: EdgeInsets.all(8.sp),
+      child: Column(
+        children: [
+          Obx(() => CustomNormalButton(
+                text: 'Get on',
+                textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                  color: AppColors.whiteOff,
+                ),
+                textcolor: AppColors.whiteOff,
+                buttoncolor: controller.areAllTermsSelected()
+                    ? AppColors.primary
+                    : AppColors.grayLight,
+                borderRadius: AppSizes.radius_8,
+                padding: EdgeInsets.symmetric(
+                  vertical: AppSizes.mp_v_2,
+                  horizontal: AppSizes.mp_w_6,
+                ),
+                onPressed: () {
+                  if (controller.areAllTermsSelected()) {
+                    Get.to(() => ProfileViewOrginid());
+                  } else {
+                    AppToasts.showError("Error, Please select all terms");
+                  }
+                },
+              )),
+        ],
       ),
     );
   }
@@ -50,13 +85,13 @@ class NewOriginIdViewType extends GetView<NewOriginIdController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Applicant Type',
+            Text('Terms and conditions',
                 style: AppTextStyles.bodySmallRegular.copyWith(
                   color: AppColors.grayDark,
                 )),
             SizedBox(height: 2.h),
             FutureBuilder<List<NewOrginIdConfirmationModel>>(
-              future: controller.fetchorginId(),
+              future: controller.fetchConfirmationModelCar(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -79,17 +114,20 @@ class NewOriginIdViewType extends GetView<NewOriginIdController> {
 
                       return Obx(() => GestureDetector(
                             onTap: () {
-                              Get.to(() => ProfileViewOrginid());
+                              controller.toggleTerm(index);
                             },
                             child: Container(
                               margin: const EdgeInsets.symmetric(vertical: 8.0),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  border: Border.all(
-                                    color: AppColors.grayLight.withOpacity(0.9),
-                                    width: 1.0,
-                                  ),
-                                  color: Colors.transparent),
+                                borderRadius: BorderRadius.circular(12.0),
+                                border: Border.all(
+                                  color: AppColors.grayLight.withOpacity(0.9),
+                                  width: 1.0,
+                                ),
+                                color: !controller.isTermChecked(index)
+                                    ? Colors.transparent
+                                    : AppColors.primary.withOpacity(0.2),
+                              ),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
@@ -146,25 +184,14 @@ class NewOriginIdViewType extends GetView<NewOriginIdController> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(12.0),
-                                    child: Container(
-                                      width: 8.w,
-                                      height: 8.w,
-                                      decoration: BoxDecoration(
-                                        color: AppColors
-                                            .primary, // Specify the color of the background
-                                        borderRadius: BorderRadius.circular(
-                                            40), // Make the container circular
-                                      ),
-                                      child: ClipOval(
-                                        child: AppSvgButton(
-                                          iconColor: AppColors.whiteOff,
-                                          imagePath: Assets.icons.arrowright,
-                                          onPressed: () {
-                                            Get.back();
-                                          },
-                                          size: AppSizes.icon_size_8 * 0.7,
-                                        ),
-                                      ),
+                                    child: MyCheckBox(
+                                      isInitSelected:
+                                          controller.isTermChecked(index),
+                                      checkBoxSize: CheckBoxSize.MEDIUM,
+                                      onChanged: (isChecked) {
+                                        controller.toggleTerm(index);
+                                      },
+                                      text: "",
                                     ),
                                   )
                                 ],

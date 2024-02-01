@@ -23,7 +23,7 @@ class IcsCitizenModelOrginId {
   NameJson? fatherNameJson;
   NameJson? firstNameJson;
   NameJson? grandFatherNameJson;
-  final List<NewOrginIdModel>? newApplicationModel;
+  List<NewOriginIdApplication> newOriginIdApplications;
 
   IcsCitizenModelOrginId({
     this.abroadAddress,
@@ -49,7 +49,7 @@ class IcsCitizenModelOrginId {
     this.fatherNameJson,
     this.firstNameJson,
     this.grandFatherNameJson,
-    this.newApplicationModel,
+    required this.newOriginIdApplications,
   });
 
   factory IcsCitizenModelOrginId.fromJson(Map<String, dynamic> json) {
@@ -86,8 +86,8 @@ class IcsCitizenModelOrginId {
       grandFatherNameJson: json['grand_father_name_json'] != null
           ? NameJson.fromJson(json['grand_father_name_json'])
           : null,
-      newApplicationModel: List.of(json["new_applications"])
-          .map((i) => NewOrginIdModel.fromJson(i))
+      newOriginIdApplications: List.of(json["new_origin_id_applications"])
+          .map((i) => NewOriginIdApplication.fromJson(i))
           .toList(),
     );
   }
@@ -110,16 +110,37 @@ class NameJson {
   }
 }
 
-class NewOrginIdModel {
-  final String embassy_id;
+class NewOriginIdApplication {
+  final String? current_passport_number;
+  final String? current_passport_expiry_date;
+  final String? current_passport_issued_date;
+  final String? visa_type_id;
+  final String? visa_number;
 
-  const NewOrginIdModel({
-    required this.embassy_id,
+  const NewOriginIdApplication({
+    this.current_passport_number,
+    this.current_passport_expiry_date,
+    this.current_passport_issued_date,
+    this.visa_type_id,
+    this.visa_number,
   });
 
-  factory NewOrginIdModel.fromJson(Map<String, dynamic> json) {
-    return NewOrginIdModel(
-      embassy_id: json['embassy']["id"],
-    );
+  factory NewOriginIdApplication.fromJson(Map<String, dynamic> json) {
+    return NewOriginIdApplication(
+        current_passport_number: json['current_passport_number'],
+        current_passport_expiry_date: json['current_passport_expiry_date'],
+        current_passport_issued_date: json['current_passport_issued_date'],
+        visa_number: json['visa_number'],
+        visa_type_id: json['visa_type_id']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "visa_type_id": visa_type_id,
+      'visa_number': visa_number,
+      'current_passport_expiry_date': current_passport_expiry_date,
+      'current_passport_issued_date': current_passport_issued_date,
+      'current_passport_number': current_passport_number,
+    };
   }
 }

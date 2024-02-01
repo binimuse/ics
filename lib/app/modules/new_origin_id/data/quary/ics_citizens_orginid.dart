@@ -26,25 +26,15 @@ query MyQuery {
     grand_father_name
     first_name_json
     grand_father_name_json
-    new_applications {
-      embassy {
-        id
-      }
-    }
-    citizen_families {
-      citizen_id
-         family_type
-      {
-        id
-        name
-      }
-      nationality_id
-      first_name
-      father_name
+    new_origin_id_applications {
+      current_passport_number
+      current_passport_expiry_date
+      current_passport_issued_date
+      visa_type_id
+      visa_number
     }
   }
 }
-
 
    """;
   }

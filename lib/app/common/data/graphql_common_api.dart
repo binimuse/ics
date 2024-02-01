@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ics/app/common/app_toasts.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/services/graphql_conf.dart';
 import 'package:ics/services/user_token_refresher.dart';
 
@@ -123,10 +124,4 @@ class GraphQLCommonApi {
 
     return null;
   }
-}
-
-enum GraphQLCommonStatus { LOADING, ERROR }
-
-enum ConfigurationRole {
-  USER,
 }

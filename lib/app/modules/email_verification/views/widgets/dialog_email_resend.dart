@@ -5,6 +5,7 @@ import 'package:ics/app/common/dialogs/dialog_center_common_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/utils/keyboard.dart';
 
 class DialogEmailResend extends StatelessWidget {

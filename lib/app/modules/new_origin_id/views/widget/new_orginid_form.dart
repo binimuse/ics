@@ -12,12 +12,14 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_five_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_four_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_one_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_seven_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_six_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_three_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_two_orginid.dart';
@@ -95,7 +97,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
             ),
           ),
           Obx(
-            () => controller.isSendStared.value
+            () => controller.networkStatus.value == NetworkStatus.LOADING
                 ? CustomLoadingWidget()
                 : const SizedBox(),
           ),
@@ -138,6 +140,10 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
               ),
               Icon(
                 Icons.calendar_month,
+                color: AppColors.whiteOff,
+              ),
+              Icon(
+                Icons.payment,
                 color: AppColors.whiteOff,
               ),
             ],
@@ -192,6 +198,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                       if (controller.currentStep == 4) Step5OrginId(),
 
                       if (controller.currentStep == 5) Step6Orginid(),
+                      if (controller.currentStep == 6) Step7Orginid(),
 
                       // Add more form fields as needed for each step
                     ],
@@ -235,7 +242,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomNormalButton(
-                      text: controller.currentStep == 5 ? 'Submit' : 'Next',
+                      text: controller.currentStep == 6 ? 'Submit' : 'Next',
                       textStyle: AppTextStyles.bodyLargeBold.copyWith(
                         color: AppColors.whiteOff,
                       ),
@@ -261,7 +268,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                               : SizedBox();
                         } else if (controller.currentStep == 4) {
                           checkdoc();
-                        } else if (controller.currentStep == 5) {
+                        } else if (controller.currentStep == 6) {
                           finalstep();
                         } else {
                           if (controller.neworginIdformKey.currentState!
@@ -450,13 +457,13 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
-    if (citizenModel.newApplicationModel!.isNotEmpty) {
-      embassyId = citizenModel.newApplicationModel!.first.embassy_id;
-      Future.delayed(const Duration(seconds: 2), () {
-        controller.embassiesvalue.value =
-            controller.base_embassies.firstWhere((e) => e.id == embassyId);
-      });
-    }
+    // if (citizenModel.newApplicationModel!.isNotEmpty) {
+    //   embassyId = citizenModel.newApplicationModel!.first.embassy_id;
+    //   Future.delayed(const Duration(seconds: 2), () {
+    //     controller.embassiesvalue.value =
+    //         controller.base_embassies.firstWhere((e) => e.id == embassyId);
+    //   });
+    // }
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
@@ -468,7 +475,35 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
   }
 
   void getDataForStep4() {
-    // controller.familyModelvalue.value = widget.citizenModel!.familyModel!;
+    final citizenModel = widget.citizenModel;
+
+    if (citizenModel!.newOriginIdApplications.isNotEmpty) {
+      final passportNumber =
+          citizenModel.newOriginIdApplications.first.current_passport_number;
+
+      final passportExpiryDate = citizenModel
+          .newOriginIdApplications.first.current_passport_expiry_date;
+
+      final passportIssuedDate = citizenModel
+          .newOriginIdApplications.first.current_passport_expiry_date;
+
+      final visaTypeID =
+          citizenModel.newOriginIdApplications.first.visa_type_id!;
+
+      final visanumber = citizenModel.newOriginIdApplications.first.visa_number;
+
+      controller.passportNumberContoller.text = passportNumber!;
+      controller.passportExpiryDateController.text =
+          passportExpiryDate.toString();
+
+      controller.passportIssueDateController.text =
+          passportIssuedDate.toString();
+
+      controller.visatypevalue.value =
+          controller.visaType.firstWhere((e) => e.id == visaTypeID);
+
+      controller.visanumberContoller.text = visanumber.toString();
+    }
   }
 
   void createCitizen() async {

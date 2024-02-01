@@ -63,51 +63,15 @@ class Step1OrginId extends StatelessWidget {
           SizedBox(
             height: 1.h,
           ),
-          TextFormBuilder(
-            validator:
-                ValidationBuilder().required('First Name is required').build(),
-            labelText: "First name",
-            controller: controller.firstNameController,
-            inputFormatters: [
-              NoNumberInputFormatter(),
-            ],
-            hint: 'First name',
-            showClearButton: false,
-            autoFocus: false,
-            onChanged: (value) {},
-          ),
+          firstName(),
           SizedBox(
             height: 2.h,
           ),
-          TextFormBuilder(
-            controller: controller.fatherNameController,
-            validator:
-                ValidationBuilder().required('Father Name is required').build(),
-            hint: 'Father Name',
-            labelText: 'Father Name',
-            inputFormatters: [
-              NoNumberInputFormatter(),
-            ],
-            showClearButton: false,
-            autoFocus: false,
-            onChanged: (value) {},
-          ),
+          fatherName(),
           SizedBox(
             height: 2.h,
           ),
-          TextFormBuilder(
-            controller: controller.grandFatherNameController,
-            validator:
-                ValidationBuilder().required('Father Name is required').build(),
-            hint: 'Grand Father Name',
-            labelText: 'Grand Father Name',
-            inputFormatters: [
-              NoNumberInputFormatter(),
-            ],
-            showClearButton: false,
-            autoFocus: false,
-            onChanged: (value) {},
-          ),
+          gfathername(),
           SizedBox(
             height: 3.h,
           ),
@@ -124,52 +88,15 @@ class Step1OrginId extends StatelessWidget {
           SizedBox(
             height: 3.h,
           ),
-          TextFormBuilder(
-            validator:
-                ValidationBuilder().required('Father Name is required').build(),
-            labelText: "የመጀመሪያ ስም",
-            controller: controller.AmfirstNameController,
-            inputFormatters: [
-              AmharicInputFormatter(),
-            ],
-            hint: 'የመጀመሪያ ስም',
-            showClearButton: false,
-            autoFocus: false,
-            onChanged: (value) {},
-          ),
+          firstNameAm(),
           SizedBox(
             height: 2.h,
           ),
-          TextFormBuilder(
-            controller: controller.AmfatherNameController,
-            validator:
-                ValidationBuilder().required('Father Name is required').build(),
-            hint: 'የአባት ስም',
-            labelText: 'የአባት ስም',
-            inputFormatters: [
-              AmharicInputFormatter(),
-            ],
-            showClearButton: false,
-            autoFocus: false,
-            onChanged: (value) {},
-          ),
+          fatherNameAm(),
           SizedBox(
             height: 2.h,
           ),
-          TextFormBuilder(
-            controller: controller.AmgrandFatherNameController,
-            validator: ValidationBuilder()
-                .required('Grand Father Name is required')
-                .build(),
-            hint: 'የአያት ስም',
-            labelText: 'የአያት ስም',
-            inputFormatters: [
-              AmharicInputFormatter(),
-            ],
-            showClearButton: false,
-            autoFocus: false,
-            onChanged: (value) {},
-          ),
+          gFathernameAm(),
           SizedBox(
             height: 2.h,
           ),
@@ -180,82 +107,19 @@ class Step1OrginId extends StatelessWidget {
               fontSize: AppSizes.font_12,
             ),
           ),
-          DateTextPickerInputOrginId(
-            yearValidator:
-                ValidationBuilder().required('year is required').build(),
-            monthValidator:
-                ValidationBuilder().required('month is required').build(),
-            dateValidator:
-                ValidationBuilder().required('date is required').build(),
-            controller: controller,
-          ),
+          bithDay(),
           SizedBox(
             height: 2.h,
           ),
-          FormBuilderDropdown(
-            decoration: ReusableInputDecoration.getDecoration('Nationality'),
-            items: controller.natinality.map((CommonModel value) {
-              return DropdownMenuItem<CommonModel>(
-                value: value,
-                child: Text(
-                  value.name,
-                  style: AppTextStyles.captionBold
-                      .copyWith(color: AppColors.grayDark),
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              controller.natinalityvalue.value = value;
-            },
-            name: 'Nationality',
-            initialValue:
-                citizenModel != null ? controller.natinalityvalue.value! : null,
-          ),
+          natianlity(),
           SizedBox(
             height: 2.h,
           ),
-          FormBuilderDropdown(
-            decoration: ReusableInputDecoration.getDecoration('Gender'),
-            items: controller.gender.map((CommonModel value) {
-              return DropdownMenuItem<CommonModel>(
-                value: value,
-                child: Text(
-                  value.name,
-                  style: AppTextStyles.captionBold
-                      .copyWith(color: AppColors.grayDark),
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              controller.gendervalue.value = value!;
-            },
-            name: 'Gender',
-            initialValue:
-                citizenModel != null ? controller.gendervalue.value! : null,
-          ),
+          gender(),
           SizedBox(
             height: 2.h,
           ),
-          FormBuilderDropdown(
-            decoration: ReusableInputDecoration.getDecoration('Birth Country'),
-            items: controller.bcountries.map((CommonModel value) {
-              return DropdownMenuItem<CommonModel>(
-                value: value,
-                child: Text(
-                  value.name,
-                  style: AppTextStyles.captionBold
-                      .copyWith(color: AppColors.grayDark),
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              controller.birthCountryvalue.value = value;
-            },
-            name: 'birth',
-            initialValue: citizenModel != null
-                ? controller.birthCountryvalue.value!
-                : null,
-          ),
+          countery(),
           SizedBox(
             height: 2.h,
           ),
@@ -266,25 +130,7 @@ class Step1OrginId extends StatelessWidget {
               fontSize: AppSizes.font_12,
             ),
           ),
-          FormBuilderCheckbox(
-            initialValue:
-                citizenModel != null ? controller.isAdoption.value : null,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-            ),
-            name: 'Is Adoption',
-            title: Text(
-              'Is Adoption',
-              style: AppTextStyles.captionBold.copyWith(
-                color: AppColors.black,
-                fontSize: AppSizes.font_12,
-              ),
-            ),
-            activeColor: AppColors.primary,
-            onChanged: (value) {
-              controller.isAdoption.value = value!;
-            },
-          )
+          adobation(),
         ]);
   }
 
@@ -318,4 +164,194 @@ class Step1OrginId extends StatelessWidget {
   DateTime selectedDate = DateTime.now();
 
   String? formattedDates;
+
+  firstName() {
+    return TextFormBuilder(
+      validator: ValidationBuilder().required('First Name is required').build(),
+      labelText: "First name",
+      controller: controller.firstNameController,
+      inputFormatters: [
+        NoNumberInputFormatter(),
+      ],
+      hint: 'First name',
+      showClearButton: false,
+      autoFocus: false,
+      onChanged: (value) {},
+    );
+  }
+
+  fatherName() {
+    return TextFormBuilder(
+      controller: controller.fatherNameController,
+      validator:
+          ValidationBuilder().required('Father Name is required').build(),
+      hint: 'Father Name',
+      labelText: 'Father Name',
+      inputFormatters: [
+        NoNumberInputFormatter(),
+      ],
+      showClearButton: false,
+      autoFocus: false,
+      onChanged: (value) {},
+    );
+  }
+
+  gfathername() {
+    return TextFormBuilder(
+      controller: controller.grandFatherNameController,
+      validator:
+          ValidationBuilder().required('Father Name is required').build(),
+      hint: 'Grand Father Name',
+      labelText: 'Grand Father Name',
+      inputFormatters: [
+        NoNumberInputFormatter(),
+      ],
+      showClearButton: false,
+      autoFocus: false,
+      onChanged: (value) {},
+    );
+  }
+
+  firstNameAm() {
+    return TextFormBuilder(
+      validator:
+          ValidationBuilder().required('Father Name is required').build(),
+      labelText: "የመጀመሪያ ስም",
+      controller: controller.AmfirstNameController,
+      inputFormatters: [
+        AmharicInputFormatter(),
+      ],
+      hint: 'የመጀመሪያ ስም',
+      showClearButton: false,
+      autoFocus: false,
+      onChanged: (value) {},
+    );
+  }
+
+  fatherNameAm() {
+    return TextFormBuilder(
+      controller: controller.AmfatherNameController,
+      validator:
+          ValidationBuilder().required('Father Name is required').build(),
+      hint: 'የአባት ስም',
+      labelText: 'የአባት ስም',
+      inputFormatters: [
+        AmharicInputFormatter(),
+      ],
+      showClearButton: false,
+      autoFocus: false,
+      onChanged: (value) {},
+    );
+  }
+
+  gFathernameAm() {
+    return TextFormBuilder(
+      controller: controller.AmgrandFatherNameController,
+      validator:
+          ValidationBuilder().required('Grand Father Name is required').build(),
+      hint: 'የአያት ስም',
+      labelText: 'የአያት ስም',
+      inputFormatters: [
+        AmharicInputFormatter(),
+      ],
+      showClearButton: false,
+      autoFocus: false,
+      onChanged: (value) {},
+    );
+  }
+
+  bithDay() {
+    return DateTextPickerInputOrginId(
+      yearValidator: ValidationBuilder().required('year is required').build(),
+      monthValidator: ValidationBuilder().required('month is required').build(),
+      dateValidator: ValidationBuilder().required('date is required').build(),
+      controller: controller,
+    );
+  }
+
+  natianlity() {
+    return FormBuilderDropdown(
+      decoration: ReusableInputDecoration.getDecoration('Nationality'),
+      items: controller.natinality.map((CommonModel value) {
+        return DropdownMenuItem<CommonModel>(
+          value: value,
+          child: Text(
+            value.name,
+            style:
+                AppTextStyles.captionBold.copyWith(color: AppColors.grayDark),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        controller.natinalityvalue.value = value;
+      },
+      name: 'Nationality',
+      initialValue:
+          citizenModel != null ? controller.natinalityvalue.value! : null,
+    );
+  }
+
+  gender() {
+    return FormBuilderDropdown(
+      decoration: ReusableInputDecoration.getDecoration('Gender'),
+      items: controller.gender.map((CommonModel value) {
+        return DropdownMenuItem<CommonModel>(
+          value: value,
+          child: Text(
+            value.name,
+            style:
+                AppTextStyles.captionBold.copyWith(color: AppColors.grayDark),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        controller.gendervalue.value = value!;
+      },
+      name: 'Gender',
+      initialValue: citizenModel != null ? controller.gendervalue.value! : null,
+    );
+  }
+
+  countery() {
+    return FormBuilderDropdown(
+      decoration: ReusableInputDecoration.getDecoration('Birth Country'),
+      items: controller.bcountries.map((CommonModel value) {
+        return DropdownMenuItem<CommonModel>(
+          value: value,
+          child: Text(
+            value.name,
+            style:
+                AppTextStyles.captionBold.copyWith(color: AppColors.grayDark),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        controller.birthCountryvalue.value = value;
+      },
+      name: 'birth',
+      initialValue:
+          citizenModel != null ? controller.birthCountryvalue.value! : null,
+    );
+  }
+
+  adobation() {
+    return FormBuilderCheckbox(
+      initialValue: citizenModel != null ? controller.isAdoption.value : null,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+      ),
+      name: 'Is Adoption',
+      title: Text(
+        'Is Adoption',
+        style: AppTextStyles.captionBold.copyWith(
+          color: AppColors.black,
+          fontSize: AppSizes.font_12,
+        ),
+      ),
+      activeColor: AppColors.primary,
+      onChanged: (value) {
+        controller.isAdoption.value = value!;
+      },
+    );
+  }
 }

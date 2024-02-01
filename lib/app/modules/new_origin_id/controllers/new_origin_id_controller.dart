@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
-import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/confirmation_model_orginid.dart';
@@ -15,8 +15,6 @@ import 'package:ics/app/modules/new_origin_id/data/mutation/ics_citizens_mutuati
 import 'package:ics/app/modules/new_origin_id/data/quary/get_emabassies_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/data/quary/get_url_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/data/quary/ics_citizens_orginid.dart';
-
-import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +35,8 @@ class NewOriginIdController extends GetxController {
   final TextEditingController AmgrandFatherNameController =
       TextEditingController();
   RxList<PlatformFile> selectedFile = <PlatformFile>[].obs;
-
+  //NETWORK STATUS
+  Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
   List<String> SkinColor = [
     'Black',
     'Brown',
@@ -321,8 +320,6 @@ class NewOriginIdController extends GetxController {
     }
   }
 
-
-
   final Rxn<GetUrlModelOrginid> getUrlModel = Rxn<GetUrlModelOrginid>();
   Future<void> geturl(
     documentTypeId,
@@ -396,6 +393,7 @@ class NewOriginIdController extends GetxController {
   var isSendStared = false.obs;
   var neworginID;
   Future<void> send() async {
+    networkStatus.value = NetworkStatus.LOADING;
     try {
       isSendStared.value = true;
       DateTime dateOfBirth = DateTime(
@@ -441,11 +439,13 @@ class NewOriginIdController extends GetxController {
       );
 
       if (result.hasException) {
+        networkStatus.value = NetworkStatus.ERROR;
         print("""objects""");
         isSend.value = false;
         print(result.exception.toString());
         isSendStared.value = false;
       } else {
+        networkStatus.value = NetworkStatus.SUCCESS;
         print(result.data);
 
         isSend.value = true;
@@ -455,6 +455,7 @@ class NewOriginIdController extends GetxController {
             .toString();
       }
     } catch (e) {
+      networkStatus.value = NetworkStatus.ERROR;
       isSendStared.value = false;
       isSend.value = false;
       print('Errors: $e');
@@ -469,6 +470,7 @@ class NewOriginIdController extends GetxController {
   var isRequestNewOrginIDSuccess = false.obs;
 
   Future<void> requestNewOrginID() async {
+    networkStatus.value = NetworkStatus.LOADING;
     try {
       // file upload
 
@@ -493,13 +495,19 @@ class NewOriginIdController extends GetxController {
       );
 
       if (result.hasException) {
+        ///CHANGE NETWORK STATUS
+        networkStatus.value = NetworkStatus.ERROR;
         isRequestNewOrginIDSuccess.value = false;
 
         print(result.exception.toString());
       } else {
+        ///CHANGE NETWORK STATUS
+        networkStatus.value = NetworkStatus.SUCCESS;
         isRequestNewOrginIDSuccess.value = true;
       }
     } catch (e) {
+      ///CHANGE NETWORK STATUS
+      networkStatus.value = NetworkStatus.ERROR;
       isRequestNewOrginIDSuccess.value = false;
       print('Error: $e');
     }
@@ -508,7 +516,7 @@ class NewOriginIdController extends GetxController {
   var isSendDocSuccess = false.obs;
   var newDocId;
   Future<void> sendDoc(
-    dynamic newApplicationId,
+    dynamic neworginID,
     var documentTypeId,
     var url,
     var path,
@@ -526,7 +534,7 @@ class NewOriginIdController extends GetxController {
           document: gql(NewDocApplicationsOrginId.newDoc),
           variables: <String, dynamic>{
             'objects': {
-              'new_application_id': newApplicationId,
+              'new_origin_id_application_id': neworginID,
               'files': path,
               'document_type_id': documentTypeId,
             }
@@ -660,8 +668,6 @@ class NewOriginIdController extends GetxController {
     }
   }
 }
-
-enum VideoTypenew { video, image, audio, unknown }
 
 class OrginIDDocuments {
   final documentTypeId;

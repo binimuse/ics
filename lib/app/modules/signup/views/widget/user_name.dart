@@ -8,6 +8,7 @@ import 'package:ics/app/common/forms/text_input.dart';
 import 'package:ics/app/common/navigation/top_nav_back_text.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/signup/controllers/signup_controller.dart';
 import 'package:ics/app/modules/signup/views/widget/phone_varfication.dart';
 

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/signup/data/mutation/signup_mutuation.dart';
 
 import 'package:ics/app/routes/app_pages.dart';
@@ -97,7 +98,12 @@ class SignupController extends GetxController {
   //signupp
   var signingUp = false.obs;
 
+
+   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
+
   void signUp() async {
+
+    networkStatus.value = NetworkStatus.LOADING;
     try {
       if (phoneController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
@@ -106,6 +112,7 @@ class SignupController extends GetxController {
           fNameController.text.isNotEmpty) {
         signingUp(true);
         signUpMutation().then((result) {
+                networkStatus.value = NetworkStatus.SUCCESS;
           if (!result.hasException) {
             // success handling
 
@@ -138,6 +145,7 @@ class SignupController extends GetxController {
             }
           }
         }).catchError((error) {
+            networkStatus.value = NetworkStatus.ERROR;
           print(error);
           // handle error
           signingUp(false);
@@ -145,12 +153,14 @@ class SignupController extends GetxController {
           AppToasts.showError("Something went wrong");
         });
       } else {
+             networkStatus.value = NetworkStatus.ERROR;
         print("am here");
         signingUp(false);
 
         AppToasts.showError("Something went wrong");
       }
     } on Exception catch (e) {
+           networkStatus.value = NetworkStatus.ERROR;
       print(e);
       // TODO
     }

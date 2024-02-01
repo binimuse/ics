@@ -28,8 +28,8 @@ class IcsnewOrginIdmutation {
 
 class NewDocApplicationsOrginId {
   static const String newDoc = r'''
-    mutation($objects: [ics_new_application_documents_insert_input!]!) {
-      insert_ics_new_application_documents(objects: $objects) {
+    mutation($objects: [ics_new_origin_id_documents_insert_input!]!) {
+      insert_ics_new_origin_id_documents(objects: $objects) {
          returning {
             id
       

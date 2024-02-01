@@ -83,6 +83,10 @@ class _Step4State extends State<Step4OrginId> {
         ),
         FormBuilderDateTimePicker(
           name: 'date_established',
+          initialValue:
+              widget.citizenModel?.newOriginIdApplications.isNotEmpty ?? false
+                  ? DateTime.parse(controller.passportIssueDateController.text)
+                  : null,
           onChanged: (value) {
             controller.passportIssueDateController.value = TextEditingValue(
               text: value.toString(),
@@ -112,6 +116,10 @@ class _Step4State extends State<Step4OrginId> {
         ),
         FormBuilderDateTimePicker(
           name: 'date_established2',
+          initialValue: widget.citizenModel != null &&
+                  widget.citizenModel!.newOriginIdApplications.isNotEmpty
+              ? DateTime.parse(controller.passportExpiryDateController.text)
+              : null,
           onChanged: (value) {
             controller.passportExpiryDateController.value = TextEditingValue(
               text: value.toString(),
@@ -179,33 +187,6 @@ class _Step4State extends State<Step4OrginId> {
           height: 2.h,
         ),
       ],
-    );
-  }
-
-  buildPhonenumber() {
-    return PhoneNumberInput(
-      hint: 'Phone number',
-      labelText: "Phone number",
-      focusNode: controller.phoneFocusNode,
-      autofocus: false,
-      controller: controller.phonenumber,
-      onChanged: (value) {
-        // Validate password on type
-        bool isValid =
-            controller.validatPhone(); // Pass the value to validatePassword
-        controller.isPhoneValid.value = isValid;
-
-        // Check if the password is valid and display the appropriate text
-      },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return 'Please enter your Phone Number';
-        }
-        if (!controller.isPhoneValid.value) {
-          return 'Invalid phone number';
-        }
-        return null;
-      },
     );
   }
 }

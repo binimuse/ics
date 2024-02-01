@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
+import 'package:ics/app/data/enums.dart';
 
 class ScreenUtil {
   static DeviceType getDeviceType() {
@@ -18,9 +19,4 @@ class ScreenUtil {
 
     return true;
   }
-}
-
-enum DeviceType {
-  phone,
-  tablet,
 }
