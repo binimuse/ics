@@ -161,7 +161,8 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
               padding: EdgeInsets.all(16.0),
               child: FormBuilder(
                 key: controller.reneworginIdformKey,
-                autovalidateMode: AutovalidateMode.disabled,
+                enabled: true,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 skipDisabled: true,
                 canPop: false,
                 onPopInvoked: (didPop) {
@@ -241,48 +242,46 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomNormalButton(
-                      text: controller.currentStep == 6 ? 'Submit' : 'Next',
-                      textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                        color: AppColors.whiteOff,
-                      ),
-                      textcolor: AppColors.whiteOff,
-                      buttoncolor: controller.currentStep == 5
-                          ? AppColors.primary
-                          : AppColors.primary,
-                      borderRadius: AppSizes.radius_16,
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppSizes.mp_v_1,
-                        horizontal: AppSizes.mp_w_6,
-                      ),
-                      onPressed: () async {
-                        if (controller.currentStep == 2) {
-                          controller.reneworginIdformKey.currentState!
-                                  .saveAndValidate()
-                              ? createCitizen()
-                              : SizedBox();
-                        } else if (controller.currentStep == 3) {
-                          controller.reneworginIdformKey.currentState!
-                                  .validate()
-                              ? requestRenewOrginID()
-                              : SizedBox();
-                        } else if (controller.currentStep == 4) {
-                          checkdoc();
-                        } else if (controller.currentStep == 6) {
-                          finalstep();
-                        } else {
-                          if (controller.reneworginIdformKey.currentState!
-                              .saveAndValidate()) {
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomNormalButton(
+                        text: controller.currentStep == 6 ? 'Submit' : 'Next',
+                        textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                          color: AppColors.whiteOff,
+                        ),
+                        textcolor: AppColors.whiteOff,
+                        buttoncolor: controller.currentStep == 5
+                            ? AppColors.primary
+                            : AppColors.primary,
+                        borderRadius: AppSizes.radius_16,
+                        padding: EdgeInsets.symmetric(
+                          vertical: AppSizes.mp_v_1,
+                          horizontal: AppSizes.mp_w_6,
+                        ),
+                        onPressed: () async {
+                          if (controller.currentStep == 3) {
                             setState(() {
-                              controller.currentStep++;
+                              if (controller.reneworginIdformKey.currentState!
+                                  .saveAndValidate()) {
+                                createCitizen();
+                              } else {
+                                _scrollToBottom();
+                              }
                             });
+                          } else if (controller.currentStep == 4) {
+                            checkdoc();
+                          } else if (controller.currentStep == 6) {
+                            finalstep();
                           } else {
-                            _scrollToBottom();
+                            if (controller.reneworginIdformKey.currentState!
+                                .validate()) {
+                              setState(() {
+                                controller.currentStep++;
+                              });
+                            } else {
+                              _scrollToBottom();
+                            }
                           }
-                        }
-                      }),
-                )
+                        }))
               ],
             ),
           ),
@@ -478,20 +477,26 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
   void getDataForStep4() {
     final citizenModel = widget.citizenModel;
 
-    if (citizenModel!.newOriginIdApplications.isNotEmpty) {
+    if (citizenModel!.renewOriginIdApplications.isNotEmpty) {
       final passportNumber =
-          citizenModel.newOriginIdApplications.first.current_passport_number;
+          citizenModel.renewOriginIdApplications.first.current_passport_number;
 
       final passportExpiryDate = citizenModel
-          .newOriginIdApplications.first.current_passport_expiry_date;
+          .renewOriginIdApplications.first.current_passport_expiry_date;
 
       final passportIssuedDate = citizenModel
-          .newOriginIdApplications.first.current_passport_expiry_date;
+          .renewOriginIdApplications.first.current_passport_expiry_date;
 
       final visaTypeID =
-          citizenModel.newOriginIdApplications.first.visa_type_id!;
+          citizenModel.renewOriginIdApplications.first.visa_type_id!;
 
-      final visanumber = citizenModel.newOriginIdApplications.first.visa_number;
+      final correctionTypeID =
+          citizenModel.renewOriginIdApplications.first.correction_type_id!;
+
+      final visanumber =
+          citizenModel.renewOriginIdApplications.first.visa_number;
+      final orginIdNumber =
+          citizenModel.renewOriginIdApplications.first.origin_id_number;
 
       controller.passportNumberContoller.text = passportNumber!;
       controller.passportExpiryDateController.text =
@@ -500,10 +505,14 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
       controller.passportIssueDateController.text =
           passportIssuedDate.toString();
 
+      controller.correctionTypevalue.value =
+          controller.correctiontyoe.firstWhere((e) => e.id == correctionTypeID);
+
       controller.visatypevalue.value =
           controller.visaType.firstWhere((e) => e.id == visaTypeID);
 
       controller.visanumberContoller.text = visanumber.toString();
+      controller.orginIdnumberContoller.text = orginIdNumber.toString();
     }
   }
 
@@ -515,20 +524,7 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
         controller.currentStep++;
       });
     } else {
-      AppToasts.showError("Form submission failed");
-    }
-  }
-
-  void requestRenewOrginID() async {
-    controller.requestReNewOrginID();
-
-    await Future.delayed(const Duration(seconds: 1));
-    if (controller.isRequestNewOrginIDSuccess.value) {
-      setState(() {
-        controller.currentStep++;
-      });
-    } else {
-      AppToasts.showError("Form submission failed");
+      AppToasts.showError("Fill all the required fields");
     }
   }
 

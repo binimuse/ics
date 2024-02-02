@@ -6,6 +6,7 @@ class BasemodelRenewOrginId {
   final List<CommonModel> base_eye_colors;
   final List<CommonModel> base_marital_statuses;
   final List<CommonModel> base_countries;
+  final List<CommonModel> base_correction_types;
   final List<AllowedContreyModel> allowed_countries;
   final List<CommonModel> base_document_types;
   final List<CommonModel> base_visa_types;
@@ -17,6 +18,7 @@ class BasemodelRenewOrginId {
     required this.base_hair_colors,
     required this.base_marital_statuses,
     required this.base_countries,
+    required this.base_correction_types,
     required this.base_document_types,
     required this.allowed_countries,
     required this.base_visa_types,
@@ -49,6 +51,9 @@ class BasemodelRenewOrginId {
           .map((i) => AllowedContreyModel.fromJson(i))
           .toList(),
       base_visa_types: List.of(json["base_visa_types"])
+          .map((i) => CommonModel.fromJson(i))
+          .toList(),
+      base_correction_types: List.of(json["base_correction_types"])
           .map((i) => CommonModel.fromJson(i))
           .toList(),
     );

@@ -141,6 +141,9 @@ class RenewOriginIdController extends GetxController {
   final Rxn<CommonModel> embassiesvalue = Rxn<CommonModel>();
 
 
+  final Rxn<CommonModel> correctionTypevalue = Rxn<CommonModel>();
+
+
   final TextEditingController countryController = TextEditingController();
 
 
@@ -239,6 +242,9 @@ class RenewOriginIdController extends GetxController {
   List<CommonModel> bcountries = [];
 
 
+  List<CommonModel> correctiontyoe = [];
+
+
   List<CommonModel> natinality = [];
 
 
@@ -274,7 +280,15 @@ class RenewOriginIdController extends GetxController {
       TextEditingController();
 
 
+  final TextEditingController visaIssueDateController = TextEditingController();
+
+
   final TextEditingController passportExpiryDateController =
+
+      TextEditingController();
+
+
+  final TextEditingController visaExpiryDateController =
 
       TextEditingController();
 
@@ -628,6 +642,11 @@ class RenewOriginIdController extends GetxController {
       bcountries = baseData.value!.base_countries.map((e) => e).toList();
 
 
+      correctiontyoe =
+
+          baseData.value!.base_correction_types.map((e) => e).toList();
+
+
       natinality = baseData.value!.base_countries.map((e) => e).toList();
 
 
@@ -936,6 +955,36 @@ class RenewOriginIdController extends GetxController {
 
               'abroad_phone_number': phonenumber.text,
 
+              'renewal_origin_id_applications': {
+
+                "data": {
+
+                  'current_passport_expiry_date':
+
+                      passportExpiryDateController.text,
+
+                  'current_passport_issued_date':
+
+                      passportIssueDateController.text,
+
+                  'current_passport_number': passportNumberContoller.text,
+
+                  'visa_expiry_date': visaExpiryDateController.text,
+
+                  'visa_issued_date': visaExpiryDateController.text,
+
+                  'visa_type_id': visatypevalue.value!.id,
+
+                  'visa_number': visanumberContoller.text,
+
+                  'origin_id_number': orginIdnumberContoller.text,
+
+                  'correction_type_id': correctionTypevalue.value!.id,
+
+                }
+
+              },
+
             }
 
           },
@@ -981,7 +1030,7 @@ class RenewOriginIdController extends GetxController {
 
       }
 
-    } catch (e) {
+    } catch (e, s) {
 
       networkStatus.value = NetworkStatus.ERROR;
 
@@ -992,111 +1041,18 @@ class RenewOriginIdController extends GetxController {
       isSend.value = false;
 
 
-      print('Errors: $e');
+      print('Errors: $s');
 
 
       if (e.toString().contains("Null ")) {
 
-        AppToasts.showError("please provide Emabases");
+        //  AppToasts.showError("please provide Emabases");
 
       } else {
 
         AppToasts.showError("Something went wrong");
 
       }
-
-    }
-
-  }
-
-
-  var isRequestNewOrginIDSuccess = false.obs;
-
-
-  Future<void> requestReNewOrginID() async {
-
-    networkStatus.value = NetworkStatus.LOADING;
-
-
-    try {
-
-      // file upload
-
-
-      GraphQLClient graphQLClient;
-
-
-      graphQLClient = GraphQLConfiguration().clientToQuery();
-
-
-      final QueryResult result = await graphQLClient.mutate(
-
-        MutationOptions(
-
-          document: gql(IcsReNewOrginIdmutation.ics_citizens_reneworginId),
-
-          variables: <String, dynamic>{
-
-            'objects': {
-
-              'citizen_id': citizenId,
-
-              'current_passport_expiry_date': passportExpiryDateController.text,
-
-              'current_passport_issued_date': passportIssueDateController.text,
-
-              'current_passport_number': passportNumberContoller.text,
-
-              'visa_type_id': visatypevalue.value!.id,
-
-              'visa_number': visanumberContoller.text,
-
-            }
-
-          },
-
-        ),
-
-      );
-
-
-      if (result.hasException) {
-
-        ///CHANGE NETWORK STATUS
-
-
-        networkStatus.value = NetworkStatus.ERROR;
-
-
-        isRequestNewOrginIDSuccess.value = false;
-
-
-        print(result.exception.toString());
-
-      } else {
-
-        ///CHANGE NETWORK STATUS
-
-
-        networkStatus.value = NetworkStatus.SUCCESS;
-
-
-        isRequestNewOrginIDSuccess.value = true;
-
-      }
-
-    } catch (e) {
-
-      ///CHANGE NETWORK STATUS
-
-
-      networkStatus.value = NetworkStatus.ERROR;
-
-
-      isRequestNewOrginIDSuccess.value = false;
-
-
-      print('Error: $e');
 
     }
 

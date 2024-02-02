@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/otp_varification/data/muatation/otp_mutation.dart';
 import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/services/graphql_conf.dart';
@@ -11,7 +12,7 @@ import 'package:ics/services/graphql_conf.dart';
 import '../data/muatation/resendotp_mutation.dart';
 
 class OtpVarificationController extends GetxController {
-  var emailContoller = "".obs;
+  var phonenumber = "".obs;
 
   final count = 0.obs;
   GraphQLConfigurationForauth graphQLConfiguration =
@@ -23,7 +24,7 @@ class OtpVarificationController extends GetxController {
     otpController = TextEditingController();
     isjustForinit(true);
 
-    // emailContoller.value = Get.arguments["email"];
+    phonenumber.value = Get.arguments["phone"];
   }
 
   @override
@@ -31,6 +32,7 @@ class OtpVarificationController extends GetxController {
     super.onReady();
   }
 
+  Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
   @override
   void onClose() {
     super.onClose();
@@ -73,6 +75,7 @@ class OtpVarificationController extends GetxController {
   }
 
   resendOtp() async {
+    print(phonenumber.value);
     resendotpstarted(true);
 
     GraphQLClient client = graphQLConfiguration.clientToQuery();
@@ -82,8 +85,8 @@ class OtpVarificationController extends GetxController {
         document: gql(ResendOTPQueryMutation.resenddotp),
         variables: <String, dynamic>{
           'object': {
-            'email': emailContoller.value,
-            'phone_number': "",
+            'email': phonenumber.value,
+            'phone_number': phonenumber.value,
           }
         },
       ),
@@ -109,40 +112,50 @@ class OtpVarificationController extends GetxController {
   var otp = "".obs;
   var verificationOtp = false.obs;
   void verification() async {
+    networkStatus.value = NetworkStatus.LOADING;
     verificationOtp(true);
 
     GraphQLClient client = graphQLConfiguration.clientToQuery();
 
-    QueryResult result = await client.mutate(
-      MutationOptions(
-        document: gql(VerifyOTPMutation.otp),
-        variables: <String, dynamic>{
-          'object': {
-            'code': otp.value,
-            'email': emailContoller.value,
-            'phone_number': "",
-          }
-        },
-      ),
-    );
+    try {
+      QueryResult result = await client.mutate(
+        MutationOptions(
+          document: gql(VerifyOTPMutation.otp),
+          variables: <String, dynamic>{
+            'object': {
+              'code': otp.value,
+              'email': "",
+              'phone_number': phonenumber.value,
+            }
+          },
+        ),
+      );
 
-    if (!result.hasException) {
-      verificationOtp(false);
+      if (!result.hasException) {
+        networkStatus.value = NetworkStatus.SUCCESS;
+        verificationOtp(false);
 
-      AppToasts.showSuccess("Otp varifiyed successfully");
-      Future.delayed(const Duration(milliseconds: 100), () {
-        Get.offAllNamed(Routes.LOGIN);
-      });
-    } else {
-      verificationOtp(false);
-      if (result.exception!.graphqlErrors[0].message
-          .contains("OTP_NOT_CORRECT")) {
-        AppToasts.showError("Invalid OTP");
+        AppToasts.showSuccess("Otp verified successfully");
+        Future.delayed(const Duration(milliseconds: 100), () {
+          Get.offAllNamed(Routes.LOGIN);
+        });
       } else {
-        print(result.exception);
-
-        AppToasts.showError("Something went wrong");
+        networkStatus.value = NetworkStatus.ERROR;
+        verificationOtp(false);
+        if (result.exception!.graphqlErrors[0].message
+            .contains("OTP_NOT_CORRECT")) {
+          AppToasts.showError("Invalid OTP");
+        } else {
+          print(result.exception);
+          AppToasts.showError("Something went wrong");
+        }
       }
+    } catch (e, s) {
+      networkStatus.value = NetworkStatus.ERROR;
+      verificationOtp(false);
+      print('Exception details:\n $e');
+      print('Stack trace:\n $s');
+      AppToasts.showError("An error occurred during OTP verification");
     }
   }
 }

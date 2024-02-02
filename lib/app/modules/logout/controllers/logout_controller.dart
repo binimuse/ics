@@ -4,6 +4,10 @@ import 'package:ics/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LogoutController extends GetxController {
+
+
+
+  
   void logout() async {
     final prefs = await SharedPreferences.getInstance();
 

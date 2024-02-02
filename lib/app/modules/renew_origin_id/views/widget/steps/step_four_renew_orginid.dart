@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_validator/form_validator.dart';
+
 import 'package:get/get.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
@@ -70,15 +72,13 @@ class _Step4State extends State<Step4RenewOrginId> {
           controller: controller.passportNumberContoller,
           hint: 'Passport number',
           labelText: 'Current Passport number',
-          validator: ValidationBuilder()
-              .required('Passport number is required')
-              .build(),
+          validator:
+              ValidationBuilder().required('Birthdate is required').build(),
           showClearButton: false,
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp(r"\s")),
           ],
           autoFocus: false,
-          onChanged: (value) {},
         ),
         SizedBox(
           height: 2.h,
@@ -86,7 +86,7 @@ class _Step4State extends State<Step4RenewOrginId> {
         FormBuilderDateTimePicker(
           name: 'date_established',
           initialValue:
-              widget.citizenModel?.newOriginIdApplications.isNotEmpty ?? false
+              widget.citizenModel?.renewOriginIdApplications.isNotEmpty ?? false
                   ? DateTime.parse(controller.passportIssueDateController.text)
                   : null,
           onChanged: (value) {
@@ -119,7 +119,7 @@ class _Step4State extends State<Step4RenewOrginId> {
         FormBuilderDateTimePicker(
           name: 'date_established2',
           initialValue: widget.citizenModel != null &&
-                  widget.citizenModel!.newOriginIdApplications.isNotEmpty
+                  widget.citizenModel!.renewOriginIdApplications.isNotEmpty
               ? DateTime.parse(controller.passportExpiryDateController.text)
               : null,
           onChanged: (value) {
@@ -176,9 +176,8 @@ class _Step4State extends State<Step4RenewOrginId> {
           controller: controller.visanumberContoller,
           hint: 'Visa number',
           labelText: 'Visa number',
-          
-          validator:
-              ValidationBuilder().required('Visa number is required').build(),
+          validator: FormBuilderValidators.required(
+              errorText: "Visa number is required"),
           showClearButton: false,
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp(r"\s")),
@@ -189,13 +188,78 @@ class _Step4State extends State<Step4RenewOrginId> {
         SizedBox(
           height: 2.h,
         ),
+        FormBuilderDateTimePicker(
+          name: 'date_established3',
+          initialValue:
+              widget.citizenModel?.renewOriginIdApplications.isNotEmpty ?? false
+                  ? DateTime.parse(controller.visaIssueDateController.text)
+                  : null,
+          onChanged: (value) {
+            controller.visaIssueDateController.value = TextEditingValue(
+              text: value.toString(),
+            );
+          },
+          inputType: InputType.date,
+          format: DateFormat('dd/MM/yyyy'),
+          enabled: true,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(
+              bottom: AppSizes.mp_v_1 / 2,
+              top: AppSizes.mp_v_1 / 2,
+            ),
+            labelText: 'Visa Issue Date(GC)',
+            hintStyle: AppTextStyles.titleBold.copyWith(
+                color: AppColors.grayDark, fontSize: AppSizes.font_12),
+            labelStyle: AppTextStyles.captionBold.copyWith(
+                color: AppColors.grayLight, fontSize: AppSizes.font_12),
+          ),
+          style: AppTextStyles.titleBold.copyWith(
+            color: AppColors.blackLight,
+            fontSize: AppSizes.font_12,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        FormBuilderDateTimePicker(
+          name: 'date_established2',
+          initialValue: widget.citizenModel != null &&
+                  widget.citizenModel!.renewOriginIdApplications.isNotEmpty
+              ? DateTime.parse(controller.visaExpiryDateController.text)
+              : null,
+          onChanged: (value) {
+            controller.visaExpiryDateController.value = TextEditingValue(
+              text: value.toString(),
+            );
+          },
+          inputType: InputType.date,
+          format: DateFormat('dd/MM/yyyy'),
+          enabled: true,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(
+              bottom: AppSizes.mp_v_1 / 2,
+              top: AppSizes.mp_v_1 / 2,
+            ),
+            labelText: 'Visa Expiry Date(GC)',
+            hintStyle: AppTextStyles.titleBold.copyWith(
+                color: AppColors.grayDark, fontSize: AppSizes.font_12),
+            labelStyle: AppTextStyles.captionBold.copyWith(
+                color: AppColors.grayLight, fontSize: AppSizes.font_12),
+          ),
+          style: AppTextStyles.titleBold.copyWith(
+            color: AppColors.blackLight,
+            fontSize: AppSizes.font_12,
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
         TextFormBuilder(
           controller: controller.orginIdnumberContoller,
           hint: 'Origin ID number',
           labelText: 'Origin ID number',
-          validator: ValidationBuilder()
-              .required('Origin ID number is required')
-              .build(),
+          validator: FormBuilderValidators.required(
+              errorText: "Origin ID number is required"),
           showClearButton: false,
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp(r"\s")),
@@ -240,7 +304,7 @@ class _Step4State extends State<Step4RenewOrginId> {
   correctiontype() {
     return FormBuilderDropdown(
       decoration: ReusableInputDecoration.getDecoration('Correction type'),
-      items: controller.natinality.map((CommonModel value) {
+      items: controller.correctiontyoe.map((CommonModel value) {
         return DropdownMenuItem<CommonModel>(
           value: value,
           child: Text(
@@ -251,11 +315,11 @@ class _Step4State extends State<Step4RenewOrginId> {
         );
       }).toList(),
       onChanged: (value) {
-        controller.natinalityvalue.value = value;
+        controller.correctionTypevalue.value = value;
       },
       name: 'Correction type',
       initialValue: widget.citizenModel != null
-          ? controller.natinalityvalue.value!
+          ? controller.correctionTypevalue.value
           : null,
     );
   }

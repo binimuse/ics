@@ -64,6 +64,7 @@ class NewOriginIdController extends GetxController {
   final Rxn<AllowedContreyModel> countryvalue = Rxn<AllowedContreyModel>();
 
   int currentStep = 0;
+
   final TextEditingController dateofbirth = TextEditingController();
   final TextEditingController dayController = TextEditingController();
   final Rxn<CommonModel> eyecolorvalue = Rxn<CommonModel>();
@@ -434,6 +435,17 @@ class NewOriginIdController extends GetxController {
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
               'abroad_phone_number': phonenumber.text,
+              'new_origin_id_applications': {
+                "data": {
+                  'current_passport_expiry_date':
+                      passportExpiryDateController.text,
+                  'current_passport_issued_date':
+                      passportIssueDateController.text,
+                  'current_passport_number': passportNumberContoller.text,
+                  'visa_type_id': visatypevalue.value!.id,
+                  'visa_number': visanumberContoller.text,
+                }
+              },
             }
           },
         ),
@@ -461,56 +473,9 @@ class NewOriginIdController extends GetxController {
       isSend.value = false;
       print('Errors: $e');
       if (e.toString().contains("Null ")) {
-        AppToasts.showError("please provide Emabases");
       } else {
         AppToasts.showError("Something went wrong");
       }
-    }
-  }
-
-  var isRequestNewOrginIDSuccess = false.obs;
-
-  Future<void> requestNewOrginID() async {
-    networkStatus.value = NetworkStatus.LOADING;
-    try {
-      // file upload
-
-      GraphQLClient graphQLClient;
-
-      graphQLClient = GraphQLConfiguration().clientToQuery();
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(IcsnewOrginIdmutation.ics_citizens_orginId),
-          variables: <String, dynamic>{
-            'objects': {
-              'citizen_id': neworginID,
-              'current_passport_expiry_date': passportExpiryDateController.text,
-              'current_passport_issued_date': passportIssueDateController.text,
-              'current_passport_number': passportNumberContoller.text,
-              'visa_type_id': visatypevalue.value!.id,
-              'visa_number': visanumberContoller.text,
-            }
-          },
-        ),
-      );
-
-      if (result.hasException) {
-        ///CHANGE NETWORK STATUS
-        networkStatus.value = NetworkStatus.ERROR;
-        isRequestNewOrginIDSuccess.value = false;
-
-        print(result.exception.toString());
-      } else {
-        ///CHANGE NETWORK STATUS
-        networkStatus.value = NetworkStatus.SUCCESS;
-        isRequestNewOrginIDSuccess.value = true;
-      }
-    } catch (e) {
-      ///CHANGE NETWORK STATUS
-      networkStatus.value = NetworkStatus.ERROR;
-      isRequestNewOrginIDSuccess.value = false;
-      print('Error: $e');
     }
   }
 

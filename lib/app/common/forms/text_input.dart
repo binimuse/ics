@@ -64,7 +64,6 @@ class _TextInputLoginState extends State<TextInputAll> {
         TextFormField(
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp(r"\s\b|\b\s")),
-            
           ],
           textInputAction: TextInputAction.next,
           cursorColor: AppColors.primary,
@@ -87,8 +86,8 @@ class _TextInputLoginState extends State<TextInputAll> {
             ),
             labelText: _isFocused ? widget.hint : null,
             hintText: _isFocused ? null : widget.hint,
-            hintStyle:
-                AppTextStyles.titleBold.copyWith(color: AppColors.grayLighter),
+            hintStyle: AppTextStyles.captionBold
+                .copyWith(color: AppColors.grayLighter),
             labelStyle:
                 AppTextStyles.captionBold.copyWith(color: AppColors.grayLight),
             floatingLabelBehavior: FloatingLabelBehavior.auto,

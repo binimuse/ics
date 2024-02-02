@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/forms/phone_number_input.dart';
@@ -108,6 +109,7 @@ class _Step3State extends State<Step3> {
                 initialValue: widget.citizenModel != null
                     ? controller.embassiesvalue.value
                     : null,
+                validator: FormBuilderValidators.required(),
               )
             : SizedBox()),
         SizedBox(
@@ -149,15 +151,7 @@ class _Step3State extends State<Step3> {
 
         // Check if the password is valid and display the appropriate text
       },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return 'Please enter your Phone Number';
-        }
-        if (!controller.isPhoneValid.value) {
-          return 'Invalid phone number';
-        }
-        return null;
-      },
+      validator: FormBuilderValidators.required(),
     );
   }
 }

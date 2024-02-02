@@ -51,6 +51,12 @@ class GetallQueryRenewOrginId {
     id
     description
   }
+  base_correction_types
+  {
+    name
+    id
+    description
+  }
 }
    """;
   }

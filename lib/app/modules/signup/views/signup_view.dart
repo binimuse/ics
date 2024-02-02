@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:ics/app/common/button/button_primary_fill.dart';
+import 'package:ics/app/common/customappbar.dart';
 
 import 'package:ics/app/common/forms/phone_number_input.dart';
+import 'package:ics/app/common/forms/text_input.dart';
+import 'package:ics/app/common/forms/text_input_signup.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 
-import 'package:ics/app/common/navigation/top_nav_close_text.dart';
 import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 
@@ -15,7 +18,6 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
 import 'package:ics/app/data/enums.dart';
-import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -27,192 +29,174 @@ class SignupView extends GetView<SignupController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        title: 'ICS',
+        title2: "Sign Up",
+        showLeading: true,
+      ),
       resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ///APP BAR
-            const TopNavCloseText(
-              centerTitle: '',
-              rightText: '',
-              useHomeIcon: false,
-            ),
-
-            SizedBox(
-              height: 1.h,
-            ),
-            SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Form(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        AppAssets.splasehimage2,
-                        height: 13.h,
-                        fit: BoxFit.contain,
-                      ),
-                      Text(
-                        "Mobile verification",
-                        textAlign: TextAlign.start,
-                        style: AppTextStyles.displayOneBold
-                            .copyWith(fontSize: AppSizes.font_14),
-                      ),
-                      SizedBox(
-                        height: AppSizes.mp_v_1,
-                      ),
-                      Text(
-                        "Please Input your phone number to continue",
-                        textAlign: TextAlign.start,
-                        style: AppTextStyles.bodySmallRegular.copyWith(
-                            color: AppColors.grayDark,
-                            fontSize: AppSizes.font_12),
-                      ),
-                      SizedBox(
-                        height: AppSizes.mp_v_1,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Column(
-                            children: [
-                              buildCountryCode(),
-                              SizedBox(
-                                height: AppSizes.mp_v_1,
-                              ),
-                              SizedBox(
-                                width: 34.w,
-                                child: Divider(
-                                  color: AppColors.grayLighter,
-                                  thickness: 1,
-                                  height: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: AppSizes.mp_w_4,
-                          ),
-                          buildPhonenumber(),
-                        ],
-                      ),
-                      SizedBox(
-                        height: AppSizes.mp_v_1,
-                      ),
-                      // Obx(() => controller.isPhoneValid.value &&
-                      //         controller.isNextPressed.value
-                      //     ? buildOTPNumber(context)
-                      //     : const SizedBox()),
-                      // SizedBox(
-                      //   height: AppSizes.mp_v_1,
-                      // ),
-                      // Obx(() => controller.isPhoneValid.value &&
-                      //         controller.isNextPressed.value &&
-                      //         !controller.isOtpValid.value
-                      //     ? Align(
-                      //         alignment: Alignment.topLeft,
-                      //         child: ButtonGrayScaleOutlineWithOutIcon(
-                      //             buttonSizeType: ButtonSizeType.SMALL,
-                      //             text: 'Send',
-                      //             onTap: () {
-                      //               if (controller.isNotAvalableCountry.value) {
-                      //                 AppToasts.showError(
-                      //                     "Error, Not a valid country");
-                      //               } else {}
-                      //             },
-                      //             isDisabled: controller.isPhoneValid.value
-                      //                 ? false
-                      //                 : true),
-                      //       )
-                      //     : const SizedBox()),
-                    ],
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ///APP BAR
+                Align(
+                  alignment: Alignment
+                      .center, // Align the image to the center of the expanded space
+                  child: Image.asset(
+                    AppAssets.splasehimage2,
+                    height: 13.h,
+                    fit: BoxFit.contain,
                   ),
                 ),
-              ),
-            ),
-            const Expanded(
-              child: SizedBox(),
-            ),
-            Column(
-              children: [
-                Obx(() => controller.signingUp.isFalse
-                    ? Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: AppSizes.mp_w_8,
-                        ),
-                        child: ButtonPrimaryFill(
-                          isterms: false,
-                          buttonSizeType: ButtonSizeType.LARGE,
-                          isDisabled: !controller.isPhoneValid.value,
-                          text: !controller.isPhoneValid.value
-                              ? "Enter your phone number"
-                              : "Next",
-                          onTap: () {
-                            if (!controller.isPhoneValid.value) {
-                              // Logic for when the "Enter your phone number" button is pressed
-                            } else if (!controller.isNextPressed.value) {
-                              controller.isNextPressed(true);
 
-                              // Logic for when the "Next" button is pressed
-                            } else {
-                              //  Get.toNamed(Routes.EMAIL_VERIFICATION);
-                              //   Get.to(const ForgotEmailtDone());
-                              // controller.signUp();
-                              Get.toNamed(Routes.OTP_VARIFICATION);
-                            }
-                          },
-                        ),
-                      )
-                    : SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(AppColors.primary),
-                        ),
-                      )),
-                SizedBox(height: 2.h),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Form(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Register Here",
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.displayOneBold
+                                .copyWith(fontSize: AppSizes.font_14),
+                          ),
+                          SizedBox(
+                            height: AppSizes.mp_v_1,
+                          ),
+                          Text(
+                            "Please Input information continue",
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.bodySmallRegular.copyWith(
+                                color: AppColors.grayDark,
+                                fontSize: AppSizes.font_12),
+                          ),
+                          SizedBox(
+                            height: AppSizes.mp_v_4,
+                          ),
+                          Form(
+                            key: controller.regFormKey,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: AppSizes.mp_w_4),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: AppSizes.mp_v_1,
+                                  ),
+                                  buildFirstName(),
+                                  SizedBox(
+                                    height: AppSizes.mp_v_1,
+                                  ),
+                                  buildLastName(),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                  buildPhoneinput(),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                  buildpininput(),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                buildButton(),
               ],
             ),
-          ],
-        ),
+          ),
+          Obx(
+            () => controller.networkStatus.value == NetworkStatus.LOADING
+                ? CustomLoadingWidget()
+                : SizedBox(),
+          ),
+        ],
       ),
     );
   }
 
+  buildpininput() {
+    return TextInputSignup(
+      hint: 'Pin',
+      maxLength: 6,
+      moreInstructions: const [
+        "Maximum  6 digits",
+        "Only Numbers",
+      ],
+      keyboardType: TextInputType.number,
+      isPassword: true,
+      onChanged: (value) {
+        // Validate password on type
+
+        bool isValid = controller.validatePassword();
+
+        controller.isPasswordValid.value = isValid;
+
+        // Check if the password is valid and display the appropriate text
+      },
+
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Please enter your pin';
+        }
+
+        if (!controller.isPasswordValid.value) {
+          return 'Pin must be 6';
+        }
+
+        return null;
+      },
+
+      controller: controller.passwordController,
+
+      autofocus: controller
+          .isNextPressed.value, // Set autofocus to true when Next is pressed
+
+      focusNode: controller.passwordFocusNode, // Pass the password focus node
+    );
+  }
+
   buildCountryCode() {
-    return Center(
-      child: CountryCodePicker(
-        flagDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: AppColors.primaryDark,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(3, 3), // changes the shadow position
-              ),
-            ]),
-        onChanged: (element) {
-          debugPrint(element.dialCode);
+    return CountryCodePicker(
+      flagDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: AppColors.primaryDark,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(3, 3), // changes the shadow position
+            ),
+          ]),
+      onChanged: (element) {
+        debugPrint(element.dialCode);
 
-          controller.countryCode = element.dialCode.toString();
-        },
-        initialSelection: 'IT',
-        textOverflow: TextOverflow.fade,
-        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+        controller.countryCode = element.dialCode.toString();
+      },
+      initialSelection: 'IT',
+      textOverflow: TextOverflow.fade,
+      // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
 
-        // optional. Shows only country name and flag
-        showCountryOnly: false,
-        // optional. Shows only country name and flag when popup is closed.
-        showOnlyCountryWhenClosed: false,
-        // optional. aligns the flag and the Text left
-        alignLeft: false,
-      ),
+      // optional. Shows only country name and flag
+      showCountryOnly: false,
+      // optional. Shows only country name and flag when popup is closed.
+      showOnlyCountryWhenClosed: false,
+      // optional. aligns the flag and the Text left
+      alignLeft: false,
     );
   }
 
@@ -242,5 +226,84 @@ class SignupView extends GetView<SignupController> {
         return null;
       },
     ));
+  }
+
+  buildButton() {
+    return Column(
+      children: [
+        Obx(
+          () => Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppSizes.mp_w_8),
+            child: ButtonPrimaryFill(
+              isterms: false,
+              buttonSizeType: ButtonSizeType.LARGE,
+              isDisabled: !controller.isPasswordValid.value ||
+                  !controller.isPhoneValid.value,
+              text: "Next",
+              onTap: () async {
+                if (await controller.regFormKey.currentState!.validate()) {
+                  if (!controller.isPasswordValid.value ||
+                      !controller.isPhoneValid.value) {
+                    // Show an error message or perform some action
+                  } else {
+                    controller.signUp();
+                  }
+                }
+              },
+            ),
+          ),
+        ),
+        SizedBox(height: 2.h),
+      ],
+    );
+  }
+
+  buildPhoneinput() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildCountryCode(),
+        SizedBox(
+          width: AppSizes.mp_w_4,
+        ),
+        buildPhonenumber(),
+      ],
+    );
+  }
+
+  buildLastName() {
+    return TextInputAll(
+      textInputAction: TextInputAction.next,
+      controller: controller.lNameController,
+      hint: 'Last name',
+      showClearButton: false,
+      onChanged: (value) {
+        bool isValid = controller.validateusername();
+        controller.isUsernameCorrect.value = isValid;
+
+        // Validate password on type
+
+        // Check if the password is valid and display the appropriate text
+      },
+    );
+  }
+
+  buildFirstName() {
+    return TextInputAll(
+      controller: controller.fNameController,
+      hint: 'First name',
+      textInputAction: TextInputAction.next,
+      showClearButton: false,
+      autoFocus: true,
+      onChanged: (value) {
+        bool isValid = controller.validateusername();
+
+        controller.isUsernameCorrect.value = isValid;
+
+        // Validate password on type
+
+        // Check if the password is valid and display the appropriate text
+      },
+    );
   }
 }

@@ -14,7 +14,7 @@ import 'package:ics/services/graphql_conf.dart';
 class SignupController extends GetxController {
   late TextEditingController emailController = TextEditingController();
   late TextEditingController passwordController = TextEditingController();
-
+  final GlobalKey<FormState> regFormKey = GlobalKey<FormState>();
 //usernmae
   late TextEditingController fNameController = TextEditingController();
   late TextEditingController lNameController = TextEditingController();
@@ -100,56 +100,42 @@ class SignupController extends GetxController {
   void signUp() async {
     networkStatus.value = NetworkStatus.LOADING;
     try {
-      if (phoneController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty &&
-          lNameController.text.isNotEmpty &&
-          fNameController.text.isNotEmpty) {
-        signingUp(true);
-        signUpMutation().then((result) {
-          networkStatus.value = NetworkStatus.SUCCESS;
-          if (!result.hasException) {
-            // success handling
+      signingUp(true);
 
-            signingUp(false);
-            AppToasts.showSuccess("Successfully registered");
-            Future.delayed(const Duration(milliseconds: 300), () {
-              Get.offAllNamed(Routes.LOGIN);
-            });
-          } else {
-            print(result);
-            // error handling
-            signingUp(false);
-
-            //  AppToasts.showError("Phone number is already registered");
-            //    AppToasts.showError("Something went wrong");
-
-            if (result.exception!.graphqlErrors.isNotEmpty) {
-              if (result.exception!.graphqlErrors[0].message
-                  .contains("CREDENTIALS_IS_ALREADY_IN_USE")) {
-                AppToasts.showError("Phone has already been taken");
-
-                Future.delayed(const Duration(milliseconds: 300), () {
-                  Get.back();
-                  Get.back();
-                });
-              }
-            }
-          }
-        }).catchError((error) {
-          networkStatus.value = NetworkStatus.ERROR;
-          print(error);
-          // handle error
+      signUpMutation().then((result) {
+        networkStatus.value = NetworkStatus.SUCCESS;
+        if (!result.hasException) {
+          // success handling
+          Get.toNamed(Routes.OTP_VARIFICATION, arguments: {
+            "phone": countryCode.toString() + phoneController.text
+          });
+          signingUp(false);
+        } else {
+          print(result);
+          // error handling
           signingUp(false);
 
-          AppToasts.showError("Something went wrong");
-        });
-      } else {
+          //  AppToasts.showError("Phone number is already registered");
+          //    AppToasts.showError("Something went wrong");
+
+          if (result.exception!.graphqlErrors.isNotEmpty) {
+            if (result.exception!.graphqlErrors[0].message
+                .contains("CREDENTIALS_IS_ALREADY_IN_USE")) {
+              AppToasts.showError("Phone has already been taken");
+            } else if (result.exception!.graphqlErrors[0].message
+                .contains("USER_ACCOUNT_NOT_CREATED")) {
+              AppToasts.showError("User account is not created");
+            }
+          }
+        }
+      }).catchError((error) {
         networkStatus.value = NetworkStatus.ERROR;
-        print("am here");
+        print(error);
+        // handle error
         signingUp(false);
 
         AppToasts.showError("Something went wrong");
-      }
+      });
     } on Exception catch (e) {
       networkStatus.value = NetworkStatus.ERROR;
       print(e);
@@ -165,8 +151,8 @@ class SignupController extends GetxController {
         document: gql(SignupQueryMutation.register),
         variables: <String, dynamic>{
           'object': {
-            'email': "",
-            'name': fNameController.text + "" + lNameController.text,
+            'email': countryCode.toString() + phoneController.text,
+            'name': fNameController.text + " " + lNameController.text,
             'password': passwordController.text,
             'phone_number': countryCode.toString() + phoneController.text,
           }

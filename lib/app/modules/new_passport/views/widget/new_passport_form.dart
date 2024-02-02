@@ -306,7 +306,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         controller.currentStep++;
       });
     } else {
-      AppToasts.showError("Form submission failed");
+      AppToasts.showError("Fill all the required fields");
     }
   }
 

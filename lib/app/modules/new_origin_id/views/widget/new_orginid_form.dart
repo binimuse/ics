@@ -255,15 +255,10 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                         horizontal: AppSizes.mp_w_6,
                       ),
                       onPressed: () async {
-                        if (controller.currentStep == 2) {
+                        if (controller.currentStep == 3) {
                           controller.neworginIdformKey.currentState!
                                   .saveAndValidate()
                               ? createCitizen()
-                              : SizedBox();
-                        } else if (controller.currentStep == 3) {
-                          controller.neworginIdformKey.currentState!
-                                  .saveAndValidate()
-                              ? requestOrginID()
                               : SizedBox();
                         } else if (controller.currentStep == 4) {
                           checkdoc();
@@ -513,20 +508,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
         controller.currentStep++;
       });
     } else {
-      AppToasts.showError("Form submission failed");
-    }
-  }
-
-  void requestOrginID() async {
-    controller.requestNewOrginID();
-
-    await Future.delayed(const Duration(seconds: 1));
-    if (controller.isRequestNewOrginIDSuccess.value) {
-      setState(() {
-        controller.currentStep++;
-      });
-    } else {
-      AppToasts.showError("Form submission failed");
+      AppToasts.showError("Fill all the required fields");
     }
   }
 

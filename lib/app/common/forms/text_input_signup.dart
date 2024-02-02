@@ -100,8 +100,8 @@ class _TextInputLoginState extends State<TextInputSignup> {
             ),
             labelText: _isFocused ? widget.hint : null,
             hintText: _isFocused ? null : widget.hint,
-            hintStyle:
-                AppTextStyles.titleBold.copyWith(color: AppColors.grayLighter),
+            hintStyle: AppTextStyles.captionBold
+                .copyWith(color: AppColors.grayLighter),
             labelStyle:
                 AppTextStyles.captionBold.copyWith(color: AppColors.grayLight),
             floatingLabelBehavior: FloatingLabelBehavior.auto,

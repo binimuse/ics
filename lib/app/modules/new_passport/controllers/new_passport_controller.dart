@@ -409,7 +409,7 @@ class NewPassportController extends GetxController {
       isSend.value = false;
       print('Errors: $e');
       if (e.toString().contains("Null ")) {
-        AppToasts.showError("please provide Emabases");
+        
       } else {
         AppToasts.showError("Something went wrong");
       }
