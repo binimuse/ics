@@ -75,6 +75,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        stoppop: true,
         title: 'New',
         title2: "Passport Form",
         showLeading: true,

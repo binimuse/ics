@@ -7,6 +7,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
 
 import 'package:sizer/sizer.dart';
+import '../../../../../common/callender/custom_callender.dart';
 import '../../../../../config/theme/app_sizes.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -45,13 +46,10 @@ class Step6Orginid extends StatelessWidget {
         SizedBox(
           height: 4.h,
         ),
-        SfCalendar(
-          view: CalendarView.month,
-          blackoutDates: controller.occupiedDates, // Disabled dates
-          minDate: today, // Set the minimum date to today
-
-          monthViewSettings: MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+        CustomCalendar(
+          blackoutDates: controller.occupiedDates,
+          minDate: today,
+          maxDate: DateTime(today.year, today.month + 3, today.day),
           onTap: (CalendarTapDetails details) {
             print('Selected date: ${details.date}');
           },

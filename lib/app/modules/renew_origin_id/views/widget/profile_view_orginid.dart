@@ -281,5 +281,8 @@ class ProfileViewRenewOrginid extends GetView<RenewOriginIdController> {
     controller.passportExpiryDateController.clear();
     controller.passportIssueDateController.clear();
     controller.passportNumberContoller.clear();
+    controller.visaExpiryDateController.clear();
+    controller.visaIssueDateController.clear();
+    controller.orginIDType.clear();
   }
 }

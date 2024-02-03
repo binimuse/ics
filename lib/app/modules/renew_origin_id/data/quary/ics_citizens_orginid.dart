@@ -34,6 +34,7 @@ query MyQuery {
       visa_number
       correction_type_id
       origin_id_number
+      embassy_id
     }
   }
 }

@@ -78,6 +78,7 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        stoppop: true,
         title: 'ReNew',
         title2: "Origin ID Form",
         showLeading: true,
@@ -457,13 +458,13 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
-    // if (citizenModel.newApplicationModel!.isNotEmpty) {
-    //   embassyId = citizenModel.newApplicationModel!.first.embassy_id;
-    //   Future.delayed(const Duration(seconds: 2), () {
-    //     controller.embassiesvalue.value =
-    //         controller.base_embassies.firstWhere((e) => e.id == embassyId);
-    //   });
-    // }
+    if (citizenModel.renewOriginIdApplications.isNotEmpty) {
+      embassyId = citizenModel.renewOriginIdApplications.first.embassy_id;
+      Future.delayed(const Duration(seconds: 2), () {
+        controller.embassiesvalue.value =
+            controller.base_embassies.firstWhere((e) => e.id == embassyId);
+      });
+    }
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);

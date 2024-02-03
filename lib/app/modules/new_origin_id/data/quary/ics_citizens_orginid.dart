@@ -32,6 +32,7 @@ query MyQuery {
       current_passport_issued_date
       visa_type_id
       visa_number
+      embassy_id
     }
   }
 }

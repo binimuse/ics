@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ics/app/common/callender/custom_callender.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
@@ -44,13 +45,10 @@ class Step6 extends StatelessWidget {
         SizedBox(
           height: 4.h,
         ),
-        SfCalendar(
-          view: CalendarView.month,
-          blackoutDates: controller.occupiedDates, // Disabled dates
-          minDate: today, // Set the minimum date to today
-
-          monthViewSettings: MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+        CustomCalendar(
+          blackoutDates: controller.occupiedDates,
+          minDate: today,
+          maxDate: DateTime(today.year, today.month + 3, today.day),
           onTap: (CalendarTapDetails details) {
             print('Selected date: ${details.date}');
           },

@@ -28,8 +28,8 @@ class IcsReNewOrginIdmutation {
 
 class ReNewDocApplicationsOrginId {
   static const String newDoc = r'''
-    mutation($objects: [ics_new_origin_id_documents_insert_input!]!) {
-      insert_ics_new_origin_id_documents(objects: $objects) {
+    mutation($objects: [ics_renew_origin_id_documents_insert_input!]!) {
+      insert_ics_renew_origin_id_documents(objects: $objects) {
          returning {
             id
       
@@ -43,7 +43,7 @@ class DeleteDocApplicationsReNewOrginId {
   static String deleteDoc(String documentTypeId) {
     return '''
       mutation MyMutation {
-        delete_ics_new_application_documents(where: {document_type_id: {_eq: "$documentTypeId"}}) {
+        delete_ics_renew_origin_id_documents(where: {document_type_id: {_eq: "$documentTypeId"}}) {
           returning {
             id
           }

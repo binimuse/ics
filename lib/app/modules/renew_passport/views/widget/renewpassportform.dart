@@ -78,7 +78,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
     AppToasts.showSuccess("Form submitted ,\n check my order page");
 
     await Future.delayed(const Duration(milliseconds: 400));
-    Get.offAndToNamed(Routes.MAIN_PAGE);
+    Get.toNamed(Routes.MAIN_PAGE);
     if (_formKey.currentState!.saveAndValidate()) {
       // Get form data
       Map<String, dynamic> formData = _formKey.currentState!.value;

@@ -959,6 +959,8 @@ class RenewOriginIdController extends GetxController {
 
                 "data": {
 
+                  'embassy_id': embassiesvalue.value!.id,
+
                   'current_passport_expiry_date':
 
                       passportExpiryDateController.text,
@@ -1101,7 +1103,7 @@ class RenewOriginIdController extends GetxController {
 
             'objects': {
 
-              'new_origin_id_application_id': neworginID,
+              'renew_origin_id_application_id': neworginID,
 
               'files': path,
 

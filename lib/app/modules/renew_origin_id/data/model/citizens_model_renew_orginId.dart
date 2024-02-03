@@ -118,6 +118,7 @@ class ReNewOriginIdApplication {
   final String? visa_number;
   final String? origin_id_number;
   final String? correction_type_id;
+  final String? embassy_id;
 
   const ReNewOriginIdApplication({
     this.current_passport_number,
@@ -127,6 +128,7 @@ class ReNewOriginIdApplication {
     this.visa_number,
     this.origin_id_number,
     this.correction_type_id,
+    this.embassy_id,
   });
 
   factory ReNewOriginIdApplication.fromJson(Map<String, dynamic> json) {
@@ -137,6 +139,7 @@ class ReNewOriginIdApplication {
       visa_number: json['visa_number'],
       origin_id_number: json['origin_id_number'],
       visa_type_id: json['visa_type_id'],
+      embassy_id: json['embassy_id'],
       correction_type_id: json['correction_type_id'],
     );
   }
@@ -149,6 +152,7 @@ class ReNewOriginIdApplication {
       'current_passport_issued_date': current_passport_issued_date,
       'current_passport_number': current_passport_number,
       'origin_id_number': origin_id_number,
+      'embassy_id': embassy_id,
       'correction_type_id': correction_type_id,
     };
   }
