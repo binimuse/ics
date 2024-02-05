@@ -139,7 +139,7 @@ class _BuildDocState extends State<BuildDocOrginID> {
                           return Stack(
                             children: [
                               Container(
-                                height: 25.h,
+                                height: 20.h,
                                 child: PDFView(
                                   filePath: file.path!,
                                 ),

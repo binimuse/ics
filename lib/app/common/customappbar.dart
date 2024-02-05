@@ -13,6 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLeading;
   final bool showActions;
   final Widget? actionIcon;
+  final String? logo;
   final bool? stoppop;
 
   CustomAppBar({
@@ -22,6 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showLeading = true,
     this.showActions = false,
     this.actionIcon,
+    this.logo,
     this.stoppop,
   });
 
@@ -45,26 +47,33 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : null,
-      title: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: AppTextStyles.bodyLargeBold.copyWith(
-                  fontSize: AppSizes.font_16, color: AppColors.primary),
+      title: logo == null
+          ? Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.bodyLargeBold.copyWith(
+                        fontSize: AppSizes.font_16, color: AppColors.primary),
+                  ),
+                  SizedBox(
+                    width: 1.w,
+                  ),
+                  Text(
+                    title2,
+                    style: AppTextStyles.bodyLargeBold.copyWith(
+                        fontSize: AppSizes.font_16, color: AppColors.grayDark),
+                  ),
+                ],
+              ),
+            )
+          : Image.asset(
+              logo!,
+              height: 15.h,
+              width: 55.w,
+              fit: BoxFit.contain,
             ),
-            SizedBox(
-              width: 1.w,
-            ),
-            Text(
-              title2,
-              style: AppTextStyles.bodyLargeBold.copyWith(
-                  fontSize: AppSizes.font_16, color: AppColors.grayDark),
-            ),
-          ],
-        ),
-      ),
       actions: showActions
           ? [
               IconButton(

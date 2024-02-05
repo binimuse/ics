@@ -220,36 +220,45 @@ class NewPassportController extends GetxController {
   }
 
   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
+
+  var setFetchedStatus = false.obs;
+
   Future<void> getAll() async {
     networkStatus.value = NetworkStatus.LOADING;
     try {
-      networkStatus.value = NetworkStatus.SUCCESS;
       dynamic result =
           await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
-
       baseData.value = Basemodel.fromJson(result);
-      gender = baseData.value!.base_genders.map((e) => e).toList();
 
-      eyecolor = baseData.value!.base_eye_colors.map((e) => e).toList();
-      haircolor = baseData.value!.base_hair_colors.map((e) => e).toList();
-      martial = baseData.value!.base_marital_statuses.map((e) => e).toList();
-      occupations = baseData.value!.base_occupations.map((e) => e).toList();
-      familytype = baseData.value!.base_family_types.map((e) => e).toList();
-      bcountries = baseData.value!.base_countries.map((e) => e).toList();
-      natinality = baseData.value!.base_countries.map((e) => e).toList();
-      allwoedCountries =
-          baseData.value!.allowed_countries.map((e) => e).toList();
-      base_document_types =
-          baseData.value!.base_document_types.map((e) => e).toList();
-
-      for (var documentType in base_document_types) {
-        documents
-            .add(PassportDocuments(documentTypeId: documentType.id, files: []));
+      if (baseData.value == null) {
+        throw Exception("Base data is null");
       }
-      isfeched(true);
+
+      mapBaseDataToLists();
+      setFetchedStatus(true);
+      networkStatus.value = NetworkStatus.SUCCESS;
     } catch (e) {
       networkStatus.value = NetworkStatus.ERROR;
-      isfeched(false);
+      print("Error occurred while fetching data: $e");
+      setFetchedStatus(false);
+    }
+  }
+
+  void mapBaseDataToLists() {
+    gender = baseData.value!.base_genders;
+    eyecolor = baseData.value!.base_eye_colors;
+    haircolor = baseData.value!.base_hair_colors;
+    martial = baseData.value!.base_marital_statuses;
+    occupations = baseData.value!.base_occupations;
+    familytype = baseData.value!.base_family_types;
+    bcountries = baseData.value!.base_countries;
+    natinality = baseData.value!.base_countries;
+    allwoedCountries = baseData.value!.allowed_countries;
+    base_document_types = baseData.value!.base_document_types;
+
+    for (var documentType in base_document_types) {
+      documents
+          .add(PassportDocuments(documentTypeId: documentType.id, files: []));
     }
   }
 
@@ -344,75 +353,77 @@ class NewPassportController extends GetxController {
       );
       String formattedDateOfBirth =
           DateFormat('yyyy-MM-dd').format(dateOfBirth);
-      GraphQLClient graphQLClient;
-
-      graphQLClient = GraphQLConfiguration().clientToQuery();
+      GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
 
       final QueryResult result = await graphQLClient.mutate(
         MutationOptions(
           document: gql(IcscitizensMutation.ics_citizens),
-          variables: <String, dynamic>{
-            'objects': {
-              'first_name': firstNameController.text,
-              'father_name': fatherNameController.text,
-              'grand_father_name': grandFatherNameController.text,
-              'first_name_json': firstnameToJson(),
-              'father_name_json': fathernameToJson(),
-              'grand_father_name_json': gfathernameToJson(),
-              'gender': gendervalue.value!.name,
-              'birth_place': birthCountryvalue.value!.name,
-              'birth_country_id': birthCountryvalue.value!.id,
-              'nationality_id': natinalityvalue.value!.id,
-              'date_of_birth': formattedDateOfBirth,
-              'occupation_id': occupationvalue.value!.id,
-              'hair_colour': haircolorvalue.value!.name,
-              'eye_colour': eyecolorvalue.value!.name,
-              'marital_status': maritalstatusvalue.value!.name,
-              'height': height.text,
-              'is_adopted': isAdoption.value,
-              'skin_colour': skincolorvalue.value,
-              'abroad_country_id': countryvalue.value!.id,
-              'abroad_address': addressController.text,
-              'abroad_phone_number': phonenumber.text,
-              'new_applications': {
-                "data": {
-                  "delivery_date": null,
-                  'embassy_id': embassiesvalue.value!.id,
-                }
-              },
-              'citizen_families': {
-                "data":
-                    familyModelvalue.map((element) => element.toJson()).toList()
-              }
-            }
-          },
+          variables: buildVariablesMap(formattedDateOfBirth),
         ),
       );
 
-      if (result.hasException) {
-        print("""objects""");
-        isSend.value = false;
-        print(result.exception.toString());
-        isSendStared.value = false;
-      } else {
-        print(result.data);
-
-        isSend.value = true;
-        isSendStared.value = false;
-
-        newApplicationId = result.data!['insert_ics_citizens']['returning'][0]
-                ['new_applications'][0]['id']
-            .toString();
-      }
+      handleMutationResult(result);
     } catch (e) {
+      handleSendException(e);
+    } finally {
       isSendStared.value = false;
-      isSend.value = false;
-      print('Errors: $e');
-      if (e.toString().contains("Null ")) {
-        
-      } else {
-        AppToasts.showError("Something went wrong");
+    }
+  }
+
+  Map<String, dynamic> buildVariablesMap(String formattedDateOfBirth) {
+    return {
+      'objects': {
+        'first_name': firstNameController.text,
+        'father_name': fatherNameController.text,
+        'grand_father_name': grandFatherNameController.text,
+        'first_name_json': firstnameToJson(),
+        'father_name_json': fathernameToJson(),
+        'grand_father_name_json': gfathernameToJson(),
+        'gender': gendervalue.value!.name,
+        'birth_place': birthCountryvalue.value!.name,
+        'birth_country_id': birthCountryvalue.value!.id,
+        'nationality_id': natinalityvalue.value!.id,
+        'date_of_birth': formattedDateOfBirth,
+        'occupation_id': occupationvalue.value!.id,
+        'hair_colour': haircolorvalue.value!.name,
+        'eye_colour': eyecolorvalue.value!.name,
+        'marital_status': maritalstatusvalue.value!.name,
+        'height': height.text,
+        'is_adopted': isAdoption.value,
+        'skin_colour': skincolorvalue.value,
+        'abroad_country_id': countryvalue.value!.id,
+        'abroad_address': addressController.text,
+        'abroad_phone_number': phonenumber.text,
+        'new_applications': {
+          "data": {
+            "delivery_date": null,
+            'embassy_id': embassiesvalue.value!.id,
+          }
+        },
+        'citizen_families': {
+          "data": familyModelvalue.map((element) => element.toJson()).toList()
+        }
       }
+    };
+  }
+
+  void handleMutationResult(QueryResult result) {
+    if (result.hasException) {
+      isSend.value = false;
+      print("Error executing mutation: ${result.exception}");
+    } else {
+      isSend.value = true;
+      newApplicationId = result.data!['insert_ics_citizens']['returning'][0]
+              ['new_applications'][0]['id']
+          .toString();
+    }
+  }
+
+  void handleSendException(dynamic e) {
+    isSend.value = false;
+    print('Error sending data: $e');
+    if (!e.toString().contains("Null")) {
+      AppToasts.showError("An error occurred while sending data.");
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -25,6 +26,7 @@ class HomeView extends GetView<HomeController> {
       appBar: CustomAppBar(
         title: 'Hello',
         title2: "welcome",
+        logo: AppAssets.splasehimage2,
         showActions: true,
         actionIcon: SvgPicture.asset(
           color: AppColors.primary,

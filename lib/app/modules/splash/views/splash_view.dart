@@ -26,6 +26,7 @@ class SplashView extends GetView<SplashController> {
                 Image.asset(
                   controller.splasehimage,
                   fit: BoxFit.contain,
+                  width: 80.w,
                 ),
                 SizedBox(height: 1.h),
               ],

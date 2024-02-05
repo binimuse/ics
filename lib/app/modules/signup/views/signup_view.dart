@@ -48,6 +48,7 @@ class SignupView extends GetView<SignupController> {
                   child: Image.asset(
                     AppAssets.splasehimage2,
                     height: 13.h,
+                    width: 80.w,
                     fit: BoxFit.contain,
                   ),
                 ),

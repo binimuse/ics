@@ -26,10 +26,10 @@ class AppColors {
   static Color white10 = const Color(0xffffffff).withOpacity(0.1);
 
   //PRIMARY
-  static Color primary = const Color(0xfff123AAE);
-  static Color primaryDark = Color.fromARGB(255, 2, 38, 138);
-  static Color primaryLight = Color.fromARGB(255, 46, 89, 217);
-  static Color primaryLighter = Color.fromARGB(255, 105, 138, 236);
+  static Color primary = const Color(0xff164da7);
+  static Color primaryLighter = Color.fromARGB(255, 149, 190, 255);
+  static Color primaryLight = Color.fromARGB(255, 87, 142, 230);
+  static Color primaryDark = Color.fromARGB(255, 17, 98, 230);
 
   //PRIMARY
   static Color secondary = Color.fromARGB(255, 235, 35, 35);
