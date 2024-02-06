@@ -21,8 +21,8 @@ class ReNewOriginIdViewType extends GetView<RenewOriginIdController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Renew',
-        title2: "Origin ID instruction",
+        title: controller.renewType.name,
+        title2: "",
         showLeading: true,
       ),
       backgroundColor: AppColors.whiteOff,

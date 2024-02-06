@@ -50,9 +50,9 @@ class RenewOriginIdView extends GetView<RenewOriginIdController> {
 
       appBar: CustomAppBar(
 
-        title: 'ReNew',
+        title: controller.renewType.name,
 
-        title2: "Origin ID Type",
+        title2: "Type",
 
         showLeading: true,
 

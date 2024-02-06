@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
-import 'package:ics/gen/assets.gen.dart';
 
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
@@ -17,7 +16,6 @@ class Step7Orginid extends StatelessWidget {
   // other properties go here
 
   Widget build(BuildContext context) {
-    final DateTime today = DateTime.now();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,

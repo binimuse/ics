@@ -31,6 +31,9 @@ import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
 
 
+import 'package:ics/app/modules/home/data/models/base_renewtype_model.dart';
+
+
 import 'package:ics/app/modules/renew_origin_id/data/model/base_model_renew_orgin.dart';
 
 
@@ -373,9 +376,18 @@ class RenewOriginIdController extends GetxController {
   final TextEditingController yearController = TextEditingController();
 
 
+  late RenewTypeModel renewType;
+
+
+  dynamic argumentdata = Get.arguments;
+
+
   @override
 
   void onInit() {
+
+    renewType = argumentdata["RenewType"];
+
 
     getAll();
 
@@ -616,9 +628,9 @@ class RenewOriginIdController extends GetxController {
 
     try {
 
-      dynamic result =
+      dynamic result = await graphQLCommonApi.query(
 
-          await graphQLCommonApi.query(getGenderQuery.fetchData(), {});
+          getGenderQuery.fetchData(renewType.document_category_code), {});
 
 
       baseData.value = BasemodelRenewOrginId.fromJson(result);
@@ -982,6 +994,8 @@ class RenewOriginIdController extends GetxController {
                   'origin_id_number': orginIdnumberContoller.text,
 
                   'correction_type_id': correctionTypevalue.value!.id,
+
+                  'origin_id_renewal_type_id': renewType.id,
 
                 }
 

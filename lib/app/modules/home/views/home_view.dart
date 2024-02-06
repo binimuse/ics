@@ -222,37 +222,55 @@ class HomeView extends GetView<HomeController> {
   }
 
   buildOriginId() {
-    return Container(
-      height: 40.h,
-      child: GridView.builder(
-        scrollDirection: Axis.vertical,
-        physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.all(8),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-        ),
-        itemCount: 4, // Replace with the actual number of cards
-        itemBuilder: (BuildContext context, int index) {
-          return CardWidget(
-              isOrgin: true,
-              svgPath: controller.svgPathsOrgin[index],
-              title: controller.Orgintitles[index],
-              iconColor: controller.color[index],
-              onPressed: () {
-                if (index == 0) {
-                  Get.toNamed(Routes.NEW_ORIGIN_ID);
-                } else if (index == 1) {
-                  Get.toNamed(Routes.RENEW_ORIGIN_ID);
-                } else if (index == 2) {
-                } else if (index == 3) {
-                } else if (index == 4) {
-                } else if (index == 5) {}
-              });
-        },
-      ),
-    );
+    return Obx(() => Container(
+          height: 40.h,
+          child: GridView.builder(
+            scrollDirection: Axis.vertical,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(8),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+            ),
+            itemCount: controller.base_origin_id_renewal_types.length + 1,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                // Render default value at index 0
+                return CardWidget(
+                  isOrgin: true,
+                  title: "New \n Origin Id",
+                  svgPath: controller.svgPathsOrgin[0],
+                  iconColor: controller.color[0],
+                  onPressed: () {
+                    // Handle onPressed event for default value
+                    Get.toNamed(Routes.NEW_ORIGIN_ID);
+                  },
+                  // set other properties as needed
+                );
+              } else {
+                // Render other values for remaining indices
+                int adjustedIndex =
+                    index - 1; // Adjust index to account for the default value
+                return CardWidget(
+                  isOrgin: true,
+                  svgPath: controller.svgPathsOrgin[adjustedIndex + 1],
+                  title: controller
+                      .base_origin_id_renewal_types[adjustedIndex].name,
+                  iconColor: controller.color[adjustedIndex + 1],
+                  onPressed: () {
+                    Get.toNamed(Routes.RENEW_ORIGIN_ID, arguments: {
+                      "RenewType":
+                          controller.base_origin_id_renewal_types[adjustedIndex]
+                    });
+
+                    // Handle onPressed event for other values
+                  },
+                );
+              }
+            },
+          ),
+        ));
   }
 
   buildPassport(BuildContext context) {

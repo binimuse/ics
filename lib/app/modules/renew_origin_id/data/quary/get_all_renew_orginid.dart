@@ -1,8 +1,8 @@
 class GetallQueryRenewOrginId {
-  dynamic fetchData() {
+  dynamic fetchData(String type) {
     return """
 {
-  base_document_types(where: {document_category: {code: {_eq: "RENEW_ORIGIN_ID"}}}) {
+  base_document_types(where: {document_category: {code: {_eq: "$type"}}}) {
     id
     name
     description

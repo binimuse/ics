@@ -35,6 +35,9 @@ query MyQuery {
       correction_type_id
       origin_id_number
       embassy_id
+      visa_expiry_date
+      visa_issued_date
+      
     }
   }
 }

@@ -79,8 +79,8 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
     return Scaffold(
       appBar: CustomAppBar(
         stoppop: true,
-        title: 'ReNew',
-        title2: "Origin ID Form",
+        title: controller.renewType.name,
+        title2: "Form",
         showLeading: true,
       ),
       body: Stack(
@@ -488,6 +488,12 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
       final passportIssuedDate = citizenModel
           .renewOriginIdApplications.first.current_passport_expiry_date;
 
+      final visaExpiryDate =
+          citizenModel.renewOriginIdApplications.first.visa_expiry_date;
+
+      final visaIssuedDate =
+          citizenModel.renewOriginIdApplications.first.visa_issued_date;
+
       final visaTypeID =
           citizenModel.renewOriginIdApplications.first.visa_type_id!;
 
@@ -505,6 +511,9 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
 
       controller.passportIssueDateController.text =
           passportIssuedDate.toString();
+
+      controller.visaExpiryDateController.text = visaExpiryDate.toString();
+      controller.visaIssueDateController.text = visaIssuedDate.toString();
 
       controller.correctionTypevalue.value =
           controller.correctiontyoe.firstWhere((e) => e.id == correctionTypeID);

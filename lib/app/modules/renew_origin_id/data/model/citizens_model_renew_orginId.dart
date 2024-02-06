@@ -114,11 +114,14 @@ class ReNewOriginIdApplication {
   final String? current_passport_number;
   final String? current_passport_expiry_date;
   final String? current_passport_issued_date;
+  final String? visa_expiry_date;
+  final String? visa_issued_date;
   final String? visa_type_id;
   final String? visa_number;
   final String? origin_id_number;
   final String? correction_type_id;
   final String? embassy_id;
+
 
   const ReNewOriginIdApplication({
     this.current_passport_number,
@@ -129,6 +132,9 @@ class ReNewOriginIdApplication {
     this.origin_id_number,
     this.correction_type_id,
     this.embassy_id,
+ 
+    this.visa_issued_date,
+    this.visa_expiry_date,
   });
 
   factory ReNewOriginIdApplication.fromJson(Map<String, dynamic> json) {
@@ -141,6 +147,9 @@ class ReNewOriginIdApplication {
       visa_type_id: json['visa_type_id'],
       embassy_id: json['embassy_id'],
       correction_type_id: json['correction_type_id'],
+      visa_issued_date: json['visa_issued_date'],
+      visa_expiry_date: json['visa_expiry_date'],
+   
     );
   }
 
@@ -154,6 +163,9 @@ class ReNewOriginIdApplication {
       'origin_id_number': origin_id_number,
       'embassy_id': embassy_id,
       'correction_type_id': correction_type_id,
+ 
+      'visa_expiry_date': visa_expiry_date,
+      'visa_issued_date': visa_issued_date,
     };
   }
 }
