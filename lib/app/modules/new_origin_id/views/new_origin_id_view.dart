@@ -162,7 +162,7 @@ class NewOriginIdView extends GetView<NewOriginIdController> {
                                           iconColor: AppColors.whiteOff,
                                           imagePath: Assets.icons.arrowright,
                                           onPressed: () {
-                                            Get.back();
+                                            Get.to(() => NewOriginIdViewType());
                                           },
                                           size: AppSizes.icon_size_8 * 0.7,
                                         ),

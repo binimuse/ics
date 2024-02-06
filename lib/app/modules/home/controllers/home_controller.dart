@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:get/get.dart';
 
 
@@ -22,7 +24,6 @@ import 'package:ics/app/modules/home/data/quary/configartion_quary.dart';
 import 'package:ics/app/modules/home/data/quary/get_renew_type.dart';
 
 
-import 'package:ics/app/modules/renew_origin_id/data/model/base_model_renew_orgin.dart';
 
 
 import 'package:ics/gen/assets.gen.dart';

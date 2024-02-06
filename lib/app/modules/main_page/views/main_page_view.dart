@@ -50,6 +50,7 @@ class MainPageView extends GetView<MainPageController> {
         }
       },
       child: Scaffold(
+        backgroundColor: AppColors.whiteOff,
         key: controller.keyforall,
         bottomNavigationBar: buildBottomAppBar(context),
         extendBody: false,

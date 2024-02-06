@@ -329,8 +329,8 @@ class RenewOriginIdView extends GetView<RenewOriginIdController> {
                                           imagePath: Assets.icons.arrowright,
 
                                           onPressed: () {
-
-                                            Get.back();
+                                            Get.to(
+                                                () => ReNewOriginIdViewType());
 
                                           },
 

@@ -124,4 +124,34 @@ class GraphQLCommonApi {
 
     return null;
   }
+
+  Stream<dynamic> subscription(
+      String subscriptionStr, Map<String, dynamic> variables) {
+    // Use the existing GraphQL client configured for subscriptions
+    final GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
+
+    // Create a StreamController to manage the subscription stream
+    final StreamController<dynamic> controller = StreamController<dynamic>();
+
+    // Set up the subscription
+    final Stream<dynamic> subscriptionStream = graphQLClient.subscribe(
+      SubscriptionOptions(
+        document: gql(subscriptionStr),
+        variables: variables,
+        
+      ),
+    );
+
+    // Add the subscription stream to the StreamController
+    subscriptionStream.listen((event) {
+      controller.add(event);
+    }, onError: (error) {
+      controller.addError(error);
+    }, onDone: () {
+      controller.close();
+    });
+
+    // Return the StreamController's stream
+    return controller.stream;
+  }
 }
