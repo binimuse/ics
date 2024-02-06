@@ -178,7 +178,7 @@ class LoginView extends GetView<LoginController> {
 
         controller.countryCode = element.dialCode.toString();
       },
-      initialSelection: 'IT',
+      initialSelection: 'et',
       textOverflow: TextOverflow.fade,
       // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
 
