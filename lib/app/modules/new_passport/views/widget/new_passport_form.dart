@@ -295,7 +295,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   void finalstep() {
     AppToasts.showSuccess("New Passport Sent successfully");
     final MyOrderController controller = Get.put(MyOrderController());
-    controller.GetNewPassport();
+    controller.getNewPassport();
     Get.offAllNamed(Routes.MAIN_PAGE);
   }
 

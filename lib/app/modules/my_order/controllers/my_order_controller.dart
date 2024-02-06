@@ -19,7 +19,7 @@ class MyOrderController extends GetxController {
 
   void onInit() {
 
-    GetNewPassport();
+    getNewPassport();
 
 
     super.onInit();
@@ -42,7 +42,7 @@ class MyOrderController extends GetxController {
   var isFechtedOrder = false.obs;
 
 
-  void GetNewPassport() async {
+  void getNewPassport() async {
 
     try {
 

@@ -51,7 +51,7 @@ class PassportWidget extends StatelessWidget {
         Get.to(DetailWidget());
       },
       child: Container(
-        height: 22.h,
+        height: 25.h,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

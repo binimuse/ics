@@ -45,115 +45,109 @@ class LoginView extends GetView<LoginController> {
         resizeToAvoidBottomInset: true,
         body: Stack(
           children: [
-            SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment
-                        .center, // Align the image to the center of the expanded space
-                    child: Image.asset(
-                      AppAssets.splasehimage2,
-                      height: 13.h,
-                      width: 80.w,
-                      fit: BoxFit.contain,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment
+                      .center, // Align the image to the center of the expanded space
+                  child: Image.asset(
+                    AppAssets.splasehimage2,
+                    height: 13.h,
+                    width: 80.w,
+                    fit: BoxFit.contain,
                   ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Obx(
-                        () => Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Form(
-                            key: controller.regFormKey,
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Login Here",
-                                  textAlign: TextAlign.start,
-                                  style: AppTextStyles.displayOneBold
-                                      .copyWith(fontSize: AppSizes.font_14),
-                                ),
-                                SizedBox(
-                                  height: AppSizes.mp_v_1,
-                                ),
-                                Text(
-                                  "Please Input information continue",
-                                  textAlign: TextAlign.start,
-                                  style: AppTextStyles.bodySmallRegular
-                                      .copyWith(
-                                          color: AppColors.grayDark,
-                                          fontSize: AppSizes.font_12),
-                                ),
-                                SizedBox(
-                                  height: AppSizes.mp_v_4,
-                                ),
-                                buildPhoneinput(),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Obx(
+                      () => Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Form(
+                          key: controller.regFormKey,
+                          child: Column(
+                            children: [
+                              Text(
+                                "Login Here",
+                                textAlign: TextAlign.start,
+                                style: AppTextStyles.displayOneBold
+                                    .copyWith(fontSize: AppSizes.font_14),
+                              ),
+                              SizedBox(
+                                height: AppSizes.mp_v_1,
+                              ),
+                              Text(
+                                "Please Input information continue",
+                                textAlign: TextAlign.start,
+                                style: AppTextStyles.bodySmallRegular.copyWith(
+                                    color: AppColors.grayDark,
+                                    fontSize: AppSizes.font_12),
+                              ),
+                              SizedBox(
+                                height: AppSizes.mp_v_4,
+                              ),
+                              buildPhoneinput(),
 
-                                SizedBox(height: 1.h),
+                              SizedBox(height: 1.h),
 
-                                // Show Password field only when Next is pressed
+                              // Show Password field only when Next is pressed
 
-                                if (controller.isNextPressed.value ||
-                                    controller
-                                        .passwordController.text.isNotEmpty)
-                                  buildpininput()
-                              ],
-                            ),
+                              if (controller.isNextPressed.value ||
+                                  controller.passwordController.text.isNotEmpty)
+                                buildpininput()
+                            ],
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const Expanded(child: SizedBox()),
-                  Column(
-                    children: [
-                      Obx(
-                        () => SizedBox(
-                          height: controller.isNextPressed.value ||
-                                  controller.passwordController.text.isNotEmpty
-                              ? 0.0
-                              : 5.h,
-                        ),
+                ),
+                const Expanded(child: SizedBox()),
+                Column(
+                  children: [
+                    Obx(
+                      () => SizedBox(
+                        height: controller.isNextPressed.value ||
+                                controller.passwordController.text.isNotEmpty
+                            ? 0.0
+                            : 5.h,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: AppSizes.mp_w_4,
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                buildFindEmailButton(),
-                                SizedBox(
-                                  height: 2.h,
-                                  child: VerticalDivider(
-                                    color: AppColors.secondary,
-                                    thickness: 2,
-                                  ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.mp_w_4,
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              buildFindEmailButton(),
+                              SizedBox(
+                                height: 2.h,
+                                child: VerticalDivider(
+                                  color: AppColors.secondary,
+                                  thickness: 2,
                                 ),
-                                buildFindPassswordButton(),
-                              ],
-                            ),
+                              ),
+                              buildFindPassswordButton(),
+                            ],
+                          ),
 
-                            // SizedBox(height: 1.h),
+                          // SizedBox(height: 1.h),
 
-                            Obx(
-                              () => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: buildButton(context)),
-                            ),
-
-                            SizedBox(height: 1.h),
-                          ],
-                        ),
+                          Obx(
+                            () => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: buildButton(context)),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             Obx(
               () => controller.networkStatus.value == NetworkStatus.LOADING
