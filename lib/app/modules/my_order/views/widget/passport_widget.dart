@@ -51,7 +51,7 @@ class PassportWidget extends StatelessWidget {
         Get.to(DetailWidget());
       },
       child: Container(
-        height: 25.h,
+        height: 20.h,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -136,9 +136,6 @@ class PassportWidget extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 2.h,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

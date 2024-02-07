@@ -1,7 +1,7 @@
 class GetanewPassportOrder {
   dynamic fetchData() {
     return """
-subscription  MyQuery {
+query   MyQuery {
   ics_new_applications(order_by: {created_at: desc}, limit: 5) {
     delivery_date
     expiration_date
