@@ -62,6 +62,7 @@ class Step1 extends StatelessWidget {
             height: 1.h,
           ),
           TextFormBuilder(
+            isMandatory: true,
             validator:
                 ValidationBuilder().required('First Name is required').build(),
             labelText: "First name",
@@ -78,6 +79,7 @@ class Step1 extends StatelessWidget {
             height: 2.h,
           ),
           TextFormBuilder(
+            isMandatory: true,
             controller: controller.fatherNameController,
             validator:
                 ValidationBuilder().required('Father Name is required').build(),
@@ -94,6 +96,7 @@ class Step1 extends StatelessWidget {
             height: 2.h,
           ),
           TextFormBuilder(
+            isMandatory: true,
             controller: controller.grandFatherNameController,
             validator:
                 ValidationBuilder().required('Father Name is required').build(),
@@ -123,6 +126,7 @@ class Step1 extends StatelessWidget {
             height: 3.h,
           ),
           TextFormBuilder(
+            isMandatory: true,
             validator:
                 ValidationBuilder().required('Father Name is required').build(),
             labelText: "የመጀመሪያ ስም",
@@ -139,6 +143,7 @@ class Step1 extends StatelessWidget {
             height: 2.h,
           ),
           TextFormBuilder(
+            isMandatory: true,
             controller: controller.AmfatherNameController,
             validator:
                 ValidationBuilder().required('Father Name is required').build(),
@@ -155,6 +160,7 @@ class Step1 extends StatelessWidget {
             height: 2.h,
           ),
           TextFormBuilder(
+            isMandatory: true,
             controller: controller.AmgrandFatherNameController,
             validator: ValidationBuilder()
                 .required('Grand Father Name is required')
@@ -297,6 +303,7 @@ class Step1 extends StatelessWidget {
 
   buildBirthdateField(BuildContext context) {
     return TextFormBuilder(
+      isMandatory: true,
       controller: controller.dateofbirth,
       validator: ValidationBuilder().required('Birthdate is required').build(),
       hint: 'Birthdate',

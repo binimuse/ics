@@ -75,13 +75,13 @@ class MyOrderView extends GetView<MyOrderController> {
                     children: [
                       controller.icsNewApplication.isEmpty
                           ? EmpityWidget(
-                              title: "No Passport Order found",
+                              title: "Passport Order Not found",
                             )
                           : PassportWidget(
                               icsNewApplicationModel:
                                   controller.icsNewApplication),
                       EmpityWidget(
-                        title: "No Orgin ID Order found",
+                        title: "Orgin ID Order Not found",
                       ),
                     ],
                   ),

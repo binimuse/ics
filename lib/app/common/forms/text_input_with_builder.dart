@@ -19,6 +19,7 @@ class TextFormBuilder extends StatefulWidget {
     this.moreInstructions,
     required this.controller,
     this.autoFocus,
+    required this.isMandatory,
     this.validator,
     this.focusNode,
     this.keyboardType,
@@ -35,6 +36,7 @@ class TextFormBuilder extends StatefulWidget {
   final List<String>? moreInstructions;
   final TextEditingController controller;
   final bool? autoFocus;
+  final bool isMandatory;
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
@@ -107,28 +109,36 @@ class _TextInputLoginState extends State<TextFormBuilder> {
               maxWidth: AppSizes.icon_size_10,
               maxHeight: AppSizes.icon_size_10,
             ),
-            suffixIcon: widget.showClearButton
-                ? Bounce(
-                    // padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        widget.controller.clear();
-
-                        _isFocused = false;
-                      });
-                    },
-                    duration: const Duration(milliseconds: 120),
-                    // padding: EdgeInsets.zero,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: AppSizes.mp_v_1,
-                      ),
-                      child: SvgPicture.asset(
-                        Assets.icons.cancel,
-                        color: AppColors.grayLight,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+            suffixIcon: widget.showClearButton || widget.isMandatory
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (widget.showClearButton)
+                        Bounce(
+                          onPressed: () {
+                            setState(() {
+                              widget.controller.clear();
+                              _isFocused = false;
+                            });
+                          },
+                          duration: const Duration(milliseconds: 120),
+                          child: Padding(
+                            padding: EdgeInsets.only(top: AppSizes.mp_v_1),
+                            child: SvgPicture.asset(
+                              Assets.icons.cancel,
+                              color: AppColors.grayLight,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      if (widget.isMandatory)
+                        Text(
+                          "*",
+                          style: TextStyle(
+                              color: AppColors.danger,
+                              fontSize: AppSizes.font_14),
+                        ),
+                    ],
                   )
                 : null,
             disabledBorder: UnderlineInputBorder(

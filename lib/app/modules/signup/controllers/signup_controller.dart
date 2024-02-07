@@ -26,7 +26,7 @@ class SignupController extends GetxController {
 
   var isEmailValidated = false.obs;
   var isNextPressed = false.obs;
-  var countryCode = "+39";
+  var countryCode = "+251";
   var isNotAvalableCountry = false.obs;
 
   var isPasswordValid = false.obs;

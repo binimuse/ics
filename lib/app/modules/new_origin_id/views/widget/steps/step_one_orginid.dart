@@ -100,12 +100,25 @@ class Step1OrginId extends StatelessWidget {
           SizedBox(
             height: 2.h,
           ),
-          Text(
-            'Birth date',
-            style: AppTextStyles.captionBold.copyWith(
-              color: AppColors.grayLight,
-              fontSize: AppSizes.font_12,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Birth date',
+                style: AppTextStyles.captionBold.copyWith(
+                  color: AppColors.grayLight,
+                  fontSize: AppSizes.font_12,
+                ),
+              ),
+              SizedBox(
+                width: 2.w,
+              ),
+              Text(
+                "*",
+                style: TextStyle(
+                    color: AppColors.danger, fontSize: AppSizes.font_14),
+              ),
+            ],
           ),
           bithDay(),
           SizedBox(
@@ -145,6 +158,7 @@ class Step1OrginId extends StatelessWidget {
 
   buildBirthdateField(BuildContext context) {
     return TextFormBuilder(
+      isMandatory: true,
       controller: controller.dateofbirth,
       validator: ValidationBuilder().required('Birthdate is required').build(),
       hint: 'Birthdate',
@@ -167,6 +181,7 @@ class Step1OrginId extends StatelessWidget {
 
   firstName() {
     return TextFormBuilder(
+      isMandatory: true,
       validator: ValidationBuilder().required('First Name is required').build(),
       labelText: "First name",
       controller: controller.firstNameController,
@@ -182,6 +197,7 @@ class Step1OrginId extends StatelessWidget {
 
   fatherName() {
     return TextFormBuilder(
+      isMandatory: true,
       controller: controller.fatherNameController,
       validator:
           ValidationBuilder().required('Father Name is required').build(),
@@ -198,6 +214,7 @@ class Step1OrginId extends StatelessWidget {
 
   gfathername() {
     return TextFormBuilder(
+      isMandatory: true,
       controller: controller.grandFatherNameController,
       validator:
           ValidationBuilder().required('Father Name is required').build(),
@@ -214,6 +231,7 @@ class Step1OrginId extends StatelessWidget {
 
   firstNameAm() {
     return TextFormBuilder(
+      isMandatory: true,
       validator:
           ValidationBuilder().required('Father Name is required').build(),
       labelText: "የመጀመሪያ ስም",
@@ -230,6 +248,7 @@ class Step1OrginId extends StatelessWidget {
 
   fatherNameAm() {
     return TextFormBuilder(
+      isMandatory: true,
       controller: controller.AmfatherNameController,
       validator:
           ValidationBuilder().required('Father Name is required').build(),
@@ -246,6 +265,7 @@ class Step1OrginId extends StatelessWidget {
 
   gFathernameAm() {
     return TextFormBuilder(
+      isMandatory: true,
       controller: controller.AmgrandFatherNameController,
       validator:
           ValidationBuilder().required('Grand Father Name is required').build(),
@@ -271,7 +291,8 @@ class Step1OrginId extends StatelessWidget {
 
   natianlity() {
     return FormBuilderDropdown(
-      decoration: ReusableInputDecoration.getDecoration('Nationality'),
+      decoration: ReusableInputDecoration.getDecoration('Nationality',
+          isMandatory: true),
       items: controller.natinality.map((CommonModel value) {
         return DropdownMenuItem<CommonModel>(
           value: value,
@@ -293,7 +314,8 @@ class Step1OrginId extends StatelessWidget {
 
   gender() {
     return FormBuilderDropdown(
-      decoration: ReusableInputDecoration.getDecoration('Gender'),
+      decoration:
+          ReusableInputDecoration.getDecoration('Gender', isMandatory: true),
       items: controller.gender.map((CommonModel value) {
         return DropdownMenuItem<CommonModel>(
           value: value,
@@ -314,7 +336,8 @@ class Step1OrginId extends StatelessWidget {
 
   countery() {
     return FormBuilderDropdown(
-      decoration: ReusableInputDecoration.getDecoration('Birth Country'),
+      decoration: ReusableInputDecoration.getDecoration('Birth Country',
+          isMandatory: true),
       items: controller.bcountries.map((CommonModel value) {
         return DropdownMenuItem<CommonModel>(
           value: value,

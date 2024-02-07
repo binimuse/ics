@@ -9,6 +9,7 @@ import 'package:ics/app/modules/home/views/home_view.dart';
 import 'package:ics/app/modules/my_order/views/my_order_view.dart';
 import 'package:ics/app/modules/notifications/views/notifications_view.dart';
 import 'package:ics/app/modules/setting/views/setting_view.dart';
+import 'package:sizer/sizer.dart';
 
 import '../controllers/main_page_controller.dart';
 
@@ -141,28 +142,22 @@ class MainPageView extends GetView<MainPageController> {
                         ),
                       )))),
           Positioned(
-            bottom: 40.0,
+            bottom: 45.0,
             right: 40.0,
             child: GestureDetector(
               onTap: () {
                 controller.changeBottomPage(3);
               },
               child: Container(
+                width: 13.w,
+                height: 13.w,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(15),
                   color: AppColors.primary,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                      offset:
-                          Offset(0, 1), // changes the position of the shadow
-                    ),
-                  ],
+                  boxShadow: [],
                 ),
                 child: buildBottomAppBarButton(
-                  Icons.settings_outlined,
+                  Icons.settings,
                   "Setting".tr,
                   3,
                   context,
@@ -182,7 +177,7 @@ class MainPageView extends GetView<MainPageController> {
     BuildContext context,
   ) {
     return SizedBox.fromSize(
-        size: const Size(50, 50), // button width and height
+        size: const Size(45, 45), // button width and height
         child: InkWell(
           splashColor: Colors.white, // splash color
           onTap: () {
@@ -199,7 +194,7 @@ class MainPageView extends GetView<MainPageController> {
                     : label == "Setting"
                         ? AppColors.whiteOff
                         : AppColors.grayLight,
-                size: AppSizes.icon_size_8 * 0.9,
+                size: AppSizes.icon_size_4 * 2,
               ),
               const SizedBox(
                 height: 5,

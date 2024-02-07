@@ -55,7 +55,8 @@ class Step2OrginID extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Occupation'),
+          decoration: ReusableInputDecoration.getDecoration('Occupation',
+              isMandatory: true),
           items: controller.occupations.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -77,7 +78,8 @@ class Step2OrginID extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Hair Color'),
+          decoration: ReusableInputDecoration.getDecoration('Hair Color',
+              isMandatory: true),
           items: controller.haircolor.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -99,7 +101,8 @@ class Step2OrginID extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Eye Color'),
+          decoration: ReusableInputDecoration.getDecoration('Eye Color',
+              isMandatory: true),
           items: controller.eyecolor.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -122,7 +125,8 @@ class Step2OrginID extends StatelessWidget {
         ),
         FormBuilderDropdown(
           validator: ValidationBuilder().required('Skin Color').build(),
-          decoration: ReusableInputDecoration.getDecoration('Skin Color'),
+          decoration: ReusableInputDecoration.getDecoration('Skin Color',
+              isMandatory: true),
           items: controller.SkinColor.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -143,7 +147,8 @@ class Step2OrginID extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Martial status'),
+          decoration: ReusableInputDecoration.getDecoration('Martial status',
+              isMandatory: true),
           items: controller.martial.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -166,6 +171,7 @@ class Step2OrginID extends StatelessWidget {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           inputFormatters: [
             HeightInputFormatter(),
           ],

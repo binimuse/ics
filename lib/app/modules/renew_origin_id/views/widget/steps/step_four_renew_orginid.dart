@@ -69,6 +69,7 @@ class _Step4State extends State<Step4RenewOrginId> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.passportNumberContoller,
           hint: 'Passport number',
           labelText: 'Current Passport number',
@@ -97,17 +98,9 @@ class _Step4State extends State<Step4RenewOrginId> {
           inputType: InputType.date,
           format: DateFormat('dd/MM/yyyy'),
           enabled: true,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(
-              bottom: AppSizes.mp_v_1 / 2,
-              top: AppSizes.mp_v_1 / 2,
-            ),
-            labelText: 'Passport Issue Date(GC)',
-            hintStyle: AppTextStyles.titleBold.copyWith(
-                color: AppColors.grayDark, fontSize: AppSizes.font_12),
-            labelStyle: AppTextStyles.captionBold.copyWith(
-                color: AppColors.grayLight, fontSize: AppSizes.font_12),
-          ),
+          decoration: ReusableInputDecoration.getDecoration(
+              'Passport Issue Date(GC)',
+              isMandatory: true),
           style: AppTextStyles.titleBold.copyWith(
             color: AppColors.blackLight,
             fontSize: AppSizes.font_12,
@@ -130,17 +123,9 @@ class _Step4State extends State<Step4RenewOrginId> {
           inputType: InputType.date,
           format: DateFormat('dd/MM/yyyy'),
           enabled: true,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(
-              bottom: AppSizes.mp_v_1 / 2,
-              top: AppSizes.mp_v_1 / 2,
-            ),
-            labelText: 'Passport Expiry Date(GC)',
-            hintStyle: AppTextStyles.titleBold.copyWith(
-                color: AppColors.grayDark, fontSize: AppSizes.font_12),
-            labelStyle: AppTextStyles.captionBold.copyWith(
-                color: AppColors.grayLight, fontSize: AppSizes.font_12),
-          ),
+          decoration: ReusableInputDecoration.getDecoration(
+              'Passport Expiry Date(GC)',
+              isMandatory: true),
           style: AppTextStyles.titleBold.copyWith(
             color: AppColors.blackLight,
             fontSize: AppSizes.font_12,
@@ -150,7 +135,8 @@ class _Step4State extends State<Step4RenewOrginId> {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Visa Type'),
+          decoration: ReusableInputDecoration.getDecoration('Visa Type',
+              isMandatory: true),
           items: controller.visaType.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -173,6 +159,7 @@ class _Step4State extends State<Step4RenewOrginId> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.visanumberContoller,
           hint: 'Visa number',
           labelText: 'Visa number',
@@ -202,17 +189,9 @@ class _Step4State extends State<Step4RenewOrginId> {
           inputType: InputType.date,
           format: DateFormat('dd/MM/yyyy'),
           enabled: true,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(
-              bottom: AppSizes.mp_v_1 / 2,
-              top: AppSizes.mp_v_1 / 2,
-            ),
-            labelText: 'Visa Issue Date(GC)',
-            hintStyle: AppTextStyles.titleBold.copyWith(
-                color: AppColors.grayDark, fontSize: AppSizes.font_12),
-            labelStyle: AppTextStyles.captionBold.copyWith(
-                color: AppColors.grayLight, fontSize: AppSizes.font_12),
-          ),
+          decoration: ReusableInputDecoration.getDecoration(
+              'Visa Issue Date(GC)',
+              isMandatory: true),
           style: AppTextStyles.titleBold.copyWith(
             color: AppColors.blackLight,
             fontSize: AppSizes.font_12,
@@ -235,17 +214,9 @@ class _Step4State extends State<Step4RenewOrginId> {
           inputType: InputType.date,
           format: DateFormat('dd/MM/yyyy'),
           enabled: true,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(
-              bottom: AppSizes.mp_v_1 / 2,
-              top: AppSizes.mp_v_1 / 2,
-            ),
-            labelText: 'Visa Expiry Date(GC)',
-            hintStyle: AppTextStyles.titleBold.copyWith(
-                color: AppColors.grayDark, fontSize: AppSizes.font_12),
-            labelStyle: AppTextStyles.captionBold.copyWith(
-                color: AppColors.grayLight, fontSize: AppSizes.font_12),
-          ),
+          decoration: ReusableInputDecoration.getDecoration(
+              'Visa Expiry Date(GC)',
+              isMandatory: true),
           style: AppTextStyles.titleBold.copyWith(
             color: AppColors.blackLight,
             fontSize: AppSizes.font_12,
@@ -255,6 +226,7 @@ class _Step4State extends State<Step4RenewOrginId> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.orginIdnumberContoller,
           hint: 'Origin ID number',
           labelText: 'Origin ID number',

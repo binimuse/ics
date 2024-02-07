@@ -495,7 +495,7 @@ class HomeView extends GetView<HomeController> {
           Row(
             children: [
               Text(
-                'Service Complaint',
+                'Service Complaint ',
                 style: AppTextStyles.bodyLargeBold.copyWith(
                     fontSize: AppSizes.font_16, color: AppColors.primary),
               ),

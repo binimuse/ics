@@ -63,7 +63,8 @@ class _Step3State extends State<Step3> {
           height: 4.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Country'),
+          decoration: ReusableInputDecoration.getDecoration('Country',
+              isMandatory: true),
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
               value: value,
@@ -91,7 +92,8 @@ class _Step3State extends State<Step3> {
         ),
         Obx(() => controller.isfechedEmbassies.value
             ? FormBuilderDropdown(
-                decoration: ReusableInputDecoration.getDecoration('Embassies'),
+                decoration: ReusableInputDecoration.getDecoration('Embassies',
+                    isMandatory: true),
                 items: controller.base_embassies.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(
                     value: value,
@@ -116,6 +118,7 @@ class _Step3State extends State<Step3> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.addressController,
           hint: 'Street details/Address line 1',
           labelText: 'Address',
@@ -138,6 +141,7 @@ class _Step3State extends State<Step3> {
 
   buildPhonenumber() {
     return PhoneNumberInput(
+      isMandatory: true,
       hint: 'Phone number',
       labelText: "Phone number",
       focusNode: controller.phoneFocusNode,

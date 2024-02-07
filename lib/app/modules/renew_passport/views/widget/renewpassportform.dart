@@ -268,6 +268,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.firstNameController,
           hint: 'First name',
           showClearButton: false,
@@ -278,6 +279,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.fatherNameController,
           hint: 'Father Name',
           showClearButton: false,
@@ -288,6 +290,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.grandFatherNameController,
           hint: 'Grand Father Name',
           showClearButton: false,
@@ -333,6 +336,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.addressController,
           hint: 'Street details/Address line 1',
           showClearButton: false,
@@ -343,6 +347,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.countryController,
           hint: 'Country',
           showClearButton: false,
@@ -353,6 +358,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.zipController,
           hint: 'Zip Code',
           showClearButton: false,
@@ -363,6 +369,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.cityController,
           hint: 'City',
           showClearButton: false,
@@ -373,6 +380,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.stateController,
           hint: 'State/Province',
           showClearButton: false,
@@ -415,6 +423,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.mobilePhoneController,
           hint: 'Mobile',
           showClearButton: false,
@@ -425,6 +434,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.emailController,
           hint: 'Email',
           showClearButton: false,
@@ -467,6 +477,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.passportnumberController,
           hint: 'Passport number',
           showClearButton: false,
@@ -477,6 +488,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.placeOfIssueController,
           hint: 'Place of Issue',
           showClearButton: false,
@@ -487,6 +499,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.validtyPerdiodController,
           hint: 'Validitiy Period',
           showClearButton: false,
@@ -497,6 +510,7 @@ class _StepperWithFormExampleState extends State<StepperWithFormExample> {
           height: 2.h,
         ),
         TextFormBuilder(
+          isMandatory: true,
           controller: controller.reasonController,
           hint: 'Reasone for Renewal',
           showClearButton: false,

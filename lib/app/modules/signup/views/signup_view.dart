@@ -18,6 +18,7 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -59,53 +60,40 @@ class SignupView extends GetView<SignupController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            "Register Here",
-                            textAlign: TextAlign.start,
-                            style: AppTextStyles.displayOneBold
-                                .copyWith(fontSize: AppSizes.font_14),
-                          ),
                           SizedBox(
                             height: AppSizes.mp_v_1,
                           ),
-                          Text(
-                            "Please Input information continue",
-                            textAlign: TextAlign.start,
-                            style: AppTextStyles.bodySmallRegular.copyWith(
-                                color: AppColors.grayDark,
-                                fontSize: AppSizes.font_12),
-                          ),
-                          SizedBox(
-                            height: AppSizes.mp_v_4,
-                          ),
-                          Form(
-                            key: controller.regFormKey,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: AppSizes.mp_w_4),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: AppSizes.mp_v_1,
-                                  ),
-                                  buildFirstName(),
-                                  SizedBox(
-                                    height: AppSizes.mp_v_1,
-                                  ),
-                                  buildLastName(),
-                                  SizedBox(
-                                    height: 2.h,
-                                  ),
-                                  buildPhoneinput(),
-                                  SizedBox(
-                                    height: 2.h,
-                                  ),
-                                  buildpininput(),
-                                  SizedBox(
-                                    height: 2.h,
-                                  ),
-                                ],
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Form(
+                              key: controller.regFormKey,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: AppSizes.mp_w_4),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: AppSizes.mp_v_1,
+                                    ),
+                                    buildFirstName(),
+                                    SizedBox(
+                                      height: AppSizes.mp_v_1,
+                                    ),
+                                    buildLastName(),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    buildPhoneinput(),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    buildpininput(),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -114,8 +102,33 @@ class SignupView extends GetView<SignupController> {
                     ),
                   ),
                 ),
+                Column(
+                  children: [
+                    Obx(
+                      () => SizedBox(
+                        height: controller.isNextPressed.value ||
+                                controller.passwordController.text.isNotEmpty
+                            ? 0.0
+                            : 5.h,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.mp_w_4,
+                        vertical: AppSizes.mp_w_2,
+                      ),
+                      child: Column(
+                        children: [
+                          // SizedBox(height: 1.h),
 
-                buildButton(),
+                          buildButton(),
+
+                          buildSignupButton(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -204,6 +217,7 @@ class SignupView extends GetView<SignupController> {
   buildPhonenumber() {
     return Expanded(
         child: PhoneNumberInput(
+      isMandatory: false,
       hint: 'Phone number',
       labelText: "Phone number",
       focusNode: controller.phoneFocusNode,
@@ -305,6 +319,24 @@ class SignupView extends GetView<SignupController> {
 
         // Check if the password is valid and display the appropriate text
       },
+    );
+  }
+
+  buildSignupButton() {
+    return MaterialButton(
+      onPressed: () {
+        Get.toNamed(Routes.LOGIN);
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 1.h),
+        child: Center(
+          child: Text(
+            "do you have an account ? Login",
+            style: AppTextStyles.bodySmallUnderlineRegular
+                .copyWith(color: AppColors.grayLight),
+          ),
+        ),
+      ),
     );
   }
 }

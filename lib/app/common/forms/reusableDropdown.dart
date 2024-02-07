@@ -4,9 +4,30 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
 class ReusableInputDecoration {
-  static InputDecoration getDecoration(String labelText) {
+  static InputDecoration getDecoration(String labelText,
+      {bool isMandatory = false}) {
     return InputDecoration(
-      labelText: labelText,
+      label: isMandatory
+          ? RichText(
+              text: TextSpan(
+                text: labelText,
+                style: AppTextStyles.titleBold.copyWith(
+                  color: AppColors.grayLight,
+                  fontSize: AppSizes.font_12,
+                ),
+                children: [
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ],
+              ),
+            )
+          : Text(labelText,
+              style: AppTextStyles.captionBold.copyWith(
+                color: AppColors.grayLight,
+                fontSize: AppSizes.font_12,
+              )),
       disabledBorder: UnderlineInputBorder(
         borderSide: BorderSide(
           color: AppColors.grayLight,
@@ -26,10 +47,6 @@ class ReusableInputDecoration {
         borderSide: BorderSide(
           color: AppColors.black,
         ),
-      ),
-      labelStyle: AppTextStyles.captionBold.copyWith(
-        color: AppColors.grayLight,
-        fontSize: AppSizes.font_12,
       ),
       contentPadding: EdgeInsets.zero,
       filled: true,

@@ -316,6 +316,7 @@ class _Step4State extends State<Step4> {
 
   buildFirstName() {
     return TextFormBuilder(
+      isMandatory: true,
       validator:
           ValidationBuilder().required('family First Name is required').build(),
       labelText: "First name",
@@ -332,6 +333,7 @@ class _Step4State extends State<Step4> {
 
   buildFatherName() {
     return TextFormBuilder(
+      isMandatory: true,
       controller: controller.familyFatherNameController,
       validator: ValidationBuilder()
           .required('Family Father Name is required')

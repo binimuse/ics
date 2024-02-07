@@ -18,6 +18,7 @@ class PhoneNumberInput extends StatefulWidget {
     required this.onChanged,
     this.validator,
     required this.focusNode,
+    required this.isMandatory,
     this.autofocus = false,
   }) : super(key: key);
 
@@ -28,6 +29,7 @@ class PhoneNumberInput extends StatefulWidget {
   final FocusNode focusNode;
   final void Function(String)? onChanged;
   final bool autofocus;
+  final bool isMandatory;
 
   @override
   _PhoneNumberInputState createState() => _PhoneNumberInputState();
@@ -89,29 +91,18 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
               maxWidth: AppSizes.icon_size_10,
               maxHeight: AppSizes.icon_size_10,
             ),
-            suffixIcon: widget.focusNode.hasFocus && _showClearButton
-                ? Bounce(
-                    // padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        widget.controller.clear();
-                        _showClearButton = false;
-
-                        //  widget.logincontroller!.isPasswordValid(false);
-                      });
-                    },
-                    duration: const Duration(milliseconds: 120),
-                    // padding: EdgeInsets.zero,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: AppSizes.mp_v_1,
-                      ),
-                      child: SvgPicture.asset(
-                        Assets.icons.cancel,
-                        color: AppColors.grayLight,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+            suffixIcon: _showClearButton || widget.isMandatory
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (widget.isMandatory)
+                        Text(
+                          "*",
+                          style: TextStyle(
+                              color: AppColors.danger,
+                              fontSize: AppSizes.font_14),
+                        ),
+                    ],
                   )
                 : null,
             disabledBorder: UnderlineInputBorder(

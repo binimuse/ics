@@ -14,6 +14,7 @@ class SettingView extends GetView<SettingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.whiteOff,
       appBar: CustomAppBar(
         title: 'My',
         title2: 'Settings',
@@ -107,18 +108,18 @@ class SettingView extends GetView<SettingController> {
   }) {
     return Card(
       color: AppColors.whiteOff,
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      elevation: 0,
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.circular(10),
+      // ),
       child: ListTile(
         leading: Icon(
           icon,
           color: AppColors.primary,
         ),
         title: Text(title,
-            style: AppTextStyles.bodyLargeBold.copyWith(
-              fontWeight: FontWeight.w600,
+            style: AppTextStyles.bodyLargeRegular.copyWith(
+              fontWeight: FontWeight.w400,
             )),
         subtitle: Text(
           subtitle,

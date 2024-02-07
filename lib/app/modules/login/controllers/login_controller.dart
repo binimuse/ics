@@ -23,7 +23,7 @@ class LoginController extends GetxController {
   late TextEditingController passwordController = TextEditingController();
   final FocusNode passwordFocusNode = FocusNode(); // Added password focus node
   var signingIn = false.obs;
-  var countryCode = "+39";
+  var countryCode = "+251";
   late TextEditingController phoneController = TextEditingController();
   @override
   void onInit() {

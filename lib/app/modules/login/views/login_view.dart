@@ -19,6 +19,7 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -116,14 +117,20 @@ class LoginView extends GetView<LoginController> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: AppSizes.mp_w_4,
+                        vertical: AppSizes.mp_w_2,
                       ),
                       child: Column(
                         children: [
+                          Obx(
+                            () => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: buildButton(context)),
+                          ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              buildFindEmailButton(),
+                              buildSignupButton(),
                               SizedBox(
                                 height: 2.h,
                                 child: VerticalDivider(
@@ -136,12 +143,6 @@ class LoginView extends GetView<LoginController> {
                           ),
 
                           // SizedBox(height: 1.h),
-
-                          Obx(
-                            () => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: buildButton(context)),
-                          ),
                         ],
                       ),
                     ),
@@ -194,6 +195,7 @@ class LoginView extends GetView<LoginController> {
   buildPhonenumber() {
     return Expanded(
         child: PhoneNumberInput(
+      isMandatory: true,
       hint: 'Phone number',
       labelText: "Phone number",
       focusNode: controller.phoneFocusNode,
@@ -276,22 +278,16 @@ class LoginView extends GetView<LoginController> {
     );
   }
 
-  buildFindEmailButton() {
+  buildSignupButton() {
     return MaterialButton(
       onPressed: () {
-        // Get.dialog(
-
-        //   const DialogFindEmail(),
-
-        //   barrierDismissible: true,
-
-        // );
+        Get.toNamed(Routes.SIGNUP);
       },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 1.h),
         child: Center(
           child: Text(
-            "Find Phone",
+            "Sign up",
             style: AppTextStyles.bodySmallUnderlineRegular
                 .copyWith(color: AppColors.grayLight),
           ),
