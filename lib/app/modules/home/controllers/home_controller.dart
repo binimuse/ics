@@ -206,9 +206,9 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   late UsersByPk usersModel = UsersByPk();
 
 
-  RxList<RenewTypeModel> base_origin_id_renewal_types =
+  RxList<BaseOriginIdRenewalType> baseOriginIdRenewalType =
 
-      List<RenewTypeModel>.of([]).obs;
+      List<BaseOriginIdRenewalType>.of([]).obs;
 
 
   var startGetUser = false.obs;
@@ -310,14 +310,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
       if (result != null) {
 
-        print("object");
+       
 
 
-        base_origin_id_renewal_types.value =
+        baseOriginIdRenewalType.value =
 
             (result['base_origin_id_renewal_types'] as List)
 
-                .map((e) => RenewTypeModel.fromJson(e))
+                .map((e) => BaseOriginIdRenewalType.fromJson(e))
 
                 .toList();
 

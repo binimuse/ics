@@ -14,14 +14,13 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
-import 'package:ics/app/modules/renew_origin_id/controllers/renew_origin_id_controller.dart';
-import 'package:ics/app/modules/renew_origin_id/data/model/citizens_model_renew_orginId.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/filled_diloag.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_five_renew_orginid.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_four_renew_orginid.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_seven_renew_orginid.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_six_renew_orginid.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_two_renew_orginid.dart';
+import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
+import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/steps/step_five_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/steps/step_four_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/steps/step_seven_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/steps/step_six_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/steps/step_two_renew_passport.dart';
 
 import 'package:ics/app/routes/app_pages.dart';
 
@@ -32,22 +31,22 @@ import 'package:sizer/sizer.dart';
 import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'steps/step_one_renew_orginid.dart';
-import 'steps/step_three_renew_orginid.dart';
+import 'steps/step_one_renew_passport.dart';
+import 'steps/step_three_renew_passport.dart';
 
-class ReNewOrginIdForm extends StatefulWidget {
-  final IcsCitizenModelReNewOrginId? citizenModel;
+class ReNewPassportForm extends StatefulWidget {
+  final IcsCitizenModelReNewPassport? citizenModel;
 
-  const ReNewOrginIdForm({
+  const ReNewPassportForm({
     this.citizenModel,
   });
   @override
   _StepperWithFormExampleState createState() => _StepperWithFormExampleState();
 }
 
-class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
-  final RenewOriginIdController controller =
-      Get.find<RenewOriginIdController>();
+class _StepperWithFormExampleState extends State<ReNewPassportForm> {
+  final RenewPassportController controller =
+      Get.find<RenewPassportController>();
 
   XFile? image;
 
@@ -176,33 +175,33 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
                     children: [
                       if (controller.currentStep == 0)
                         //Personal Detail
-                        Step1RenewOrginId(
+                        Step1RenewPassport(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
                       //Personal Detail
                       if (controller.currentStep == 1)
-                        Step2RenewOrginID(
+                        Step2RenewPassport(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
                       //Address
                       if (controller.currentStep == 2)
-                        Step3RenewOrginId(
+                        Step3RenewPassport(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
                       //Passport info
                       if (controller.currentStep == 3)
-                        Step4RenewOrginId(
+                        Step4RenewPassport(
                           citizenModel: widget.citizenModel,
                           controller: controller,
                         ),
 
-                      if (controller.currentStep == 4) Step5RenewOrginId(),
+                      if (controller.currentStep == 4) Step5RenewPassport(),
 
-                      if (controller.currentStep == 5) Step6RenewOrginid(),
-                      if (controller.currentStep == 6) Step7RenewOrginid(),
+                      if (controller.currentStep == 5) Step6RenewPassport(),
+                      if (controller.currentStep == 6) Step7RenewPassport(),
 
                       // Add more form fields as needed for each step
                     ],
@@ -458,8 +457,8 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
-    if (citizenModel.renewOriginIdApplications.isNotEmpty) {
-      embassyId = citizenModel.renewOriginIdApplications.first.embassy_id;
+    if (citizenModel.reNewPassportApplication.isNotEmpty) {
+      embassyId = citizenModel.reNewPassportApplication.first.embassy_id;
       Future.delayed(const Duration(seconds: 2), () {
         controller.embassiesvalue.value =
             controller.base_embassies.firstWhere((e) => e.id == embassyId);
@@ -478,32 +477,32 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
   void getDataForStep4() {
     final citizenModel = widget.citizenModel;
 
-    if (citizenModel!.renewOriginIdApplications.isNotEmpty) {
+    if (citizenModel!.reNewPassportApplication.isNotEmpty) {
       final passportNumber =
-          citizenModel.renewOriginIdApplications.first.current_passport_number;
+          citizenModel.reNewPassportApplication.first.current_passport_number;
 
       final passportExpiryDate = citizenModel
-          .renewOriginIdApplications.first.current_passport_expiry_date;
+          .reNewPassportApplication.first.current_passport_expiry_date;
 
       final passportIssuedDate = citizenModel
-          .renewOriginIdApplications.first.current_passport_expiry_date;
+          .reNewPassportApplication.first.current_passport_expiry_date;
 
       final visaExpiryDate =
-          citizenModel.renewOriginIdApplications.first.visa_expiry_date;
+          citizenModel.reNewPassportApplication.first.visa_expiry_date;
 
       final visaIssuedDate =
-          citizenModel.renewOriginIdApplications.first.visa_issued_date;
+          citizenModel.reNewPassportApplication.first.visa_issued_date;
 
       final visaTypeID =
-          citizenModel.renewOriginIdApplications.first.visa_type_id!;
+          citizenModel.reNewPassportApplication.first.visa_type_id!;
 
       final correctionTypeID =
-          citizenModel.renewOriginIdApplications.first.correction_type_id!;
+          citizenModel.reNewPassportApplication.first.correction_type_id!;
 
       final visanumber =
-          citizenModel.renewOriginIdApplications.first.visa_number;
+          citizenModel.reNewPassportApplication.first.visa_number;
       final orginIdNumber =
-          citizenModel.renewOriginIdApplications.first.origin_id_number;
+          citizenModel.reNewPassportApplication.first.origin_id_number;
 
       controller.passportNumberContoller.text = passportNumber!;
       controller.passportExpiryDateController.text =

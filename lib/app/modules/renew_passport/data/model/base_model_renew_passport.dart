@@ -1,4 +1,4 @@
-class BasemodelRenewOrginId {
+class BasemodelRenewPassport {
   final List<CommonModel> base_genders;
   final List<CommonModel> base_occupations;
 
@@ -11,7 +11,7 @@ class BasemodelRenewOrginId {
   // final List<CommonModel> base_document_types;
   final List<CommonModel> base_visa_types;
 
-  BasemodelRenewOrginId({
+  BasemodelRenewPassport({
     required this.base_genders,
     required this.base_occupations,
     required this.base_eye_colors,
@@ -24,8 +24,8 @@ class BasemodelRenewOrginId {
     required this.base_visa_types,
   });
 
-  factory BasemodelRenewOrginId.fromJson(Map<String, dynamic> json) {
-    return BasemodelRenewOrginId(
+  factory BasemodelRenewPassport.fromJson(Map<String, dynamic> json) {
+    return BasemodelRenewPassport(
       base_occupations: List.of(json["base_occupations"])
           .map((i) => CommonModel.fromJson(i))
           .toList(),
@@ -127,15 +127,15 @@ class FamilyModel {
   }
 }
 
-class BaseDocRenewOrginId {
+class BaseDocRenewPassport {
   final List<CommonModel> base_document_types;
 
-  BaseDocRenewOrginId({
+  BaseDocRenewPassport({
     required this.base_document_types,
   });
 
-  factory BaseDocRenewOrginId.fromJson(Map<String, dynamic> json) {
-    return BaseDocRenewOrginId(
+  factory BaseDocRenewPassport.fromJson(Map<String, dynamic> json) {
+    return BaseDocRenewPassport(
       base_document_types: List.of(json["base_document_types"])
           .map((i) => CommonModel.fromJson(i))
           .toList(),

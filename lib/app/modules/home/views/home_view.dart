@@ -233,7 +233,7 @@ class HomeView extends GetView<HomeController> {
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
             ),
-            itemCount: controller.base_origin_id_renewal_types.length + 1,
+            itemCount: controller.baseOriginIdRenewalType.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
                 // Render default value at index 0
@@ -255,13 +255,12 @@ class HomeView extends GetView<HomeController> {
                 return CardWidget(
                   isOrgin: true,
                   svgPath: controller.svgPathsOrgin[adjustedIndex + 1],
-                  title: controller
-                      .base_origin_id_renewal_types[adjustedIndex].name,
+                  title: controller.baseOriginIdRenewalType[adjustedIndex].name,
                   iconColor: controller.color[adjustedIndex + 1],
                   onPressed: () {
                     Get.toNamed(Routes.RENEW_ORIGIN_ID, arguments: {
                       "RenewType":
-                          controller.base_origin_id_renewal_types[adjustedIndex]
+                          controller.baseOriginIdRenewalType[adjustedIndex]
                     });
 
                     // Handle onPressed event for other values

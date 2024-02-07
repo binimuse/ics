@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -10,15 +12,15 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/home/data/models/base_renewtype_model.dart';
-import 'package:ics/app/modules/renew_origin_id/controllers/renew_origin_id_controller.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/profile_view_orginid.dart';
+import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/profile_view_passport.dart';
 
 import 'package:sizer/sizer.dart';
 
-class ReNewOriginIdViewType extends GetView<RenewOriginIdController> {
+class ReNewPassportViewType extends GetView<RenewPassportController> {
   final ChildType baseOriginIdRenewalType;
 
-  ReNewOriginIdViewType({
+  ReNewPassportViewType({
     required this.baseOriginIdRenewalType,
   });
 
@@ -73,7 +75,7 @@ class ReNewOriginIdViewType extends GetView<RenewOriginIdController> {
                 ),
                 onPressed: () {
                   if (areAllTermsSelected()) {
-                    Get.to(() => ProfileViewRenewOrginid());
+                    Get.to(() => ProfileViewRenewPassport());
                   } else {
                     AppToasts.showError("Error, Please select all terms");
                   }

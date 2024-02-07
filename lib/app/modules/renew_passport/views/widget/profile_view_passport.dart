@@ -10,15 +10,15 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ics/app/modules/renew_origin_id/controllers/renew_origin_id_controller.dart';
-import 'package:ics/app/modules/renew_origin_id/data/model/citizens_model_renew_orginId.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/renew_orginid_form.dart';
+import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
+import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/renew_passport_form.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 
-class ProfileViewRenewOrginid extends GetView<RenewOriginIdController> {
-  const ProfileViewRenewOrginid({Key? key}) : super(key: key);
+class ProfileViewRenewPassport extends GetView<RenewPassportController> {
+  const ProfileViewRenewPassport({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
@@ -93,7 +93,7 @@ class ProfileViewRenewOrginid extends GetView<RenewOriginIdController> {
                 clearforstep3();
                 clearforstep4();
 
-                Get.to(() => ReNewOrginIdForm());
+                Get.to(() => ReNewPassportForm());
               },
             ),
           ),
@@ -143,11 +143,11 @@ class ProfileViewRenewOrginid extends GetView<RenewOriginIdController> {
   }
 
   Widget buildInfoItem(
-    IcsCitizenModelReNewOrginId citizen,
+    IcsCitizenModelReNewPassport citizen,
   ) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ReNewOrginIdForm(
+        Get.to(() => ReNewPassportForm(
               citizenModel: citizen,
             ));
       },

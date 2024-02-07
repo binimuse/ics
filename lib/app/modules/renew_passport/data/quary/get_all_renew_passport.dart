@@ -1,4 +1,4 @@
-class GetallQueryRenewOrginId {
+class GetallQueryRenewPassport {
   dynamic fetchData() {
     return """
 {
@@ -60,7 +60,7 @@ class GetallQueryRenewOrginId {
   }
 }
 
-class GetDocQueryRenewOrginId {
+class GetDocQueryRenewPassport {
   dynamic fetchData(String type) {
     return """
 {
