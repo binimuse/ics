@@ -5,6 +5,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/home/data/models/base_renewtype_passport_model.dart';
 import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/model/fileurl_passport.dart';
@@ -147,7 +148,7 @@ class RenewPassportController extends GetxController {
 
   final TextEditingController monthController = TextEditingController();
 
-  final reneworginIdformKey = GlobalKey<FormBuilderState>();
+  final renewPassportformKey = GlobalKey<FormBuilderState>();
 
   //step 4
 
@@ -187,6 +188,8 @@ class RenewPassportController extends GetxController {
   }
 
   final Rxn<CommonModel> occupationvalue = Rxn<CommonModel>();
+  final Rxn<CommonModel> familytypevalue = Rxn<CommonModel>();
+  final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
 
   //Step 3
 
@@ -202,13 +205,15 @@ class RenewPassportController extends GetxController {
 
   final TextEditingController yearController = TextEditingController();
 
-  late BaseOriginIdRenewalType renewType;
+  late BasePassportRenewalType renewType;
 
   dynamic argumentdata = Get.arguments;
 
   @override
   void onInit() {
     renewType = argumentdata["RenewType"];
+
+    print("huhuh ${renewType.id}");
 
     getAll();
 
@@ -261,7 +266,7 @@ class RenewPassportController extends GetxController {
       martial = baseData.value!.base_marital_statuses.map((e) => e).toList();
 
       occupations = baseData.value!.base_occupations.map((e) => e).toList();
-
+      familytype = baseData.value!.base_family_types.map((e) => e).toList();
       bcountries = baseData.value!.base_countries.map((e) => e).toList();
 
       correctiontyoe =
@@ -312,12 +317,12 @@ class RenewPassportController extends GetxController {
   }
 
   void check() {
-    final isValid = reneworginIdformKey.currentState!.validate();
+    final isValid = renewPassportformKey.currentState!.validate();
 
     if (!isValid) {
       return;
     } else {
-      reneworginIdformKey.currentState!.save();
+      renewPassportformKey.currentState!.save();
 
       send(); // Call report() when the form is valid
     }
@@ -462,23 +467,21 @@ class RenewPassportController extends GetxController {
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
               'abroad_phone_number': phonenumber.text,
-              'renewal_passport_applications': {
+              'renew_passport_applications': {
                 "data": {
                   'embassy_id': embassiesvalue.value!.id,
-                  'current_passport_expiry_date':
-                      passportExpiryDateController.text,
-                  'current_passport_issued_date':
-                      passportIssueDateController.text,
-                  'current_passport_number': passportNumberContoller.text,
-                  'visa_expiry_date': visaExpiryDateController.text,
-                  'visa_issued_date': visaExpiryDateController.text,
-                  'visa_type_id': visatypevalue.value!.id,
-                  'visa_number': visanumberContoller.text,
-                  'origin_id_number': orginIdnumberContoller.text,
-                  'correction_type_id': correctionTypevalue.value!.id,
-                  'origin_id_renewal_type_id': renewType.id,
+                  'application_no': "",
+                  'passport_number': passportNumberContoller.text,
+                  'correction_type_id': correctionTypevalue.value != null
+                      ? correctionTypevalue.value!.id
+                      : null,
+                  'passport_renewal_type_id': renewType.id,
                 }
               },
+              'citizen_families': {
+                "data":
+                    familyModelvalue.map((element) => element.toJson()).toList()
+              }
             }
           },
         ),

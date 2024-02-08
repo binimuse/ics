@@ -23,7 +23,7 @@ class RenewPassportView extends GetView<RenewPassportController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: controller.renewType.name,
+        title: controller.renewType.name.toString(),
         title2: "Type",
         showLeading: true,
       ),
@@ -109,7 +109,7 @@ class RenewPassportView extends GetView<RenewPassportController> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          confirmation.name,
+                                          confirmation.name.toString(),
                                           style: AppTextStyles.bodySmallBold
                                               .copyWith(
                                             fontSize: 12.sp,

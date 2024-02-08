@@ -17,9 +17,12 @@ import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/renew_origin_id/controllers/renew_origin_id_controller.dart';
 import 'package:ics/app/modules/renew_origin_id/data/model/citizens_model_renew_orginId.dart';
 import 'package:ics/app/modules/renew_origin_id/views/widget/filled_diloag.dart';
-import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_five_renew_orginid.dart';
 import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_four_renew_orginid.dart';
+
 import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_seven_renew_orginid.dart';
+
+import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_five_renew_orginid.dart';
+
 import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_six_renew_orginid.dart';
 import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_two_renew_orginid.dart';
 
@@ -498,7 +501,12 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
           citizenModel.renewOriginIdApplications.first.visa_type_id!;
 
       final correctionTypeID =
-          citizenModel.renewOriginIdApplications.first.correction_type_id!;
+          citizenModel.renewOriginIdApplications.first?.correction_type_id;
+
+      if (correctionTypeID != null) {
+        controller.correctionTypevalue.value = controller.correctiontyoe
+            .firstWhere((e) => e.id == correctionTypeID);
+      }
 
       final visanumber =
           citizenModel.renewOriginIdApplications.first.visa_number;
@@ -514,9 +522,6 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
 
       controller.visaExpiryDateController.text = visaExpiryDate.toString();
       controller.visaIssueDateController.text = visaIssuedDate.toString();
-
-      controller.correctionTypevalue.value =
-          controller.correctiontyoe.firstWhere((e) => e.id == correctionTypeID);
 
       controller.visatypevalue.value =
           controller.visaType.firstWhere((e) => e.id == visaTypeID);

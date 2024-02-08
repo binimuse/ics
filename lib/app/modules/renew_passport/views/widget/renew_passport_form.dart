@@ -16,10 +16,11 @@ import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
 import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
-import 'package:ics/app/modules/renew_passport/views/widget/steps/step_five_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_four_renew_passport.dart';
-import 'package:ics/app/modules/renew_passport/views/widget/steps/step_seven_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_six_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/steps/step_five_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/steps/step_eight_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/steps/step_seven_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_two_renew_passport.dart';
 
 import 'package:ics/app/routes/app_pages.dart';
@@ -79,7 +80,7 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
     return Scaffold(
       appBar: CustomAppBar(
         stoppop: true,
-        title: controller.renewType.name,
+        title: controller.renewType.name.toString(),
         title2: "Form",
         showLeading: true,
       ),
@@ -161,7 +162,7 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
             child: Padding(
               padding: EdgeInsets.all(16.0),
               child: FormBuilder(
-                key: controller.reneworginIdformKey,
+                key: controller.renewPassportformKey,
                 enabled: true,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 skipDisabled: true,
@@ -198,10 +199,14 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
                           controller: controller,
                         ),
 
-                      if (controller.currentStep == 4) Step5RenewPassport(),
+                      if (controller.currentStep == 4)
+                        Step5RenewPassport(
+                          controller: controller,
+                        ),
 
                       if (controller.currentStep == 5) Step6RenewPassport(),
                       if (controller.currentStep == 6) Step7RenewPassport(),
+                      if (controller.currentStep == 7) Step8RenewPassport(),
 
                       // Add more form fields as needed for each step
                     ],
@@ -243,12 +248,12 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomNormalButton(
-                        text: controller.currentStep == 6 ? 'Submit' : 'Next',
+                        text: controller.currentStep == 7 ? 'Submit' : 'Next',
                         textStyle: AppTextStyles.bodyLargeBold.copyWith(
                           color: AppColors.whiteOff,
                         ),
                         textcolor: AppColors.whiteOff,
-                        buttoncolor: controller.currentStep == 5
+                        buttoncolor: controller.currentStep == 6
                             ? AppColors.primary
                             : AppColors.primary,
                         borderRadius: AppSizes.radius_16,
@@ -257,22 +262,22 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
                           horizontal: AppSizes.mp_w_6,
                         ),
                         onPressed: () async {
-                          if (controller.currentStep == 3) {
+                          if (controller.currentStep == 4) {
                             //  Get.dialog(ProfileFourDialog());
                             setState(() {
-                              if (controller.reneworginIdformKey.currentState!
+                              if (controller.renewPassportformKey.currentState!
                                   .saveAndValidate()) {
                                 createCitizen();
                               } else {
                                 _scrollToBottom();
                               }
                             });
-                          } else if (controller.currentStep == 4) {
+                          } else if (controller.currentStep == 5) {
                             checkdoc();
-                          } else if (controller.currentStep == 6) {
+                          } else if (controller.currentStep == 7) {
                             finalstep();
                           } else {
-                            if (controller.reneworginIdformKey.currentState!
+                            if (controller.renewPassportformKey.currentState!
                                 .validate()) {
                               setState(() {
                                 controller.currentStep++;
@@ -479,49 +484,15 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
 
     if (citizenModel!.reNewPassportApplication.isNotEmpty) {
       final passportNumber =
-          citizenModel.reNewPassportApplication.first.current_passport_number;
-
-      final passportExpiryDate = citizenModel
-          .reNewPassportApplication.first.current_passport_expiry_date;
-
-      final passportIssuedDate = citizenModel
-          .reNewPassportApplication.first.current_passport_expiry_date;
-
-      final visaExpiryDate =
-          citizenModel.reNewPassportApplication.first.visa_expiry_date;
-
-      final visaIssuedDate =
-          citizenModel.reNewPassportApplication.first.visa_issued_date;
-
-      final visaTypeID =
-          citizenModel.reNewPassportApplication.first.visa_type_id!;
+          citizenModel.reNewPassportApplication.first.passport_number;
 
       final correctionTypeID =
           citizenModel.reNewPassportApplication.first.correction_type_id!;
 
-      final visanumber =
-          citizenModel.reNewPassportApplication.first.visa_number;
-      final orginIdNumber =
-          citizenModel.reNewPassportApplication.first.origin_id_number;
-
       controller.passportNumberContoller.text = passportNumber!;
-      controller.passportExpiryDateController.text =
-          passportExpiryDate.toString();
-
-      controller.passportIssueDateController.text =
-          passportIssuedDate.toString();
-
-      controller.visaExpiryDateController.text = visaExpiryDate.toString();
-      controller.visaIssueDateController.text = visaIssuedDate.toString();
 
       controller.correctionTypevalue.value =
           controller.correctiontyoe.firstWhere((e) => e.id == correctionTypeID);
-
-      controller.visatypevalue.value =
-          controller.visaType.firstWhere((e) => e.id == visaTypeID);
-
-      controller.visanumberContoller.text = visanumber.toString();
-      controller.orginIdnumberContoller.text = orginIdNumber.toString();
     }
   }
 

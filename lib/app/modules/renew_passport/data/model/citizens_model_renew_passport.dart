@@ -86,7 +86,7 @@ class IcsCitizenModelReNewPassport {
       grandFatherNameJson: json['grand_father_name_json'] != null
           ? NameJson.fromJson(json['grand_father_name_json'])
           : null,
-      reNewPassportApplication: List.of(json["renew_passport_applications "])
+      reNewPassportApplication: List.of(json["renew_passport_applications"])
           .map((i) => ReNewPassportApplication.fromJson(i))
           .toList(),
     );
@@ -111,57 +111,29 @@ class NameJson {
 }
 
 class ReNewPassportApplication {
-  final String? current_passport_number;
-  final String? current_passport_expiry_date;
-  final String? current_passport_issued_date;
-  final String? visa_expiry_date;
-  final String? visa_issued_date;
-  final String? visa_type_id;
-  final String? visa_number;
-  final String? origin_id_number;
   final String? correction_type_id;
   final String? embassy_id;
+  final String? passport_number;
 
   const ReNewPassportApplication({
-    this.current_passport_number,
-    this.current_passport_expiry_date,
-    this.current_passport_issued_date,
-    this.visa_type_id,
-    this.visa_number,
-    this.origin_id_number,
     this.correction_type_id,
     this.embassy_id,
-    this.visa_issued_date,
-    this.visa_expiry_date,
+    this.passport_number,
   });
 
   factory ReNewPassportApplication.fromJson(Map<String, dynamic> json) {
     return ReNewPassportApplication(
-      current_passport_number: json['current_passport_number'],
-      current_passport_expiry_date: json['current_passport_expiry_date'],
-      current_passport_issued_date: json['current_passport_issued_date'],
-      visa_number: json['visa_number'],
-      origin_id_number: json['origin_id_number'],
-      visa_type_id: json['visa_type_id'],
+      passport_number: json['passport_number'],
       embassy_id: json['embassy_id'],
       correction_type_id: json['correction_type_id'],
-      visa_issued_date: json['visa_issued_date'],
-      visa_expiry_date: json['visa_expiry_date'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "visa_type_id": visa_type_id,
-      'visa_number': visa_number,
-      'current_passport_expiry_date': current_passport_expiry_date,
-      'current_passport_issued_date': current_passport_issued_date,
-      'current_passport_number': current_passport_number,
-      'origin_id_number': origin_id_number,
+      'passport_number': passport_number,
       'embassy_id': embassy_id,
       'correction_type_id': correction_type_id,
-      'visa_expiry_date': visa_expiry_date,
-      'visa_issued_date': visa_issued_date,
     };
   }
 }

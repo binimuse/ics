@@ -53,6 +53,12 @@ class GetallQueryRenewPassport {
     id
     description
   }
+      base_family_types
+  {
+    description
+     name
+    id
+  }
 }
 
 

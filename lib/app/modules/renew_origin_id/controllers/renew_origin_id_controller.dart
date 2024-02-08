@@ -497,7 +497,9 @@ class RenewOriginIdController extends GetxController {
                   'visa_type_id': visatypevalue.value!.id,
                   'visa_number': visanumberContoller.text,
                   'origin_id_number': orginIdnumberContoller.text,
-                  'correction_type_id': correctionTypevalue.value!.id,
+                  'correction_type_id': correctionTypevalue.value != null
+                      ? correctionTypevalue.value!.id
+                      : null,
                   'origin_id_renewal_type_id': renewType.id,
                 }
               },

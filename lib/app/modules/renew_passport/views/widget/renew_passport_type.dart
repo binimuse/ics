@@ -11,7 +11,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
-import 'package:ics/app/modules/home/data/models/base_renewtype_model.dart';
+import 'package:ics/app/modules/home/data/models/base_renewtype_passport_model.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/profile_view_passport.dart';
 
@@ -32,7 +32,7 @@ class ReNewPassportViewType extends GetView<RenewPassportController> {
         (_) => false).obs;
     return Scaffold(
       appBar: CustomAppBar(
-        title: controller.renewType.name,
+        title: controller.renewType.name.toString(),
         title2: "",
         showLeading: true,
       ),

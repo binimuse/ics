@@ -190,35 +190,55 @@ class HomeView extends GetView<HomeController> {
   }
 
   buildcardsPassport() {
-    return Container(
-      height: 50.h,
-      child: GridView.builder(
-        scrollDirection: Axis.vertical,
-        physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.all(8),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 2,
-        ),
-        itemCount: 4, // Replace with the actual number of cards
-        itemBuilder: (BuildContext context, int index) {
-          return CardWidget(
-              svgPath: controller.svgPaths[index],
-              title: controller.titles[index],
-              iconColor: controller.color[index],
-              onPressed: () {
-                if (index == 0) {
-                  Get.toNamed(Routes.NEW_PASSPORT);
-                } else if (index == 1) {
-                } else if (index == 2) {
-                } else if (index == 3) {
-                } else if (index == 4) {
-                } else if (index == 5) {}
-              });
-        },
-      ),
-    );
+    return Obx(() => Container(
+          height: 40.h,
+          child: GridView.builder(
+            scrollDirection: Axis.vertical,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(8),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+            ),
+            itemCount: controller.basePassportRenewalType.length + 1,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                // Render default value at index 0
+                return CardWidget(
+                  isOrgin: true,
+                  title: "New \n Passport",
+                  svgPath: controller.svgPathsOrgin[0],
+                  iconColor: controller.color[0],
+                  onPressed: () {
+                    // Handle onPressed event for default value
+                    Get.toNamed(Routes.NEW_PASSPORT);
+                  },
+                  // set other properties as needed
+                );
+              } else {
+                // Render other values for remaining indices
+                int adjustedIndex =
+                    index - 1; // Adjust index to account for the default value
+                return CardWidget(
+                  isOrgin: true,
+                  svgPath: controller.svgPathsOrgin[adjustedIndex + 1],
+                  title: controller.basePassportRenewalType[adjustedIndex].name
+                      .toString(),
+                  iconColor: controller.color[adjustedIndex + 1],
+                  onPressed: () {
+                    Get.toNamed(Routes.RENEW_PASSPORT, arguments: {
+                      "RenewType":
+                          controller.basePassportRenewalType[adjustedIndex]
+                    });
+
+                    // Handle onPressed event for other values
+                  },
+                );
+              }
+            },
+          ),
+        ));
   }
 
   buildOriginId() {

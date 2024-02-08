@@ -2,15 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ics/app/common/callender/custom_callender.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
+import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/docpicker_renew_passport.dart';
 
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Step6RenewPassport extends StatelessWidget {
   final RenewPassportController controller =
@@ -18,13 +17,12 @@ class Step6RenewPassport extends StatelessWidget {
   // other properties go here
 
   Widget build(BuildContext context) {
-    final DateTime today = DateTime.now();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 20.w,
+          width: 80.w,
           child: Text(
             'Step 6',
             style: AppTextStyles.bodyLargeBold
@@ -37,8 +35,9 @@ class Step6RenewPassport extends StatelessWidget {
           height: 2.h,
         ),
         SizedBox(
+          width: 80.w,
           child: Text(
-            'schedule appointment here',
+            'Upload document ...',
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,
@@ -48,13 +47,24 @@ class Step6RenewPassport extends StatelessWidget {
         SizedBox(
           height: 4.h,
         ),
-        CustomCalendar(
-          blackoutDates: controller.occupiedDates,
-          minDate: today,
-          maxDate: DateTime(today.year, today.month + 3, today.day),
-          onTap: (CalendarTapDetails details) {
-            print('Selected date: ${details.date}');
-          },
+        Container(
+          height: 100.h,
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: controller.base_document_types.length,
+            itemBuilder: (BuildContext context, int index) {
+              CommonModel documentType = controller.base_document_types[index];
+              return BuildDocRenewPassport(
+                documentType: documentType,
+                controller: controller,
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                  height: 8.0); // Adjust the space between items as needed
+            },
+          ),
         ),
         SizedBox(
           height: 2.h,
