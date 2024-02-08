@@ -7,24 +7,25 @@ class MyOrderController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
-    getNewPassport();
+    getOrginOrder();
     super.onInit();
   }
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
-  RxList<IcsNewApplicationModel> icsNewApplication =
-      List<IcsNewApplicationModel>.of([]).obs;
-  GetanewPassportOrder getanewPassportOrderQuery = GetanewPassportOrder();
+  RxList<IcsAllOriginIdApplication> originIdApplication =
+      List<IcsAllOriginIdApplication>.of([]).obs;
+  GetOrginOrder getOrginOrders = GetOrginOrder();
   var isfechedorder = false.obs;
-  void getNewPassport() async {
+  void getOrginOrder() async {
     try {
-      dynamic result = await graphQLCommonApi
-          .query(getanewPassportOrderQuery.fetchData(), {});
+      dynamic result =
+          await graphQLCommonApi.query(getOrginOrders.fetchData(), {});
 
       if (result != null) {
-        icsNewApplication.value = (result['ics_new_applications'] as List)
-            .map((e) => IcsNewApplicationModel.fromJson(e))
-            .toList();
+        originIdApplication.value =
+            (result['ics_all_origin_id_applications'] as List)
+                .map((e) => IcsAllOriginIdApplication.fromMap(e))
+                .toList();
 
         // countLabours.value = getlabour.value.length;
       }

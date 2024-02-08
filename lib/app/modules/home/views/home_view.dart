@@ -564,7 +564,10 @@ class HomeView extends GetView<HomeController> {
               iconColor: controller.color[index],
               onPressed: () {
                 if (index == 0) {
-                } else if (index == 1) {}
+
+                } else if (index == 1) {
+                  
+                }
               });
         },
       ),

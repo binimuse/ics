@@ -510,8 +510,8 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
 
   void finalstep() {
     AppToasts.showSuccess("New Origin Id Sent successfully");
-    final MyOrderController controller = Get.put(MyOrderController());
-    controller.getNewPassport();
+    // final MyOrderController controller = Get.put(MyOrderController());
+    // controller.getNewPassport();
     Get.offAllNamed(Routes.MAIN_PAGE);
   }
 }

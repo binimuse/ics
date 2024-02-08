@@ -5,6 +5,7 @@ import 'package:ics/app/common/empty_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/my_order/views/widget/orgin_widget.dart';
 import 'package:ics/app/modules/my_order/views/widget/passport_widget.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import '../../../common/loading/custom_loading_widget.dart';
@@ -58,11 +59,11 @@ class MyOrderView extends GetView<MyOrderController> {
                     // All specified values will override the [SegmentedTabControl] setting
                     tabs: [
                       SegmentTab(
-                        label: 'Passport',
-                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
+                        label: 'Orgin ID',
                       ),
                       SegmentTab(
-                        label: 'Orgin ID',
+                        label: 'Passport',
+                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
                       ),
                     ],
                   ),
@@ -73,13 +74,13 @@ class MyOrderView extends GetView<MyOrderController> {
                   child: TabBarView(
                     physics: const BouncingScrollPhysics(),
                     children: [
-                      controller.icsNewApplication.isEmpty
+                      controller.originIdApplication.isEmpty
                           ? EmpityWidget(
                               title: "Passport Order Not found",
                             )
-                          : PassportWidget(
+                          : OrginIdWidget(
                               icsNewApplicationModel:
-                                  controller.icsNewApplication),
+                                  controller.originIdApplication),
                       EmpityWidget(
                         title: "Orgin ID Order Not found",
                       ),
