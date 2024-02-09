@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/common/timeline/timeline.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -32,9 +33,91 @@ class DetailWidget extends StatelessWidget {
           Divider(
             color: AppColors.grayLighter,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-            child: SizedBox(),
+          Expanded(
+            child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: ListView(
+                  children: [
+                    MyTimeLineTiles(
+                        isFirst: true,
+                        isLast: false,
+                        isPast: true,
+                        eventchild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Passport Order Placed",
+                              style: AppTextStyles.menuBold
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                            Text(
+                              "you passport order is placed",
+                              style: AppTextStyles.menuRegular
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                          ],
+                        )),
+
+                    //embassy_approved,shipped, immigration_approved, issued
+                    MyTimeLineTiles(
+                        isFirst: false,
+                        isLast: false,
+                        isPast: true,
+                        eventchild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Payment Paid",
+                              style: AppTextStyles.menuBold
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                            Text(
+                              "you have successfully paid the order payment",
+                              style: AppTextStyles.menuRegular
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                          ],
+                        )),
+                    MyTimeLineTiles(
+                        isFirst: false,
+                        isLast: false,
+                        isPast: false,
+                        eventchild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Immigration approved",
+                              style: AppTextStyles.menuBold
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                            Text(
+                              "",
+                              style: AppTextStyles.menuRegular
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                          ],
+                        )),
+                    MyTimeLineTiles(
+                        isFirst: false,
+                        isLast: true,
+                        isPast: false,
+                        eventchild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Issued",
+                              style: AppTextStyles.menuBold
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                            Text(
+                              "",
+                              style: AppTextStyles.menuRegular
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                          ],
+                        )),
+                  ],
+                )),
           ),
         ],
       ),
