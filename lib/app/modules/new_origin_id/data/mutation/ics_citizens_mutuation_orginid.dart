@@ -1,20 +1,22 @@
 class IcscitizensMutationOrginId {
   static const String ics_citizens = r'''
-    mutation($objects: [ics_citizens_insert_input]!) {
-      insert_ics_citizens(objects: $objects) {
-         returning {
-                id
-    
-    }
-       
+mutation ($objects: [ics_citizens_insert_input!]!) {
+  insert_ics_citizens(objects: $objects) {
+    returning {
+      id
+      new_origin_id_applications {
+        id
       }
     }
+  }
+}
+
   ''';
 }
 
 class IcsnewOrginIdmutation {
   static const String ics_citizens_orginId = r'''
-    mutation($objects: [ics_new_origin_id_applications_insert_input]!) {
+    mutation($objects: [ics_new_origin_id_applications_insert_input!]!) {
       insert_ics_new_origin_id_applications(objects: $objects) {
          returning {
                 citizen_id

@@ -393,7 +393,7 @@ class RenewPassportController extends GetxController {
         print('File uploaded successfully');
 
         sendDoc(
-          citizenId,
+          renewPassportId,
           documentTypeId,
           url,
           path,
@@ -420,7 +420,7 @@ class RenewPassportController extends GetxController {
 
   var isSendStared = false.obs;
 
-  var citizenId;
+  var renewPassportId;
 
   Future<void> send() async {
     networkStatus.value = NetworkStatus.LOADING;
@@ -470,7 +470,6 @@ class RenewPassportController extends GetxController {
               'renew_passport_applications': {
                 "data": {
                   'embassy_id': embassiesvalue.value!.id,
-                  'application_no': "",
                   'passport_number': passportNumberContoller.text,
                   'correction_type_id': correctionTypevalue.value != null
                       ? correctionTypevalue.value!.id
@@ -506,7 +505,8 @@ class RenewPassportController extends GetxController {
 
         isSendStared.value = false;
 
-        citizenId = result.data!['insert_ics_citizens']['returning'][0]['id']
+        renewPassportId = result.data!['insert_ics_citizens']['returning'][0]
+                ['renew_passport_applications'][0]['id']
             .toString();
       }
     } catch (e, s) {
@@ -550,7 +550,7 @@ class RenewPassportController extends GetxController {
           document: gql(ReNewDocApplicationsPassport.newDoc),
           variables: <String, dynamic>{
             'objects': {
-              'renew_origin_id_application_id': neworginID,
+              'renew_passport_application_id': neworginID,
               'files': path,
               'document_type_id': documentTypeId,
             }

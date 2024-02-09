@@ -17,8 +17,21 @@ import '../controllers/home_controller.dart';
 import 'widget/featured_news_item.dart';
 import 'widget/news_carousel_slider.dart';
 
-class HomeView extends GetView<HomeController> {
+class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  late HomeController controller;
+  @override
+  void initState() {
+    controller = Get.put(HomeController());
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -564,10 +577,7 @@ class HomeView extends GetView<HomeController> {
               iconColor: controller.color[index],
               onPressed: () {
                 if (index == 0) {
-
-                } else if (index == 1) {
-                  
-                }
+                } else if (index == 1) {}
               });
         },
       ),

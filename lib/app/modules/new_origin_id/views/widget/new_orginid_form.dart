@@ -514,7 +514,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
   }
 
   void finalstep() {
-    AppToasts.showSuccess("New Origin Id Sent successfully");
+    AppToasts.showSuccess("Origin Id request Sent successfully");
     final MyOrderController controller = Get.put(MyOrderController());
     controller.getOrginOrder();
     Get.offAllNamed(Routes.MAIN_PAGE);

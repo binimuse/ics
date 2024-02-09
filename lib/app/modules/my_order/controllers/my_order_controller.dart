@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
 import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart';
 
 class MyOrderController extends GetxController {
@@ -8,12 +9,16 @@ class MyOrderController extends GetxController {
   @override
   void onInit() {
     getOrginOrder();
+
     super.onInit();
   }
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
   RxList<IcsAllOriginIdApplication> originIdApplication =
       List<IcsAllOriginIdApplication>.of([]).obs;
+
+  RxList<IcsAllPassportIdApplication> passportApplication =
+      List<IcsAllPassportIdApplication>.of([]).obs;
   GetOrginOrder getOrginOrders = GetOrginOrder();
   var isfechedorder = false.obs;
   void getOrginOrder() async {
@@ -25,6 +30,11 @@ class MyOrderController extends GetxController {
         originIdApplication.value =
             (result['ics_all_origin_id_applications'] as List)
                 .map((e) => IcsAllOriginIdApplication.fromMap(e))
+                .toList();
+
+        passportApplication.value =
+            (result['ics_all_passport_applications'] as List)
+                .map((e) => IcsAllPassportIdApplication.fromMap(e))
                 .toList();
 
         // countLabours.value = getlabour.value.length;

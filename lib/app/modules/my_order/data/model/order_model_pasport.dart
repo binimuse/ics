@@ -1,22 +1,22 @@
-class IcsAllOriginIdApplication {
+class IcsAllPassportIdApplication {
   String? newId;
-  String? renewalId;
+  String? renew_id;
   String createdAt;
   Application? renewApplication;
   Application? newApplication;
 
-  IcsAllOriginIdApplication({
+  IcsAllPassportIdApplication({
     required this.newId,
-    required this.renewalId,
+    required this.renew_id,
     required this.createdAt,
     required this.renewApplication,
     required this.newApplication,
   });
 
-  factory IcsAllOriginIdApplication.fromMap(Map<String, dynamic> json) =>
-      IcsAllOriginIdApplication(
+  factory IcsAllPassportIdApplication.fromMap(Map<String, dynamic> json) =>
+      IcsAllPassportIdApplication(
         newId: json["new_id"],
-        renewalId: json["renewal_id"],
+        renew_id: json["renew_id"],
         createdAt: json["created_at"],
         renewApplication: json["renew_application"] == null
             ? null
@@ -28,7 +28,7 @@ class IcsAllOriginIdApplication {
 
   Map<String, dynamic> toMap() => {
         "new_id": newId,
-        "renewal_id": renewalId,
+        "renew_id": renew_id,
         "created_at": createdAt,
         "renew_application": renewApplication?.toMap(),
         "new_application": newApplication?.toMap(),
@@ -39,13 +39,13 @@ class Application {
   String applicationNo;
   String createdAt;
   Citizen citizen;
-  OriginIdRenewalType? originIdRenewalType;
+  PassportRenewalType? passportRenewalType;
 
   Application({
     required this.applicationNo,
     required this.createdAt,
     required this.citizen,
-    this.originIdRenewalType,
+    this.passportRenewalType,
   });
 
   factory Application.fromMap(Map<String, dynamic> json) {
@@ -53,9 +53,9 @@ class Application {
       applicationNo: json["application_no"],
       createdAt: json["created_at"],
       citizen: Citizen.fromMap(json["citizen"]),
-      originIdRenewalType: json["origin_id_renewal_type"] == null
+      passportRenewalType: json["passport_renewal_type"] == null
           ? null
-          : OriginIdRenewalType.fromMap(json["origin_id_renewal_type"]),
+          : PassportRenewalType.fromMap(json["passport_renewal_type"]),
     );
   }
 
@@ -63,7 +63,7 @@ class Application {
         "application_no": applicationNo,
         "created_at": createdAt,
         "citizen": citizen.toMap(),
-        "origin_id_renewal_type": originIdRenewalType?.toMap(),
+        "origin_id_renewal_type": passportRenewalType?.toMap(),
       };
 }
 
@@ -143,18 +143,18 @@ class NameJson {
       };
 }
 
-class OriginIdRenewalType {
+class PassportRenewalType {
   String id;
   String name;
 
-  OriginIdRenewalType({
+  PassportRenewalType({
     required this.id,
     required this.name,
   });
 
-  factory OriginIdRenewalType.fromMap(Map<String, dynamic> json) {
+  factory PassportRenewalType.fromMap(Map<String, dynamic> json) {
     print(json);
-    return OriginIdRenewalType(
+    return PassportRenewalType(
       id: json["id"],
       name: json["name"] ?? "",
     );

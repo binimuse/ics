@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,10 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
-import 'package:ics/app/modules/home/views/home_view.dart';
-import 'package:ics/app/modules/my_order/views/my_order_view.dart';
-import 'package:ics/app/modules/notifications/views/notifications_view.dart';
-import 'package:ics/app/modules/setting/views/setting_view.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controllers/main_page_controller.dart';
@@ -19,7 +17,7 @@ class MainPageView extends GetView<MainPageController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (controller.currentPageIndex.value != 0) {
+        if (controller.selectedViewIndex.value != 0) {
           controller.changescreen(0);
           return false;
         } else {
@@ -55,20 +53,7 @@ class MainPageView extends GetView<MainPageController> {
         key: controller.keyforall,
         bottomNavigationBar: buildBottomAppBar(context),
         extendBody: false,
-        body: SafeArea(
-          child: Obx(() {
-            return IndexedStack(
-              index: controller.currentPageIndex.value,
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                HomeView(),
-                MyOrderView(),
-                NotificationsView(),
-                SettingView(),
-              ],
-            );
-          }),
-        ),
+        body: Obx(() => controller.pages[controller.selectedViewIndex.value]),
       ),
     );
   }
@@ -98,7 +83,7 @@ class MainPageView extends GetView<MainPageController> {
                       vertical: AppSizes.mp_v_1, horizontal: AppSizes.mp_v_1),
                   child: WillPopScope(
                       onWillPop: () async {
-                        if (controller.currentPageIndex.value == 0) {
+                        if (controller.selectedViewIndex.value == 0) {
                           // Ask the user if they want to exit the app if they are on the home page
                           exit(0);
                         } else {
@@ -189,7 +174,7 @@ class MainPageView extends GetView<MainPageController> {
             children: <Widget>[
               Icon(
                 icon,
-                color: controller.currentPageIndex.value == pageIndex
+                color: controller.selectedViewIndex.value == pageIndex
                     ? AppColors.primary
                     : label == "Setting"
                         ? AppColors.whiteOff

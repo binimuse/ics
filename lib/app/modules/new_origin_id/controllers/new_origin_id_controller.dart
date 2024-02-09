@@ -465,7 +465,8 @@ class NewOriginIdController extends GetxController {
         isSend.value = true;
         isSendStared.value = false;
 
-        neworginID = result.data!['insert_ics_citizens']['returning'][0]['id']
+        neworginID = result.data!['insert_ics_citizens']['returning'][0]
+                ['new_origin_id_applications'][0]['id']
             .toString();
       }
     } catch (e) {

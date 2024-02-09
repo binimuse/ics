@@ -410,7 +410,7 @@ class RenewOriginIdController extends GetxController {
         print('File uploaded successfully');
 
         sendDoc(
-          citizenId,
+          renewOriginIDApplicationId,
           documentTypeId,
           url,
           path,
@@ -437,7 +437,7 @@ class RenewOriginIdController extends GetxController {
 
   var isSendStared = false.obs;
 
-  var citizenId;
+  var renewOriginIDApplicationId;
 
   Future<void> send() async {
     networkStatus.value = NetworkStatus.LOADING;
@@ -527,7 +527,8 @@ class RenewOriginIdController extends GetxController {
 
         isSendStared.value = false;
 
-        citizenId = result.data!['insert_ics_citizens']['returning'][0]['id']
+        renewOriginIDApplicationId = result.data!['insert_ics_citizens']
+                ['returning'][0]['renewal_origin_id_applications'][0]['id']
             .toString();
       }
     } catch (e, s) {
@@ -552,7 +553,7 @@ class RenewOriginIdController extends GetxController {
   var newDocId;
 
   Future<void> sendDoc(
-    dynamic neworginID,
+    dynamic reneworginID,
     var documentTypeId,
     var url,
     var path,
@@ -571,7 +572,7 @@ class RenewOriginIdController extends GetxController {
           document: gql(ReNewDocApplicationsOrginId.newDoc),
           variables: <String, dynamic>{
             'objects': {
-              'renew_origin_id_application_id': neworginID,
+              'renew_origin_id_application_id': reneworginID,
               'files': path,
               'document_type_id': documentTypeId,
             }

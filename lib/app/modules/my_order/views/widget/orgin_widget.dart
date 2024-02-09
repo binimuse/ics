@@ -34,8 +34,8 @@ class OrginIdWidget extends StatelessWidget {
               separatorBuilder: (context, index) =>
                   SizedBox(height: AppSizes.mp_v_2 * 1.5),
               itemBuilder: (context, index) {
-                var citizen = icsNewApplicationModel[index];
-                return buildCard(citizen);
+                var orginApplication = icsNewApplicationModel[index];
+                return buildCard(orginApplication);
               },
             )
           ],
@@ -47,7 +47,9 @@ class OrginIdWidget extends StatelessWidget {
   Widget buildCard(IcsAllOriginIdApplication orginApplication) {
     return GestureDetector(
       onTap: () {
-        Get.to(DetailWidget());
+        Get.to(DetailWidget(
+          icsNewApplicationModel: orginApplication,
+        ));
       },
       child: Container(
         height: 20.h,
@@ -75,21 +77,50 @@ class OrginIdWidget extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: SvgPicture.asset(Assets.icons.passport,
-                          color: AppColors.success),
+                          color: getColor(orginApplication)),
                       onPressed: () {
                         // showModal(context);
                       },
                     ),
-                    Text("New Passport",
+                    Text(getApplicationTypeText(orginApplication),
                         style: AppTextStyles.bodyLargeBold.copyWith(
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w400,
                         )),
                     Spacer(),
+                  ],
+                ),
+              ),
+              Container(
+                width: 100.w,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLighter.withOpacity(0.2),
+                  // borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    getApplicationumber(orginApplication),
+                    style: AppTextStyles.bodySmallBold.copyWith(
+                      color: AppColors.primary,
+                      fontSize: AppSizes.font_10,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 1.h,
+              ),
+              Container(
+                alignment: AlignmentDirectional.centerStart,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         height: 4.h,
-                        width: 22.w,
+                        width: 20.w,
                         decoration: BoxDecoration(
                           color: AppColors.warning,
                           borderRadius: BorderRadius.circular(12.0),
@@ -109,43 +140,19 @@ class OrginIdWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 100.w,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLighter.withOpacity(0.2),
-                  // borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    orginApplication.renewApplication.toString(),
-                    style: AppTextStyles.bodySmallBold.copyWith(
-                      color: AppColors.primary,
-                      fontSize: AppSizes.font_10,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "",
-                      //  convertToTimeAgo(orginApplication.createdAt.toString()),
-                      style: AppTextStyles.displayOneRegular.copyWith(
-                        color: AppColors.grayDark,
-                        fontSize: AppSizes.font_10,
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        convertToTimeAgo(orginApplication.createdAt.toString()),
+                        style: AppTextStyles.displayOneRegular.copyWith(
+                          color: AppColors.grayDark,
+                          fontSize: AppSizes.font_10,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -153,8 +160,51 @@ class OrginIdWidget extends StatelessWidget {
     );
   }
 
+  String getApplicationTypeText(IcsAllOriginIdApplication orginApplication) {
+    if (orginApplication.renewApplication != null) {
+      if (orginApplication.renewApplication!.originIdRenewalType != null) {
+        return orginApplication.renewApplication!.originIdRenewalType!.name
+            .toString();
+      }
+      return "";
+    } else if (orginApplication.newApplication != null) {
+      return "New Orgin ID Application";
+    } else {
+      return "Unknown Renewal Application Type";
+    }
+  }
+
+  String getApplicationumber(IcsAllOriginIdApplication orginApplication) {
+    if (orginApplication.renewApplication != null) {
+      return orginApplication.renewApplication!.applicationNo.toString();
+    } else if (orginApplication.newApplication != null) {
+      return orginApplication.newApplication!.applicationNo.toString();
+    } else {
+      return "";
+    }
+  }
+
   String convertToTimeAgo(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
     return timeago.format(dateTime);
+  }
+
+  getColor(IcsAllOriginIdApplication orginApplication) {
+    if (orginApplication.renewApplication != null) {
+      if (orginApplication.renewApplication!.originIdRenewalType != null) {
+        if (orginApplication.renewApplication!.originIdRenewalType!.name
+            .contains("Lost")) {
+          return AppColors.danger;
+        } else if (orginApplication.renewApplication!.originIdRenewalType!.name
+            .contains("Correction")) {
+          return AppColors.accent;
+        } else if (orginApplication.renewApplication!.originIdRenewalType!.name
+            .contains("Renew")) {
+          return AppColors.warning;
+        }
+      }
+    } else {
+      return AppColors.success;
+    }
   }
 }

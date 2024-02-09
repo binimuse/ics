@@ -1,19 +1,21 @@
 // ignore_for_file: deprecated_member_use, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
 import 'package:order_tracker/order_tracker.dart';
 import 'package:sizer/sizer.dart';
 
-class DetailWidget extends StatelessWidget {
-  final IcsAllOriginIdApplication icsNewApplicationModel;
+class DetailWidgetPassport extends StatelessWidget {
+  final IcsAllPassportIdApplication passportIdApplication;
 
-  DetailWidget({
-    required this.icsNewApplicationModel,
+  DetailWidgetPassport({
+    required this.passportIdApplication,
   });
   List<TextDto> orderList = [
     TextDto("Your order has been placed", "Fri, 25th Mar '22 - 10:47pm"),
@@ -36,41 +38,52 @@ class DetailWidget extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Orders',
-        title2: 'Status',
-        showActions: false,
-        showLeading: true,
-      ),
-      backgroundColor: AppColors.whiteOff,
-      body: Column(
-        children: [
-          _buildHeader(),
-          Divider(
-            color: AppColors.grayLighter,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: OrderTracker(
-              status: Status.order,
-              headingDateTextStyle: AppTextStyles.bodySmallRegular.copyWith(
-                  fontSize: AppSizes.font_10, color: AppColors.grayDark),
-              headingTitleStyle: AppTextStyles.bodyLargeBold.copyWith(
-                  fontSize: AppSizes.font_16, color: AppColors.primary),
-              subTitleTextStyle: AppTextStyles.bodyLargeBold
-                  .copyWith(fontSize: AppSizes.font_12, color: AppColors.black),
-              subDateTextStyle: AppTextStyles.bodySmallRegular.copyWith(
-                  fontSize: AppSizes.font_10, color: AppColors.grayDark),
-              activeColor: AppColors.primary,
-              inActiveColor: Colors.grey[300],
-              orderTitleAndDateList: orderList,
-              shippedTitleAndDateList: shippedList,
-              outOfDeliveryTitleAndDateList: outOfDeliveryList,
-              deliveredTitleAndDateList: deliveredList,
+    return WillPopScope(
+      onWillPop: () async {
+        Get.back();
+
+        return true;
+      },
+      child: Scaffold(
+        appBar: CustomAppBar(
+          title: 'Orders',
+          title2: 'Status',
+          showActions: false,
+          showLeading: true,
+        ),
+        backgroundColor: AppColors.whiteOff,
+        body: Column(
+          children: [
+            _buildHeader(),
+            Divider(
+              color: AppColors.grayLighter,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: OrderTracker(
+
+                status: Status.order,
+                
+                headingDateTextStyle: AppTextStyles.bodySmallRegular.copyWith(
+                    fontSize: AppSizes.font_10, color: AppColors.grayDark),
+                headingTitleStyle: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_16, color: AppColors.primary),
+                subTitleTextStyle: AppTextStyles.bodyLargeBold.copyWith(
+                    fontSize: AppSizes.font_12, color: AppColors.black),
+                subDateTextStyle: AppTextStyles.bodySmallRegular.copyWith(
+                    fontSize: AppSizes.font_10, color: AppColors.grayDark),
+                activeColor: AppColors.primary,
+                inActiveColor: Colors.grey[300],
+                
+                orderTitleAndDateList: orderList,
+                shippedTitleAndDateList: shippedList,
+                outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                deliveredTitleAndDateList: deliveredList,
+
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -95,13 +108,13 @@ class DetailWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                getName(icsNewApplicationModel),
+                getName(passportIdApplication),
                 style: AppTextStyles.bodyLargeBold
                     .copyWith(color: AppColors.primary),
               ),
               SizedBox(height: 1.h),
               Text(
-                getNameAm(icsNewApplicationModel),
+                getNameAm(passportIdApplication),
                 style: AppTextStyles.bodyLargeBold.copyWith(
                   color: AppColors.black,
                   fontSize: AppSizes.font_14,
@@ -117,7 +130,7 @@ class DetailWidget extends StatelessWidget {
                   ),
                   SizedBox(width: 10.0),
                   Text(
-                    getNameCountry(icsNewApplicationModel),
+                    getNameCountry(passportIdApplication),
                     style: AppTextStyles.bodySmallRegular.copyWith(
                       color: AppColors.black,
                       fontSize: AppSizes.font_10,
@@ -132,7 +145,7 @@ class DetailWidget extends StatelessWidget {
     );
   }
 
-  String getNameAm(IcsAllOriginIdApplication orginApplication) {
+  String getNameAm(IcsAllPassportIdApplication orginApplication) {
     if (orginApplication.renewApplication != null) {
       return orginApplication.renewApplication!.citizen.firstNameJson.am
               .toString() +
@@ -156,7 +169,7 @@ class DetailWidget extends StatelessWidget {
     }
   }
 
-  String getName(IcsAllOriginIdApplication orginApplication) {
+  String getName(IcsAllPassportIdApplication orginApplication) {
     if (orginApplication.renewApplication != null) {
       return orginApplication.renewApplication!.citizen.fatherName.toString() +
           " " +
@@ -174,7 +187,7 @@ class DetailWidget extends StatelessWidget {
     }
   }
 
-  String getNameCountry(IcsAllOriginIdApplication icsNewApplicationModel) {
+  String getNameCountry(IcsAllPassportIdApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.birthCountry.name;
     } else if (icsNewApplicationModel.newApplication != null) {
