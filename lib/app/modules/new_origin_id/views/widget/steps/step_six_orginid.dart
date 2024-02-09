@@ -1,7 +1,10 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
+import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
@@ -50,9 +53,30 @@ class Step6Orginid extends StatelessWidget {
           blackoutDates: controller.occupiedDates,
           minDate: today,
           maxDate: DateTime(today.year, today.month + 3, today.day),
-          onTap: (CalendarTapDetails details) {
-            print('Selected date: ${details.date}');
+          onTap: (CalendarTapDetails details) {},
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        FormBuilderDropdown(
+          validator: ValidationBuilder().required('Urgency type').build(),
+          decoration: ReusableInputDecoration.getDecoration('Urgency type',
+              isMandatory: true),
+          items: controller.urgencytype.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: AppTextStyles.captionBold
+                    .copyWith(color: AppColors.grayDark),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            //  controller.skincolorvalue.value = value!;
           },
+          name: 'Urgency',
+          //  initialValue: citizenModel != null ? citizenModel!.skinColour! : null,
         ),
         SizedBox(
           height: 2.h,

@@ -60,7 +60,7 @@ dependencies:
   animated_segmented_tab_control: ^1.2.0
   timeago: ^3.6.0
   syncfusion_flutter_calendar: ^24.1.47
-  order_tracker: ^0.0.2
+  timeline_tile: ^2.0.0
 
 
 

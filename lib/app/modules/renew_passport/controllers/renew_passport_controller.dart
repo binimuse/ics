@@ -9,7 +9,7 @@ import 'package:ics/app/modules/home/data/models/base_renewtype_passport_model.d
 import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/model/fileurl_passport.dart';
-import 'package:ics/app/modules/renew_passport/data/mutation/ics_citizens_mutuation_orginid.dart';
+import 'package:ics/app/modules/renew_passport/data/mutation/ics_citizens_mutuation_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/quary/get_all_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/quary/get_emabassies_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/quary/get_url_passport.dart';
@@ -46,6 +46,11 @@ class RenewPassportController extends GetxController {
     'Brown',
     'Blue',
     'Other',
+  ];
+
+  List<String> urgencytype = [
+    'Normal(2000 ETB)',
+    'Urgent(6000 ETB)',
   ];
 
   final TextEditingController addressController = TextEditingController();

@@ -68,7 +68,10 @@ class RenewOriginIdController extends GetxController {
     'Blue',
     'Other',
   ];
-
+  List<String> urgencytype = [
+    'Normal(2000 ETB)',
+    'Urgent(6000 ETB)',
+  ];
   final TextEditingController addressController = TextEditingController();
 
   final Rxn<BasemodelRenewOrginId> baseData = Rxn<BasemodelRenewOrginId>();

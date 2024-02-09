@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/common/timeline/timeline.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/my_order/data/model/order_model.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
-import 'package:order_tracker/order_tracker.dart';
 import 'package:sizer/sizer.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class DetailWidgetPassport extends StatelessWidget {
   final IcsAllPassportIdApplication passportIdApplication;
@@ -17,25 +17,7 @@ class DetailWidgetPassport extends StatelessWidget {
   DetailWidgetPassport({
     required this.passportIdApplication,
   });
-  List<TextDto> orderList = [
-    TextDto("Your order has been placed", "Fri, 25th Mar '22 - 10:47pm"),
-    TextDto("Seller ha processed your order", "Sun, 27th Mar '22 - 10:19am"),
-    TextDto("Your item has been picked up by courier partner.",
-        "Tue, 29th Mar '22 - 5:00pm"),
-  ];
 
-  List<TextDto> shippedList = [
-    TextDto("Your order has been shipped", "Tue, 29th Mar '22 - 5:04pm"),
-    TextDto("Your item has been received in the nearest hub to you.", null),
-  ];
-
-  List<TextDto> outOfDeliveryList = [
-    TextDto("Your order is out for delivery", "Thu, 31th Mar '22 - 2:27pm"),
-  ];
-
-  List<TextDto> deliveredList = [
-    TextDto("Your order has been delivered", "Thu, 31th Mar '22 - 3:58pm"),
-  ];
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -58,29 +40,91 @@ class DetailWidgetPassport extends StatelessWidget {
             Divider(
               color: AppColors.grayLighter,
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: OrderTracker(
+            Expanded(
+              child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: ListView(
+                    children: [
+                      MyTimeLineTiles(
+                          isFirst: true,
+                          isLast: false,
+                          isPast: true,
+                          eventchild: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Passport Order Placed",
+                                style: AppTextStyles.menuBold
+                                    .copyWith(color: AppColors.whiteOff),
+                              ),
+                              Text(
+                                "you passport order is placed",
+                                style: AppTextStyles.menuRegular
+                                    .copyWith(color: AppColors.whiteOff),
+                              ),
+                            ],
+                          )),
 
-                status: Status.order,
-                
-                headingDateTextStyle: AppTextStyles.bodySmallRegular.copyWith(
-                    fontSize: AppSizes.font_10, color: AppColors.grayDark),
-                headingTitleStyle: AppTextStyles.bodyLargeBold.copyWith(
-                    fontSize: AppSizes.font_16, color: AppColors.primary),
-                subTitleTextStyle: AppTextStyles.bodyLargeBold.copyWith(
-                    fontSize: AppSizes.font_12, color: AppColors.black),
-                subDateTextStyle: AppTextStyles.bodySmallRegular.copyWith(
-                    fontSize: AppSizes.font_10, color: AppColors.grayDark),
-                activeColor: AppColors.primary,
-                inActiveColor: Colors.grey[300],
-                
-                orderTitleAndDateList: orderList,
-                shippedTitleAndDateList: shippedList,
-                outOfDeliveryTitleAndDateList: outOfDeliveryList,
-                deliveredTitleAndDateList: deliveredList,
-
-              ),
+                      //embassy_approved,shipped, immigration_approved, issued
+                      MyTimeLineTiles(
+                          isFirst: false,
+                          isLast: false,
+                          isPast: true,
+                          eventchild: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Payment Paid",
+                                style: AppTextStyles.menuBold
+                                    .copyWith(color: AppColors.whiteOff),
+                              ),
+                              Text(
+                                "you have successfully paid the order payment",
+                                style: AppTextStyles.menuRegular
+                                    .copyWith(color: AppColors.whiteOff),
+                              ),
+                            ],
+                          )),
+                      MyTimeLineTiles(
+                          isFirst: false,
+                          isLast: false,
+                          isPast: false,
+                          eventchild: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Immigration approved",
+                                style: AppTextStyles.menuBold
+                                    .copyWith(color: AppColors.whiteOff),
+                              ),
+                              Text(
+                                "",
+                                style: AppTextStyles.menuRegular
+                                    .copyWith(color: AppColors.whiteOff),
+                              ),
+                            ],
+                          )),
+                      MyTimeLineTiles(
+                          isFirst: false,
+                          isLast: true,
+                          isPast: false,
+                          eventchild: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Issued",
+                                style: AppTextStyles.menuBold
+                                    .copyWith(color: AppColors.whiteOff),
+                              ),
+                              Text(
+                                "",
+                                style: AppTextStyles.menuRegular
+                                    .copyWith(color: AppColors.whiteOff),
+                              ),
+                            ],
+                          )),
+                    ],
+                  )),
             ),
           ],
         ),
