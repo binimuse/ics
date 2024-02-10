@@ -43,11 +43,6 @@ class NewPassportController extends GetxController {
     'Other',
   ];
 
-  List<String> urgencytype = [
-    'Normal(2000 ETB)',
-    'Urgent(6000 ETB)',
-  ];
-
   final TextEditingController addressController = TextEditingController();
   final Rxn<Basemodel> baseData = Rxn<Basemodel>();
   final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
@@ -64,6 +59,8 @@ class NewPassportController extends GetxController {
   final TextEditingController countryController = TextEditingController();
 
   final Rxn<AllowedContreyModel> countryvalue = Rxn<AllowedContreyModel>();
+  final Rxn<AllowedContreyModel> currentcountryvalue =
+      Rxn<AllowedContreyModel>();
 
   int currentStep = 0;
   final TextEditingController dateofbirth = TextEditingController();
@@ -73,6 +70,7 @@ class NewPassportController extends GetxController {
   final TextEditingController fatherNameController = TextEditingController();
   //Step 1
   final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController birthplace = TextEditingController();
   final TextEditingController grandFatherNameController =
       TextEditingController();
 
@@ -385,7 +383,7 @@ class NewPassportController extends GetxController {
         'father_name_json': fathernameToJson(),
         'grand_father_name_json': gfathernameToJson(),
         'gender': gendervalue.value!.name,
-        'birth_place': birthCountryvalue.value!.name,
+        'birth_place': birthplace.text,
         'birth_country_id': birthCountryvalue.value!.id,
         'nationality_id': natinalityvalue.value!.id,
         'date_of_birth': formattedDateOfBirth,
@@ -398,11 +396,12 @@ class NewPassportController extends GetxController {
         'skin_colour': skincolorvalue.value,
         'abroad_country_id': countryvalue.value!.id,
         'abroad_address': addressController.text,
-        'abroad_phone_number': phonenumber.text,
+        'phone_number': phonenumber.text,
         'new_applications': {
           "data": {
             "delivery_date": null,
             'embassy_id': embassiesvalue.value!.id,
+            'current_country_id': currentcountryvalue.value!.id,
           }
         },
         'citizen_families': {

@@ -56,7 +56,7 @@ class IcsCitizenModelReNewOrginId {
     return IcsCitizenModelReNewOrginId(
       abroadAddress: json['abroad_address'],
       abroadCountryId: json['abroad_country_id'],
-      abroadPhoneNumber: json['abroad_phone_number'],
+      abroadPhoneNumber: json['phone_number'],
       birthCountryId: json['birth_country_id'],
       is_adopted: json['is_adopted'],
       nationality_id: json['nationality_id'],
@@ -122,7 +122,6 @@ class ReNewOriginIdApplication {
   final String? correction_type_id;
   final String? embassy_id;
 
-
   const ReNewOriginIdApplication({
     this.current_passport_number,
     this.current_passport_expiry_date,
@@ -132,7 +131,6 @@ class ReNewOriginIdApplication {
     this.origin_id_number,
     this.correction_type_id,
     this.embassy_id,
- 
     this.visa_issued_date,
     this.visa_expiry_date,
   });
@@ -149,7 +147,6 @@ class ReNewOriginIdApplication {
       correction_type_id: json['correction_type_id'],
       visa_issued_date: json['visa_issued_date'],
       visa_expiry_date: json['visa_expiry_date'],
-   
     );
   }
 
@@ -163,7 +160,6 @@ class ReNewOriginIdApplication {
       'origin_id_number': origin_id_number,
       'embassy_id': embassy_id,
       'correction_type_id': correction_type_id,
- 
       'visa_expiry_date': visa_expiry_date,
       'visa_issued_date': visa_issued_date,
     };

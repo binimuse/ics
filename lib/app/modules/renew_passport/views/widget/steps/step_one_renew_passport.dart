@@ -13,7 +13,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
 import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
-
+import 'package:flutter/services.dart';
 import 'package:ics/utils/keyboard.dart';
 import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
@@ -53,7 +53,7 @@ class Step1RenewPassport extends StatelessWidget {
           SizedBox(
             width: 80.w,
             child: Text(
-              'Your passport is an essential document in international travel and for identification purposes. ',
+              'Personal profie',
               style: AppTextStyles.bodySmallRegular.copyWith(
                   fontSize: AppSizes.font_12, color: AppColors.grayDark),
               maxLines: 4,
@@ -111,15 +111,31 @@ class Step1RenewPassport extends StatelessWidget {
           SizedBox(
             height: 2.h,
           ),
-          natianlity(),
-          SizedBox(
-            height: 2.h,
-          ),
           gender(),
           SizedBox(
             height: 2.h,
           ),
+          natianlity(),
+          SizedBox(
+            height: 2.h,
+          ),
           countery(),
+          SizedBox(
+            height: 2.h,
+          ),
+          TextFormBuilder(
+            isMandatory: true,
+            validator: ValidationBuilder().required('Birth place').build(),
+            labelText: "Birth place",
+            controller: controller.birthplace,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
+            ],
+            hint: 'Birth place',
+            showClearButton: false,
+            autoFocus: false,
+            onChanged: (value) {},
+          ),
           SizedBox(
             height: 2.h,
           ),

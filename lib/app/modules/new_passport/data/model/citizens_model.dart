@@ -60,7 +60,7 @@ class IcsCitizenModel {
     return IcsCitizenModel(
       abroadAddress: json['abroad_address'],
       abroadCountryId: json['abroad_country_id'],
-      abroadPhoneNumber: json['abroad_phone_number'],
+      abroadPhoneNumber: json['phone_number'],
       birthCountryId: json['birth_country_id'],
       is_adopted: json['is_adopted'],
       nationality_id: json['nationality_id'],

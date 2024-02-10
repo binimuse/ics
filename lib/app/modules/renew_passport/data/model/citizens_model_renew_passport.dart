@@ -3,6 +3,7 @@ class IcsCitizenModelReNewPassport {
   String? abroadCountryId;
   String? abroadPhoneNumber;
   String? birthCountryId;
+  String? currentCountryId;
   String? nationality_id;
   String? birthPlace;
   DateTime? createdAt;
@@ -31,6 +32,7 @@ class IcsCitizenModelReNewPassport {
     this.abroadPhoneNumber,
     this.birthCountryId,
     this.nationality_id,
+    this.currentCountryId,
     this.birthPlace,
     this.createdAt,
     this.dateOfBirth,
@@ -56,7 +58,7 @@ class IcsCitizenModelReNewPassport {
     return IcsCitizenModelReNewPassport(
       abroadAddress: json['abroad_address'],
       abroadCountryId: json['abroad_country_id'],
-      abroadPhoneNumber: json['abroad_phone_number'],
+      abroadPhoneNumber: json['phone_number'],
       birthCountryId: json['birth_country_id'],
       is_adopted: json['is_adopted'],
       nationality_id: json['nationality_id'],
@@ -113,11 +115,13 @@ class NameJson {
 class ReNewPassportApplication {
   final String? correction_type_id;
   final String? embassy_id;
+  final String? current_country_id;
   final String? passport_number;
 
   const ReNewPassportApplication({
     this.correction_type_id,
     this.embassy_id,
+    this.current_country_id,
     this.passport_number,
   });
 
@@ -125,6 +129,7 @@ class ReNewPassportApplication {
     return ReNewPassportApplication(
       passport_number: json['passport_number'],
       embassy_id: json['embassy_id'],
+      current_country_id: json['current_country_id'],
       correction_type_id: json['correction_type_id'],
     );
   }
@@ -133,6 +138,7 @@ class ReNewPassportApplication {
     return {
       'passport_number': passport_number,
       'embassy_id': embassy_id,
+      'current_country_id': current_country_id,
       'correction_type_id': correction_type_id,
     };
   }

@@ -59,29 +59,6 @@ class Step6 extends StatelessWidget {
         SizedBox(
           height: 2.h,
         ),
-        FormBuilderDropdown(
-          validator: ValidationBuilder().required('Urgency type').build(),
-          decoration: ReusableInputDecoration.getDecoration('Urgency type',
-              isMandatory: true),
-          items: controller.urgencytype.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            //  controller.skincolorvalue.value = value!;
-          },
-          name: 'Urgency',
-          //  initialValue: citizenModel != null ? citizenModel!.skinColour! : null,
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
       ],
     );
   }

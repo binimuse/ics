@@ -5,7 +5,7 @@ query MyQuery {
   ics_citizens(order_by: {created_at: desc}, limit: 5) {
     abroad_address
     abroad_country_id
-    abroad_phone_number
+    phone_number
     birth_country_id
     nationality_id
     is_adopted
@@ -27,8 +27,10 @@ query MyQuery {
     first_name_json
     grand_father_name_json
     renew_passport_applications {
+      current_country_id
       correction_type_id
       embassy_id
+      current_country_id
       passport_number
     
     }

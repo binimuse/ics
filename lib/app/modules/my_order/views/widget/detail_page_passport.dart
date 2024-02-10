@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/timeline/timeline.dart';
+import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -139,14 +140,15 @@ class DetailWidgetPassport extends StatelessWidget {
         children: <Widget>[
           const SizedBox(width: 20.0),
           SizedBox(
-              width: 80.0,
-              height: 80.0,
-              child: CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.grey,
-                  child: CircleAvatar(
-                    radius: 35.0,
-                  ))),
+            width: 80.0,
+            height: 80.0,
+            child: Image.asset(
+              AppAssets.qr,
+              height: 15.h,
+              width: 55.w,
+              fit: BoxFit.contain,
+            ),
+          ),
           const SizedBox(width: 20.0),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,13 +217,13 @@ class DetailWidgetPassport extends StatelessWidget {
 
   String getName(IcsAllPassportIdApplication orginApplication) {
     if (orginApplication.renewApplication != null) {
-      return orginApplication.renewApplication!.citizen.fatherName.toString() +
+      return orginApplication.renewApplication!.citizen.firstName.toString() +
           " " +
           orginApplication.renewApplication!.citizen.fatherName.toString() +
           " " +
           orginApplication.renewApplication!.citizen.grandFatherName.toString();
     } else if (orginApplication.newApplication != null) {
-      return orginApplication.newApplication!.citizen.fatherName.toString() +
+      return orginApplication.newApplication!.citizen.firstName.toString() +
           " " +
           orginApplication.newApplication!.citizen.fatherName.toString() +
           " " +

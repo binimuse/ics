@@ -44,7 +44,7 @@ class Step2RenewPassport extends StatelessWidget {
         SizedBox(
           width: 80.w,
           child: Text(
-            'Your passport is an essential document in international travel and for identification purposes. ',
+            'Personal profie',
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,

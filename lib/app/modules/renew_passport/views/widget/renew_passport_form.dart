@@ -57,13 +57,14 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
   }
 
   void initState() {
-    super.initState();
     if (widget.citizenModel != null) {
+      getDataForStep3();
       getDataForStep1();
       getDataForStep2();
-      getDataForStep3();
+
       getDataForStep4();
     }
+    super.initState();
   }
 
   final SignatureController _controller = SignatureController(
@@ -406,17 +407,20 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
     final citizenModel = widget.citizenModel;
     final firstName = citizenModel!.firstName!;
     final fatherName = citizenModel.father_name!;
+    final birthpalce = citizenModel.birthPlace!;
     final grandFatherName = citizenModel.grand_father_name!;
     final firstNameAm = citizenModel.firstNameJson!.am!;
     final fatherNameAm = citizenModel.fatherNameJson!.am!;
     final grandFatherNameAm = citizenModel.grandFatherNameJson!.am!;
     final birthCountryId = citizenModel.birthCountryId;
-    final nationalityId = citizenModel.birthCountryId;
+
+    final nationalityId = citizenModel.nationality_id;
     final gender = citizenModel.gender;
     final dateOfBirth = citizenModel.dateOfBirth!;
 
     controller.firstNameController.text = firstName;
     controller.fatherNameController.text = fatherName;
+    controller.birthplace.text = birthpalce;
     controller.grandFatherNameController.text = grandFatherName;
     controller.AmfirstNameController.text = firstNameAm;
     controller.AmfatherNameController.text = fatherNameAm;
@@ -456,14 +460,19 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
 
   void getDataForStep3() {
     var embassyId;
+
     final citizenModel = widget.citizenModel;
+
     final abroadCountryId = citizenModel!.abroadCountryId;
+    final currentcontry =
+        citizenModel.reNewPassportApplication.first.current_country_id;
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
     if (citizenModel.reNewPassportApplication.isNotEmpty) {
       embassyId = citizenModel.reNewPassportApplication.first.embassy_id;
-      Future.delayed(const Duration(seconds: 2), () {
+
+      Future.delayed(const Duration(seconds: 1), () {
         controller.embassiesvalue.value =
             controller.base_embassies.firstWhere((e) => e.id == embassyId);
       });
@@ -471,6 +480,9 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
+
+    controller.currentcountryvalue.value =
+        controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
     controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
@@ -486,12 +498,16 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
           citizenModel.reNewPassportApplication.first.passport_number;
 
       final correctionTypeID =
-          citizenModel.reNewPassportApplication.first.correction_type_id!;
+          citizenModel.reNewPassportApplication.first.correction_type_id != null
+              ? citizenModel.reNewPassportApplication.first.correction_type_id!
+              : null;
+
+      if (correctionTypeID != null) {
+        controller.correctionTypevalue.value = controller.correctiontyoe
+            .firstWhere((e) => e.id == correctionTypeID);
+      }
 
       controller.passportNumberContoller.text = passportNumber!;
-
-      controller.correctionTypevalue.value =
-          controller.correctiontyoe.firstWhere((e) => e.id == correctionTypeID);
     }
   }
 

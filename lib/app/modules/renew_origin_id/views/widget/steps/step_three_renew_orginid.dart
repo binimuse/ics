@@ -54,7 +54,7 @@ class _Step3State extends State<Step3RenewOrginId> {
         SizedBox(
           width: 80.w,
           child: Text(
-            'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+            'Address and collaction Information',
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,
@@ -65,7 +65,8 @@ class _Step3State extends State<Step3RenewOrginId> {
           height: 4.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Country',
+          decoration: ReusableInputDecoration.getDecoration(
+              'Collaction Country',
               isMandatory: true),
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
@@ -84,7 +85,7 @@ class _Step3State extends State<Step3RenewOrginId> {
               controller.embassiesvalue.value = null;
             });
           },
-          name: 'Country',
+          name: 'Collaction Country',
           initialValue: widget.citizenModel != null
               ? controller.countryvalue.value!
               : null,
@@ -94,7 +95,8 @@ class _Step3State extends State<Step3RenewOrginId> {
         ),
         Obx(() => controller.isfechedEmbassies.value
             ? FormBuilderDropdown(
-                decoration: ReusableInputDecoration.getDecoration('Embassies',
+                decoration: ReusableInputDecoration.getDecoration(
+                    'Embassies/branch',
                     isMandatory: true),
                 items: controller.base_embassies.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(
@@ -110,10 +112,7 @@ class _Step3State extends State<Step3RenewOrginId> {
                   controller.embassiesvalue.value = value;
                 },
                 validator: FormBuilderValidators.required(),
-                name: 'Embassies',
-                initialValue: widget.citizenModel != null
-                    ? controller.embassiesvalue.value
-                    : null,
+                name: 'Embassies/branch',
               )
             : SizedBox()),
         SizedBox(
@@ -128,7 +127,7 @@ class _Step3State extends State<Step3RenewOrginId> {
               ValidationBuilder().required('Address is required').build(),
           showClearButton: false,
           inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp(r"\s")),
+            FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
           ],
           autoFocus: false,
           onChanged: (value) {},

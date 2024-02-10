@@ -258,6 +258,7 @@ class ProfileViewOrginid extends GetView<NewOriginIdController> {
     controller.firstNameController.clear();
     controller.fatherNameController.clear();
     controller.grandFatherNameController.clear();
+    controller.birthplace.clear();
     controller.AmfirstNameController.clear();
     controller.AmfatherNameController.clear();
     controller.AmgrandFatherNameController.clear();

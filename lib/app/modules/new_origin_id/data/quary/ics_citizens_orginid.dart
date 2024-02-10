@@ -5,8 +5,9 @@ query MyQuery {
   ics_citizens(order_by: {created_at: desc}, limit: 5) {
     abroad_address
     abroad_country_id
-    abroad_phone_number
+    phone_number
     birth_country_id
+    
     nationality_id
     is_adopted
     birth_place
@@ -33,6 +34,7 @@ query MyQuery {
       visa_type_id
       visa_number
       embassy_id
+      current_country_id
     }
   }
 }

@@ -397,18 +397,20 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     final citizenModel = widget.citizenModel;
     final firstName = citizenModel!.firstName!;
     final fatherName = citizenModel.father_name!;
+    final birthplace = citizenModel.birthPlace!;
     final grandFatherName = citizenModel.grand_father_name!;
     final firstNameAm = citizenModel.firstNameJson!.am!;
     final fatherNameAm = citizenModel.fatherNameJson!.am!;
     final grandFatherNameAm = citizenModel.grandFatherNameJson!.am!;
     final birthCountryId = citizenModel.birthCountryId;
-    final nationalityId = citizenModel.birthCountryId;
+    final nationalityId = citizenModel.nationality_id;
     final gender = citizenModel.gender;
     final dateOfBirth = citizenModel.dateOfBirth!;
 
     controller.firstNameController.text = firstName;
     controller.fatherNameController.text = fatherName;
     controller.grandFatherNameController.text = grandFatherName;
+    controller.birthplace.text = birthplace;
     controller.AmfirstNameController.text = firstNameAm;
     controller.AmfatherNameController.text = fatherNameAm;
     controller.AmgrandFatherNameController.text = grandFatherNameAm;

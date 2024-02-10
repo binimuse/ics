@@ -16,6 +16,7 @@ import 'package:ics/utils/keyboard.dart';
 import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
+import 'package:flutter/services.dart';
 
 class Step1 extends StatelessWidget {
   final IcsCitizenModel? citizenModel;
@@ -51,7 +52,7 @@ class Step1 extends StatelessWidget {
           SizedBox(
             width: 80.w,
             child: Text(
-              'Your passport is an essential document in international travel and for identification purposes. ',
+              'Personal profie',
               style: AppTextStyles.bodySmallRegular.copyWith(
                   fontSize: AppSizes.font_12, color: AppColors.grayDark),
               maxLines: 4,
@@ -219,28 +220,6 @@ class Step1 extends StatelessWidget {
             height: 2.h,
           ),
           FormBuilderDropdown(
-            decoration: ReusableInputDecoration.getDecoration('Gender'),
-            items: controller.gender.map((CommonModel value) {
-              return DropdownMenuItem<CommonModel>(
-                value: value,
-                child: Text(
-                  value.name,
-                  style: AppTextStyles.captionBold
-                      .copyWith(color: AppColors.grayDark),
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              controller.gendervalue.value = value!;
-            },
-            name: 'Gender',
-            initialValue:
-                citizenModel != null ? controller.gendervalue.value! : null,
-          ),
-          SizedBox(
-            height: 2.h,
-          ),
-          FormBuilderDropdown(
             decoration: ReusableInputDecoration.getDecoration('Birth Country'),
             items: controller.bcountries.map((CommonModel value) {
               return DropdownMenuItem<CommonModel>(
@@ -262,6 +241,41 @@ class Step1 extends StatelessWidget {
           ),
           SizedBox(
             height: 2.h,
+          ),
+          TextFormBuilder(
+            isMandatory: true,
+            validator: ValidationBuilder().required('Birth place').build(),
+            labelText: "Birth place",
+            controller: controller.birthplace,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
+            ],
+            hint: 'Birth place',
+            showClearButton: false,
+            autoFocus: false,
+            onChanged: (value) {},
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          FormBuilderDropdown(
+            decoration: ReusableInputDecoration.getDecoration('Gender'),
+            items: controller.gender.map((CommonModel value) {
+              return DropdownMenuItem<CommonModel>(
+                value: value,
+                child: Text(
+                  value.name,
+                  style: AppTextStyles.captionBold
+                      .copyWith(color: AppColors.grayDark),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              controller.gendervalue.value = value!;
+            },
+            name: 'Gender',
+            initialValue:
+                citizenModel != null ? controller.gendervalue.value! : null,
           ),
           Text(
             'Is Adoption ?',

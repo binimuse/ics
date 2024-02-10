@@ -259,6 +259,7 @@ class ProfileViewRenewPassport extends GetView<RenewPassportController> {
     controller.firstNameController.clear();
     controller.fatherNameController.clear();
     controller.grandFatherNameController.clear();
+    controller.birthplace.clear();
     controller.AmfirstNameController.clear();
     controller.AmfatherNameController.clear();
     controller.AmgrandFatherNameController.clear();

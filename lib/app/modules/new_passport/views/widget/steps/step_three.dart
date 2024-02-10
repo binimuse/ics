@@ -52,7 +52,7 @@ class _Step3State extends State<Step3> {
         SizedBox(
           width: 80.w,
           child: Text(
-            'Your origin ID is an essential document while living in Ethiopia for identification purposes.',
+            'Address and collaction Information',
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,
@@ -63,7 +63,8 @@ class _Step3State extends State<Step3> {
           height: 4.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Country',
+          decoration: ReusableInputDecoration.getDecoration(
+              'Collaction Country',
               isMandatory: true),
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
@@ -82,7 +83,7 @@ class _Step3State extends State<Step3> {
               controller.embassiesvalue.value = null;
             });
           },
-          name: 'Country',
+          name: 'Collaction Country',
           initialValue: widget.citizenModel != null
               ? controller.countryvalue.value!
               : null,
@@ -107,10 +108,7 @@ class _Step3State extends State<Step3> {
                 onChanged: (value) {
                   controller.embassiesvalue.value = value;
                 },
-                name: 'Embassies',
-                initialValue: widget.citizenModel != null
-                    ? controller.embassiesvalue.value
-                    : null,
+                name: 'Embassies/branch',
                 validator: FormBuilderValidators.required(),
               )
             : SizedBox()),
@@ -126,7 +124,7 @@ class _Step3State extends State<Step3> {
               ValidationBuilder().required('Address is required').build(),
           showClearButton: false,
           inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp(r"\s")),
+            FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
           ],
           autoFocus: false,
           onChanged: (value) {},

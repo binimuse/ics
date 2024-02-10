@@ -45,11 +45,6 @@ class NewOriginIdController extends GetxController {
     'Other',
   ];
 
-  List<String> urgencytype = [
-    'Normal(2000 ETB)',
-    'Urgent(6000 ETB)',
-  ];
-
   final TextEditingController addressController = TextEditingController();
 
   final Rxn<BasemodelOrginId> baseData = Rxn<BasemodelOrginId>();
@@ -67,6 +62,8 @@ class NewOriginIdController extends GetxController {
   final TextEditingController countryController = TextEditingController();
 
   final Rxn<AllowedContreyModel> countryvalue = Rxn<AllowedContreyModel>();
+  final Rxn<AllowedContreyModel> currentcountryvalue =
+      Rxn<AllowedContreyModel>();
 
   int currentStep = 0;
 
@@ -75,6 +72,7 @@ class NewOriginIdController extends GetxController {
   final Rxn<CommonModel> eyecolorvalue = Rxn<CommonModel>();
 
   final TextEditingController fatherNameController = TextEditingController();
+  final TextEditingController birthplace = TextEditingController();
   //Step 1
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController grandFatherNameController =
@@ -426,7 +424,7 @@ class NewOriginIdController extends GetxController {
               'father_name_json': fathernameToJson(),
               'grand_father_name_json': gfathernameToJson(),
               'gender': gendervalue.value!.name,
-              'birth_place': birthCountryvalue.value!.name,
+              'birth_place': birthplace.text,
               'birth_country_id': birthCountryvalue.value!.id,
               'nationality_id': natinalityvalue.value!.id,
               'date_of_birth': formattedDateOfBirth,
@@ -439,7 +437,7 @@ class NewOriginIdController extends GetxController {
               'skin_colour': skincolorvalue.value,
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
-              'abroad_phone_number': phonenumber.text,
+              'phone_number': phonenumber.text,
               'new_origin_id_applications': {
                 "data": {
                   'current_passport_expiry_date':
@@ -449,7 +447,8 @@ class NewOriginIdController extends GetxController {
                   'current_passport_number': passportNumberContoller.text,
                   'visa_type_id': visatypevalue.value!.id,
                   'visa_number': visanumberContoller.text,
-                  'embassy_id': embassiesvalue.value!.id
+                  'embassy_id': embassiesvalue.value!.id,
+                  'current_country_id': currentcountryvalue.value!.id,
                 }
               },
             }
