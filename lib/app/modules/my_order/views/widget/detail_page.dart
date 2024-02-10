@@ -46,12 +46,12 @@ class DetailWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Passport Order Placed",
+                              "Origin Id Order Placed",
                               style: AppTextStyles.menuBold
                                   .copyWith(color: AppColors.whiteOff),
                             ),
                             Text(
-                              "you passport order is placed",
+                              "you Origin ID order is placed",
                               style: AppTextStyles.menuRegular
                                   .copyWith(color: AppColors.whiteOff),
                             ),
