@@ -247,6 +247,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                       ),
                       onPressed: () async {
                         if (controller.currentStep == 3) {
+                          //   controller.handleDrawFinish();
                           controller.newPassportformKey.currentState!
                                   .saveAndValidate()
                               ? createCitizen()
