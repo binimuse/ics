@@ -134,94 +134,108 @@ class _Step4State extends State<Step4RenewOrginId> {
         SizedBox(
           height: 2.h,
         ),
-        FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Visa Type',
-              isMandatory: true),
-          items: controller.visaType.map((CommonModel value) {
-            return DropdownMenuItem<CommonModel>(
-              value: value,
-              child: Text(
-                value.name,
-                style: AppTextStyles.captionBold
-                    .copyWith(color: AppColors.grayDark),
+        Obx(() => Visibility(
+              visible: controller.countryvalue.value!.name == 'Ethiopia' ||
+                  controller.currentcountryvalue.value!.name == 'Ethiopia',
+              child: FormBuilderDropdown(
+                decoration: ReusableInputDecoration.getDecoration('Visa Type',
+                    isMandatory: true),
+                items: controller.visaType.map((CommonModel value) {
+                  return DropdownMenuItem<CommonModel>(
+                    value: value,
+                    child: Text(
+                      value.name,
+                      style: AppTextStyles.captionBold
+                          .copyWith(color: AppColors.grayDark),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  controller.visatypevalue.value = value;
+                },
+                name: 'Visa Type',
+                initialValue: widget.citizenModel != null
+                    ? controller.visatypevalue.value
+                    : null,
               ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            controller.visatypevalue.value = value;
-          },
-          name: 'Visa Type',
-          initialValue: widget.citizenModel != null
-              ? controller.visatypevalue.value
-              : null,
-        ),
+            )),
+        SizedBox(height: 2.h),
+        Obx(() => Visibility(
+              visible: controller.countryvalue.value!.name == 'Ethiopia' ||
+                  controller.currentcountryvalue.value!.name == 'Ethiopia',
+              child: TextFormBuilder(
+                isMandatory: true,
+                controller: controller.visanumberContoller,
+                hint: 'Visa number',
+                labelText: 'Visa number',
+                validator: ValidationBuilder()
+                    .required('Visa number is required')
+                    .build(),
+                showClearButton: false,
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                ],
+                autoFocus: false,
+                onChanged: (value) {},
+              ),
+            )),
         SizedBox(
           height: 2.h,
         ),
-        TextFormBuilder(
-          isMandatory: true,
-          controller: controller.visanumberContoller,
-          hint: 'Visa number',
-          labelText: 'Visa number',
-          validator: FormBuilderValidators.required(
-              errorText: "Visa number is required"),
-          showClearButton: false,
-          inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp(r"\s")),
-          ],
-          autoFocus: false,
-          onChanged: (value) {},
-        ),
+        Obx(() => Visibility(
+            visible: controller.countryvalue.value!.name == 'Ethiopia' ||
+                controller.currentcountryvalue.value!.name == 'Ethiopia',
+            child: FormBuilderDateTimePicker(
+              name: 'date_established3',
+              initialValue:
+                  widget.citizenModel?.renewOriginIdApplications.isNotEmpty ??
+                          false
+                      ? DateTime.parse(controller.visaIssueDateController.text)
+                      : null,
+              onChanged: (value) {
+                controller.visaIssueDateController.value = TextEditingValue(
+                  text: value.toString(),
+                );
+              },
+              inputType: InputType.date,
+              format: DateFormat('dd/MM/yyyy'),
+              enabled: true,
+              decoration: ReusableInputDecoration.getDecoration(
+                  'Visa Issue Date(GC)',
+                  isMandatory: true),
+              style: AppTextStyles.titleBold.copyWith(
+                color: AppColors.blackLight,
+                fontSize: AppSizes.font_12,
+              ),
+            ))),
         SizedBox(
           height: 2.h,
         ),
-        FormBuilderDateTimePicker(
-          name: 'date_established3',
-          initialValue:
-              widget.citizenModel?.renewOriginIdApplications.isNotEmpty ?? false
-                  ? DateTime.parse(controller.visaIssueDateController.text)
+        Obx(() => Visibility(
+            visible: controller.countryvalue.value!.name == 'Ethiopia' ||
+                controller.currentcountryvalue.value!.name == 'Ethiopia',
+            child: FormBuilderDateTimePicker(
+              name: 'date_established2',
+              initialValue: widget.citizenModel != null &&
+                      widget.citizenModel!.renewOriginIdApplications.isNotEmpty
+                  ? DateTime.parse(controller.visaExpiryDateController.text)
                   : null,
-          onChanged: (value) {
-            controller.visaIssueDateController.value = TextEditingValue(
-              text: value.toString(),
-            );
-          },
-          inputType: InputType.date,
-          format: DateFormat('dd/MM/yyyy'),
-          enabled: true,
-          decoration: ReusableInputDecoration.getDecoration(
-              'Visa Issue Date(GC)',
-              isMandatory: true),
-          style: AppTextStyles.titleBold.copyWith(
-            color: AppColors.blackLight,
-            fontSize: AppSizes.font_12,
-          ),
-        ),
-        SizedBox(
-          height: 2.h,
-        ),
-        FormBuilderDateTimePicker(
-          name: 'date_established2',
-          initialValue: widget.citizenModel != null &&
-                  widget.citizenModel!.renewOriginIdApplications.isNotEmpty
-              ? DateTime.parse(controller.visaExpiryDateController.text)
-              : null,
-          onChanged: (value) {
-            controller.visaExpiryDateController.value = TextEditingValue(
-              text: value.toString(),
-            );
-          },
-          inputType: InputType.date,
-          format: DateFormat('dd/MM/yyyy'),
-          enabled: true,
-          decoration: ReusableInputDecoration.getDecoration(
-              'Visa Expiry Date(GC)',
-              isMandatory: true),
-          style: AppTextStyles.titleBold.copyWith(
-            color: AppColors.blackLight,
-            fontSize: AppSizes.font_12,
-          ),
-        ),
+              onChanged: (value) {
+                controller.visaExpiryDateController.value = TextEditingValue(
+                  text: value.toString(),
+                );
+              },
+              inputType: InputType.date,
+              format: DateFormat('dd/MM/yyyy'),
+              enabled: true,
+              decoration: ReusableInputDecoration.getDecoration(
+                  'Visa Expiry Date(GC)',
+                  isMandatory: true),
+              style: AppTextStyles.titleBold.copyWith(
+                color: AppColors.blackLight,
+                fontSize: AppSizes.font_12,
+              ),
+            ))),
         SizedBox(
           height: 2.h,
         ),

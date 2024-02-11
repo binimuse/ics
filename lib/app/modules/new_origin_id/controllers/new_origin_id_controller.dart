@@ -445,8 +445,8 @@ class NewOriginIdController extends GetxController {
                   'current_passport_issued_date':
                       passportIssueDateController.text,
                   'current_passport_number': passportNumberContoller.text,
-                  'visa_type_id': visatypevalue.value!.id,
-                  'visa_number': visanumberContoller.text,
+                  'visa_type_id': visatypevalue.value?.id ?? null,
+                  'visa_number': visanumberContoller.text ?? null,
                   'embassy_id': embassiesvalue.value!.id,
                   'current_country_id': currentcountryvalue.value!.id,
                 }

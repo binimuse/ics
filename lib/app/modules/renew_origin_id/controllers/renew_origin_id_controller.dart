@@ -816,14 +816,12 @@ class RenewOriginIdController extends GetxController {
                       passportIssueDateController.text,
 
                   'current_passport_number': passportNumberContoller.text,
+                  'visa_expiry_date': visaExpiryDateController.text ?? null,
+                  'visa_issued_date': visaExpiryDateController.text ?? null,
 
-                  'visa_expiry_date': visaExpiryDateController.text,
+                  'visa_type_id': visatypevalue.value?.id ?? null,
 
-                  'visa_issued_date': visaExpiryDateController.text,
-
-                  'visa_type_id': visatypevalue.value!.id,
-
-                  'visa_number': visanumberContoller.text,
+                  'visa_number': visanumberContoller.text ?? null,
 
                   'origin_id_number': orginIdnumberContoller.text,
 

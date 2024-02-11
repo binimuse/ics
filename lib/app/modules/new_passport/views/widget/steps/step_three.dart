@@ -63,8 +63,31 @@ class _Step3State extends State<Step3> {
           height: 4.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration(
-              'Collaction Country',
+          decoration: ReusableInputDecoration.getDecoration('Current Country',
+              isMandatory: true),
+          items: controller.allwoedCountries.map((AllowedContreyModel value) {
+            return DropdownMenuItem<AllowedContreyModel>(
+              value: value,
+              child: Text(
+                value.name,
+                style: AppTextStyles.captionBold
+                    .copyWith(color: AppColors.grayDark),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            controller.currentcountryvalue.value = value!;
+          },
+          name: 'Current Country',
+          initialValue: widget.citizenModel!.newApplicationModel!.isNotEmpty
+              ? controller.currentcountryvalue.value!
+              : null,
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        FormBuilderDropdown(
+          decoration: ReusableInputDecoration.getDecoration('Collaction place',
               isMandatory: true),
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
@@ -83,7 +106,7 @@ class _Step3State extends State<Step3> {
               controller.embassiesvalue.value = null;
             });
           },
-          name: 'Collaction Country',
+          name: 'Collaction place',
           initialValue: widget.citizenModel != null
               ? controller.countryvalue.value!
               : null,
@@ -93,7 +116,8 @@ class _Step3State extends State<Step3> {
         ),
         Obx(() => controller.isfechedEmbassies.value
             ? FormBuilderDropdown(
-                decoration: ReusableInputDecoration.getDecoration('Embassies',
+                decoration: ReusableInputDecoration.getDecoration(
+                    'Embassies/branch',
                     isMandatory: true),
                 items: controller.base_embassies.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(

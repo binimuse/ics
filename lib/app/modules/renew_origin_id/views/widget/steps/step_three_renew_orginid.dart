@@ -65,6 +65,31 @@ class _Step3State extends State<Step3RenewOrginId> {
           height: 4.h,
         ),
         FormBuilderDropdown(
+          decoration: ReusableInputDecoration.getDecoration('Current Country',
+              isMandatory: true),
+          items: controller.allwoedCountries.map((AllowedContreyModel value) {
+            return DropdownMenuItem<AllowedContreyModel>(
+              value: value,
+              child: Text(
+                value.name,
+                style: AppTextStyles.captionBold
+                    .copyWith(color: AppColors.grayDark),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            controller.currentcountryvalue.value = value!;
+          },
+          name: 'Current Country',
+          initialValue:
+              widget.citizenModel!.renewOriginIdApplications.isNotEmpty
+                  ? controller.currentcountryvalue.value!
+                  : null,
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration(
               'Collaction Country',
               isMandatory: true),

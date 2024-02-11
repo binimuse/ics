@@ -12,7 +12,6 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
@@ -459,8 +458,10 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
   void getDataForStep3() {
     var embassyId;
+    var currentcontry;
     final citizenModel = widget.citizenModel;
     final abroadCountryId = citizenModel!.abroadCountryId;
+
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
@@ -470,10 +471,17 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
         controller.embassiesvalue.value =
             controller.base_embassies.firstWhere((e) => e.id == embassyId);
       });
+
+      currentcontry =
+          citizenModel.newApplicationModel?.first.current_country_id ?? null;
+
+      controller.currentcountryvalue.value =
+          controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
     }
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
+
     controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;

@@ -2,12 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:flutter_bounce/flutter_bounce.dart';
-import '../../../../gen/assets.gen.dart';
 
 class PhoneNumberInput extends StatefulWidget {
   const PhoneNumberInput({

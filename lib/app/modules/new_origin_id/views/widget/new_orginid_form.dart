@@ -449,6 +449,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
 
   void getDataForStep3() {
     var embassyId;
+    var currentcontry;
     final citizenModel = widget.citizenModel;
     final abroadCountryId = citizenModel!.abroadCountryId;
     final abroadAddress = citizenModel.abroadAddress!;
@@ -460,6 +461,12 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
         controller.embassiesvalue.value =
             controller.base_embassies.firstWhere((e) => e.id == embassyId);
       });
+
+      currentcontry =
+          citizenModel.newOriginIdApplications.first.current_country_id ?? null;
+
+      controller.currentcountryvalue.value =
+          controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
     }
 
     controller.countryvalue.value =

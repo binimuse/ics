@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-import 'package:ics/app/modules/help/model/faq_model.dart';
 
 
 class HelpController extends GetxController {

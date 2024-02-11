@@ -10,7 +10,6 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
 import 'package:sizer/sizer.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 class DetailWidgetPassport extends StatelessWidget {
   final IcsAllPassportIdApplication passportIdApplication;

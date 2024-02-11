@@ -28,6 +28,7 @@ query MyQuery {
     first_name_json
     grand_father_name_json
     new_applications {
+      current_country_id
       embassy {
         id
       }

@@ -119,14 +119,17 @@ class NameJson {
 
 class NewApplicationModel {
   final String embassy_id;
+  final String current_country_id;
 
   const NewApplicationModel({
     required this.embassy_id,
+    required this.current_country_id,
   });
 
   factory NewApplicationModel.fromJson(Map<String, dynamic> json) {
     return NewApplicationModel(
       embassy_id: json['embassy']["id"],
+      current_country_id: json['current_country_id'],
     );
   }
 }
