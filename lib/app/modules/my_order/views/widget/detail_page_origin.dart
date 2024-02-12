@@ -547,7 +547,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
             child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 1,
+              itemCount: 2,
               itemBuilder: (BuildContext context, int index) {
                 return BuildDocViewer(
                   pdfPath: '',
