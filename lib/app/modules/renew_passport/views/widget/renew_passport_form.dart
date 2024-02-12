@@ -28,7 +28,6 @@ import 'package:im_stepper/stepper.dart';
 
 import 'package:sizer/sizer.dart';
 
-import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'steps/step_one_renew_passport.dart';
@@ -50,12 +49,6 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
 
   XFile? image;
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   void initState() {
     if (widget.citizenModel != null) {
       getDataForStep3();
@@ -66,12 +59,6 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
     }
     super.initState();
   }
-
-  final SignatureController _controller = SignatureController(
-    penStrokeWidth: 5,
-    penColor: Colors.red,
-    exportBackgroundColor: Colors.blue,
-  );
 
   final picker = ImagePicker();
   final int maxSizeInBytes = 50 * 1024 * 1024; // 50 MB
@@ -262,7 +249,21 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
                           horizontal: AppSizes.mp_w_6,
                         ),
                         onPressed: () async {
-                          if (controller.currentStep == 4) {
+                          if (controller.currentStep == 1) {
+                            if (controller.renewPassportformKey.currentState!
+                                .saveAndValidate()) {
+                              if (controller.selectedImages.isNotEmpty) {
+                                setState(() {
+                                  controller.currentStep++;
+                                });
+                              } else {
+                                _scrollToBottom();
+                                AppToasts.showError("Please upload a photo.");
+                              }
+                            } else {
+                              _scrollToBottom();
+                            }
+                          } else if (controller.currentStep == 4) {
                             //  Get.dialog(ProfileFourDialog());
                             setState(() {
                               if (controller.renewPassportformKey.currentState!
@@ -460,29 +461,32 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
 
   void getDataForStep3() {
     var embassyId;
+    var currentcontry;
 
     final citizenModel = widget.citizenModel;
 
     final abroadCountryId = citizenModel!.abroadCountryId;
-    final currentcontry =
-        citizenModel.reNewPassportApplication.first.current_country_id;
+
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
     if (citizenModel.reNewPassportApplication.isNotEmpty) {
+      currentcontry =
+          citizenModel.reNewPassportApplication.first.current_country_id;
       embassyId = citizenModel.reNewPassportApplication.first.embassy_id;
 
       Future.delayed(const Duration(seconds: 1), () {
         controller.embassiesvalue.value =
             controller.base_embassies.firstWhere((e) => e.id == embassyId);
       });
+
+      controller.currentcountryvalue.value =
+          controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
     }
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
 
-    controller.currentcountryvalue.value =
-        controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
     controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;

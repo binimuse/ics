@@ -11,6 +11,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
 import 'package:flutter/services.dart';
+import 'package:signature/signature.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 import '../../../data/model/base_model_orgin.dart';
@@ -53,7 +54,7 @@ class _Step4State extends State<Step4OrginId> {
         SizedBox(
           width: 80.w,
           child: Text(
-            'Current Passport Details:',
+            'Current Passport Details and Signature',
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,
@@ -179,7 +180,75 @@ class _Step4State extends State<Step4OrginId> {
         SizedBox(
           height: 2.h,
         ),
+        getSignuture()
       ],
+    );
+  }
+
+  getSignuture() {
+    return Container(
+      width: 100.w,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.edit,
+                    color: AppColors.primary,
+                  ),
+                  Text(
+                    'Sign here'.tr,
+                    style: AppTextStyles.bodySmallBold.copyWith(
+                      color: AppColors.grayDark,
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  controller.signatureController.clear();
+                },
+                child: Icon(
+                  Icons.clear,
+                  color: AppColors.secondary,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.whiteOff,
+              borderRadius: BorderRadius.all(Radius.circular(90)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(3, 3), // changes the shadow position
+                ),
+              ],
+            ),
+            child: Signature(
+              controller: controller.signatureController,
+              height: 200,
+              width: 300.w,
+              backgroundColor: AppColors.grayLighter,
+            ),
+          ),
+          SizedBox(
+            height: 2.h,
+          ),
+        ],
+      ),
     );
   }
 }

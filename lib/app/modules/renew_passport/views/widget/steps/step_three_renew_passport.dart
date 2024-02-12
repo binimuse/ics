@@ -82,7 +82,7 @@ class _Step3State extends State<Step3RenewPassport> {
           },
           name: 'Current Country',
           initialValue: widget.citizenModel != null
-              ? controller.currentcountryvalue.value!
+              ? controller.currentcountryvalue.value
               : null,
         ),
         SizedBox(

@@ -15,6 +15,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 
 import 'package:ics/app/modules/home/data/models/base_renewtype_model.dart';
 
+
 import 'package:ics/app/modules/home/data/models/base_renewtype_passport_model.dart';
 
 
@@ -25,6 +26,7 @@ import 'package:ics/app/modules/home/data/quary/configartion_quary.dart';
 
 
 import 'package:ics/app/modules/home/data/quary/get_renew_type.dart';
+
 
 import 'package:ics/app/modules/home/data/quary/get_renew_type_passport.dart';
 
@@ -119,6 +121,10 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     Assets.icons.paper,
 
+    Assets.icons.paper,
+
+    Assets.icons.paper,
+
   ];
 
 
@@ -154,9 +160,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   final List<String> Evisatitles = [
 
-    'New \n E-Visa',
+    'Transit  \n E-Visa',
+
+    'Change   \n E-Visa',
 
     'Extension  \n E-Visa',
+
+    'E-Visa ',
 
   ];
 
@@ -192,7 +202,9 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     getUser();
 
+
     getRenewtypePassport();
+
 
     getRenewtype();
 
@@ -351,6 +363,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   RxList<BasePassportRenewalType> basePassportRenewalType =
 
       List<BasePassportRenewalType>.of([]).obs;
+
 
   void getRenewtypePassport() async {
 

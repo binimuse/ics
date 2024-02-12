@@ -354,7 +354,7 @@ class _HomeViewState extends State<HomeView> {
           Row(
             children: [
               Text(
-                'E-Visa ',
+                'Visa ',
                 style: AppTextStyles.bodyLargeBold.copyWith(
                     fontSize: AppSizes.font_16, color: AppColors.primary),
               ),
@@ -434,7 +434,7 @@ class _HomeViewState extends State<HomeView> {
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
         ),
-        itemCount: 2, // Replace with the actual number of cards
+        itemCount: 4, // Replace with the actual number of cards
         itemBuilder: (BuildContext context, int index) {
           return CardWidget(
               isOrgin: true,
@@ -443,7 +443,9 @@ class _HomeViewState extends State<HomeView> {
               iconColor: controller.color[index],
               onPressed: () {
                 if (index == 0) {
-                } else if (index == 1) {}
+                } else if (index == 3) {
+                  Get.toNamed(Routes.EVISA);
+                }
               });
         },
       ),

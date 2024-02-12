@@ -79,7 +79,7 @@ class _Step3State extends State<Step3> {
             controller.currentcountryvalue.value = value!;
           },
           name: 'Current Country',
-          initialValue: widget.citizenModel!.newApplicationModel!.isNotEmpty
+          initialValue: widget.citizenModel != null
               ? controller.currentcountryvalue.value!
               : null,
         ),

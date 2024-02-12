@@ -119,6 +119,7 @@ class RenewOriginIdController extends GetxController {
 
   List<AllowedContreyModel> allwoedCountries = [];
 
+  RxList<File> selectedImages = <File>[].obs;
 
   List<CommonModel> base_document_types = [];
 
@@ -816,7 +817,9 @@ class RenewOriginIdController extends GetxController {
                       passportIssueDateController.text,
 
                   'current_passport_number': passportNumberContoller.text,
+
                   'visa_expiry_date': visaExpiryDateController.text ?? null,
+
                   'visa_issued_date': visaExpiryDateController.text ?? null,
 
                   'visa_type_id': visatypevalue.value?.id ?? null,

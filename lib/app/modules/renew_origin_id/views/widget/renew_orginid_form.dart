@@ -260,7 +260,21 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
                           horizontal: AppSizes.mp_w_6,
                         ),
                         onPressed: () async {
-                          if (controller.currentStep == 3) {
+                          if (controller.currentStep == 1) {
+                            if (controller.reneworginIdformKey.currentState!
+                                .saveAndValidate()) {
+                              if (controller.selectedImages.isNotEmpty) {
+                                setState(() {
+                                  controller.currentStep++;
+                                });
+                              } else {
+                                _scrollToBottom();
+                                AppToasts.showError("Please upload a photo.");
+                              }
+                            } else {
+                              _scrollToBottom();
+                            }
+                          } else if (controller.currentStep == 3) {
                             //  Get.dialog(ProfileFourDialog());
                             setState(() {
                               if (controller.reneworginIdformKey.currentState!

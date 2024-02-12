@@ -22,6 +22,7 @@ abstract class Routes {
   static const NEW_ORIGIN_ID = _Paths.NEW_ORIGIN_ID;
   static const RENEW_ORIGIN_ID = _Paths.RENEW_ORIGIN_ID;
   static const CORRECTION_ORIGIN_ID = _Paths.CORRECTION_ORIGIN_ID;
+  static const EVISA = _Paths.EVISA;
 }
 
 abstract class _Paths {
@@ -45,4 +46,5 @@ abstract class _Paths {
   static const NEW_ORIGIN_ID = '/new-origin-id';
   static const RENEW_ORIGIN_ID = '/renew-origin-id';
   static const CORRECTION_ORIGIN_ID = '/correction-origin-id';
+  static const EVISA = '/evisa';
 }

@@ -230,44 +230,57 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomNormalButton(
-                      text: controller.currentStep == 5 ? 'Submit' : 'Next',
-                      textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                        color: AppColors.whiteOff,
-                      ),
-                      textcolor: AppColors.whiteOff,
-                      buttoncolor: controller.currentStep == 5
-                          ? AppColors.primary
-                          : AppColors.primary,
-                      borderRadius: AppSizes.radius_16,
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppSizes.mp_v_1,
-                        horizontal: AppSizes.mp_w_6,
-                      ),
-                      onPressed: () async {
-                        if (controller.currentStep == 3) {
-                          //   controller.handleDrawFinish();
-                          controller.newPassportformKey.currentState!
-                                  .saveAndValidate()
-                              ? createCitizen()
-                              : SizedBox();
-                        } else if (controller.currentStep == 4) {
-                          checkdoc();
-                        } else if (controller.currentStep == 5) {
-                          finalstep();
-                        } else {
-                          if (controller.newPassportformKey.currentState!
-                              .saveAndValidate()) {
-                            setState(() {
-                              controller.currentStep++;
-                            });
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomNormalButton(
+                        text: controller.currentStep == 5 ? 'Submit' : 'Next',
+                        textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                          color: AppColors.whiteOff,
+                        ),
+                        textcolor: AppColors.whiteOff,
+                        buttoncolor: controller.currentStep == 5
+                            ? AppColors.primary
+                            : AppColors.primary,
+                        borderRadius: AppSizes.radius_16,
+                        padding: EdgeInsets.symmetric(
+                          vertical: AppSizes.mp_v_1,
+                          horizontal: AppSizes.mp_w_6,
+                        ),
+                        onPressed: () async {
+                          if (controller.currentStep == 1) {
+                            if (controller.newPassportformKey.currentState!
+                                .saveAndValidate()) {
+                              if (controller.selectedImages.isNotEmpty) {
+                                setState(() {
+                                  controller.currentStep++;
+                                });
+                              } else {
+                                _scrollToBottom();
+                                AppToasts.showError("Please upload a photo.");
+                              }
+                            } else {
+                              _scrollToBottom();
+                            }
+                          } else if (controller.currentStep == 3) {
+                            // controller.handleDrawFinish();
+                            controller.newPassportformKey.currentState!
+                                    .saveAndValidate()
+                                ? createCitizen()
+                                : SizedBox();
+                          } else if (controller.currentStep == 4) {
+                            checkdoc();
+                          } else if (controller.currentStep == 5) {
+                            finalstep();
                           } else {
-                            _scrollToBottom();
+                            if (controller.newPassportformKey.currentState!
+                                .saveAndValidate()) {
+                              setState(() {
+                                controller.currentStep++;
+                              });
+                            } else {
+                              _scrollToBottom();
+                            }
                           }
-                        }
-                      }),
-                )
+                        }))
               ],
             ),
           ),

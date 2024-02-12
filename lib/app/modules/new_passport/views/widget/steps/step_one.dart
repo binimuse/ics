@@ -277,6 +277,9 @@ class Step1 extends StatelessWidget {
             initialValue:
                 citizenModel != null ? controller.gendervalue.value! : null,
           ),
+          SizedBox(
+            height: 2.h,
+          ),
           Text(
             'Is Adoption ?',
             style: AppTextStyles.captionBold.copyWith(

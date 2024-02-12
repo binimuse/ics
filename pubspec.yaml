@@ -61,6 +61,7 @@ dependencies:
   timeago: ^3.6.0
   syncfusion_flutter_calendar: ^24.1.47
   timeline_tile: ^2.0.0
+  flutter_image_compress: ^2.1.0
 
 
 

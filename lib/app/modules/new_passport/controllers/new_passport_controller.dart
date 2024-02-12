@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart' as Mydio;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -8,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
-import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
@@ -28,12 +25,8 @@ import 'dart:io';
 
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
-import 'package:signature/signature.dart';
 import '../data/quary/get_all.dart';
-import 'package:flutter/rendering.dart';
 
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:http_parser/http_parser.dart';
 
 class NewPassportController extends GetxController {
@@ -114,7 +107,7 @@ class NewPassportController extends GetxController {
   List<CommonModel> eyecolor = [];
   final TextEditingController monthController = TextEditingController();
   final newPassportformKey = GlobalKey<FormBuilderState>();
-
+  RxList<File> selectedImages = <File>[].obs;
   final phoneFocusNode = FocusNode();
   var isPhoneValid = false.obs;
   bool validatPhone() {
@@ -594,52 +587,6 @@ class NewPassportController extends GetxController {
       print(">>>>>>>>>>>>>>>>>> getEmbassies $e");
     }
   }
-
-  @override
-  void dispose() {
-    signatureController.dispose();
-    super.dispose();
-  }
-
-  final SignatureController signatureController = SignatureController(
-    penStrokeWidth: 5,
-    penColor: AppColors.primary,
-    exportBackgroundColor: AppColors.grayLight,
-  );
-
-  void handleDrawFinish() {
-    exportSignatureToPng(signatureController);
-  }
-
-  Future<ExportResult> exportSignatureToPng(
-      SignatureController signatureController) async {
-    try {
-      // Convert the Signature to an image
-      final signatureImage = await signatureController.toImage(
-        width: 300,
-        height: 200,
-        // backgroundColor: AppColors.primaryDark,
-      );
-
-      // Create a ByteData object from the image
-      final byteData =
-          await signatureImage!.toByteData(format: ui.ImageByteFormat.png);
-      final pngBytes = byteData!.buffer.asUint8List();
-
-      // Encode the PNG image as a base64 string
-      final base64Image = base64Encode(pngBytes);
-
-      // TODO: Handle the success case here
-      print('Exported signature image successfully');
-      return ExportResult.success;
-    } catch (e) {
-      // TODO: Handle the error case here
-      print('Failed to export signature image: $e');
-      return ExportResult.error;
-    }
-  }
-
-  RxList<File> selectedImages = <File>[].obs;
 }
 
 class PassportDocuments {

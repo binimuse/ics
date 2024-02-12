@@ -108,6 +108,9 @@ class RenewPassportController extends GetxController {
   ];
 
 
+  RxList<File> selectedImages = <File>[].obs;
+
+
   final TextEditingController addressController = TextEditingController();
 
 

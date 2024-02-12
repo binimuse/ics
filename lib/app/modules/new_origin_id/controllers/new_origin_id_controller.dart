@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart' as Mydio;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
+import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
@@ -15,16 +18,18 @@ import 'package:ics/app/modules/new_origin_id/data/mutation/ics_citizens_mutuati
 import 'package:ics/app/modules/new_origin_id/data/quary/get_emabassies_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/data/quary/get_url_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/data/quary/ics_citizens_orginid.dart';
+import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:ics/services/graphql_conf.dart';
-
+import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:io';
 
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
+import 'package:signature/signature.dart';
 import '../data/quary/get_all_orginid.dart';
 
 import 'package:http_parser/http_parser.dart';
@@ -60,7 +65,7 @@ class NewOriginIdController extends GetxController {
   final Rxn<CommonModel> embassiesvalue = Rxn<CommonModel>();
 
   final TextEditingController countryController = TextEditingController();
-
+  RxList<File> selectedImages = <File>[].obs;
   final Rxn<AllowedContreyModel> countryvalue = Rxn<AllowedContreyModel>();
   final Rxn<AllowedContreyModel> currentcountryvalue =
       Rxn<AllowedContreyModel>();
@@ -637,6 +642,47 @@ class NewOriginIdController extends GetxController {
     } catch (e) {
       isfechedEmbassies.value = false;
       print(">>>>>>>>>>>>>>>>>> getEmbassies $e");
+    }
+  }
+
+  void dispose() {
+    signatureController.dispose();
+    super.dispose();
+  }
+
+  final SignatureController signatureController = SignatureController(
+    penStrokeWidth: 5,
+    penColor: AppColors.primary,
+    exportBackgroundColor: AppColors.grayLight,
+  );
+
+  void handleDrawFinish() {
+    exportSignatureToPng(signatureController);
+  }
+
+  Future<ExportResult> exportSignatureToPng(
+      SignatureController signatureController) async {
+    try {
+      // Convert the Signature to an image
+      final signatureImage = await signatureController.toImage(
+        width: 300,
+        height: 200,
+        // backgroundColor: AppColors.primaryDark,
+      );
+
+      // Create a ByteData object from the image
+      final byteData =
+          await signatureImage!.toByteData(format: ui.ImageByteFormat.png);
+      final pngBytes = byteData!.buffer.asUint8List();
+
+      // Encode the PNG image as a base64 string
+      final base64Image = base64Encode(pngBytes);
+
+      print('Exported signature image successfully');
+      return ExportResult.success;
+    } catch (e) {
+      print('Failed to export signature image: $e');
+      return ExportResult.error;
     }
   }
 }

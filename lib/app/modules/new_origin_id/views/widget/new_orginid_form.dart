@@ -256,11 +256,29 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                         horizontal: AppSizes.mp_w_6,
                       ),
                       onPressed: () async {
-                        if (controller.currentStep == 3) {
-                          controller.neworginIdformKey.currentState!
-                                  .saveAndValidate()
-                              ? createCitizen()
-                              : SizedBox();
+                        if (controller.currentStep == 1) {
+                          if (controller.neworginIdformKey.currentState!
+                              .saveAndValidate()) {
+                            if (controller.selectedImages.isNotEmpty) {
+                              setState(() {
+                                controller.currentStep++;
+                              });
+                            } else {
+                              _scrollToBottom();
+                              AppToasts.showError("Please upload a photo.");
+                            }
+                          } else {
+                            _scrollToBottom();
+                          }
+                        } else if (controller.currentStep == 3) {
+                          if (controller.signatureController.isNotEmpty) {
+                            controller.neworginIdformKey.currentState!
+                                    .saveAndValidate()
+                                ? createCitizen()
+                                : SizedBox();
+                          } else {
+                            AppToasts.showError("Please sign your signature");
+                          }
                         } else if (controller.currentStep == 4) {
                           checkdoc();
                         } else if (controller.currentStep == 6) {

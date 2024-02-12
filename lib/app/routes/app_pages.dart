@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
 
-
 import '../modules/email_verification/bindings/email_verification_binding.dart';
 import '../modules/email_verification/views/email_verification_view.dart';
+import '../modules/evisa/bindings/evisa_binding.dart';
+import '../modules/evisa/views/evisa_view.dart';
 import '../modules/help/bindings/help_binding.dart';
 import '../modules/help/views/help_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -129,6 +130,10 @@ class AppPages {
       page: () => const RenewOriginIdView(),
       binding: RenewOriginIdBinding(),
     ),
-
+    GetPage(
+      name: _Paths.EVISA,
+      page: () => const EvisaView(),
+      binding: EvisaBinding(),
+    ),
   ];
 }
