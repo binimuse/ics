@@ -119,7 +119,9 @@ class RenewOriginIdController extends GetxController {
 
   List<AllowedContreyModel> allwoedCountries = [];
 
+
   RxList<File> selectedImages = <File>[].obs;
+
 
   List<CommonModel> base_document_types = [];
 
@@ -503,6 +505,9 @@ class RenewOriginIdController extends GetxController {
 
 
       baseDocData.value = BaseDocRenewOrginId.fromJson(result);
+
+
+      print("bini ${type}");
 
 
       base_document_types =

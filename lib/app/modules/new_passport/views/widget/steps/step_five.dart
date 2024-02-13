@@ -35,7 +35,7 @@ class Step5 extends StatelessWidget {
         SizedBox(
           width: 80.w,
           child: Text(
-            'Upload document ...',
+            'Upload documents ...',
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,

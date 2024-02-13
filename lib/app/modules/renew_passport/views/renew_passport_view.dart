@@ -116,22 +116,22 @@ class RenewPassportView extends GetView<RenewPassportController> {
                                             color: AppColors.black,
                                           ),
                                         ),
-                                        confirmation.description != null
-                                            ? SizedBox(
-                                                width: 25.h,
-                                                child: Text(
-                                                  overflow: TextOverflow.fade,
-                                                  maxLines: 6,
-                                                  confirmation.description!,
-                                                  style: AppTextStyles
-                                                      .captionRegular
-                                                      .copyWith(
-                                                    color: AppColors.black,
-                                                    fontSize: 9.sp,
-                                                  ),
-                                                ),
-                                              )
-                                            : SizedBox(),
+                                        // confirmation.description != null
+                                        //     ? SizedBox(
+                                        //         width: 25.h,
+                                        //         child: Text(
+                                        //           overflow: TextOverflow.fade,
+                                        //           maxLines: 6,
+                                        //           confirmation.description,
+                                        //           style: AppTextStyles
+                                        //               .captionRegular
+                                        //               .copyWith(
+                                        //             color: AppColors.black,
+                                        //             fontSize: 9.sp,
+                                        //           ),
+                                        //         ),
+                                        //       )
+                                        //     : SizedBox(),
                                       ],
                                     ),
                                   ],

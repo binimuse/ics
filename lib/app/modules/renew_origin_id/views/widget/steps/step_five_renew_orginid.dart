@@ -48,7 +48,7 @@ class Step5RenewOrginId extends StatelessWidget {
           height: 4.h,
         ),
         Container(
-          height: 100.h,
+          height: 70.h,
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,

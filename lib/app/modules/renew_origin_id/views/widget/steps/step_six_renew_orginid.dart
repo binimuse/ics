@@ -37,7 +37,9 @@ class Step6RenewOrginid extends StatelessWidget {
         ),
         SizedBox(
           child: Text(
-            'schedule appointment here',
+            controller.renewType.name.toString().contains("Correction")
+                ? 'schedule appointment here'
+                : "Estimated Delivery date is",
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,
@@ -47,14 +49,25 @@ class Step6RenewOrginid extends StatelessWidget {
         SizedBox(
           height: 4.h,
         ),
-        CustomCalendar(
-          blackoutDates: controller.occupiedDates,
-          minDate: today,
-          maxDate: DateTime(today.year, today.month + 3, today.day),
-          onTap: (CalendarTapDetails details) {
-            print('Selected date: ${details.date}');
-          },
-        ),
+        controller.renewType.name.toString().contains("Correction")
+            ? CustomCalendar(
+                blackoutDates: controller.occupiedDates,
+                minDate: today,
+                maxDate: DateTime(today.year, today.month + 3, today.day),
+                onTap: (CalendarTapDetails details) {
+                  print('Selected date: ${details.date}');
+                },
+              )
+            : SizedBox(
+                width: 100.w,
+                child: Text(
+                  'February/19/2024',
+                  style: AppTextStyles.bodyLargeBold.copyWith(
+                      fontSize: AppSizes.font_12, color: AppColors.primary),
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
         SizedBox(
           height: 2.h,
         ),

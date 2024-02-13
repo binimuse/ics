@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
@@ -12,11 +11,12 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
-import 'package:ics/app/modules/my_order/data/model/order_model.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
+
 import 'package:ics/app/modules/my_order/views/widget/doc_viewer.dart';
-import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
+import 'package:intl/intl.dart';
 
 class DetailOriginWidget extends StatefulWidget {
   final IcsAllOriginIdApplication icsNewApplicationModel;
@@ -294,23 +294,23 @@ class _HomeViewState extends State<DetailOriginWidget> {
             ),
             _buildExperienceRow(
                 company: "Date of birth(GC)",
-                position: "Wordpress Developer",
+                position: getDateOfBirth(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Nationality",
-                position: "Wordpress Developer",
+                position: getNationality(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Birth Country",
-                position: "Wordpress Developer",
+                position: getBirthCountry(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Birth Place",
-                position: "Wordpress Developer",
+                position: getBirthPlace(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Gender",
-                position: "Wordpress Developer",
+                position: getGender(widget.icsNewApplicationModel),
                 duration: ""),
           ],
         ),
@@ -328,35 +328,35 @@ class _HomeViewState extends State<DetailOriginWidget> {
             SizedBox(height: 2.h),
             _buildExperienceRow(
                 company: "Current Passport number",
-                position: "Wordpress Developer",
+                position: getnumber(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Passport Issue date",
-                position: "Wordpress Developer",
+                position: getIssuedate(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Passport Expiry date",
-                position: "Wordpress Developer",
+                position: getExpirydate(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Visa type",
-                position: "Wordpress Developer",
+                position: getVisaType(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Visa Number",
-                position: "Wordpress Developer",
+                position: getVisaNumber(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Visa Issue date",
-                position: "Wordpress Developer",
+                position: getVisaIssuedDate(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Visa Expiry date",
-                position: "Wordpress Developer",
+                position: getVisaExpiryDate(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Origin Id number",
-                position: "Wordpress Developer",
+                position: getOriginnumber(widget.icsNewApplicationModel),
                 duration: ""),
           ],
         ),
@@ -374,31 +374,31 @@ class _HomeViewState extends State<DetailOriginWidget> {
             SizedBox(height: 2.h),
             _buildExperienceRow(
                 company: "Adoption",
-                position: "Wordpress Developer",
+                position: getAdoption(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Occupation",
-                position: "Wordpress Developer",
+                position: getOccupation(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Hair color",
-                position: "Wordpress Developer",
+                position: getHair(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "eye color",
-                position: "Wordpress Developer",
+                position: geteyeColor(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Skin color",
-                position: "Wordpress Developer",
+                position: getSkinColor(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Marital Status",
-                position: "Wordpress Developer",
+                position: getMarital(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
-                company: "Hight",
-                position: "Wordpress Developer",
+                company: "height",
+                position: getheight(widget.icsNewApplicationModel),
                 duration: ""),
           ],
         ),
@@ -416,15 +416,15 @@ class _HomeViewState extends State<DetailOriginWidget> {
             SizedBox(height: 2.h),
             _buildExperienceRow(
                 company: "Current Country",
-                position: "Wordpress Developer",
+                position: getCurrentCountry(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Address Detail",
-                position: "Wordpress Developer",
+                position: getAddress(widget.icsNewApplicationModel),
                 duration: ""),
             _buildExperienceRow(
                 company: "Phone Number",
-                position: "Wordpress Developer",
+                position: getPhone(widget.icsNewApplicationModel),
                 duration: ""),
           ],
         ),
@@ -560,5 +560,295 @@ class _HomeViewState extends State<DetailOriginWidget> {
             ),
           )),
     );
+  }
+
+  String getDateOfBirth(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      DateTime dateOfBirth =
+          icsNewApplicationModel.renewApplication!.citizen.dateOfBirth;
+      String formattedDate = DateFormat.yMd().format(dateOfBirth);
+      return formattedDate;
+    } else if (icsNewApplicationModel.newApplication != null) {
+      DateTime dateOfBirth =
+          icsNewApplicationModel.newApplication!.citizen.dateOfBirth;
+      String formattedDate = DateFormat.yMd().format(dateOfBirth);
+      return formattedDate;
+    } else {
+      return "";
+    }
+  }
+
+  getNationality(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.nationality.name;
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.nationality.name;
+    } else {
+      return "";
+    }
+  }
+
+  getBirthCountry(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.birthCountry.name;
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.birthCountry.name;
+    } else {
+      return "";
+    }
+  }
+
+  getBirthPlace(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.birthPlace
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.birthPlace
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getGender(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.gender.toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.gender.toString();
+    } else {
+      return "";
+    }
+  }
+
+  getAdoption(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.isAdopted
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.isAdopted
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getOccupation(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.occupation.name
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.occupation.name
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getHair(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.hairColour
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.hairColour
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  geteyeColor(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.eyeColour
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.eyeColour
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getSkinColor(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.skinColour
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.skinColour
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getMarital(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.maritalStatus
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.maritalStatus
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getheight(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.height.toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.height.toString();
+    } else {
+      return "";
+    }
+  }
+
+  getCurrentCountry(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.currentCountry!.name
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.currentCountry!.name
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getAddress(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.abroadAddress
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.abroadAddress
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getPhone(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.citizen.phoneNumber
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.citizen.phoneNumber
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getnumber(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.currentPassportNumber
+          .toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.currentPassportNumber
+          .toString();
+    } else {
+      return "";
+    }
+  }
+
+  getIssuedate(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      DateTime dateOfBirth =
+          icsNewApplicationModel.renewApplication!.currentPassportIssuedDate!;
+      String formattedDate = DateFormat.yMd().format(dateOfBirth);
+      return formattedDate;
+    } else if (icsNewApplicationModel.newApplication != null) {
+      DateTime dateOfBirth =
+          icsNewApplicationModel.newApplication!.currentPassportIssuedDate!;
+      String formattedDate = DateFormat.yMd().format(dateOfBirth);
+      return formattedDate;
+    } else {
+      return "";
+    }
+  }
+
+  getExpirydate(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      DateTime dateOfBirth =
+          icsNewApplicationModel.renewApplication!.currentPassportExpiryDate!;
+      String formattedDate = DateFormat.yMd().format(dateOfBirth);
+      return formattedDate;
+    } else if (icsNewApplicationModel.newApplication != null) {
+      DateTime dateOfBirth =
+          icsNewApplicationModel.newApplication!.currentPassportExpiryDate!;
+      String formattedDate = DateFormat.yMd().format(dateOfBirth);
+      return formattedDate;
+    } else {
+      return "";
+    }
+  }
+
+  getVisaType(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.visaType!.name.toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.visaType!.name.toString();
+    } else {
+      return "";
+    }
+  }
+
+  getVisaNumber(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.visaNumber.toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.visaNumber.toString();
+    } else {
+      return "";
+    }
+  }
+
+  String getVisaExpiryDate(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      DateTime? visaExpiryDate =
+          icsNewApplicationModel.renewApplication!.visaExpiryDate;
+      if (visaExpiryDate != null) {
+        String formattedDate = DateFormat.yMd().format(visaExpiryDate);
+        return formattedDate;
+      }
+    } else if (icsNewApplicationModel.newApplication != null) {
+      DateTime? visaExpiryDate =
+          icsNewApplicationModel.newApplication!.visaExpiryDate;
+      if (visaExpiryDate != null) {
+        String formattedDate = DateFormat.yMd().format(visaExpiryDate);
+        return formattedDate;
+      }
+    }
+
+    return "";
+  }
+
+  String getVisaIssuedDate(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      DateTime? visaIssuedDate =
+          icsNewApplicationModel.renewApplication!.visaIssuedDate;
+      if (visaIssuedDate != null) {
+        String formattedDate = DateFormat.yMd().format(visaIssuedDate);
+        return formattedDate;
+      }
+    } else if (icsNewApplicationModel.newApplication != null) {
+      DateTime? visaIssuedDate =
+          icsNewApplicationModel.newApplication!.visaIssuedDate;
+      if (visaIssuedDate != null) {
+        String formattedDate = DateFormat.yMd().format(visaIssuedDate);
+        return formattedDate;
+      }
+    }
+
+    return "";
+  }
+
+  getOriginnumber(IcsAllOriginIdApplication icsNewApplicationModel) {
+    if (icsNewApplicationModel.renewApplication != null) {
+      return icsNewApplicationModel.renewApplication!.originIdNumber.toString();
+    } else if (icsNewApplicationModel.newApplication != null) {
+      return icsNewApplicationModel.newApplication!.originIdNumber.toString();
+    } else {
+      return "";
+    }
   }
 }

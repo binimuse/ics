@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
-import 'package:ics/app/modules/my_order/data/model/order_model.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
+
 
 import 'package:ics/app/modules/my_order/views/widget/detail_page_origin.dart';
 import 'package:ics/gen/assets.gen.dart';

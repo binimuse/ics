@@ -2,9 +2,9 @@ import 'package:get/get.dart';
 
 
 import 'package:ics/app/common/data/graphql_common_api.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
 
 
-import 'package:ics/app/modules/my_order/data/model/order_model.dart';
 
 
 import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
@@ -99,12 +99,14 @@ class MyOrderController extends GetxController
 
       isfechedorder(true);
 
-    } catch (e) {
+    } catch (e, s) {
 
       isfechedorder(false);
 
 
       print(">>>>>>>>>>>>>>>>>> $e");
+
+      print(">>>>>>>>>>>>>>>>>> $s");
 
     }
 

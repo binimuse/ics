@@ -1,22 +1,22 @@
-class IcsAllPassportIdApplication {
+class IcsAllOriginIdApplication {
   String? newId;
-  String? renew_id;
+  String? renewalId;
   String createdAt;
   Application? renewApplication;
   Application? newApplication;
 
-  IcsAllPassportIdApplication({
+  IcsAllOriginIdApplication({
     required this.newId,
-    required this.renew_id,
+    required this.renewalId,
     required this.createdAt,
     required this.renewApplication,
     required this.newApplication,
   });
 
-  factory IcsAllPassportIdApplication.fromMap(Map<String, dynamic> json) =>
-      IcsAllPassportIdApplication(
+  factory IcsAllOriginIdApplication.fromMap(Map<String, dynamic> json) =>
+      IcsAllOriginIdApplication(
         newId: json["new_id"],
-        renew_id: json["renew_id"],
+        renewalId: json["renewal_id"],
         createdAt: json["created_at"],
         renewApplication: json["renew_application"] == null
             ? null
@@ -28,7 +28,7 @@ class IcsAllPassportIdApplication {
 
   Map<String, dynamic> toMap() => {
         "new_id": newId,
-        "renew_id": renew_id,
+        "renewal_id": renewalId,
         "created_at": createdAt,
         "renew_application": renewApplication?.toMap(),
         "new_application": newApplication?.toMap(),
@@ -39,34 +39,57 @@ class Application {
   String applicationNo;
   String createdAt;
   Citizen citizen;
-  PassportRenewalType? passportRenewalType;
-  CommonType? currentCountry;
-  String? passport_number;
-  String? visaNumber;
+  CommonType? originIdRenewalType;
 
+  CommonType? currentCountry;
+  String? currentPassportNumber;
+  String? visaNumber;
+  CommonType? visaType;
   DateTime? currentPassportExpiryDate;
   DateTime? currentPassportIssuedDate;
+  DateTime? visaExpiryDate;
+  DateTime? visaIssuedDate;
+  String? originIdNumber;
 
   Application({
     required this.applicationNo,
     required this.createdAt,
     required this.citizen,
-    this.passportRenewalType,
     required this.currentCountry,
-    this.passport_number,
+    this.currentPassportNumber,
     this.visaNumber,
+    this.visaType,
+    this.currentPassportExpiryDate,
+    this.currentPassportIssuedDate,
+    this.originIdRenewalType,
+    this.visaExpiryDate,
+    this.visaIssuedDate,
+    this.originIdNumber,
   });
 
   factory Application.fromMap(Map<String, dynamic> json) {
     return Application(
       applicationNo: json["application_no"],
-      passport_number: json["passport_number"],
       createdAt: json["created_at"],
       citizen: Citizen.fromMap(json["citizen"]),
       currentCountry: CommonType.fromMap(json["current_country"]),
-      passportRenewalType: json["passport_renewal_type"] == null
+      currentPassportNumber: json["current_passport_number"],
+      visaNumber: json["visa_number"],
+      visaType: CommonType.fromMap(json["visa_type"]),
+      currentPassportExpiryDate:
+          DateTime.parse(json["current_passport_expiry_date"]),
+      currentPassportIssuedDate:
+          DateTime.parse(json["current_passport_issued_date"]),
+      originIdRenewalType: json["origin_id_renewal_type"] == null
           ? null
-          : PassportRenewalType.fromMap(json["passport_renewal_type"]),
+          : CommonType.fromMap(json["origin_id_renewal_type"]),
+      visaExpiryDate: json["visa_expiry_date"] != null
+          ? DateTime.parse(json["visa_expiry_date"])
+          : null,
+      visaIssuedDate: json["visa_issued_date"] != null
+          ? DateTime.parse(json["visa_issued_date"])
+          : null,
+      originIdNumber: json["origin_id_number"] ?? '',
     );
   }
 
@@ -74,9 +97,20 @@ class Application {
         "application_no": applicationNo,
         "created_at": createdAt,
         "citizen": citizen.toMap(),
-        "passport_number": passport_number,
-        "origin_id_renewal_type": passportRenewalType?.toMap(),
         "current_country": currentCountry!.toMap(),
+        "current_passport_number": currentPassportNumber,
+        "visa_number": visaNumber,
+        "visa_type": visaType!.toMap(),
+        "current_passport_expiry_date":
+            "${currentPassportExpiryDate!.year.toString().padLeft(4, '0')}-${currentPassportExpiryDate!.month.toString().padLeft(2, '0')}-${currentPassportExpiryDate!.day.toString().padLeft(2, '0')}",
+        "current_passport_issued_date":
+            "${currentPassportIssuedDate!.year.toString().padLeft(4, '0')}-${currentPassportIssuedDate!.month.toString().padLeft(2, '0')}-${currentPassportIssuedDate!.day.toString().padLeft(2, '0')}",
+        "origin_id_renewal_type": originIdRenewalType?.toMap(),
+        "visa_expiry_date":
+            "${visaExpiryDate!.year.toString().padLeft(4, '0')}-${visaExpiryDate!.month.toString().padLeft(2, '0')}-${visaExpiryDate!.day.toString().padLeft(2, '0')}",
+        "visa_issued_date":
+            "${visaIssuedDate!.year.toString().padLeft(4, '0')}-${visaIssuedDate!.month.toString().padLeft(2, '0')}-${visaIssuedDate!.day.toString().padLeft(2, '0')}",
+        "origin_id_number": originIdNumber ?? "",
       };
 }
 
@@ -214,29 +248,6 @@ class NameJson {
   Map<String, dynamic> toMap() => {
         "am": am,
         "en": en,
-      };
-}
-
-class PassportRenewalType {
-  String id;
-  String name;
-
-  PassportRenewalType({
-    required this.id,
-    required this.name,
-  });
-
-  factory PassportRenewalType.fromMap(Map<String, dynamic> json) {
-    print(json);
-    return PassportRenewalType(
-      id: json["id"],
-      name: json["name"] ?? "",
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
       };
 }
 

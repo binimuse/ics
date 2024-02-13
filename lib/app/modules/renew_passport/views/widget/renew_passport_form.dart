@@ -129,9 +129,10 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
                 color: AppColors.whiteOff,
               ),
               Icon(
-                Icons.calendar_month,
-                color: AppColors.whiteOff,
-              ),
+                      Icons.calendar_month,
+                      color: AppColors.whiteOff,
+                    )
+                 ,
               Icon(
                 Icons.payment,
                 color: AppColors.whiteOff,

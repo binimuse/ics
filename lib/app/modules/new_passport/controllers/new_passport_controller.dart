@@ -257,6 +257,8 @@ class NewPassportController extends GetxController {
     bcountries = baseData.value!.base_countries;
     natinality = baseData.value!.base_countries;
     allwoedCountries = baseData.value!.allowed_countries;
+
+    print("nini${baseData.value!.base_document_types}");
     base_document_types = baseData.value!.base_document_types;
 
     for (var documentType in base_document_types) {
