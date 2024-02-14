@@ -5,12 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:intl/intl.dart';
 
-class DateTextPickerInput extends StatefulWidget {
-  const DateTextPickerInput({
+class DateTextPickerInputReNewPassport<T> extends StatefulWidget {
+  const DateTextPickerInputReNewPassport({
     Key? key,
     required this.controller,
     required this.dateValidator,
@@ -18,16 +17,18 @@ class DateTextPickerInput extends StatefulWidget {
     required this.yearValidator,
   }) : super(key: key);
 
-  final NewPassportController controller;
+  final T controller;
   final String? Function(String?)? dateValidator;
   final String? Function(String?)? monthValidator;
   final String? Function(String?)? yearValidator;
 
   @override
-  State<DateTextPickerInput> createState() => _DateTextPickerInputState();
+  State<DateTextPickerInputReNewPassport> createState() =>
+      _DateTextPickerInputState();
 }
 
-class _DateTextPickerInputState extends State<DateTextPickerInput> {
+class _DateTextPickerInputState
+    extends State<DateTextPickerInputReNewPassport> {
   late FocusNode yearFocusNode;
   late FocusNode monthFocusNode;
   late FocusNode dayFocusNode;
@@ -234,7 +235,16 @@ class _DateTextPickerInputState extends State<DateTextPickerInput> {
             keyboardType: TextInputType.number,
             focusNode: yearFocusNode,
             onChanged: (value) {
-              if (value.length == 4) {}
+              if (value.length == 4) {
+                int age = calculateAge();
+
+                print("bini ${age}");
+                if (age > 18) {
+                  widget.controller.showAdoption(false);
+                } else {
+                  widget.controller.showAdoption(true);
+                }
+              }
             },
             style: AppTextStyles.bodyLargeBold.copyWith(
               color: AppColors.blackLight,
@@ -285,5 +295,25 @@ class _DateTextPickerInputState extends State<DateTextPickerInput> {
         ),
       ],
     );
+  }
+
+  int calculateAge() {
+    DateTime currentDate = DateTime.now();
+    int currentYear = currentDate.year;
+    int currentMonth = currentDate.month;
+    int currentDay = currentDate.day;
+
+    int birthYear = int.tryParse(widget.controller.yearController.text) ?? 0;
+    int birthMonth = int.tryParse(widget.controller.monthController.text) ?? 0;
+    int birthDay = int.tryParse(widget.controller.dayController.text) ?? 0;
+
+    int age = currentYear - birthYear;
+
+    if (currentMonth < birthMonth ||
+        (currentMonth == birthMonth && currentDay < birthDay)) {
+      age--;
+    }
+
+    return age;
   }
 }

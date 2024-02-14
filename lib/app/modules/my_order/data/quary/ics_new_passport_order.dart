@@ -7,6 +7,7 @@ class GetOrginOrder {
     renewal_id
     created_at
     renew_application {
+   renew_origin_id_documents { files, id, document_type { name, id } rejected }
       origin_id_renewal_type {
         id
         name
@@ -64,6 +65,7 @@ class GetOrginOrder {
     new_application {
       application_no
       created_at
+      new_origin_id_documents { files id document_type { name id } rejected }
       citizen {
         first_name
         father_name
@@ -115,6 +117,8 @@ class GetOrginOrder {
     renew_id
     created_at
     renew_application {
+      renew_passport_application_documents { files id document_type { name id } rejected }
+      
       passport_number
       passport_renewal_type {
         id
@@ -160,6 +164,9 @@ class GetOrginOrder {
       }
     }
     new_application {
+      
+        new_application_documents { files id document_type { name id } rejected }
+  
       application_no
       created_at
       citizen {
@@ -201,6 +208,7 @@ class GetOrginOrder {
     }
   }
 }
+
 
 
 

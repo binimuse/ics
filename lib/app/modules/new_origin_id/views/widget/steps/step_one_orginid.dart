@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:get/get.dart';
+import 'package:ics/app/common/datepicker/date_text_picker_input.dart';
 
-import 'package:ics/app/common/datepicker/date_text_picker_input_orginid.dart';
 import 'package:ics/app/common/forms/form_lable.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
@@ -152,14 +153,16 @@ class Step1OrginId extends StatelessWidget {
           SizedBox(
             height: 2.h,
           ),
-          Text(
-            'Is Adoption ?',
-            style: AppTextStyles.captionBold.copyWith(
-              color: AppColors.grayLight,
-              fontSize: AppSizes.font_12,
-            ),
-          ),
-          adobation(),
+          Obx(() => controller.showAdoption.value
+              ? Text(
+                  'Is Adoption ?',
+                  style: AppTextStyles.captionBold.copyWith(
+                    color: AppColors.grayLight,
+                    fontSize: AppSizes.font_12,
+                  ),
+                )
+              : SizedBox()),
+          Obx(() => controller.showAdoption.value ? adobation() : SizedBox()),
         ]);
   }
 
@@ -297,7 +300,7 @@ class Step1OrginId extends StatelessWidget {
   }
 
   bithDay() {
-    return DateTextPickerInputOrginId(
+    return DateTextPickerInputReNewPassport(
       yearValidator: ValidationBuilder().required('year is required').build(),
       monthValidator: ValidationBuilder().required('month is required').build(),
       dateValidator: ValidationBuilder().required('date is required').build(),

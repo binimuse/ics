@@ -3,10 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/help/model/faq_model.dart';
 import 'package:ics/gen/assets.gen.dart';
-
-import 'package:sizer/sizer.dart';
 
 class ItemFaq extends StatefulWidget {
   const ItemFaq({super.key, required this.title, required this.subtitle});

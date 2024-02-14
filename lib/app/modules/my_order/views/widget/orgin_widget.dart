@@ -164,11 +164,8 @@ class OrginIdWidget extends StatelessWidget {
 
   String getApplicationTypeText(IcsAllOriginIdApplication orginApplication) {
     if (orginApplication.renewApplication != null) {
-      if (orginApplication.renewApplication!.originIdRenewalType != null) {
-        return orginApplication.renewApplication!.originIdRenewalType!.name
-            .toString();
-      }
-      return "";
+      return orginApplication.renewApplication!.originIdRenewalType.name
+          .toString();
     } else if (orginApplication.newApplication != null) {
       return "New Orgin ID Application";
     } else {
@@ -193,19 +190,17 @@ class OrginIdWidget extends StatelessWidget {
 
   getColor(IcsAllOriginIdApplication orginApplication) {
     if (orginApplication.renewApplication != null) {
-      if (orginApplication.renewApplication!.originIdRenewalType != null) {
-        if (orginApplication.renewApplication!.originIdRenewalType!.name
-            .contains("Lost")) {
-          return AppColors.danger;
-        } else if (orginApplication.renewApplication!.originIdRenewalType!.name
-            .contains("Correction")) {
-          return AppColors.accent;
-        } else if (orginApplication.renewApplication!.originIdRenewalType!.name
-            .contains("Renew")) {
-          return AppColors.warning;
-        }
+      if (orginApplication.renewApplication!.originIdRenewalType.name
+          .contains("Lost")) {
+        return AppColors.danger;
+      } else if (orginApplication.renewApplication!.originIdRenewalType.name
+          .contains("Correction")) {
+        return AppColors.accent;
+      } else if (orginApplication.renewApplication!.originIdRenewalType.name
+          .contains("Renew")) {
+        return AppColors.warning;
       }
-    } else {
+        } else {
       return AppColors.success;
     }
   }

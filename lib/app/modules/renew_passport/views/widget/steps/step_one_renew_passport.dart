@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:get/get.dart';
+import 'package:ics/app/common/datepicker/date_text_picker_input.dart';
 
-import 'package:ics/app/common/datepicker/date_text_picker_input_renew_passport.dart';
 import 'package:ics/app/common/forms/form_lable.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
@@ -14,7 +15,6 @@ import 'package:ics/app/modules/renew_passport/controllers/renew_passport_contro
 import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
 import 'package:flutter/services.dart';
-import 'package:ics/utils/keyboard.dart';
 import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
@@ -139,48 +139,18 @@ class Step1RenewPassport extends StatelessWidget {
           SizedBox(
             height: 2.h,
           ),
-          Text(
-            'Is Adoption ?',
-            style: AppTextStyles.captionBold.copyWith(
-              color: AppColors.grayLight,
-              fontSize: AppSizes.font_12,
-            ),
-          ),
-          adobation(),
+          Obx(() => controller.showAdoption.value
+              ? Text(
+                  'Is Adoption ?',
+                  style: AppTextStyles.captionBold.copyWith(
+                    color: AppColors.grayLight,
+                    fontSize: AppSizes.font_12,
+                  ),
+                )
+              : SizedBox()),
+          Obx(() => controller.showAdoption.value ? adobation() : SizedBox()),
         ]);
   }
-
-  buildDateOfBirth(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildBirthdateField(context),
-      ],
-    );
-  }
-
-  buildBirthdateField(BuildContext context) {
-    return TextFormBuilder(
-      isMandatory: true,
-      controller: controller.dateofbirth,
-      validator: ValidationBuilder().required('Birthdate is required').build(),
-      hint: 'Birthdate',
-      labelText: 'Birthdate',
-      showClearButton: false,
-      autoFocus: false,
-      inputFormatters: [
-        DateInputFormatter(),
-      ],
-      onTap: () {
-        KeyboardUtil.hideKeyboard(context);
-        // showModal(context);
-      },
-    );
-  }
-
-  DateTime selectedDate = DateTime.now();
-
-  String? formattedDates;
 
   firstName() {
     return TextFormBuilder(

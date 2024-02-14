@@ -6,6 +6,7 @@ class Constants {
   static const String refreshTokenKey = 'refresh_token';
   static const String userId = 'userId';
   static const String verifyEmail = 'verifyEmail';
+  static const String fileViewer = 'http://196.189.21.165:9000/';
 
   static const int laborsPageSize = 10;
 

@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/timeline/timeline.dart';
-import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -15,6 +14,7 @@ import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_viewer.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 
@@ -243,16 +243,14 @@ class _HomeViewState extends State<DetailPassportWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(width: 20.0),
-                SizedBox(
-                  width: 80.0,
-                  height: 80.0,
-                  child: Image.asset(
-                    AppAssets.qr,
-                    height: 15.h,
-                    width: 55.w,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                Container(
+                    width: 80.0,
+                    height: 80.0,
+                    child: QrImageView(
+                      data: getQrData(widget.icsAllPassportIdApplication),
+                      version: QrVersions.auto,
+                      size: 200.0,
+                    )),
                 const SizedBox(width: 20.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -720,6 +718,19 @@ class _HomeViewState extends State<DetailPassportWidget> {
       return icsNewApplicationModel.newApplication!.passport_number.toString();
     } else {
       return "";
+    }
+  }
+
+  getQrData(IcsAllPassportIdApplication icsNewApplicationModel) {
+    {
+      if (icsNewApplicationModel.renewApplication != null) {
+        return icsNewApplicationModel.renewApplication!.applicationNo
+            .toString();
+      } else if (icsNewApplicationModel.newApplication != null) {
+        return icsNewApplicationModel.newApplication!.applicationNo.toString();
+      } else {
+        return "";
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart' as Mydio;
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -27,7 +27,6 @@ import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
 import '../data/quary/get_all.dart';
 
-import 'package:http_parser/http_parser.dart';
 
 class NewPassportController extends GetxController {
   final TextEditingController AmfatherNameController = TextEditingController();
@@ -93,6 +92,7 @@ class NewPassportController extends GetxController {
 
   var isfeched = false.obs;
   var isAdoption = false.obs;
+  var showAdoption = false.obs;
 
   final Rxn<CommonModel> maritalstatusvalue = Rxn<CommonModel>();
   final Rxn<CommonModel> gendervalue = Rxn<CommonModel>();
@@ -278,72 +278,8 @@ class NewPassportController extends GetxController {
   }
 
   final Rxn<GetUrlModel> getUrlModel = Rxn<GetUrlModel>();
-  Future<void> geturl(
-    documentTypeId,
-    PlatformFile files,
-  ) async {
-    try {
-      isSendStared.value = true;
-      dynamic result = await graphQLCommonApi.query(
-        geturlQuery.fetchData("pdf", ""),
-        {},
-      );
-
-      getUrlModel.value = GetUrlModel.fromJson(result!['getSignedUploadUrl']);
-      isSendStared.value = true;
-      sendUrl(documentTypeId, getUrlModel.value!.url, getUrlModel.value!.path,
-          files);
-      isfeched(true);
-    } catch (e) {
-      isSendStared.value = false;
-      isfeched(false);
-      print("Error occurred while getting URL: $e");
-    }
-  }
 
   var isGetDocUrlStarted = false.obs;
-  void sendUrl(
-    String? documentTypeId,
-    String? url,
-    String? path,
-    PlatformFile files,
-  ) async {
-    try {
-      isSendStared.value = true;
-      print(Uri.parse(url!).toString());
-      var dio = Mydio.Dio();
-
-      Mydio.FormData formData = Mydio.FormData.fromMap({
-        'file': await Mydio.MultipartFile.fromFile(
-          files.path!,
-          contentType: MediaType('application', 'octet-stream'),
-        ),
-      });
-
-      isGetDocUrlStarted(true);
-      var response = await dio.put(url, data: formData);
-      if (response.statusCode == 200) {
-        isSendStared.value = false;
-        print('File uploaded successfully');
-        sendDoc(
-          newApplicationId,
-          documentTypeId,
-          url,
-          path,
-        );
-
-        print(response);
-      } else {
-        isSendStared.value = false;
-        isGetDocUrlStarted(false);
-        print('Failed to upload file. Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      isSendStared.value = false;
-      isGetDocUrlStarted(false);
-      print('Error uploading file: $e');
-    }
-  }
 
   var isSend = false.obs;
   var isSendStared = false.obs;
@@ -436,9 +372,7 @@ class NewPassportController extends GetxController {
   var isSendDocSuccess = false.obs;
   var newDocId;
   Future<void> sendDoc(
-    dynamic newApplicationId,
     var documentTypeId,
-    var url,
     var path,
   ) async {
     try {
@@ -455,7 +389,9 @@ class NewPassportController extends GetxController {
           variables: <String, dynamic>{
             'objects': {
               'new_application_id': newApplicationId,
-              'files': path,
+              'files': {
+                'path': path,
+              },
               'document_type_id': documentTypeId,
             }
           },

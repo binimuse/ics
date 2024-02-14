@@ -79,7 +79,7 @@ class _HomeViewState extends State<HomeView> {
                     fit: BoxFit.contain,
                   )),
               Tab(
-                  text: 'E-Visa',
+                  text: 'Visa',
                   icon: SvgPicture.asset(
                     Assets.icons.paper,
                     color: AppColors.primary,

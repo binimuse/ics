@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:get/get.dart';
 import 'package:ics/app/common/datepicker/date_text_picker_input.dart';
 import 'package:ics/app/common/forms/form_lable.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
@@ -12,7 +13,6 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
-import 'package:ics/utils/keyboard.dart';
 import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
@@ -185,7 +185,7 @@ class Step1 extends StatelessWidget {
               fontSize: AppSizes.font_12,
             ),
           ),
-          DateTextPickerInput(
+          DateTextPickerInputReNewPassport(
             yearValidator:
                 ValidationBuilder().required('year is required').build(),
             monthValidator:
@@ -197,6 +197,33 @@ class Step1 extends StatelessWidget {
           SizedBox(
             height: 2.h,
           ),
+
+          //         TypeAheadField(
+          //   textFieldConfiguration: TextFieldConfiguration(
+          //     controller:
+          //         _typeAheadController, // Pass the controller to the field
+          //     decoration: InputDecoration(labelText: 'Select Nationality'),
+          //   ),
+          //   suggestionsCallback: (pattern) {
+          //     var lowerCasePattern = pattern.toLowerCase();
+          //     var filteredNationalities = controller.natinality
+          //         .where((CommonModel nationality) =>
+          //             nationality.name.toLowerCase().contains(lowerCasePattern))
+          //         .toList();
+          //     return filteredNationalities;
+          //   },
+          //   itemBuilder: (context, CommonModel nationality) {
+          //     return ListTile(
+          //       title: Text(nationality.name),
+          //     );
+          //   },
+          //   onSuggestionSelected: (CommonModel nationality) {
+          //     _typeAheadController.text =
+          //         nationality.name; // Set the text to the selected value
+          //     controller.natinalityvalue.value = nationality;
+          //   },
+          //   keepSuggestionsOnLoading: false,
+          // ),
           FormBuilderDropdown(
             decoration: ReusableInputDecoration.getDecoration('Nationality'),
             items: controller.natinality.map((CommonModel value) {
@@ -280,64 +307,36 @@ class Step1 extends StatelessWidget {
           SizedBox(
             height: 2.h,
           ),
-          Text(
-            'Is Adoption ?',
-            style: AppTextStyles.captionBold.copyWith(
-              color: AppColors.grayLight,
-              fontSize: AppSizes.font_12,
-            ),
-          ),
-          FormBuilderCheckbox(
-            initialValue:
-                citizenModel != null ? controller.isAdoption.value : null,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-            ),
-            name: 'Is Adoption',
-            title: Text(
-              'Is Adoption',
-              style: AppTextStyles.captionBold.copyWith(
-                color: AppColors.black,
-                fontSize: AppSizes.font_12,
-              ),
-            ),
-            activeColor: AppColors.primary,
-            onChanged: (value) {
-              controller.isAdoption.value = value!;
-            },
-          )
+          Obx(() => controller.showAdoption.value
+              ? Text(
+                  'Is Adoption ?',
+                  style: AppTextStyles.captionBold.copyWith(
+                    color: AppColors.grayLight,
+                    fontSize: AppSizes.font_12,
+                  ),
+                )
+              : SizedBox()),
+          Obx(() => controller.showAdoption.value
+              ? FormBuilderCheckbox(
+                  initialValue:
+                      citizenModel != null ? controller.isAdoption.value : null,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  name: 'Is Adoption',
+                  title: Text(
+                    'Is Adoption',
+                    style: AppTextStyles.captionBold.copyWith(
+                      color: AppColors.black,
+                      fontSize: AppSizes.font_12,
+                    ),
+                  ),
+                  activeColor: AppColors.primary,
+                  onChanged: (value) {
+                    controller.isAdoption.value = value!;
+                  },
+                )
+              : SizedBox())
         ]);
   }
-
-  buildDateOfBirth(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildBirthdateField(context),
-      ],
-    );
-  }
-
-  buildBirthdateField(BuildContext context) {
-    return TextFormBuilder(
-      isMandatory: true,
-      controller: controller.dateofbirth,
-      validator: ValidationBuilder().required('Birthdate is required').build(),
-      hint: 'Birthdate',
-      labelText: 'Birthdate',
-      showClearButton: false,
-      autoFocus: false,
-      inputFormatters: [
-        DateInputFormatter(),
-      ],
-      onTap: () {
-        KeyboardUtil.hideKeyboard(context);
-        // showModal(context);
-      },
-    );
-  }
-
-  DateTime selectedDate = DateTime.now();
-
-  String? formattedDates;
 }

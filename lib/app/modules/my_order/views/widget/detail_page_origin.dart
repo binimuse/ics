@@ -6,15 +6,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/timeline/timeline.dart';
-import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
-
-import 'package:ics/app/modules/my_order/views/widget/doc_viewer.dart';
+import 'package:ics/app/modules/my_order/views/widget/doc_causole.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 
@@ -114,7 +113,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
                     fit: BoxFit.contain,
                   )),
               Tab(
-                  text: 'Docement',
+                  text: 'Document',
                   icon: SvgPicture.asset(
                     Assets.icons.memo,
                     color: AppColors.primary,
@@ -243,16 +242,14 @@ class _HomeViewState extends State<DetailOriginWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(width: 20.0),
-                SizedBox(
-                  width: 80.0,
-                  height: 80.0,
-                  child: Image.asset(
-                    AppAssets.qr,
-                    height: 15.h,
-                    width: 55.w,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                Container(
+                    width: 80.0,
+                    height: 80.0,
+                    child: QrImageView(
+                      data: getQrData(widget.icsNewApplicationModel),
+                      version: QrVersions.auto,
+                      size: 200.0,
+                    )),
                 const SizedBox(width: 20.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -412,7 +409,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            _buildTitle("Address Detail "),
+            _buildTitle("Address Detail"),
             SizedBox(height: 2.h),
             _buildExperienceRow(
                 company: "Current Country",
@@ -539,26 +536,48 @@ class _HomeViewState extends State<DetailOriginWidget> {
   }
 
   buildDocument() {
-    return SingleChildScrollView(
-      child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
-            width: 50.w,
-            child: ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 2,
-              itemBuilder: (BuildContext context, int index) {
-                return BuildDocViewer(
-                  pdfPath: '',
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                    height: 8.0); // Adjust the space between items as needed
-              },
-            ),
-          )),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 2.h,
+        ),
+        widget.icsNewApplicationModel.renewApplication != null
+            ? Expanded(child: buildFaqListRenew())
+            : Expanded(child: buildFaqListForNew())
+      ],
+    );
+  }
+
+  ListView buildFaqListForNew() {
+    return ListView.separated(
+      separatorBuilder: (context, index) => const Divider(
+        height: 1.0,
+      ),
+      itemCount: widget
+          .icsNewApplicationModel.newApplication!.newOriginIdDocuments!.length,
+      itemBuilder: (context, index) {
+        var data = widget.icsNewApplicationModel.newApplication!
+            .newOriginIdDocuments![index];
+      
+        return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
+      },
+    );
+  }
+
+  ListView buildFaqListRenew() {
+    return ListView.separated(
+      separatorBuilder: (context, index) => const Divider(
+        height: 1.0,
+      ),
+      itemCount: widget.icsNewApplicationModel.renewApplication!
+          .renewOriginIdDocuments.length,
+      itemBuilder: (context, index) {
+        var data = widget.icsNewApplicationModel.renewApplication!
+            .renewOriginIdDocuments[index];
+        
+        return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
+      },
     );
   }
 
@@ -704,10 +723,10 @@ class _HomeViewState extends State<DetailOriginWidget> {
 
   getCurrentCountry(IcsAllOriginIdApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.currentCountry!.name
+      return icsNewApplicationModel.renewApplication!.currentCountry.name
           .toString();
     } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.currentCountry!.name
+      return icsNewApplicationModel.newApplication!.currentCountry.name
           .toString();
     } else {
       return "";
@@ -753,12 +772,12 @@ class _HomeViewState extends State<DetailOriginWidget> {
   getIssuedate(IcsAllOriginIdApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       DateTime dateOfBirth =
-          icsNewApplicationModel.renewApplication!.currentPassportIssuedDate!;
+          icsNewApplicationModel.renewApplication!.currentPassportIssuedDate;
       String formattedDate = DateFormat.yMd().format(dateOfBirth);
       return formattedDate;
     } else if (icsNewApplicationModel.newApplication != null) {
       DateTime dateOfBirth =
-          icsNewApplicationModel.newApplication!.currentPassportIssuedDate!;
+          icsNewApplicationModel.newApplication!.currentPassportIssuedDate;
       String formattedDate = DateFormat.yMd().format(dateOfBirth);
       return formattedDate;
     } else {
@@ -769,12 +788,12 @@ class _HomeViewState extends State<DetailOriginWidget> {
   getExpirydate(IcsAllOriginIdApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       DateTime dateOfBirth =
-          icsNewApplicationModel.renewApplication!.currentPassportExpiryDate!;
+          icsNewApplicationModel.renewApplication!.currentPassportExpiryDate;
       String formattedDate = DateFormat.yMd().format(dateOfBirth);
       return formattedDate;
     } else if (icsNewApplicationModel.newApplication != null) {
       DateTime dateOfBirth =
-          icsNewApplicationModel.newApplication!.currentPassportExpiryDate!;
+          icsNewApplicationModel.newApplication!.currentPassportExpiryDate;
       String formattedDate = DateFormat.yMd().format(dateOfBirth);
       return formattedDate;
     } else {
@@ -784,9 +803,9 @@ class _HomeViewState extends State<DetailOriginWidget> {
 
   getVisaType(IcsAllOriginIdApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.visaType!.name.toString();
+      return icsNewApplicationModel.renewApplication!.visaType.name.toString();
     } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.visaType!.name.toString();
+      return icsNewApplicationModel.newApplication!.visaType.name.toString();
     } else {
       return "";
     }
@@ -806,13 +825,10 @@ class _HomeViewState extends State<DetailOriginWidget> {
     if (icsNewApplicationModel.renewApplication != null) {
       DateTime? visaExpiryDate =
           icsNewApplicationModel.renewApplication!.visaExpiryDate;
-      if (visaExpiryDate != null) {
-        String formattedDate = DateFormat.yMd().format(visaExpiryDate);
-        return formattedDate;
-      }
-    } else if (icsNewApplicationModel.newApplication != null) {
-      DateTime? visaExpiryDate =
-          icsNewApplicationModel.newApplication!.visaExpiryDate;
+      String formattedDate = DateFormat.yMd().format(visaExpiryDate);
+      return formattedDate;
+        } else if (icsNewApplicationModel.newApplication != null) {
+      DateTime? visaExpiryDate = null;
       if (visaExpiryDate != null) {
         String formattedDate = DateFormat.yMd().format(visaExpiryDate);
         return formattedDate;
@@ -826,13 +842,10 @@ class _HomeViewState extends State<DetailOriginWidget> {
     if (icsNewApplicationModel.renewApplication != null) {
       DateTime? visaIssuedDate =
           icsNewApplicationModel.renewApplication!.visaIssuedDate;
-      if (visaIssuedDate != null) {
-        String formattedDate = DateFormat.yMd().format(visaIssuedDate);
-        return formattedDate;
-      }
-    } else if (icsNewApplicationModel.newApplication != null) {
-      DateTime? visaIssuedDate =
-          icsNewApplicationModel.newApplication!.visaIssuedDate;
+      String formattedDate = DateFormat.yMd().format(visaIssuedDate);
+      return formattedDate;
+        } else if (icsNewApplicationModel.newApplication != null) {
+      DateTime? visaIssuedDate = null;
       if (visaIssuedDate != null) {
         String formattedDate = DateFormat.yMd().format(visaIssuedDate);
         return formattedDate;
@@ -846,9 +859,22 @@ class _HomeViewState extends State<DetailOriginWidget> {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.originIdNumber.toString();
     } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.originIdNumber.toString();
+      return "";
     } else {
       return "";
+    }
+  }
+
+  getQrData(IcsAllOriginIdApplication icsNewApplicationModel) {
+    {
+      if (icsNewApplicationModel.renewApplication != null) {
+        return icsNewApplicationModel.renewApplication!.applicationNo
+            .toString();
+      } else if (icsNewApplicationModel.newApplication != null) {
+        return icsNewApplicationModel.newApplication!.applicationNo.toString();
+      } else {
+        return "";
+      }
     }
   }
 }

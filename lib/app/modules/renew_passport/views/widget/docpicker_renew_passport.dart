@@ -3,13 +3,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
+import 'package:ics/app/common/fileupload/common_file_uploder.dart';
+import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
 import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
 
 import 'package:sizer/sizer.dart';
-import 'dart:io';
 
 class BuildDocRenewPassport extends StatefulWidget {
   final CommonModel documentType;
@@ -29,61 +30,24 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
 
   Future<void> openPdfPicker() async {
     widget.controller.isSendStared.value = true;
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf'],
-    );
-
-    if (result != null) {
-      PlatformFile file = result.files.first;
-
-      if (file.extension == 'pdf') {
-        File pickedFile = File(file.path!);
-        int fileSize = await pickedFile.length();
-
-        if (fileSize <= 10 * 1024 * 1024) {
-          // Check if file size is within the limit
-          try {
-            setState(() {
-              widget.controller.documents
-                  .firstWhere((element) =>
-                      element.documentTypeId == widget.documentType.id)
-                  .files
-                  .clear(); // Clear the existing files
-
-              widget.controller.documents
-                  .firstWhere((element) =>
-                      element.documentTypeId == widget.documentType.id)
-                  .files
-                  .add(file);
-
-              widget.controller.geturl(
-                widget.documentType.id,
-                widget.controller.documents.first.files.first,
-              );
-            });
-            widget.controller.isSendStared.value = false;
-          } catch (e) {
-            setState(() {
-              hasError = true;
-            });
-            widget.controller.isSendStared.value = false;
-            AppToasts.showError("error  while getting the URL.");
-
-            print("Error in geturl: $e");
-          }
-        } else {
+    try {
+      PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
+      if (pickedFile != null) {
+        try {
+          handleFilePickedSuccess(pickedFile);
+        } catch (e, s) {
+          setState(() {
+            hasError = true;
+          });
           widget.controller.isSendStared.value = false;
-          AppToasts.showError("File size exceeds the limit of 10MB!");
+          AppToasts.showError("error  while getting the URL.");
+
+          print("Error in geturl: $s");
         }
-      } else {
-        widget.controller.isSendStared.value = false;
-        AppToasts.showError("Invalid File!!");
       }
-    } else {
-      widget.controller.isSendStared.value = false;
-      AppToasts.showError("File Not picked!!");
-      // User canceled the file picking
+    } catch (e) {
+      // Handle the error
+      print("Error: $e");
     }
   }
 
@@ -259,5 +223,42 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
         });
       });
     }
+  }
+
+  void handleFilePickedSuccess(PlatformFile pickedFile) {
+    // Move the async code outside of setState
+    _handleFilePickedSuccess(pickedFile);
+  }
+
+  Future<void> _handleFilePickedSuccess(PlatformFile pickedFile) async {
+    // Perform the async operations
+    widget.controller.documents
+        .firstWhere(
+            (element) => element.documentTypeId == widget.documentType.id)
+        .files
+        .clear(); // Clear the existing files
+
+    widget.controller.documents
+        .firstWhere(
+            (element) => element.documentTypeId == widget.documentType.id)
+        .files
+        .add(pickedFile);
+    MinioUploader uploader = MinioUploader();
+    String responseUrl =
+        await uploader.uploadFileToMinio(pickedFile, widget.documentType.id!);
+
+    if (responseUrl.isNotEmpty) {
+      // Response is successful
+      print(responseUrl);
+      widget.controller.sendDoc(widget.documentType.id, responseUrl);
+    } else {
+      // Response is not successful
+      print('Response is false');
+    }
+
+    // Call setState to update the state
+    setState(() {
+      widget.controller.isSendStared.value = false;
+    });
   }
 }

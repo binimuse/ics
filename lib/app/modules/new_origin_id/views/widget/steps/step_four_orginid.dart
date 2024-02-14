@@ -136,7 +136,8 @@ class _Step4State extends State<Step4OrginId> {
               visible: controller.countryvalue.value!.name == 'Ethiopia' ||
                   controller.currentcountryvalue.value!.name == 'Ethiopia',
               child: FormBuilderDropdown(
-                decoration: ReusableInputDecoration.getDecoration('Visa Type',
+                decoration: ReusableInputDecoration.getDecoration(
+                    'Visa acquiring method',
                     isMandatory: true),
                 items: controller.visaType.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(
@@ -151,7 +152,7 @@ class _Step4State extends State<Step4OrginId> {
                 onChanged: (value) {
                   controller.visatypevalue.value = value;
                 },
-                name: 'Visa Type',
+                name: 'Visa acquiring method',
                 initialValue: widget.citizenModel != null
                     ? controller.visatypevalue.value
                     : null,

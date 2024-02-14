@@ -1,8 +1,10 @@
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter/material.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
+import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/utils/constants.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 class BuildDocViewer extends StatefulWidget {
   final String pdfPath;
@@ -16,35 +18,125 @@ class BuildDocViewer extends StatefulWidget {
 class _BuildDocState extends State<BuildDocViewer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: AppColors.primaryLighter.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.file_copy,
-            color: AppColors.primary,
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        return Container(
+          //  margin: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.all(12),
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Row(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: const BorderRadius.all(Radius.circular(18))),
+                padding: const EdgeInsets.all(12),
+                child: Icon(
+                  Icons.file_present,
+                  color: Colors.lightBlue[900],
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 4.h,
+                      width: 18.w,
+                      decoration: BoxDecoration(
+                        color: AppColors.warning,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Pending",
+                            style: AppTextStyles.bodySmallBold.copyWith(
+                                color: AppColors.whiteOff,
+                                fontSize: AppSizes.font_10),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  _showAreYouSureDialog(context, widget.pdfPath);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Icon(
+                        Icons.remove_red_eye,
+                        color: AppColors.primary,
+                      ),
+                      Text("View",
+                          style: AppTextStyles.menuRegular.copyWith(
+                            color: AppColors.primary,
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 1.h),
-          Text(
-            'Text',
-            style: AppTextStyles.bodySmallBold.copyWith(
-              color: AppColors.primary,
+        );
+      },
+      shrinkWrap: true,
+      itemCount: 1,
+      padding: const EdgeInsets.all(0),
+      controller: ScrollController(keepScrollOffset: false),
+      separatorBuilder: (context, index) {
+        return SizedBox(
+          height: 2.h,
+        );
+      },
+    );
+  }
+
+  void _showAreYouSureDialog(
+    BuildContext context,
+    String pdfPath,
+  ) {
+    print(Constants.fileViewer + pdfPath);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: AppColors.danger,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            Container(
+              height: 50.h,
+              child: PDF().cachedFromUrl(Constants.fileViewer + pdfPath),
             ),
-          ),
-          Container(
-            height: 25.h,
-            child: PDFView(
-              filePath: widget.pdfPath,
-            ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }

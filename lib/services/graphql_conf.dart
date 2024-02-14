@@ -64,6 +64,8 @@ class GraphQLConfiguration {
   }
 }
 
+
+
 class GraphQLConfigurationForauth {
   static HttpLink httpLink = HttpLink("http://196.189.21.165:8080/v1/graphql");
 
