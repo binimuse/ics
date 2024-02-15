@@ -44,6 +44,7 @@ class _BuildDocState extends State<BuildDoc> {
         }
       }
     } catch (e) {
+      widget.controller.isSendStared.value = false;
       // Handle the error
       print("Error: $e");
     }

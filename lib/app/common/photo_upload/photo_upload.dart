@@ -1,7 +1,13 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/dialogs/upload_dilaog.dart';
+import 'package:ics/app/common/fileupload/common_file_uploder.dart';
+import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -11,9 +17,11 @@ import 'package:sizer/sizer.dart';
 import 'dart:io';
 
 class PhotoUpload extends StatelessWidget {
-  const PhotoUpload({Key? key, required this.selectedImages}) : super(key: key);
+  PhotoUpload({Key? key, required this.selectedImages, required this.photoPath})
+      : super(key: key);
 
   final RxList<File> selectedImages;
+  RxList<String> photoPath;
 
   @override
   Widget build(BuildContext context) {
@@ -82,27 +90,6 @@ class PhotoUpload extends StatelessWidget {
     );
   }
 
-  Future<void> _getFromGallery() async {
-    final picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      File file = File(image.path);
-      final int maxSizeInBytes = 10 * 1024 * 1024; // 10 MB
-
-      try {
-        int fileSize = await file.length();
-        if (fileSize <= maxSizeInBytes) {
-          selectedImages.add(file);
-        } else {
-          AppToasts.showError("Invalid File, Please select an Image.");
-        }
-      } catch (e) {
-        print("Error: $e");
-      }
-    }
-  }
-
   Widget getImage(BuildContext context) {
     return Obx(() {
       final imageFile = selectedImages.isNotEmpty ? selectedImages.first : null;
@@ -120,17 +107,7 @@ class PhotoUpload extends StatelessWidget {
           child: Stack(
             children: [
               if (imageFile != null)
-                Container(
-                  width: 26.w,
-                  height: 15.h,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.file(
-                      imageFile,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )
+                showimage(imageFile)
               else
                 Container(
                   width: 13.h,
@@ -157,6 +134,7 @@ class PhotoUpload extends StatelessWidget {
                       if (imageFile != null) {
                         selectedImages.removeAt(0);
                         imageFile.deleteSync();
+                        photoPath.removeAt(0);
                       } else {
                         AppToasts.showError("No image selected");
                       }
@@ -179,7 +157,7 @@ class PhotoUpload extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return UploadDialog(
-          onUpload: _getFromGallery,
+          onUpload: _showBottomNavigationSheet,
           title: 'Note info:'.tr,
           contentTexts: [
             'Photos width should be  355pixel-500pixel and height should be  485 pixel-  500 pixel.'
@@ -193,5 +171,134 @@ class PhotoUpload extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _showBottomNavigationSheet() {
+    Get.bottomSheet(
+      backgroundColor: AppColors.whiteOff,
+      Container(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: Icon(
+                Icons.camera,
+                color: AppColors.primary,
+              ),
+              title: Text(
+                'Pick from Camera',
+                style: AppTextStyles.bodySmallBold.copyWith(
+                  color: AppColors.grayDark,
+                ),
+              ),
+              onTap: () {
+                Get.back();
+                _pickFromCamera();
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.photo_library,
+                color: AppColors.primary,
+              ),
+              title: Text(
+                'Pick from Gallery',
+                style: AppTextStyles.bodySmallBold.copyWith(
+                  color: AppColors.grayDark,
+                ),
+              ),
+              onTap: () {
+                Get.back();
+                _pickFromGallery();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _pickFromCamera() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+
+    if (image != null) {
+      final PlatformFile pickedFile = PlatformFile(
+        path: image.path,
+        name: image.name,
+        size: 0,
+        bytes: null,
+      );
+
+      final int maxSizeInBytes = 30 * 1024 * 1024; // 10 MB
+
+      try {
+        if (pickedFile.size <= maxSizeInBytes) {
+          handleFilePickedSuccess(pickedFile);
+        } else {
+          AppToasts.showError("Invalid File, Please select an Image.");
+        }
+      } catch (e) {
+        print("Error: $e");
+      }
+    }
+  }
+
+  void _pickFromGallery() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final PlatformFile pickedFile = PlatformFile(
+        path: image.path,
+        name: image.name,
+        size: 0,
+        bytes: null,
+      );
+
+      final int maxSizeInBytes = 30 * 1024 * 1024; // 10 MB
+
+      try {
+        if (pickedFile.size <= maxSizeInBytes) {
+          handleFilePickedSuccess(pickedFile);
+        } else {
+          AppToasts.showError("Invalid File, Please select an Image.");
+        }
+      } catch (e) {
+        print("Error: $e");
+      }
+    }
+  }
+
+  showimage(File path) {
+    return Container(
+      width: 26.w,
+      height: 15.h,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: Image.file(
+          path,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  handleFilePickedSuccess(PlatformFile pickedFile) async {
+    print("bini ${pickedFile}");
+    // Perform the async operations
+
+    MinioUploader uploader = MinioUploader();
+    String responseUrl = await uploader.uploadFileToMinio(pickedFile, "");
+
+    if (responseUrl.isNotEmpty) {
+      selectedImages.add(File(pickedFile.path!));
+      photoPath.clear();
+      photoPath.add(responseUrl);
+
+      // Response is successful
+    } else {
+      // Response is not successful
+      print('Response is false');
+    }
   }
 }

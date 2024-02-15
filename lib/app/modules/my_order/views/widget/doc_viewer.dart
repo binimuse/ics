@@ -132,8 +132,13 @@ class _BuildDocState extends State<BuildDocViewer> {
           actions: [
             Container(
               height: 50.h,
-              child: PDF().cachedFromUrl(Constants.fileViewer + pdfPath),
-            ),
+              child:
+                  PDF(swipeHorizontal: true, enableSwipe: true).cachedFromUrl(
+                Constants.fileViewer + pdfPath,
+                placeholder: (progress) => Center(child: Text('$progress %')),
+                errorWidget: (error) => Center(child: Text('PDF Not Found')),
+              ),
+            )
           ],
         );
       },

@@ -20,6 +20,7 @@ class GetOrginOrder {
         grand_father_name
         father_name_json
         first_name_json
+        photo
         gender
         grand_father_name_json
         birth_country {
@@ -72,6 +73,7 @@ class GetOrginOrder {
         grand_father_name
         father_name_json
         first_name_json
+        photo
         gender
         grand_father_name_json
         birth_country {
@@ -132,6 +134,7 @@ class GetOrginOrder {
         grand_father_name
         gender
         father_name_json
+        photo
         first_name_json
         grand_father_name_json
         birth_country {
@@ -174,6 +177,7 @@ class GetOrginOrder {
         father_name
         grand_father_name
         father_name_json
+        photo
         gender
         first_name_json
         grand_father_name_json

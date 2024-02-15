@@ -12,7 +12,7 @@ import 'package:sizer/sizer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PassportWidget extends StatelessWidget {
-  final RxList<IcsAllPassportIdApplication> passportApplication;
+  final RxList<IcsAllPassportApplication> passportApplication;
 
   const PassportWidget({
     required this.passportApplication,
@@ -44,7 +44,7 @@ class PassportWidget extends StatelessWidget {
     );
   }
 
-  Widget buildCard(IcsAllPassportIdApplication passportApplication) {
+  Widget buildCard(IcsAllPassportApplication passportApplication) {
     return GestureDetector(
       onTap: () {
         Get.to(DetailPassportWidget(
@@ -162,10 +162,10 @@ class PassportWidget extends StatelessWidget {
   }
 
   String getApplicationTypeText(
-      IcsAllPassportIdApplication passportIdApplication) {
+      IcsAllPassportApplication passportIdApplication) {
     if (passportIdApplication.renewApplication != null) {
       if (passportIdApplication.renewApplication!.passportRenewalType != null) {
-        return passportIdApplication.renewApplication!.passportRenewalType!.name
+        return passportIdApplication.renewApplication!.passportRenewalType.name
             .toString();
       }
       return "";
@@ -176,8 +176,7 @@ class PassportWidget extends StatelessWidget {
     }
   }
 
-  String getApplicationumber(
-      IcsAllPassportIdApplication passportIdApplication) {
+  String getApplicationumber(IcsAllPassportApplication passportIdApplication) {
     if (passportIdApplication.renewApplication != null) {
       return passportIdApplication.renewApplication!.applicationNo.toString();
     } else if (passportIdApplication.newApplication != null) {
@@ -192,18 +191,18 @@ class PassportWidget extends StatelessWidget {
     return timeago.format(dateTime);
   }
 
-  getColor(IcsAllPassportIdApplication passportIdApplication) {
+  getColor(IcsAllPassportApplication passportIdApplication) {
     if (passportIdApplication.renewApplication != null) {
       if (passportIdApplication.renewApplication!.passportRenewalType != null) {
-        if (passportIdApplication.renewApplication!.passportRenewalType!.name
+        if (passportIdApplication.renewApplication!.passportRenewalType.name
             .contains("Lost")) {
           return AppColors.danger;
         } else if (passportIdApplication
-            .renewApplication!.passportRenewalType!.name
+            .renewApplication!.passportRenewalType.name
             .contains("Correction")) {
           return AppColors.accent;
         } else if (passportIdApplication
-            .renewApplication!.passportRenewalType!.name
+            .renewApplication!.passportRenewalType.name
             .contains("Renew")) {
           return AppColors.warning;
         }

@@ -211,6 +211,7 @@ class Step2 extends StatelessWidget {
         ),
         PhotoUpload(
           selectedImages: controller.selectedImages,
+          photoPath: controller.photoPath,
         )
       ],
     );

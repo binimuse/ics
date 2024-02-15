@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -13,6 +14,7 @@ import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_causole.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:ics/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
@@ -106,7 +108,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
                     fit: BoxFit.contain,
                   )),
               Tab(
-                  text: 'Passort',
+                  text: 'Passport',
                   icon: SvgPicture.asset(
                     Assets.icons.paper,
                     color: AppColors.primary,
@@ -236,20 +238,51 @@ class _HomeViewState extends State<DetailOriginWidget> {
         child: Column(
           children: [
             _buildTitle("Personal Detail"),
+            SizedBox(width: 2.h),
             SizedBox(height: 2.h),
+            Container(
+                width: 80.0,
+                height: 80.0,
+                child: QrImageView(
+                  data: getQrData(widget.icsNewApplicationModel),
+                  version: QrVersions.auto,
+                  size: 200.0,
+                )),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const SizedBox(width: 20.0),
+                SizedBox(width: 2.h),
                 Container(
                     width: 80.0,
                     height: 80.0,
-                    child: QrImageView(
-                      data: getQrData(widget.icsNewApplicationModel),
-                      version: QrVersions.auto,
-                      size: 200.0,
-                    )),
+                    child: getImage(widget.icsNewApplicationModel) != null
+                        ? CachedNetworkImage(
+                            imageUrl: Constants.fileViewer +
+                                getImage(widget.icsNewApplicationModel)!,
+                            fit: BoxFit.contain,
+                            height: 28.h,
+                            width: double.infinity,
+                            placeholder: (context, str) => Container(
+                              color: AppColors.whiteOff,
+                              height: 28.h,
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: AppColors.whiteOff,
+                              height: 28.h,
+                            ),
+                          )
+                        : Container(
+                            color: AppColors.danger,
+                            height: 28.h,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'No image found',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.menuBold
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                          )),
                 const SizedBox(width: 20.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -455,13 +488,13 @@ class _HomeViewState extends State<DetailOriginWidget> {
 
   String getName(IcsAllOriginIdApplication orginApplication) {
     if (orginApplication.renewApplication != null) {
-      return orginApplication.renewApplication!.citizen.fatherName.toString() +
+      return orginApplication.renewApplication!.citizen.firstName.toString() +
           " " +
           orginApplication.renewApplication!.citizen.fatherName.toString() +
           " " +
           orginApplication.renewApplication!.citizen.grandFatherName.toString();
     } else if (orginApplication.newApplication != null) {
-      return orginApplication.newApplication!.citizen.fatherName.toString() +
+      return orginApplication.newApplication!.citizen.firstName.toString() +
           " " +
           orginApplication.newApplication!.citizen.fatherName.toString() +
           " " +
@@ -559,7 +592,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
       itemBuilder: (context, index) {
         var data = widget.icsNewApplicationModel.newApplication!
             .newOriginIdDocuments![index];
-      
+
         return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
       },
     );
@@ -575,7 +608,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
       itemBuilder: (context, index) {
         var data = widget.icsNewApplicationModel.renewApplication!
             .renewOriginIdDocuments[index];
-        
+
         return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
       },
     );
@@ -827,7 +860,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
           icsNewApplicationModel.renewApplication!.visaExpiryDate;
       String formattedDate = DateFormat.yMd().format(visaExpiryDate);
       return formattedDate;
-        } else if (icsNewApplicationModel.newApplication != null) {
+    } else if (icsNewApplicationModel.newApplication != null) {
       DateTime? visaExpiryDate = null;
       if (visaExpiryDate != null) {
         String formattedDate = DateFormat.yMd().format(visaExpiryDate);
@@ -844,7 +877,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
           icsNewApplicationModel.renewApplication!.visaIssuedDate;
       String formattedDate = DateFormat.yMd().format(visaIssuedDate);
       return formattedDate;
-        } else if (icsNewApplicationModel.newApplication != null) {
+    } else if (icsNewApplicationModel.newApplication != null) {
       DateTime? visaIssuedDate = null;
       if (visaIssuedDate != null) {
         String formattedDate = DateFormat.yMd().format(visaIssuedDate);
@@ -876,5 +909,21 @@ class _HomeViewState extends State<DetailOriginWidget> {
         return "";
       }
     }
+  }
+
+  String? getImage(IcsAllOriginIdApplication icsAllPassportIdApplication) {
+    if (icsAllPassportIdApplication.renewApplication != null) {
+      if (icsAllPassportIdApplication.renewApplication!.citizen.photo != null) {
+        return icsAllPassportIdApplication.renewApplication!.citizen.photo
+            .toString();
+      }
+    } else if (icsAllPassportIdApplication.newApplication != null) {
+      if (icsAllPassportIdApplication.newApplication!.citizen.photo != null) {
+        return icsAllPassportIdApplication.newApplication!.citizen.photo
+            .toString();
+      }
+    }
+
+    return null;
   }
 }

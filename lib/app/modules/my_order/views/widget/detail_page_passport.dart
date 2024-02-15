@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -12,14 +13,15 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 
 import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
-import 'package:ics/app/modules/my_order/views/widget/doc_viewer.dart';
+import 'package:ics/app/modules/my_order/views/widget/doc_causole.dart';
 import 'package:ics/gen/assets.gen.dart';
+import 'package:ics/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 
 class DetailPassportWidget extends StatefulWidget {
-  final IcsAllPassportIdApplication icsAllPassportIdApplication;
+  final IcsAllPassportApplication icsAllPassportIdApplication;
 
   DetailPassportWidget({
     required this.icsAllPassportIdApplication,
@@ -107,14 +109,14 @@ class _HomeViewState extends State<DetailPassportWidget> {
                     fit: BoxFit.contain,
                   )),
               Tab(
-                  text: 'Passort',
+                  text: 'Passport',
                   icon: SvgPicture.asset(
                     Assets.icons.paper,
                     color: AppColors.primary,
                     fit: BoxFit.contain,
                   )),
               Tab(
-                  text: 'Docement',
+                  text: 'Document',
                   icon: SvgPicture.asset(
                     Assets.icons.memo,
                     color: AppColors.primary,
@@ -238,6 +240,15 @@ class _HomeViewState extends State<DetailPassportWidget> {
           children: [
             _buildTitle("Personal Detail"),
             SizedBox(height: 2.h),
+            Container(
+                width: 80.0,
+                height: 80.0,
+                child: QrImageView(
+                  data: getQrData(widget.icsAllPassportIdApplication),
+                  version: QrVersions.auto,
+                  size: 200.0,
+                )),
+            SizedBox(height: 2.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,11 +257,33 @@ class _HomeViewState extends State<DetailPassportWidget> {
                 Container(
                     width: 80.0,
                     height: 80.0,
-                    child: QrImageView(
-                      data: getQrData(widget.icsAllPassportIdApplication),
-                      version: QrVersions.auto,
-                      size: 200.0,
-                    )),
+                    child: getImage(widget.icsAllPassportIdApplication) != null
+                        ? CachedNetworkImage(
+                            imageUrl: Constants.fileViewer +
+                                getImage(widget.icsAllPassportIdApplication)!,
+                            fit: BoxFit.contain,
+                            height: 28.h,
+                            width: double.infinity,
+                            placeholder: (context, str) => Container(
+                              color: AppColors.whiteOff,
+                              height: 28.h,
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: AppColors.whiteOff,
+                              height: 28.h,
+                            ),
+                          )
+                        : Container(
+                            color: AppColors.danger,
+                            height: 28.h,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'No image found',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.menuBold
+                                  .copyWith(color: AppColors.whiteOff),
+                            ),
+                          )),
                 const SizedBox(width: 20.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -402,7 +435,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     );
   }
 
-  String getNameAm(IcsAllPassportIdApplication orginApplication) {
+  String getNameAm(IcsAllPassportApplication orginApplication) {
     if (orginApplication.renewApplication != null) {
       return orginApplication.renewApplication!.citizen.firstNameJson.am
               .toString() +
@@ -426,15 +459,15 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  String getName(IcsAllPassportIdApplication orginApplication) {
+  String getName(IcsAllPassportApplication orginApplication) {
     if (orginApplication.renewApplication != null) {
-      return orginApplication.renewApplication!.citizen.fatherName.toString() +
+      return orginApplication.renewApplication!.citizen.firstName.toString() +
           " " +
           orginApplication.renewApplication!.citizen.fatherName.toString() +
           " " +
           orginApplication.renewApplication!.citizen.grandFatherName.toString();
     } else if (orginApplication.newApplication != null) {
-      return orginApplication.newApplication!.citizen.fatherName.toString() +
+      return orginApplication.newApplication!.citizen.firstName.toString() +
           " " +
           orginApplication.newApplication!.citizen.fatherName.toString() +
           " " +
@@ -444,7 +477,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  String getNameCountry(IcsAllPassportIdApplication icsNewApplicationModel) {
+  String getNameCountry(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.birthCountry.name;
     } else if (icsNewApplicationModel.newApplication != null) {
@@ -509,30 +542,52 @@ class _HomeViewState extends State<DetailPassportWidget> {
   }
 
   buildDocument() {
-    return SingleChildScrollView(
-      child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
-            width: 50.w,
-            child: ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 2,
-              itemBuilder: (BuildContext context, int index) {
-                return BuildDocViewer(
-                  pdfPath: '',
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                    height: 8.0); // Adjust the space between items as needed
-              },
-            ),
-          )),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 2.h,
+        ),
+        widget.icsAllPassportIdApplication.renewApplication != null
+            ? Expanded(child: buildFaqListRenew())
+            : Expanded(child: buildFaqListForNew())
+      ],
     );
   }
 
-  String getDateOfBirth(IcsAllPassportIdApplication icsNewApplicationModel) {
+  ListView buildFaqListForNew() {
+    return ListView.separated(
+      separatorBuilder: (context, index) => const Divider(
+        height: 1.0,
+      ),
+      itemCount: widget.icsAllPassportIdApplication.newApplication!
+          .newApplicationDocuments.length,
+      itemBuilder: (context, index) {
+        var data = widget.icsAllPassportIdApplication.newApplication!
+            .newApplicationDocuments[index];
+
+        return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
+      },
+    );
+  }
+
+  ListView buildFaqListRenew() {
+    return ListView.separated(
+      separatorBuilder: (context, index) => const Divider(
+        height: 1.0,
+      ),
+      itemCount: widget.icsAllPassportIdApplication.renewApplication!
+          .renewPassportApplicationDocuments.length,
+      itemBuilder: (context, index) {
+        var data = widget.icsAllPassportIdApplication.renewApplication!
+            .renewPassportApplicationDocuments[index];
+
+        return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
+      },
+    );
+  }
+
+  String getDateOfBirth(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       DateTime dateOfBirth =
           icsNewApplicationModel.renewApplication!.citizen.dateOfBirth;
@@ -548,7 +603,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getNationality(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getNationality(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.nationality.name;
     } else if (icsNewApplicationModel.newApplication != null) {
@@ -558,7 +613,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getBirthCountry(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getBirthCountry(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.birthCountry.name;
     } else if (icsNewApplicationModel.newApplication != null) {
@@ -568,7 +623,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getBirthPlace(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getBirthPlace(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.birthPlace
           .toString();
@@ -580,7 +635,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getGender(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getGender(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.gender.toString();
     } else if (icsNewApplicationModel.newApplication != null) {
@@ -590,7 +645,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getAdoption(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getAdoption(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.isAdopted
           .toString();
@@ -602,7 +657,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getOccupation(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getOccupation(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.occupation.name
           .toString();
@@ -614,7 +669,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getHair(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getHair(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.hairColour
           .toString();
@@ -626,7 +681,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  geteyeColor(IcsAllPassportIdApplication icsNewApplicationModel) {
+  geteyeColor(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.eyeColour
           .toString();
@@ -638,7 +693,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getSkinColor(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getSkinColor(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.skinColour
           .toString();
@@ -650,7 +705,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getMarital(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getMarital(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.maritalStatus
           .toString();
@@ -662,7 +717,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getheight(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getheight(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.height.toString();
     } else if (icsNewApplicationModel.newApplication != null) {
@@ -672,7 +727,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getCurrentCountry(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getCurrentCountry(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.currentCountry!.name
           .toString();
@@ -684,7 +739,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getAddress(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getAddress(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.abroadAddress
           .toString();
@@ -696,7 +751,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getPhone(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getPhone(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
       return icsNewApplicationModel.renewApplication!.citizen.phoneNumber
           .toString();
@@ -708,7 +763,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  String getNumber(IcsAllPassportIdApplication icsNewApplicationModel) {
+  String getNumber(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null &&
         icsNewApplicationModel.renewApplication!.passport_number != null) {
       return icsNewApplicationModel.renewApplication!.passport_number
@@ -721,7 +776,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
   }
 
-  getQrData(IcsAllPassportIdApplication icsNewApplicationModel) {
+  getQrData(IcsAllPassportApplication icsNewApplicationModel) {
     {
       if (icsNewApplicationModel.renewApplication != null) {
         return icsNewApplicationModel.renewApplication!.applicationNo
@@ -732,5 +787,21 @@ class _HomeViewState extends State<DetailPassportWidget> {
         return "";
       }
     }
+  }
+
+  String? getImage(IcsAllPassportApplication icsAllPassportIdApplication) {
+    if (icsAllPassportIdApplication.renewApplication != null) {
+      if (icsAllPassportIdApplication.renewApplication!.citizen.photo != null) {
+        return icsAllPassportIdApplication.renewApplication!.citizen.photo
+            .toString();
+      }
+    } else if (icsAllPassportIdApplication.newApplication != null) {
+      if (icsAllPassportIdApplication.newApplication!.citizen.photo != null) {
+        return icsAllPassportIdApplication.newApplication!.citizen.photo
+            .toString();
+      }
+    }
+
+    return null;
   }
 }

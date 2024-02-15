@@ -555,8 +555,7 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
   }
 
   void createCitizen() async {
-    controller.send();
-    await Future.delayed(const Duration(seconds: 1));
+    await controller.send(); // Wait for the send() method to complete
     if (controller.isSend.value) {
       setState(() {
         controller.currentStep++;

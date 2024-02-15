@@ -40,7 +40,6 @@ class IcsAllOriginIdApplication {
 class IcsAllOriginIdApplicationNewApplication {
   String applicationNo;
   String createdAt;
-  List<Document>? newOriginIdDocuments;
   Citizen citizen;
   CurrentCountry currentCountry;
   String currentPassportNumber;
@@ -48,11 +47,11 @@ class IcsAllOriginIdApplicationNewApplication {
   CurrentCountry visaType;
   DateTime currentPassportExpiryDate;
   DateTime currentPassportIssuedDate;
+  List<Document> newOriginIdDocuments;
 
   IcsAllOriginIdApplicationNewApplication({
     required this.applicationNo,
     required this.createdAt,
-    this.newOriginIdDocuments,
     required this.citizen,
     required this.currentCountry,
     required this.currentPassportNumber,
@@ -60,6 +59,7 @@ class IcsAllOriginIdApplicationNewApplication {
     required this.visaType,
     required this.currentPassportExpiryDate,
     required this.currentPassportIssuedDate,
+    required this.newOriginIdDocuments,
   });
 
   factory IcsAllOriginIdApplicationNewApplication.fromMap(
@@ -67,8 +67,6 @@ class IcsAllOriginIdApplicationNewApplication {
       IcsAllOriginIdApplicationNewApplication(
         applicationNo: json["application_no"],
         createdAt: json["created_at"],
-        newOriginIdDocuments: List<Document>.from(
-            json["new_origin_id_documents"].map((x) => Document.fromMap(x))),
         citizen: Citizen.fromMap(json["citizen"]),
         currentCountry: CurrentCountry.fromMap(json["current_country"]),
         currentPassportNumber: json["current_passport_number"],
@@ -78,13 +76,13 @@ class IcsAllOriginIdApplicationNewApplication {
             DateTime.parse(json["current_passport_expiry_date"]),
         currentPassportIssuedDate:
             DateTime.parse(json["current_passport_issued_date"]),
+        newOriginIdDocuments: List<Document>.from(
+            json["new_origin_id_documents"].map((x) => Document.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "application_no": applicationNo,
         "created_at": createdAt,
-        "new_origin_id_documents":
-            List<Document>.from(newOriginIdDocuments!.map((x) => x.toMap())),
         "citizen": citizen.toMap(),
         "current_country": currentCountry.toMap(),
         "current_passport_number": currentPassportNumber,
@@ -94,6 +92,8 @@ class IcsAllOriginIdApplicationNewApplication {
             "${currentPassportExpiryDate.year.toString().padLeft(4, '0')}-${currentPassportExpiryDate.month.toString().padLeft(2, '0')}-${currentPassportExpiryDate.day.toString().padLeft(2, '0')}",
         "current_passport_issued_date":
             "${currentPassportIssuedDate.year.toString().padLeft(4, '0')}-${currentPassportIssuedDate.month.toString().padLeft(2, '0')}-${currentPassportIssuedDate.day.toString().padLeft(2, '0')}",
+        "new_origin_id_documents":
+            List<dynamic>.from(newOriginIdDocuments.map((x) => x.toMap())),
       };
 }
 
@@ -255,30 +255,22 @@ class CurrentCountry {
 }
 
 class Document {
-  Files files;
-  String id;
   CurrentCountry documentType;
-  bool? rejected;
+  Files files;
 
   Document({
-    required this.files,
-    required this.id,
     required this.documentType,
-    required this.rejected,
+    required this.files,
   });
 
   factory Document.fromMap(Map<String, dynamic> json) => Document(
-        files: Files.fromMap(json["files"]),
-        id: json["id"],
         documentType: CurrentCountry.fromMap(json["document_type"]),
-        rejected: json["rejected"],
+        files: Files.fromMap(json["files"]),
       );
 
   Map<String, dynamic> toMap() => {
-        "files": files.toMap(),
-        "id": id,
         "document_type": documentType.toMap(),
-        "rejected": rejected,
+        "files": files.toMap(),
       };
 }
 
@@ -299,7 +291,6 @@ class Files {
 }
 
 class IcsAllOriginIdApplicationRenewApplication {
-  List<Document> renewOriginIdDocuments;
   CurrentCountry originIdRenewalType;
   String applicationNo;
   String createdAt;
@@ -313,9 +304,9 @@ class IcsAllOriginIdApplicationRenewApplication {
   DateTime visaExpiryDate;
   DateTime visaIssuedDate;
   String originIdNumber;
+  List<Document> renewOriginIdDocuments;
 
   IcsAllOriginIdApplicationRenewApplication({
-    required this.renewOriginIdDocuments,
     required this.originIdRenewalType,
     required this.applicationNo,
     required this.createdAt,
@@ -329,13 +320,12 @@ class IcsAllOriginIdApplicationRenewApplication {
     required this.visaExpiryDate,
     required this.visaIssuedDate,
     required this.originIdNumber,
+    required this.renewOriginIdDocuments,
   });
 
   factory IcsAllOriginIdApplicationRenewApplication.fromMap(
           Map<String, dynamic> json) =>
       IcsAllOriginIdApplicationRenewApplication(
-        renewOriginIdDocuments: List<Document>.from(
-            json["renew_origin_id_documents"].map((x) => x)),
         originIdRenewalType:
             CurrentCountry.fromMap(json["origin_id_renewal_type"]),
         applicationNo: json["application_no"],
@@ -352,11 +342,11 @@ class IcsAllOriginIdApplicationRenewApplication {
         visaExpiryDate: DateTime.parse(json["visa_expiry_date"]),
         visaIssuedDate: DateTime.parse(json["visa_issued_date"]),
         originIdNumber: json["origin_id_number"],
+        renewOriginIdDocuments: List<Document>.from(
+            json["renew_origin_id_documents"].map((x) => Document.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "renew_origin_id_documents":
-            List<dynamic>.from(renewOriginIdDocuments.map((x) => x)),
         "origin_id_renewal_type": originIdRenewalType.toMap(),
         "application_no": applicationNo,
         "created_at": createdAt,
@@ -374,126 +364,7 @@ class IcsAllOriginIdApplicationRenewApplication {
         "visa_issued_date":
             "${visaIssuedDate.year.toString().padLeft(4, '0')}-${visaIssuedDate.month.toString().padLeft(2, '0')}-${visaIssuedDate.day.toString().padLeft(2, '0')}",
         "origin_id_number": originIdNumber,
-      };
-}
-
-class IcsAllPassportApplication {
-  String? newId;
-  String? renewId;
-  String createdAt;
-  IcsAllPassportApplicationRenewApplication? renewApplication;
-  IcsAllPassportApplicationNewApplication? newApplication;
-
-  IcsAllPassportApplication({
-    required this.newId,
-    required this.renewId,
-    required this.createdAt,
-    required this.renewApplication,
-    required this.newApplication,
-  });
-
-  factory IcsAllPassportApplication.fromMap(Map<String, dynamic> json) =>
-      IcsAllPassportApplication(
-        newId: json["new_id"],
-        renewId: json["renew_id"],
-        createdAt: json["created_at"],
-        renewApplication: json["renew_application"] == null
-            ? null
-            : IcsAllPassportApplicationRenewApplication.fromMap(
-                json["renew_application"]),
-        newApplication: json["new_application"] == null
-            ? null
-            : IcsAllPassportApplicationNewApplication.fromMap(
-                json["new_application"]),
-      );
-
-  Map<String, dynamic> toMap() => {
-        "new_id": newId,
-        "renew_id": renewId,
-        "created_at": createdAt,
-        "renew_application": renewApplication?.toMap(),
-        "new_application": newApplication?.toMap(),
-      };
-}
-
-class IcsAllPassportApplicationNewApplication {
-  List<Document> newApplicationDocuments;
-  String applicationNo;
-  String createdAt;
-  Citizen citizen;
-  CurrentCountry currentCountry;
-
-  IcsAllPassportApplicationNewApplication({
-    required this.newApplicationDocuments,
-    required this.applicationNo,
-    required this.createdAt,
-    required this.citizen,
-    required this.currentCountry,
-  });
-
-  factory IcsAllPassportApplicationNewApplication.fromMap(
-          Map<String, dynamic> json) =>
-      IcsAllPassportApplicationNewApplication(
-        newApplicationDocuments: List<Document>.from(
-            json["new_application_documents"].map((x) => Document.fromMap(x))),
-        applicationNo: json["application_no"],
-        createdAt: json["created_at"],
-        citizen: Citizen.fromMap(json["citizen"]),
-        currentCountry: CurrentCountry.fromMap(json["current_country"]),
-      );
-
-  Map<String, dynamic> toMap() => {
-        "new_application_documents":
-            List<dynamic>.from(newApplicationDocuments.map((x) => x.toMap())),
-        "application_no": applicationNo,
-        "created_at": createdAt,
-        "citizen": citizen.toMap(),
-        "current_country": currentCountry.toMap(),
-      };
-}
-
-class IcsAllPassportApplicationRenewApplication {
-  List<Document> renewPassportApplicationDocuments;
-  String passportNumber;
-  CurrentCountry passportRenewalType;
-  String applicationNo;
-  String createdAt;
-  Citizen citizen;
-  CurrentCountry currentCountry;
-
-  IcsAllPassportApplicationRenewApplication({
-    required this.renewPassportApplicationDocuments,
-    required this.passportNumber,
-    required this.passportRenewalType,
-    required this.applicationNo,
-    required this.createdAt,
-    required this.citizen,
-    required this.currentCountry,
-  });
-
-  factory IcsAllPassportApplicationRenewApplication.fromMap(
-          Map<String, dynamic> json) =>
-      IcsAllPassportApplicationRenewApplication(
-        renewPassportApplicationDocuments: List<Document>.from(
-            json["renew_passport_application_documents"]
-                .map((x) => Document.fromMap(x))),
-        passportNumber: json["passport_number"],
-        passportRenewalType:
-            CurrentCountry.fromMap(json["passport_renewal_type"]),
-        applicationNo: json["application_no"],
-        createdAt: json["created_at"],
-        citizen: Citizen.fromMap(json["citizen"]),
-        currentCountry: CurrentCountry.fromMap(json["current_country"]),
-      );
-
-  Map<String, dynamic> toMap() => {
-        "renew_passport_application_documents": List<dynamic>.from(
-            renewPassportApplicationDocuments.map((x) => x.toMap())),
-        "passport_number": passportNumber,
-        "passport_renewal_type": passportRenewalType.toMap(),
-        "application_no": applicationNo,
-        "created_at": createdAt,
-        "citizen": citizen.toMap(),
-        "current_country": currentCountry.toMap(),
+        "renew_origin_id_documents":
+            List<dynamic>.from(renewOriginIdDocuments.map((x) => x.toMap())),
       };
 }

@@ -190,6 +190,7 @@ class Step2RenewPassport extends StatelessWidget {
         ),
         PhotoUpload(
           selectedImages: controller.selectedImages,
+          photoPath: controller.photoPath,
         )
       ],
     );

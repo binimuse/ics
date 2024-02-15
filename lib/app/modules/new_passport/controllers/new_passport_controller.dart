@@ -1,4 +1,3 @@
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -26,7 +25,6 @@ import 'dart:io';
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
 import '../data/quary/get_all.dart';
-
 
 class NewPassportController extends GetxController {
   final TextEditingController AmfatherNameController = TextEditingController();
@@ -284,6 +282,8 @@ class NewPassportController extends GetxController {
   var isSend = false.obs;
   var isSendStared = false.obs;
   var newApplicationId;
+
+  RxList<String> photoPath = <String>[].obs;
   Future<void> send() async {
     try {
       isSendStared.value = true;
@@ -312,6 +312,7 @@ class NewPassportController extends GetxController {
   }
 
   Map<String, dynamic> buildVariablesMap(String formattedDateOfBirth) {
+   
     return {
       'objects': {
         'first_name': firstNameController.text,
@@ -331,6 +332,7 @@ class NewPassportController extends GetxController {
         'marital_status': maritalstatusvalue.value!.name,
         'height': height.text,
         'is_adopted': isAdoption.value,
+        'photo': photoPath.first,
         'skin_colour': skincolorvalue.value,
         'abroad_country_id': countryvalue.value!.id,
         'abroad_address': addressController.text,
@@ -363,6 +365,7 @@ class NewPassportController extends GetxController {
 
   void handleSendException(dynamic e) {
     isSend.value = false;
+    isSendStared.value = false;
     print('Error sending data: $e');
     if (!e.toString().contains("Null")) {
       AppToasts.showError("An error occurred while sending data.");

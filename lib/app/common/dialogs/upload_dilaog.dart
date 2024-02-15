@@ -20,6 +20,7 @@ class UploadDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: Center(
         child: Text(
           title,
@@ -51,22 +52,20 @@ class UploadDialog extends StatelessWidget {
                         Icon(
                           Icons.circle,
                           color: AppColors.primary,
-                          size: 8,
+                          size: 9,
                         ),
-                        SizedBox(
-                            width:
-                                8), // Add some spacing between the icon and text
+                        // Add some spacing between the icon and text
                       ],
                     ),
                   ),
                   Expanded(
                     flex:
-                        8, // Give more flex to the text to allow it to occupy more space
-                    child: Text(
-                      text,
-                      style: AppTextStyles.bodySmallRegular
-                          .copyWith(color: AppColors.black),
-                    ),
+                        9, // Give more flex to the text to allow it to occupy more space
+                    child: Text(text,
+                        style: AppTextStyles.bodySmallRegular.copyWith(
+                          color: AppColors.black,
+                          fontSize: 15,
+                        )),
                   ),
                 ],
               ),

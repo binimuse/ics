@@ -186,6 +186,7 @@ class Step2OrginID extends StatelessWidget {
         ),
         PhotoUpload(
           selectedImages: controller.selectedImages,
+          photoPath: controller.photoPath,
         )
       ],
     );

@@ -1,4 +1,3 @@
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -332,6 +331,7 @@ class NewOriginIdController extends GetxController {
   var isSend = false.obs;
   var isSendStared = false.obs;
   var neworginID;
+  RxList<String> photoPath = <String>[].obs;
   Future<void> send() async {
     networkStatus.value = NetworkStatus.LOADING;
     try {
@@ -368,6 +368,7 @@ class NewOriginIdController extends GetxController {
               'eye_colour': eyecolorvalue.value!.name,
               'marital_status': maritalstatusvalue.value!.name,
               'height': height.text,
+              'photo': photoPath.first,
               'is_adopted': isAdoption.value,
               'skin_colour': skincolorvalue.value,
               'abroad_country_id': countryvalue.value!.id,

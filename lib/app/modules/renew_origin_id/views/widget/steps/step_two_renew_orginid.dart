@@ -190,6 +190,7 @@ class Step2RenewOrginID extends StatelessWidget {
         ),
         PhotoUpload(
           selectedImages: controller.selectedImages,
+          photoPath: controller.photoPath,
         )
       ],
     );
