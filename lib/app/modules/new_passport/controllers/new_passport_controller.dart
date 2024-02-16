@@ -7,13 +7,17 @@ import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/modules/new_passport/data/model/booked_date_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
+import 'package:ics/app/modules/new_passport/data/mutation/book_appointemts_mutation.dart';
 import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
+import 'package:ics/app/modules/new_passport/data/quary/get_booked_date.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_emabassies.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_url.dart';
 import 'package:ics/app/modules/new_passport/data/quary/ics_citizens.dart';
+import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +46,7 @@ class NewPassportController extends GetxController {
 
   final TextEditingController addressController = TextEditingController();
   final Rxn<Basemodel> baseData = Rxn<Basemodel>();
+  final Rxn<BookedDate> bookedDate = Rxn<BookedDate>();
   final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
 
   List<AllowedContreyModel> allwoedCountries = [];
@@ -72,6 +77,7 @@ class NewPassportController extends GetxController {
       TextEditingController();
 
   GetallQuery getGenderQuery = GetallQuery();
+  GetBookedDate getBookedDate = GetBookedDate();
   GetUrlQuery geturlQuery = GetUrlQuery();
   Getaicscitizens getaicscitizens = Getaicscitizens();
   GetEmbassiesQuery getEmbassiesQuery = GetEmbassiesQuery();
@@ -125,7 +131,7 @@ class NewPassportController extends GetxController {
   final TextEditingController phonenumber = TextEditingController();
 
   final reasonController = TextEditingController();
-  var selectedDate = DateTime.now().obs;
+
   final RxString skincolorvalue = ''.obs;
   final List<bool> termCheckedList = [
     false,
@@ -144,12 +150,6 @@ class NewPassportController extends GetxController {
 
     super.onInit();
   }
-
-  List<DateTime> occupiedDates = [
-    DateTime(2024, 2, 1),
-    DateTime(2024, 2, 3),
-    // Add more dates...
-  ];
 
   Future<List<NewConfirmationModel>> fetchConfirmationModelCar() async {
     // simulate network delay
@@ -199,10 +199,6 @@ class NewPassportController extends GetxController {
       }
     }
     return true;
-  }
-
-  void updateSelectedDate(DateTime newDate) {
-    selectedDate.value = newDate;
   }
 
   //signature
@@ -282,6 +278,94 @@ class NewPassportController extends GetxController {
   var isSend = false.obs;
   var isSendStared = false.obs;
   var newApplicationId;
+  late DateTime selelctedate;
+  List<DateTime> occupiedDates = [
+    // Add more dates...
+  ];
+
+  Future<void> getBookedDates(String embasiyId) async {
+    networkStatus.value = NetworkStatus.LOADING;
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getBookedDate.fetchData(embasiyId), {});
+      bookedDate.value = BookedDate.fromMap(result);
+
+      setFetchedStatus(true);
+      networkStatus.value = NetworkStatus.SUCCESS;
+
+      // first clear
+      occupiedDates.clear();
+      // Add fetched dates to occupiedDates list
+      List<DateTime> fetchedDates = [];
+      for (var bookedDate in bookedDate.value!.icsNewPassportBookedDates) {
+        // Remove the time component from the DateTime object
+        DateTime dateWithoutTime = DateTime(bookedDate.bookingDate.year,
+            bookedDate.bookingDate.month, bookedDate.bookingDate.day);
+        fetchedDates.add(dateWithoutTime);
+      }
+      occupiedDates = fetchedDates;
+    } catch (e, s) {
+      networkStatus.value = NetworkStatus.ERROR;
+      print("Error occurred while fetching data: $s");
+      setFetchedStatus(false);
+    }
+  }
+
+  late DateTime selectedDate;
+  late DateTime selectedDateTime;
+  Future<void> sendBookedDates(BuildContext context) async {
+    networkStatus.value = NetworkStatus.LOADING;
+    try {
+      GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
+      // // Remove the time component from the selectedDate
+      // // Convert selectedDate to a date string without the time component
+      // String dateString = selectedDate.toIso8601String().split('T').first;
+
+      // int hour = selectedDateTime.hour;
+      // int minute = selectedDateTime.minute;
+      // int second = selectedDateTime.second;
+
+      // String timeString =
+      //     '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}:${second.toString().padLeft(2, '0')}';
+
+      // print(dateString);
+      // print(timeString);
+      // print(newApplicationId);
+
+      String timetz = DateFormat("HH:mm:ss").format(selectedDateTime);
+
+      print(timetz);
+
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(NewAppointments.newApp),
+          variables: <String, dynamic>{
+            "objects": {
+              "date": "2024-02-29",
+              "new_application_id": "18e4108d-2887-44a9-a88f-5dfc943276d8",
+              "start_time": timetz,
+            }
+          },
+        ),
+      );
+
+      if (!result.hasException) {
+        networkStatus.value = NetworkStatus.SUCCESS;
+        AppToasts.showSuccess("New Passport Sent successfully");
+
+        Get.offAllNamed(Routes.MAIN_PAGE);
+      } else {
+        networkStatus.value = NetworkStatus.ERROR;
+        AppToasts.showError("Something went wrong");
+        print(result);
+      }
+    } catch (e, s) {
+      AppToasts.showError("Something went wrong");
+      print(e);
+      print(s);
+      networkStatus.value = NetworkStatus.ERROR;
+    }
+  }
 
   RxList<String> photoPath = <String>[].obs;
   Future<void> send() async {
@@ -312,7 +396,6 @@ class NewPassportController extends GetxController {
   }
 
   Map<String, dynamic> buildVariablesMap(String formattedDateOfBirth) {
-   
     return {
       'objects': {
         'first_name': firstNameController.text,

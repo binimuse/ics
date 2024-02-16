@@ -19,6 +19,7 @@ class CustomCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
+      timeSlotViewSettings: TimeSlotViewSettings(),
       view: CalendarView.month,
       blackoutDates: blackoutDates,
       minDate: minDate,

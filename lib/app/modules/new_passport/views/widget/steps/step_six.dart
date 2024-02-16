@@ -9,6 +9,7 @@ import 'package:ics/app/modules/new_passport/controllers/new_passport_controller
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:interval_time_picker/interval_time_picker.dart';
 
 class Step6 extends StatelessWidget {
   final NewPassportController controller = Get.find<NewPassportController>();
@@ -48,9 +49,32 @@ class Step6 extends StatelessWidget {
         CustomCalendar(
           blackoutDates: controller.occupiedDates,
           minDate: today,
+          
           maxDate: DateTime(today.year, today.month + 3, today.day),
           onTap: (CalendarTapDetails details) {
-            print('Selected date: ${details.date}');
+            controller.selectedDate = details.date!;
+            print(controller.selectedDate);
+
+            // Show the time picker with one-hour intervals
+            showIntervalTimePicker(
+              context: context,
+              initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+              interval: 60,
+            ).then((pickedTime) {
+              if (pickedTime != null) {
+                // Combine the selected date and time
+                DateTime selectedDateTime = DateTime(
+                  controller.selectedDate.year,
+                  controller.selectedDate.month,
+                  controller.selectedDate.day,
+                  pickedTime.hour,
+                  pickedTime.minute,
+                );
+
+                // Update your controller or state with the selectedDateTime
+                controller.selectedDateTime = selectedDateTime;
+              }
+            });
           },
         ),
         SizedBox(

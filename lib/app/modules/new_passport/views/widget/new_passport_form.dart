@@ -269,7 +269,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                           } else if (controller.currentStep == 4) {
                             checkdoc();
                           } else if (controller.currentStep == 5) {
-                            finalstep();
+                            finalstep(context);
                           } else {
                             if (controller.newPassportformKey.currentState!
                                 .saveAndValidate()) {
@@ -305,11 +305,13 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     }
   }
 
-  void finalstep() {
-    AppToasts.showSuccess("New Passport Sent successfully");
-    // final MyOrderController controller = Get.put(MyOrderController());
-    // controller.getNewPassport();
-    Get.offAllNamed(Routes.MAIN_PAGE);
+  void finalstep(BuildContext context) {
+    if (controller.selectedDate != null &&
+        controller.selectedDateTime != null) {
+      controller.sendBookedDates(context);
+    } else {
+      AppToasts.showError("Please select a date");
+    }
   }
 
   void createCitizen() async {

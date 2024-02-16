@@ -131,6 +131,7 @@ class _Step3State extends State<Step3> {
                 }).toList(),
                 onChanged: (value) {
                   controller.embassiesvalue.value = value;
+                  controller.getBookedDates(value!.id!);
                 },
                 name: 'Embassies/branch',
                 validator: FormBuilderValidators.required(),
