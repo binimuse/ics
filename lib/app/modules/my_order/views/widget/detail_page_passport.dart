@@ -147,6 +147,8 @@ class _HomeViewState extends State<DetailPassportWidget> {
       padding: const EdgeInsets.all(20),
       child: ListView(
         children: [
+          _buildTitle("status"),
+          _buildAppointemnt(),
           MyTimeLineTiles(
             isFirst: true,
             isLast: false,
@@ -485,6 +487,42 @@ class _HomeViewState extends State<DetailPassportWidget> {
     } else {
       return "";
     }
+  }
+
+  Widget _buildAppointemnt() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "Appointemnt date :- ",
+            style: AppTextStyles.bodyLargeBold.copyWith(
+              color: AppColors.black,
+              fontSize: AppSizes.font_12,
+            ),
+          ),
+          Text(
+            getAppointmentdate(widget.icsAllPassportIdApplication),
+            style: AppTextStyles.bodyLargeBold.copyWith(
+              color: AppColors.black,
+              fontSize: AppSizes.font_12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String getAppointmentdate(
+      IcsAllPassportApplication icsAllPassportIdApplication) {
+    if (icsAllPassportIdApplication.newApplication!.appointments.isNotEmpty) {
+      String formattedDateTime = DateFormat("EEE/d/yyyy").format(
+          icsAllPassportIdApplication.newApplication!.appointments.first.date);
+      return formattedDateTime;
+    }
+
+    return "";
   }
 
   Widget _buildTitle(String title) {

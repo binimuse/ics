@@ -1,13 +1,12 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/dialogs/upload_dilaog.dart';
 import 'package:ics/app/common/fileupload/common_file_uploder.dart';
-import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -107,7 +106,7 @@ class PhotoUpload extends StatelessWidget {
           child: Stack(
             children: [
               if (imageFile != null)
-                showimage(imageFile)
+                showImage(imageFile)
               else
                 Container(
                   width: 13.h,
@@ -133,7 +132,7 @@ class PhotoUpload extends StatelessWidget {
                       print(imageFile);
                       if (imageFile != null) {
                         selectedImages.removeAt(0);
-                        imageFile.deleteSync();
+                        //imageFile.deleteSync();
                         photoPath.removeAt(0);
                       } else {
                         AppToasts.showError("No image selected");
@@ -269,18 +268,54 @@ class PhotoUpload extends StatelessWidget {
     }
   }
 
-  showimage(File path) {
-    return Container(
-      width: 26.w,
-      height: 15.h,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.file(
-          path,
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+  Widget showImage(dynamic path) {
+    Widget imageWidget;
+
+    if (path is File) {
+      // Determine if the path is a local file or network URL
+      Uri? uri;
+      try {
+        uri = Uri.parse(path.path);
+      } catch (e) {
+        uri = null;
+      }
+
+      if (uri != null && uri.isAbsolute) {
+        // Selected image is from a network URL
+        imageWidget = Container(
+          width: 26.w,
+          height: 15.h,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: CachedNetworkImage(
+              imageUrl: uri.toString(),
+              fit: BoxFit.cover,
+              placeholder: (context, url) =>
+                  Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
+          ),
+        );
+      } else {
+        // Selected image is from a local file
+        imageWidget = Container(
+          width: 26.w,
+          height: 15.h,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.file(
+              path,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      }
+    } else {
+      // Invalid image path or URL
+      imageWidget = Container(); // or any other placeholder widget
+    }
+
+    return imageWidget;
   }
 
   handleFilePickedSuccess(PlatformFile pickedFile) async {

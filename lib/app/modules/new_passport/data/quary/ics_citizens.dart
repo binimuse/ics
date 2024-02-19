@@ -7,7 +7,7 @@ query MyQuery {
     abroad_country_id
     phone_number
     birth_country_id
-    
+    photo
     nationality_id
     is_adopted
     birth_place

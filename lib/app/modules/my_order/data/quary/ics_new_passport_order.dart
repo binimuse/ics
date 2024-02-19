@@ -167,7 +167,11 @@ class GetOrginOrder {
       }
     }
     new_application {
-      
+        appointments {
+        date
+        start_time
+        rescheduled
+      }
         new_application_documents { files id document_type { name id } rejected }
   
       application_no

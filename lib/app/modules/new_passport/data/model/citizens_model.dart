@@ -7,6 +7,7 @@ class IcsCitizenModel {
   String? birthCountryId;
   String? nationality_id;
   String? birthPlace;
+  String? photo;
   DateTime? createdAt;
   DateTime? dateOfBirth;
   String? eyeColour;
@@ -35,6 +36,7 @@ class IcsCitizenModel {
     this.birthCountryId,
     this.nationality_id,
     this.birthPlace,
+    this.photo,
     this.createdAt,
     this.dateOfBirth,
     this.eyeColour,
@@ -62,6 +64,7 @@ class IcsCitizenModel {
       abroadCountryId: json['abroad_country_id'],
       abroadPhoneNumber: json['phone_number'],
       birthCountryId: json['birth_country_id'],
+      photo: json['photo'],
       is_adopted: json['is_adopted'],
       nationality_id: json['nationality_id'],
       birthPlace: json['birth_place'],

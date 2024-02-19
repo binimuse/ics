@@ -130,6 +130,7 @@ class _Step3State extends State<Step3> {
                   );
                 }).toList(),
                 onChanged: (value) {
+                  print(value!.id!);
                   controller.embassiesvalue.value = value;
                   controller.getBookedDates(value!.id!);
                 },

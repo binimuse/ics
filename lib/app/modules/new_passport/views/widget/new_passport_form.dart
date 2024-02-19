@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -22,6 +24,7 @@ import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
 import 'package:ics/app/routes/app_pages.dart';
+import 'package:ics/utils/constants.dart';
 
 import 'package:im_stepper/stepper.dart';
 
@@ -306,11 +309,11 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   }
 
   void finalstep(BuildContext context) {
-    if (controller.selectedDate != null &&
+    if (controller.selectedDate != null ||
         controller.selectedDateTime != null) {
       controller.sendBookedDates(context);
     } else {
-      AppToasts.showError("Please select a date");
+      AppToasts.showError("Please select both a date and a time");
     }
   }
 
@@ -458,6 +461,11 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     final skinColour = citizenModel.skinColour!;
     final height = citizenModel.height!;
     final maritalStatus = citizenModel.maritalStatus;
+    final photo = citizenModel.photo;
+
+    controller.photoPath.add(photo!);
+    controller.selectedImages.add(File(Constants.fileViewer + photo));
+    // controller.selectedImages.add(photo!);
 
     controller.occupationvalue.value =
         controller.occupations.firstWhere((e) => e.id == occupationId);

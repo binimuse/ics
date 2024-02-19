@@ -134,5 +134,101 @@ class MyOrderController extends GetxController
 
   void increment() => count.value++;
 
+
+  // void getNewPassport() async {
+
+
+  //   try {
+
+
+  //     // Set isFechtedOrder to true to indicate a loading state
+
+
+  //     isFechtedOrder.value = true;
+
+
+  //     Stream<dynamic> subscriptionStream = graphQLCommonApi
+
+
+  //         .subscription(getanewPassportOrderQuery.fetchData(), {});
+
+
+  //     subscriptionStream.listen(
+
+
+  //       (event) {
+
+
+  //         if (event.hasException) {
+
+
+  //           print("Subscription error: ${event.exception}");
+
+
+  //         } else if (event.isLoading) {
+
+
+  //           // Handle loading state if needed
+
+
+  //         } else if (event.data != null) {
+
+
+  //           icsNewApplication.value =
+
+
+  //               (event.data['ics_new_applications'] as List)
+
+
+  //                   .map((e) => IcsNewApplicationModel.fromJson(e))
+
+
+  //                   .toList();
+
+
+  //         }
+
+
+  //       },
+
+
+  //       onError: (error) {
+
+
+  //         isFechtedOrder.value = false;
+
+
+  //         print("Subscription error: $error");
+
+
+  //       },
+
+
+  //       onDone: () {
+
+
+  //         // Handle completion of the subscription stream if needed
+
+
+  //       },
+
+
+  //     );
+
+
+  //   } catch (e) {
+
+
+  //     isFechtedOrder.value = false;
+
+
+  //     print(">>>>>>>>>>>>>>>>>> $e");
+
+
+  //   }
+
+
+  // }
+
 }
 

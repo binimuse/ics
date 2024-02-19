@@ -44,11 +44,13 @@ class IcsAllPassportApplicationNewApplication {
   String createdAt;
   Citizen citizen;
   CurrentCountry currentCountry;
+  List<Appointment> appointments;
   List<Document> newApplicationDocuments;
   String? passport_number;
 
   IcsAllPassportApplicationNewApplication({
     required this.applicationNo,
+    required this.appointments,
     required this.createdAt,
     required this.citizen,
     required this.currentCountry,
@@ -59,6 +61,8 @@ class IcsAllPassportApplicationNewApplication {
   factory IcsAllPassportApplicationNewApplication.fromMap(
           Map<String, dynamic> json) =>
       IcsAllPassportApplicationNewApplication(
+        appointments: List<Appointment>.from(
+            json["appointments"].map((x) => Appointment.fromMap(x))),
         applicationNo: json["application_no"],
         passport_number: json["passport_number"],
         createdAt: json["created_at"],
@@ -69,6 +73,7 @@ class IcsAllPassportApplicationNewApplication {
       );
 
   Map<String, dynamic> toMap() => {
+        "appointments": List<dynamic>.from(appointments.map((x) => x.toMap())),
         "application_no": applicationNo,
         "created_at": createdAt,
         "passport_number": passport_number,
@@ -76,6 +81,31 @@ class IcsAllPassportApplicationNewApplication {
         "current_country": currentCountry.toMap(),
         "new_application_documents":
             List<dynamic>.from(newApplicationDocuments.map((x) => x.toMap())),
+      };
+}
+
+class Appointment {
+  DateTime date;
+  String startTime;
+  bool rescheduled;
+
+  Appointment({
+    required this.date,
+    required this.startTime,
+    required this.rescheduled,
+  });
+
+  factory Appointment.fromMap(Map<String, dynamic> json) => Appointment(
+        date: DateTime.parse(json["date"]),
+        startTime: json["start_time"],
+        rescheduled: json["rescheduled"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "date":
+            "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+        "start_time": startTime,
+        "rescheduled": rescheduled,
       };
 }
 

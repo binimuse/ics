@@ -147,6 +147,8 @@ class NewPassportController extends GetxController {
   void onInit() {
     getAll();
     getCitizene();
+    selectedDate = null;
+    selectedDateTime = null;
 
     super.onInit();
   }
@@ -311,28 +313,21 @@ class NewPassportController extends GetxController {
     }
   }
 
-  late DateTime selectedDate;
-  late DateTime selectedDateTime;
+  late DateTime? selectedDate;
+  late DateTime? selectedDateTime;
   Future<void> sendBookedDates(BuildContext context) async {
     networkStatus.value = NetworkStatus.LOADING;
     try {
       GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
-      // // Remove the time component from the selectedDate
-      // // Convert selectedDate to a date string without the time component
-      // String dateString = selectedDate.toIso8601String().split('T').first;
+      // Remove the time component from the selectedDate
+      // Convert selectedDate to a date string without the time component
+      String dateString = selectedDate!.toIso8601String().split('T').first;
 
-      // int hour = selectedDateTime.hour;
-      // int minute = selectedDateTime.minute;
-      // int second = selectedDateTime.second;
+      print(dateString);
 
-      // String timeString =
-      //     '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}:${second.toString().padLeft(2, '0')}';
+      print(newApplicationId);
 
-      // print(dateString);
-      // print(timeString);
-      // print(newApplicationId);
-
-      String timetz = DateFormat("HH:mm:ss").format(selectedDateTime);
+      String timetz = DateFormat("HH:mm:ss").format(selectedDateTime!);
 
       print(timetz);
 
@@ -341,8 +336,8 @@ class NewPassportController extends GetxController {
           document: gql(NewAppointments.newApp),
           variables: <String, dynamic>{
             "objects": {
-              "date": "2024-02-29",
-              "new_application_id": "18e4108d-2887-44a9-a88f-5dfc943276d8",
+              "date": dateString,
+              "new_application_id": newApplicationId,
               "start_time": timetz,
             }
           },

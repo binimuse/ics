@@ -49,7 +49,6 @@ class Step6 extends StatelessWidget {
         CustomCalendar(
           blackoutDates: controller.occupiedDates,
           minDate: today,
-          
           maxDate: DateTime(today.year, today.month + 3, today.day),
           onTap: (CalendarTapDetails details) {
             controller.selectedDate = details.date!;
@@ -64,9 +63,9 @@ class Step6 extends StatelessWidget {
               if (pickedTime != null) {
                 // Combine the selected date and time
                 DateTime selectedDateTime = DateTime(
-                  controller.selectedDate.year,
-                  controller.selectedDate.month,
-                  controller.selectedDate.day,
+                  controller.selectedDate!.year,
+                  controller.selectedDate!.month,
+                  controller.selectedDate!.day,
                   pickedTime.hour,
                   pickedTime.minute,
                 );
