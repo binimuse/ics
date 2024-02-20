@@ -495,6 +495,34 @@ class NewPassportController extends GetxController {
     }
   }
 
+  var isUpdateSuccess = false.obs;
+  Future<void> updateNewApplication() async {
+    try {
+      //file upload
+
+      GraphQLClient graphQLClient;
+
+      graphQLClient = GraphQLConfiguration().clientToQuery();
+
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(UpdateNewApplication.update(newApplicationId)),
+        ),
+      );
+
+      if (result.hasException) {
+        isUpdateSuccess(false);
+        print(result.exception.toString());
+      } else {
+        isUpdateSuccess(true);
+      }
+    } catch (e) {
+      print(e.toString());
+      isUpdateSuccess(false);
+      print('Error: $e');
+    }
+  }
+
   var isDeleteDocSuccess = false.obs;
   Future<void> deleteDoc(
     var documentTypeId,

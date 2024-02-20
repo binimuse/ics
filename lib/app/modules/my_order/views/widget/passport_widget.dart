@@ -52,7 +52,7 @@ class PassportWidget extends StatelessWidget {
         ));
       },
       child: Container(
-        height: 20.h,
+        height: 21.h,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

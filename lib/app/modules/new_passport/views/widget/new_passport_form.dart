@@ -301,10 +301,12 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      print("object");
-      setState(() {
-        controller.currentStep++;
-      });
+      await controller.updateNewApplication();
+      if (controller.isUpdateSuccess.value) {
+        setState(() {
+          controller.currentStep++;
+        });
+      }
     }
   }
 

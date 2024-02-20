@@ -181,9 +181,6 @@ class MainPageView extends GetView<MainPageController> {
                         : AppColors.grayLight,
                 size: AppSizes.icon_size_4 * 2,
               ),
-              const SizedBox(
-                height: 5,
-              ),
             ],
           ),
         ));

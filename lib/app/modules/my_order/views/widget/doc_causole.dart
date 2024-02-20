@@ -7,9 +7,14 @@ import 'package:ics/app/modules/my_order/views/widget/doc_viewer.dart';
 import 'package:ics/gen/assets.gen.dart';
 
 class ItemDoc extends StatefulWidget {
-  const ItemDoc({super.key, required this.title, required this.pdfPath});
+  const ItemDoc(
+      {super.key,
+      required this.title,
+      required this.reviewStatus,
+      required this.pdfPath});
 
   final String title;
+  final String reviewStatus;
   final String pdfPath;
 
   @override
@@ -131,6 +136,7 @@ class _ItemFaqState extends State<ItemDoc> {
   buildPDFViewer() {
     return BuildDocViewer(
       pdfPath: widget.pdfPath,
+      reviewStatus: widget.reviewStatus,
     );
   }
 }
