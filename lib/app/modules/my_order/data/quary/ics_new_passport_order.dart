@@ -167,6 +167,7 @@ class GetOrginOrder {
       }
     }
     new_application {
+      review_status
         appointments {
         date
         start_time

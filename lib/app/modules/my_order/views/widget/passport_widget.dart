@@ -120,7 +120,7 @@ class PassportWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         height: 4.h,
-                        width: 20.w,
+                        width: 30.w,
                         decoration: BoxDecoration(
                           color: AppColors.warning,
                           borderRadius: BorderRadius.circular(12.0),
@@ -130,7 +130,7 @@ class PassportWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Pending",
+                              getStatus(passportApplication),
                               style: AppTextStyles.bodySmallBold.copyWith(
                                 color: AppColors.whiteOff,
                                 fontSize: AppSizes.font_10,
@@ -209,6 +209,16 @@ class PassportWidget extends StatelessWidget {
       }
     } else {
       return AppColors.success;
+    }
+  }
+
+  String getStatus(IcsAllPassportApplication passportApplication) {
+    if (passportApplication.renewApplication != null) {
+      return "Pending";
+    } else if (passportApplication.newApplication != null) {
+      return passportApplication.newApplication!.reviewStatus.toString();
+    } else {
+      return "";
     }
   }
 }

@@ -62,10 +62,10 @@ class _HomeViewState extends State<DetailPassportWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Pending",
+                  getStatus(widget.icsAllPassportIdApplication),
                   style: AppTextStyles.bodySmallBold.copyWith(
                     color: AppColors.whiteOff,
-                    fontSize: AppSizes.font_10,
+                    fontSize: 9,
                   ),
                 ),
               ],
@@ -516,10 +516,13 @@ class _HomeViewState extends State<DetailPassportWidget> {
 
   String getAppointmentdate(
       IcsAllPassportApplication icsAllPassportIdApplication) {
-    if (icsAllPassportIdApplication.newApplication!.appointments.isNotEmpty) {
-      String formattedDateTime = DateFormat("EEE/d/yyyy").format(
-          icsAllPassportIdApplication.newApplication!.appointments.first.date);
-      return formattedDateTime;
+    if (icsAllPassportIdApplication.newApplication != null) {
+      if (icsAllPassportIdApplication.newApplication!.appointments.isNotEmpty) {
+        String formattedDateTime = DateFormat("EEE/d/yyyy").format(
+            icsAllPassportIdApplication
+                .newApplication!.appointments.first.date);
+        return formattedDateTime;
+      }
     }
 
     return "";
@@ -841,5 +844,16 @@ class _HomeViewState extends State<DetailPassportWidget> {
     }
 
     return null;
+  }
+
+  getStatus(icsAllPassportIdApplication) {
+    if (icsAllPassportIdApplication.renewApplication != null) {
+      return "Pending";
+    } else if (icsAllPassportIdApplication.newApplication != null) {
+      return icsAllPassportIdApplication.newApplication!.reviewStatus
+          .toString();
+    } else {
+      return "";
+    }
   }
 }
