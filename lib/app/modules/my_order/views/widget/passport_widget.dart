@@ -122,7 +122,10 @@ class PassportWidget extends StatelessWidget {
                         height: 4.h,
                         width: 30.w,
                         decoration: BoxDecoration(
-                          color: AppColors.warning,
+                          color: getStatus(passportApplication)
+                                  .contains("REJECTED")
+                              ? AppColors.danger
+                              : AppColors.warning,
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Row(

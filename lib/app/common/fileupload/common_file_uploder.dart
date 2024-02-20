@@ -9,7 +9,7 @@ class MinioUploader {
   Future<String> uploadFileToMinio(
       PlatformFile file, String documentTypeId) async {
     var uploadUrl =
-        Uri.parse('http://196.189.21.165:8085/direct-single-file-upload');
+        Uri.parse('http://196.189.30.153:3002/direct-single-file-upload');
     var request = http.MultipartRequest('POST', uploadUrl);
     final mimeType = lookupMimeType(file.path!);
 
@@ -32,6 +32,7 @@ class MinioUploader {
 
       return url;
     } else {
+      print(response.reasonPhrase);
       throw Exception('Failed to upload file: ${response.reasonPhrase}');
     }
   }

@@ -2,7 +2,7 @@ class GetallQuery {
   dynamic fetchData() {
     return """
 {
-  base_document_types(where: {document_category: {code: {_eq: "NEW_APPLICATION"}}}) {
+  base_document_types(where: {document_category: {code: {_eq: "NEW_PASSPORT_APPLICATION_DC"}}}) {
     id
     name
     description

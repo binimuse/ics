@@ -8,11 +8,13 @@ import 'package:ics/utils/prefrence_utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GraphQLConfiguration {
-  static const String _baseUrl = "http://196.189.21.165:8080/v1/graphql";
+  //static const String _baseUrl = "http://196.189.21.165:8080/v1/graphql";
+  static const String _baseUrlProduaction =
+      "http://196.189.30.153:8000/v1/graphql";
   static const String _websocketUrl = "ws://196.189.21.165:8080/v1/graphql";
   static const String xhasurarole = "user";
 
-  static HttpLink httpLink = HttpLink(_baseUrl, defaultHeaders: {
+  static HttpLink httpLink = HttpLink(_baseUrlProduaction, defaultHeaders: {
     'x-hasura-role': xhasurarole,
   });
 
@@ -64,19 +66,19 @@ class GraphQLConfiguration {
   }
 }
 
-
-
 class GraphQLConfigurationForauth {
-  static HttpLink httpLink = HttpLink("http://196.189.21.165:8080/v1/graphql");
+  // static HttpLink httpLink = HttpLink("http://196.189.21.165:8080/v1/graphql");
+  static HttpLink httpLinkProdaction =
+      HttpLink("http://196.189.30.153:8000/v1/graphql");
 
   ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(
-      link: httpLink,
+      link: httpLinkProdaction,
       cache: GraphQLCache(),
     ),
   );
 
-  final Link link = (httpLink);
+  final Link link = (httpLinkProdaction);
 
   GraphQLClient clientToQuery() {
     return GraphQLClient(

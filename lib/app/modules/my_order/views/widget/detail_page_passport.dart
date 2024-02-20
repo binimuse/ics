@@ -54,7 +54,10 @@ class _HomeViewState extends State<DetailPassportWidget> {
             height: 4.h,
             width: 20.w,
             decoration: BoxDecoration(
-              color: AppColors.warning,
+              color: getStatus(widget.icsAllPassportIdApplication)
+                      .contains("REJECTED")
+                  ? AppColors.danger
+                  : AppColors.warning,
               borderRadius: BorderRadius.circular(12.0),
             ),
             child: Row(
@@ -770,10 +773,10 @@ class _HomeViewState extends State<DetailPassportWidget> {
 
   getCurrentCountry(IcsAllPassportApplication icsNewApplicationModel) {
     if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.currentCountry!.name
+      return icsNewApplicationModel.renewApplication!.currentCountry.name
           .toString();
     } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.currentCountry!.name
+      return icsNewApplicationModel.newApplication!.currentCountry.name
           .toString();
     } else {
       return "";
