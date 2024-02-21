@@ -173,7 +173,7 @@ class GetOrginOrder {
         start_time
         rescheduled
       }
-        new_application_documents { files id document_type { name id } rejected }
+        new_application_documents { review_status files id document_type { name id } rejected }
   
       application_no
       created_at

@@ -9,8 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GraphQLConfiguration {
   //static const String _baseUrl = "http://196.189.21.165:8080/v1/graphql";
-  static const String _baseUrlProduaction =
-      "http://196.189.30.153:8000/v1/graphql";
+  static const String _baseUrlProduaction = Constants.baseProdactionUrl;
   static const String _websocketUrl = "ws://196.189.21.165:8080/v1/graphql";
   static const String xhasurarole = "user";
 
@@ -68,8 +67,7 @@ class GraphQLConfiguration {
 
 class GraphQLConfigurationForauth {
   // static HttpLink httpLink = HttpLink("http://196.189.21.165:8080/v1/graphql");
-  static HttpLink httpLinkProdaction =
-      HttpLink("http://196.189.30.153:8000/v1/graphql");
+  static HttpLink httpLinkProdaction = HttpLink(Constants.baseProdactionUrl);
 
   ValueNotifier<GraphQLClient> client = ValueNotifier(
     GraphQLClient(
@@ -90,7 +88,7 @@ class GraphQLConfigurationForauth {
 
 class GraphQLConfigurationRefresh {
   static HttpLink httpLink = HttpLink(
-    "http://196.189.21.165:8080/v1/graphql",
+    Constants.baseProdactionUrl,
   );
 
   ValueNotifier<GraphQLClient> client = ValueNotifier(

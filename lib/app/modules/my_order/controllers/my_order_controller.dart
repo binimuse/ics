@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:ics/app/common/app_toasts.dart';
 
 import 'package:ics/app/common/data/graphql_common_api.dart';
 
@@ -11,6 +13,8 @@ import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart'
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
+import 'package:ics/services/graphql_conf.dart';
 
 class MyOrderController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -80,67 +84,44 @@ class MyOrderController extends GetxController
 
   void increment() => count.value++;
 
-  // void getNewPassport() async {
+  var isSendDocSuccess = false.obs;
+  var newDocId;
+  Future<void> sendDoc(
+    var documentTypeId,
+    var path,
+    var newApplicationId,
+  ) async {
+    try {
+      // file upload
 
-  //   try {
+      GraphQLClient graphQLClient;
 
-  //     // Set isFechtedOrder to true to indicate a loading state
+      graphQLClient = GraphQLConfiguration().clientToQuery();
 
-  //     isFechtedOrder.value = true;
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(NewDocApplications.newDoc),
+          variables: <String, dynamic>{
+            'objects': {
+              'new_application_id': newApplicationId,
+              'files': {
+                'path': path,
+              },
+              'document_type_id': documentTypeId,
+            }
+          },
+        ),
+      );
 
-  //     Stream<dynamic> subscriptionStream = graphQLCommonApi
+      if (result.hasException) {
+        print(result.exception.toString());
+      } else {
+        isSendDocSuccess(true);
 
-  //         .subscription(getanewPassportOrderQuery.fetchData(), {});
-
-  //     subscriptionStream.listen(
-
-  //       (event) {
-
-  //         if (event.hasException) {
-
-  //           print("Subscription error: ${event.exception}");
-
-  //         } else if (event.isLoading) {
-
-  //           // Handle loading state if needed
-
-  //         } else if (event.data != null) {
-
-  //           icsNewApplication.value =
-
-  //               (event.data['ics_new_applications'] as List)
-
-  //                   .map((e) => IcsNewApplicationModel.fromJson(e))
-
-  //                   .toList();
-
-  //         }
-
-  //       },
-
-  //       onError: (error) {
-
-  //         isFechtedOrder.value = false;
-
-  //         print("Subscription error: $error");
-
-  //       },
-
-  //       onDone: () {
-
-  //         // Handle completion of the subscription stream if needed
-
-  //       },
-
-  //     );
-
-  //   } catch (e) {
-
-  //     isFechtedOrder.value = false;
-
-  //     print(">>>>>>>>>>>>>>>>>> $e");
-
-  //   }
-
-  // }
+        AppToasts.showSuccess("Document uploaded successfully");
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 }

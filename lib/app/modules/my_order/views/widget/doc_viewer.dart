@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -8,8 +9,9 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 class BuildDocViewer extends StatefulWidget {
   final String pdfPath;
+  final String reviewStatus;
 
-  const BuildDocViewer({required this.pdfPath});
+  const BuildDocViewer({required this.pdfPath, required this.reviewStatus});
 
   @override
   _BuildDocState createState() => _BuildDocState();
@@ -49,7 +51,10 @@ class _BuildDocState extends State<BuildDocViewer> {
                       height: 4.h,
                       width: 18.w,
                       decoration: BoxDecoration(
-                        color: AppColors.warning,
+                        color:
+                            widget.reviewStatus.toString().contains("REJECTED")
+                                ? AppColors.danger
+                                : AppColors.warning,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Row(
@@ -57,7 +62,7 @@ class _BuildDocState extends State<BuildDocViewer> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "Pending",
+                            widget.reviewStatus.toString(),
                             style: AppTextStyles.bodySmallBold.copyWith(
                                 color: AppColors.whiteOff,
                                 fontSize: AppSizes.font_10),
@@ -68,6 +73,29 @@ class _BuildDocState extends State<BuildDocViewer> {
                   ],
                 ),
               ),
+              widget.reviewStatus.toString().contains("REJECTED")
+                  ? GestureDetector(
+                      onTap: () {
+                        _showAreYouSureDialog(context, widget.pdfPath);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.upload,
+                              color: AppColors.primary,
+                            ),
+                            Text("Re-Upload",
+                                style: AppTextStyles.menuRegular.copyWith(
+                                  color: AppColors.primary,
+                                )),
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
               GestureDetector(
                 onTap: () {
                   _showAreYouSureDialog(context, widget.pdfPath);
@@ -75,7 +103,7 @@ class _BuildDocState extends State<BuildDocViewer> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Icon(
                         Icons.remove_red_eye,

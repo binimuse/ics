@@ -256,19 +256,23 @@ class CurrentCountry {
 
 class Document {
   CurrentCountry documentType;
+  String reviewStatus;
   Files files;
 
   Document({
     required this.documentType,
+    required this.reviewStatus,
     required this.files,
   });
 
   factory Document.fromMap(Map<String, dynamic> json) => Document(
+        reviewStatus: json["review_status"],
         documentType: CurrentCountry.fromMap(json["document_type"]),
         files: Files.fromMap(json["files"]),
       );
 
   Map<String, dynamic> toMap() => {
+        "review_status": reviewStatus,
         "document_type": documentType.toMap(),
         "files": files.toMap(),
       };

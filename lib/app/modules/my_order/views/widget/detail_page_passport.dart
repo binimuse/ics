@@ -610,7 +610,11 @@ class _HomeViewState extends State<DetailPassportWidget> {
         var data = widget.icsAllPassportIdApplication.newApplication!
             .newApplicationDocuments[index];
 
-        return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
+        return ItemDoc(
+          title: data.documentType.name,
+          pdfPath: data.files.path,
+          reviewStatus: data.reviewStatus,
+        );
       },
     );
   }
@@ -626,7 +630,11 @@ class _HomeViewState extends State<DetailPassportWidget> {
         var data = widget.icsAllPassportIdApplication.renewApplication!
             .renewPassportApplicationDocuments[index];
 
-        return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
+        return ItemDoc(
+          title: data.documentType.name,
+          pdfPath: data.files.path,
+          reviewStatus: data.reviewStatus,
+        );
       },
     );
   }

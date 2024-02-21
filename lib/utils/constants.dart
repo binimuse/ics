@@ -7,6 +7,9 @@ class Constants {
   static const String userId = 'userId';
   static const String verifyEmail = 'verifyEmail';
   static const String fileViewer = 'http://196.189.30.153:9000/';
+  static const String baseProdactionUrl =
+      'http://196.189.30.153:8000/v1/graphql';
+  static const String baseStagingUrl = 'http://196.189.21.165:8080/v1/graphql';
 
   static const int laborsPageSize = 10;
 

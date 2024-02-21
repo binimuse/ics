@@ -15,6 +15,22 @@ class IcscitizensMutation {
   ''';
 }
 
+class UpdateNewApplication {
+  static String update(String applicationId) {
+    return '''
+mutation MyMutation {
+  update_ics_new_applications(where: {id: {_eq: "$applicationId"}}, _set: {submitted: true}) {
+    
+    returning {
+      id
+    }
+  }
+}
+
+    ''';
+  }
+}
+
 class NewDocApplications {
   static const String newDoc = r'''
     mutation($objects: [ics_new_application_documents_insert_input!]!) {

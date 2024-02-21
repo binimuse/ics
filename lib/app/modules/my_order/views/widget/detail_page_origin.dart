@@ -593,7 +593,11 @@ class _HomeViewState extends State<DetailOriginWidget> {
         var data = widget.icsNewApplicationModel.newApplication!
             .newOriginIdDocuments![index];
 
-        return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
+        return ItemDoc(
+          title: data.documentType.name,
+          pdfPath: data.files.path,
+          reviewStatus: '',
+        );
       },
     );
   }
@@ -609,7 +613,11 @@ class _HomeViewState extends State<DetailOriginWidget> {
         var data = widget.icsNewApplicationModel.renewApplication!
             .renewOriginIdDocuments[index];
 
-        return ItemDoc(title: data.documentType.name, pdfPath: data.files.path);
+        return ItemDoc(
+          title: data.documentType.name,
+          pdfPath: data.files.path,
+          reviewStatus: '',
+        );
       },
     );
   }
