@@ -592,11 +592,13 @@ class _HomeViewState extends State<DetailOriginWidget> {
       itemBuilder: (context, index) {
         var data = widget.icsNewApplicationModel.newApplication!
             .newOriginIdDocuments![index];
-
+        CurrentCountry documentType = data.documentType;
         return ItemDoc(
           title: data.documentType.name,
-          pdfPath: data.files.path,
-          reviewStatus: '',
+          documentType: documentType,
+          applicationId: '',
+          controller: controller,
+          listOfDoc: [],
         );
       },
     );
@@ -612,11 +614,13 @@ class _HomeViewState extends State<DetailOriginWidget> {
       itemBuilder: (context, index) {
         var data = widget.icsNewApplicationModel.renewApplication!
             .renewOriginIdDocuments[index];
-
+        CurrentCountry documentType = data.documentType;
         return ItemDoc(
           title: data.documentType.name,
-          pdfPath: data.files.path,
-          reviewStatus: '',
+          documentType: documentType,
+          applicationId: '',
+          controller: controller,
+          listOfDoc: [],
         );
       },
     );

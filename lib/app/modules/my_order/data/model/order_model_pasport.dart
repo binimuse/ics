@@ -40,6 +40,7 @@ class IcsAllPassportApplication {
 }
 
 class IcsAllPassportApplicationNewApplication {
+  String id;
   String reviewStatus;
   String applicationNo;
   String createdAt;
@@ -50,6 +51,7 @@ class IcsAllPassportApplicationNewApplication {
   String? passport_number;
 
   IcsAllPassportApplicationNewApplication({
+    required this.id,
     required this.applicationNo,
     required this.reviewStatus,
     required this.appointments,
@@ -63,6 +65,7 @@ class IcsAllPassportApplicationNewApplication {
   factory IcsAllPassportApplicationNewApplication.fromMap(
           Map<String, dynamic> json) =>
       IcsAllPassportApplicationNewApplication(
+        id: json["id"],
         reviewStatus: json["review_status"],
         appointments: List<Appointment>.from(
             json["appointments"].map((x) => Appointment.fromMap(x))),
@@ -76,6 +79,7 @@ class IcsAllPassportApplicationNewApplication {
       );
 
   Map<String, dynamic> toMap() => {
+        "id": id,
         "review_status": reviewStatus,
         "appointments": List<dynamic>.from(appointments.map((x) => x.toMap())),
         "application_no": applicationNo,

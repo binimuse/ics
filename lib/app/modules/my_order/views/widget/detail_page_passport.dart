@@ -6,14 +6,18 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/common/timeline/timeline.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
 
 import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_causole.dart';
+import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:ics/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -35,7 +39,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
   late MyOrderController controller;
   @override
   void initState() {
-    controller = Get.put(MyOrderController());
+    controller = Get.find<MyOrderController>();
 
     super.initState();
   }
@@ -43,106 +47,109 @@ class _HomeViewState extends State<DetailPassportWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Orders',
-        title2: 'Status',
-        showActions: true,
-        showLeading: true,
-        actionIcon: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: 4.h,
-            width: 20.w,
-            decoration: BoxDecoration(
-              color: getStatus(widget.icsAllPassportIdApplication)
-                      .contains("REJECTED")
-                  ? AppColors.danger
-                  : AppColors.warning,
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  getStatus(widget.icsAllPassportIdApplication),
-                  style: AppTextStyles.bodySmallBold.copyWith(
-                    color: AppColors.whiteOff,
-                    fontSize: 9,
+        appBar: CustomAppBar(
+          title: 'Orders',
+          title2: 'Status',
+          showActions: true,
+          showLeading: true,
+          actionIcon: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 4.h,
+              width: 20.w,
+              decoration: BoxDecoration(
+                color: getStatus(widget.icsAllPassportIdApplication)
+                        .contains("REJECTED")
+                    ? AppColors.danger
+                    : AppColors.warning,
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    getStatus(widget.icsAllPassportIdApplication),
+                    style: AppTextStyles.bodySmallBold.copyWith(
+                      color: AppColors.whiteOff,
+                      fontSize: 9,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      backgroundColor: AppColors.whiteOff,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 1.h,
-          ),
-          TabBar(
-            controller: controller.tabController,
-            tabAlignment: TabAlignment.center,
-            isScrollable: true,
-            labelStyle: AppTextStyles.bodyLargeBold
-                .copyWith(fontSize: AppSizes.font_10, color: AppColors.primary),
-            tabs: [
-              Tab(text: 'Status', icon: Icon(Icons.check_circle)),
-              Tab(
-                  text: 'Profile',
-                  icon: SvgPicture.asset(
-                    Assets.icons.profileDefault,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-              Tab(
-                  text: 'Profile',
-                  icon: SvgPicture.asset(
-                    Assets.icons.profileDefault,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-              Tab(
-                  text: 'Address',
-                  icon: SvgPicture.asset(
-                    Assets.icons.location,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-              Tab(
-                  text: 'Passport',
-                  icon: SvgPicture.asset(
-                    Assets.icons.paper,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-              Tab(
-                  text: 'Document',
-                  icon: SvgPicture.asset(
-                    Assets.icons.memo,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: controller.tabController,
-              children: [
-                buildStatus(),
-                buildProfile(),
-                buildProfile2(),
-                buildAddress(),
-                buildPassportInfo(),
-                buildDocument(),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        backgroundColor: AppColors.whiteOff,
+        body: Obx(
+          () => controller.networkStatus.value == NetworkStatus.LOADING
+              ? CustomLoadingWidget()
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    TabBar(
+                      controller: controller.tabController,
+                      tabAlignment: TabAlignment.center,
+                      isScrollable: true,
+                      labelStyle: AppTextStyles.bodyLargeBold.copyWith(
+                          fontSize: AppSizes.font_10, color: AppColors.primary),
+                      tabs: [
+                        Tab(text: 'Status', icon: Icon(Icons.check_circle)),
+                        Tab(
+                            text: 'Profile',
+                            icon: SvgPicture.asset(
+                              Assets.icons.profileDefault,
+                              color: AppColors.primary,
+                              fit: BoxFit.contain,
+                            )),
+                        Tab(
+                            text: 'Profile',
+                            icon: SvgPicture.asset(
+                              Assets.icons.profileDefault,
+                              color: AppColors.primary,
+                              fit: BoxFit.contain,
+                            )),
+                        Tab(
+                            text: 'Address',
+                            icon: SvgPicture.asset(
+                              Assets.icons.location,
+                              color: AppColors.primary,
+                              fit: BoxFit.contain,
+                            )),
+                        Tab(
+                            text: 'Passport',
+                            icon: SvgPicture.asset(
+                              Assets.icons.paper,
+                              color: AppColors.primary,
+                              fit: BoxFit.contain,
+                            )),
+                        Tab(
+                            text: 'Document',
+                            icon: SvgPicture.asset(
+                              Assets.icons.memo,
+                              color: AppColors.primary,
+                              fit: BoxFit.contain,
+                            )),
+                      ],
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: controller.tabController,
+                        children: [
+                          buildStatus(),
+                          buildProfile(),
+                          buildProfile2(),
+                          buildAddress(),
+                          buildPassportInfo(),
+                          buildDocument(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+        ));
   }
 
   Widget buildStatus() {
@@ -604,16 +611,18 @@ class _HomeViewState extends State<DetailPassportWidget> {
       separatorBuilder: (context, index) => const Divider(
         height: 1.0,
       ),
-      itemCount: widget.icsAllPassportIdApplication.newApplication!
-          .newApplicationDocuments.length,
+      itemCount: controller.groupedAppliaction.length,
       itemBuilder: (context, index) {
         var data = widget.icsAllPassportIdApplication.newApplication!
             .newApplicationDocuments[index];
-
+        CurrentCountry documentType = data.documentType;
         return ItemDoc(
           title: data.documentType.name,
-          pdfPath: data.files.path,
-          reviewStatus: data.reviewStatus,
+          documentType: documentType,
+          applicationId:
+              widget.icsAllPassportIdApplication.newApplication!.id.toString(),
+          controller: controller,
+          listOfDoc: controller.groupedAppliaction[index].document,
         );
       },
     );
@@ -629,11 +638,14 @@ class _HomeViewState extends State<DetailPassportWidget> {
       itemBuilder: (context, index) {
         var data = widget.icsAllPassportIdApplication.renewApplication!
             .renewPassportApplicationDocuments[index];
+        CurrentCountry documentType = data.documentType;
 
         return ItemDoc(
           title: data.documentType.name,
-          pdfPath: data.files.path,
-          reviewStatus: data.reviewStatus,
+          documentType: documentType,
+          applicationId: '',
+          controller: controller,
+          listOfDoc: [],
         );
       },
     );

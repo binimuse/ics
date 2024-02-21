@@ -167,13 +167,14 @@ class GetOrginOrder {
       }
     }
     new_application {
+      id
       review_status
         appointments {
         date
         start_time
         rescheduled
       }
-        new_application_documents { review_status files id document_type { name id } rejected }
+         new_application_documents(order_by: {created_at: desc}) { review_status files id document_type { name id } rejected }
   
       application_no
       created_at

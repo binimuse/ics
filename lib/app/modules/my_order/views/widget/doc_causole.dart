@@ -3,19 +3,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_viewer.dart';
 import 'package:ics/gen/assets.gen.dart';
 
 class ItemDoc extends StatefulWidget {
-  const ItemDoc(
-      {super.key,
-      required this.title,
-      required this.reviewStatus,
-      required this.pdfPath});
+  const ItemDoc({
+    super.key,
+    required this.title,
+    required this.listOfDoc,
+    required this.documentType,
+    required this.applicationId,
+    required this.controller,
+  });
 
   final String title;
-  final String reviewStatus;
-  final String pdfPath;
+
+  final List<Document> listOfDoc;
+
+  final MyOrderController controller;
+  final String applicationId;
+  final CurrentCountry documentType;
 
   @override
   State<ItemDoc> createState() => _ItemFaqState();
@@ -103,40 +112,34 @@ class _ItemFaqState extends State<ItemDoc> {
                 horizontal: AppSizes.mp_w_6,
                 vertical: AppSizes.mp_w_1,
               ),
-              child: ListView.builder(
+              child: ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: EdgeInsets.symmetric(
                   vertical: AppSizes.mp_v_1 * 0.7,
                 ),
                 itemBuilder: (context, index) {
-                  return buildPDFViewer();
+                  return buildPDFViewer(widget.listOfDoc[index]);
                 },
-                itemCount: 1,
+                itemCount: widget.listOfDoc.length,
+                separatorBuilder: (context, index) {
+                  return SizedBox(
+                    height: AppSizes.mp_v_4 * 0.8,
+                  );
+                },
               ),
-              // child: Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: widget.description
-              //       .map(
-              //         (e) => Padding(
-              //           padding: EdgeInsets.only(bottom: AppSizes.mp_v_2),
-              //           child: Text(
-              //             e,
-              //             style: AppTextStyles.bodyLargeBold.copyWith(color: AppColors.primaryDark),
-              //           ),
-              //         ),
-              //       )
-              //       .toList(),
-              // ),
             ),
           )
         : const SizedBox();
   }
 
-  buildPDFViewer() {
+  buildPDFViewer(Document document) {
     return BuildDocViewer(
-      pdfPath: widget.pdfPath,
-      reviewStatus: widget.reviewStatus,
+      pdfPath: document.files.path,
+      reviewStatus: document.reviewStatus,
+      documentType: document.documentType,
+      controller: widget.controller,
+      applicationId: widget.applicationId,
     );
   }
 }

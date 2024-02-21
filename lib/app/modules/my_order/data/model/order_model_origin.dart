@@ -372,3 +372,13 @@ class IcsAllOriginIdApplicationRenewApplication {
             List<dynamic>.from(renewOriginIdDocuments.map((x) => x.toMap())),
       };
 }
+
+class GroupedAppliaction {
+  CurrentCountry documentType;
+  List<Document> document;
+
+  GroupedAppliaction({
+    required this.documentType,
+    required this.document,
+  });
+}

@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:ics/utils/constants.dart';
 import 'package:mime/mime.dart';
 
 class MinioUploader {
   Future<String> uploadFileToMinio(
       PlatformFile file, String documentTypeId) async {
-    var uploadUrl =
-        Uri.parse('http://196.189.30.153:3002/direct-single-file-upload');
+    var uploadUrl = Uri.parse(Constants.fileUploader);
     var request = http.MultipartRequest('POST', uploadUrl);
     final mimeType = lookupMimeType(file.path!);
 
