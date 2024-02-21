@@ -119,7 +119,7 @@ class _Step3State extends State<Step3> {
                 decoration: ReusableInputDecoration.getDecoration(
                     controller.countryvalue.value!.name == "Ethiopia"
                         ? "Branch"
-                        : 'Embassies',
+                        : "Embassies",
                     isMandatory: true),
                 items: controller.base_embassies.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(
@@ -134,7 +134,7 @@ class _Step3State extends State<Step3> {
                 onChanged: (value) {
                   print(value!.id!);
                   controller.embassiesvalue.value = value;
-                  controller.getBookedDates(value!.id!);
+                  controller.getBookedDates(value.id!);
                 },
                 name: controller.countryvalue.value!.name == "Ethiopia"
                     ? "Branch"

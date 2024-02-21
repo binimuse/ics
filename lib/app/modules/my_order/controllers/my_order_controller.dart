@@ -14,7 +14,6 @@ import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart'
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
 import 'package:ics/services/graphql_conf.dart';
@@ -50,7 +49,7 @@ class MyOrderController extends GetxController
   var isfechedorder = false.obs;
   List<CommonModel> base_document_types = [];
   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
-  void getOrginOrder() async {
+  getOrginOrder() async {
     networkStatus.value = NetworkStatus.LOADING;
     try {
       dynamic result =

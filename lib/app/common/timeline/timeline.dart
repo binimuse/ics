@@ -7,24 +7,29 @@ class MyTimeLineTiles extends StatelessWidget {
   final bool isFirst;
   final bool isLast;
   final bool isPast;
+  final bool? isrejected;
   final eventchild;
   const MyTimeLineTiles({
     super.key,
     required this.isFirst,
     required this.isLast,
     required this.isPast,
+    this.isrejected,
     required this.eventchild,
   });
 
   Widget build(BuildContext context) {
+    Color primaryColor =
+        isrejected == true ? AppColors.danger : AppColors.primary;
     return TimelineTile(
       isFirst: isFirst,
       isLast: isLast,
-      beforeLineStyle:
-          LineStyle(color: isPast ? AppColors.primary : AppColors.grayLight),
+      beforeLineStyle: LineStyle(
+        color: isPast ? primaryColor : AppColors.grayLight,
+      ),
       indicatorStyle: IndicatorStyle(
         width: 40,
-        color: isPast ? AppColors.primary : AppColors.grayLight,
+        color: isPast ? primaryColor : AppColors.grayLight,
         iconStyle: IconStyle(
           iconData: Icons.done,
           color: isPast ? Colors.white : AppColors.grayLight,
@@ -32,6 +37,7 @@ class MyTimeLineTiles extends StatelessWidget {
       ),
       endChild: EventCard(
         isPast: isPast,
+        isrejected: isrejected,
         child: eventchild,
       ),
     );

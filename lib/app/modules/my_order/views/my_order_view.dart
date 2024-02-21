@@ -99,7 +99,9 @@ class _MyOrderViewState extends State<MyOrderView> {
                             )
                           : PassportWidget(
                               passportApplication:
-                                  controller.passportApplication),
+                                  controller.passportApplication,
+                              controller: controller,
+                            ),
                     ],
                   ),
                 ),

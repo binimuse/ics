@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
@@ -17,7 +18,6 @@ import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
 
 import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_causole.dart';
-import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:ics/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -135,16 +135,27 @@ class _HomeViewState extends State<DetailPassportWidget> {
                       ],
                     ),
                     Expanded(
-                      child: TabBarView(
-                        controller: controller.tabController,
-                        children: [
-                          buildStatus(),
-                          buildProfile(),
-                          buildProfile2(),
-                          buildAddress(),
-                          buildPassportInfo(),
-                          buildDocument(),
-                        ],
+                      child: EasyRefresh(
+                        onRefresh: () async {
+                          await controller.getOrginOrder();
+                        },
+                        header: MaterialHeader(),
+                        child: SizedBox(
+                          height: 100.h,
+                          width: double
+                              .infinity, // Set the width to occupy all available space
+                          child: TabBarView(
+                            controller: controller.tabController,
+                            children: [
+                              buildStatus(),
+                              buildProfile(),
+                              buildProfile2(),
+                              buildAddress(),
+                              buildPassportInfo(),
+                              buildDocument(),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -155,7 +166,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
   Widget buildStatus() {
     return Container(
       padding: const EdgeInsets.all(20),
-      child: ListView(
+      child: Column(
         children: [
           _buildTitle("status"),
           _buildAppointemnt(),
@@ -202,12 +213,16 @@ class _HomeViewState extends State<DetailPassportWidget> {
           MyTimeLineTiles(
             isFirst: false,
             isLast: false,
-            isPast: false,
+            isrejected: getStatus(widget.icsAllPassportIdApplication)
+                    .contains("REJECTED")
+                ? true
+                : false,
+            isPast: true,
             eventchild: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Immigration approved",
+                  getStatus(widget.icsAllPassportIdApplication),
                   style: AppTextStyles.menuBold
                       .copyWith(color: AppColors.whiteOff),
                 ),

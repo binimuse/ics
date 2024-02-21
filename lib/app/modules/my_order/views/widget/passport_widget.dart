@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
 import 'package:ics/app/modules/my_order/views/widget/detail_page_passport.dart';
 import 'package:ics/gen/assets.gen.dart';
@@ -13,32 +15,39 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class PassportWidget extends StatelessWidget {
   final RxList<IcsAllPassportApplication> passportApplication;
+  final MyOrderController controller;
 
   const PassportWidget({
     required this.passportApplication,
+    required this.controller,
   });
-  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 1.h,
-            ),
-            ListView.separated(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: passportApplication.length,
-              separatorBuilder: (context, index) =>
-                  SizedBox(height: AppSizes.mp_v_2 * 1.5),
-              itemBuilder: (context, index) {
-                var passportApp = passportApplication[index];
-                return buildCard(passportApp);
-              },
-            )
-          ],
+    return EasyRefresh(
+      onRefresh: () async {
+        await controller.getOrginOrder();
+      },
+      header: MaterialHeader(),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 1.h,
+              ),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: passportApplication.length,
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: AppSizes.mp_v_2 * 1.5),
+                itemBuilder: (context, index) {
+                  var passportApp = passportApplication[index];
+                  return buildCard(passportApp);
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
