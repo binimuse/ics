@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -24,6 +25,7 @@ import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
 import 'package:ics/app/routes/app_pages.dart';
+import 'package:ics/gen/assets.gen.dart';
 import 'package:ics/utils/constants.dart';
 
 import 'package:im_stepper/stepper.dart';
@@ -31,7 +33,10 @@ import 'package:im_stepper/stepper.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:signature/signature.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'summery_newPassport.dart';
 
 class NewPassportForm extends StatefulWidget {
   final IcsCitizenModel? citizenModel;
@@ -267,7 +272,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                             // controller.handleDrawFinish();
                             controller.newPassportformKey.currentState!
                                     .saveAndValidate()
-                                ? createCitizen()
+                                ? _showSummeryDiloag(context)
                                 : SizedBox();
                           } else if (controller.currentStep == 4) {
                             checkdoc();
@@ -514,5 +519,21 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
   void getDataForStep4() {
     controller.familyModelvalue.value = widget.citizenModel!.familyModel!;
+  }
+
+  _showSummeryDiloag(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SummaryDialogNewPassport(
+          context: context,
+          controller: controller,
+          onTap: () {
+            Navigator.pop(context);
+            createCitizen();
+          },
+        );
+      },
+    );
   }
 }

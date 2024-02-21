@@ -30,7 +30,8 @@ import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
 import '../data/quary/get_all.dart';
 
-class NewPassportController extends GetxController {
+class NewPassportController extends GetxController
+    with SingleGetTickerProviderMixin {
   final TextEditingController AmfatherNameController = TextEditingController();
   final TextEditingController AmfirstNameController = TextEditingController();
   final TextEditingController AmgrandFatherNameController =
@@ -142,9 +143,10 @@ class NewPassportController extends GetxController {
 
   //for birthDate
   final TextEditingController yearController = TextEditingController();
-
+  late TabController tabController;
   @override
   void onInit() {
+    tabController = TabController(length: 4, vsync: this);
     getAll();
     getCitizene();
     selectedDate = null;

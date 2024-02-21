@@ -56,6 +56,7 @@ class PassportWidget extends StatelessWidget {
   Widget buildCard(IcsAllPassportApplication passportApplication) {
     return GestureDetector(
       onTap: () {
+        controller.groupDocumnats(passportApplication.newApplication!.id);
         Get.to(DetailPassportWidget(
           icsAllPassportIdApplication: passportApplication,
         ));

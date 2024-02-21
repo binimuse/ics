@@ -114,7 +114,7 @@ class GetOrginOrder {
       current_passport_issued_date
     }
   }
-  ics_all_passport_applications(order_by: {created_at: desc}) {
+ ics_all_passport_applications(order_by: {created_at: desc}, where: {new_application: {submitted: {_eq: true}}}) {
     new_id
     renew_id
     created_at

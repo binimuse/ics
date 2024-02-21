@@ -317,7 +317,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
                   children: <Widget>[
                     Text(
                       getName(widget.icsAllPassportIdApplication),
-                      style: AppTextStyles.bodyLargeBold
+                      style: AppTextStyles.bodyLargeRegular
                           .copyWith(color: AppColors.primary),
                     ),
                     SizedBox(height: 1.h),

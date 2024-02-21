@@ -69,7 +69,6 @@ class MyOrderController extends GetxController
                 .map((e) => IcsAllPassportApplication.fromMap(e))
                 .toList();
 
-        groupDocumnats();
         networkStatus.value = NetworkStatus.SUCCESS;
       }
 
@@ -85,27 +84,30 @@ class MyOrderController extends GetxController
   }
 
   List<CurrentCountry> documentspassport = [];
-  groupDocumnats() {
+  groupDocumnats(String applicationid) {
     groupedAppliaction.clear();
+
     passportApplication.forEach((element) {
-      element.newApplication!.newApplicationDocuments.forEach((element) {
-        final docTypeID = element.documentType.id;
-        int existingIndex = groupedAppliaction
-            .indexWhere((group) => group.documentType.id == docTypeID);
+      if (element.newApplication!.id == applicationid) {
+        element.newApplication!.newApplicationDocuments.forEach((element) {
+          final docTypeID = element.documentType.id;
+          int existingIndex = groupedAppliaction
+              .indexWhere((group) => group.documentType.id == docTypeID);
 
-        if (existingIndex != -1) {
-          // If an existing OrderGroup is found, add the order to its list of orders
-          groupedAppliaction[existingIndex].document.add(element);
-        } else {
-          // If no existing OrderGroup is found, create a new OrderGroup and add it to the list
-          GroupedAppliaction newGroup = GroupedAppliaction(
-            documentType: element.documentType,
-            document: [element],
-          );
+          if (existingIndex != -1) {
+            // If an existing OrderGroup is found, add the order to its list of orders
+            groupedAppliaction[existingIndex].document.add(element);
+          } else {
+            // If no existing OrderGroup is found, create a new OrderGroup and add it to the list
+            GroupedAppliaction newGroup = GroupedAppliaction(
+              documentType: element.documentType,
+              document: [element],
+            );
 
-          groupedAppliaction.add(newGroup);
-        }
-      });
+            groupedAppliaction.add(newGroup);
+          }
+        });
+      }
     });
   }
 
