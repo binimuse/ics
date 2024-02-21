@@ -87,29 +87,29 @@ class _BuildDocState extends State<BuildDocViewer> {
                   ],
                 ),
               ),
-              widget.reviewStatus.toString().contains("REJECTED")
-                  ? GestureDetector(
-                      onTap: () {
-                        openPdfPicker();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.upload,
-                              color: AppColors.primary,
-                            ),
-                            Text("Re-Upload",
-                                style: AppTextStyles.menuRegular.copyWith(
-                                  color: AppColors.primary,
-                                )),
-                          ],
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
+              // widget.reviewStatus.toString().contains("REJECTED")
+              //     ? GestureDetector(
+              //         onTap: () {
+              //           openPdfPicker();
+              //         },
+              //         child: Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.center,
+              //             children: <Widget>[
+              //               Icon(
+              //                 Icons.upload,
+              //                 color: AppColors.primary,
+              //               ),
+              //               Text("Re-Upload",
+              //                   style: AppTextStyles.menuRegular.copyWith(
+              //                     color: AppColors.primary,
+              //                   )),
+              //             ],
+              //           ),
+              //         ),
+              //       )
+              //     : SizedBox(),
               GestureDetector(
                 onTap: () {
                   _showAreYouSureDialog(context, widget.pdfPath);
@@ -185,53 +185,5 @@ class _BuildDocState extends State<BuildDocViewer> {
         );
       },
     );
-  }
-
-  openPdfPicker() async {
-    widget.controller.isSendStared.value = true;
-    try {
-      PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
-      if (pickedFile != null) {
-        try {
-          handleFilePickedSuccess(pickedFile);
-        } catch (e, s) {
-          widget.controller.isSendStared.value = false;
-          AppToasts.showError("error  while getting the URL.");
-
-          print("Error in geturl: $s");
-        }
-      }
-    } catch (e) {
-      widget.controller.isSendStared.value = false;
-      // Handle the error
-      print("Error: $e");
-    }
-  }
-
-  void handleFilePickedSuccess(PlatformFile pickedFile) {
-    // Move the async code outside of setState
-    _handleFilePickedSuccess(pickedFile);
-  }
-
-  Future<void> _handleFilePickedSuccess(PlatformFile pickedFile) async {
-    MinioUploader uploader = MinioUploader();
-    String responseUrl =
-        await uploader.uploadFileToMinio(pickedFile, widget.documentType.id);
-
-    if (responseUrl.isNotEmpty) {
-      // Response is successful
-      print(responseUrl);
-      widget.controller.sendDoc(
-        widget.documentType.id,
-        responseUrl,
-        widget.applicationId,
-      );
-    } else {
-      // Response is not successful
-      print('Response is false');
-    }
-
-    // Update the state
-    widget.controller.isSendStared.value = false;
   }
 }

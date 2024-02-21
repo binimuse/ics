@@ -588,10 +588,10 @@ class _HomeViewState extends State<DetailOriginWidget> {
         height: 1.0,
       ),
       itemCount: widget
-          .icsNewApplicationModel.newApplication!.newOriginIdDocuments!.length,
+          .icsNewApplicationModel.newApplication!.newOriginIdDocuments.length,
       itemBuilder: (context, index) {
         var data = widget.icsNewApplicationModel.newApplication!
-            .newOriginIdDocuments![index];
+            .newOriginIdDocuments[index];
         CurrentCountry documentType = data.documentType;
         return ItemDoc(
           title: data.documentType.name,

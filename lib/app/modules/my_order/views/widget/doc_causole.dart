@@ -1,5 +1,9 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ics/app/common/app_toasts.dart';
+import 'package:ics/app/common/fileupload/common_file_uploder.dart';
+import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -85,6 +89,29 @@ class _ItemFaqState extends State<ItemDoc> {
                     ),
             ),
           ),
+          widget.listOfDoc[0].reviewStatus.contains("REJECTED")
+              ? GestureDetector(
+                  onTap: () {
+                    openPdfPicker();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.upload,
+                          color: AppColors.primary,
+                        ),
+                        Text("Re-Upload",
+                            style: AppTextStyles.menuRegular.copyWith(
+                              color: AppColors.primary,
+                            )),
+                      ],
+                    ),
+                  ),
+                )
+              : SizedBox(),
           IconButton(
             onPressed: () {
               setState(() {
@@ -141,5 +168,53 @@ class _ItemFaqState extends State<ItemDoc> {
       controller: widget.controller,
       applicationId: widget.applicationId,
     );
+  }
+
+  openPdfPicker() async {
+    widget.controller.isSendStared.value = true;
+    try {
+      PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
+      if (pickedFile != null) {
+        try {
+          handleFilePickedSuccess(pickedFile);
+        } catch (e, s) {
+          widget.controller.isSendStared.value = false;
+          AppToasts.showError("error  while getting the URL.");
+
+          print("Error in geturl: $s");
+        }
+      }
+    } catch (e) {
+      widget.controller.isSendStared.value = false;
+      // Handle the error
+      print("Error: $e");
+    }
+  }
+
+  void handleFilePickedSuccess(PlatformFile pickedFile) {
+    // Move the async code outside of setState
+    _handleFilePickedSuccess(pickedFile);
+  }
+
+  Future<void> _handleFilePickedSuccess(PlatformFile pickedFile) async {
+    MinioUploader uploader = MinioUploader();
+    String responseUrl =
+        await uploader.uploadFileToMinio(pickedFile, widget.documentType.id);
+
+    if (responseUrl.isNotEmpty) {
+      // Response is successful
+      print(responseUrl);
+      widget.controller.sendDoc(
+        widget.documentType.id,
+        responseUrl,
+        widget.applicationId,
+      );
+    } else {
+      // Response is not successful
+      print('Response is false');
+    }
+
+    // Update the state
+    widget.controller.isSendStared.value = false;
   }
 }
