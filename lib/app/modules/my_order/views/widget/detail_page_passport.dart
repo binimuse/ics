@@ -613,12 +613,9 @@ class _HomeViewState extends State<DetailPassportWidget> {
       ),
       itemCount: controller.groupedAppliaction.length,
       itemBuilder: (context, index) {
-        var data = widget.icsAllPassportIdApplication.newApplication!
-            .newApplicationDocuments[index];
-        CurrentCountry documentType = data.documentType;
         return ItemDoc(
-          title: data.documentType.name,
-          documentType: documentType,
+          title: controller.groupedAppliaction[index].documentType.name,
+          documentType: controller.groupedAppliaction[index].documentType,
           applicationId:
               widget.icsAllPassportIdApplication.newApplication!.id.toString(),
           controller: controller,

@@ -117,7 +117,9 @@ class _Step3State extends State<Step3> {
         Obx(() => controller.isfechedEmbassies.value
             ? FormBuilderDropdown(
                 decoration: ReusableInputDecoration.getDecoration(
-                    'Embassies/branch',
+                    controller.countryvalue.value!.name == "Ethiopia"
+                        ? "Branch"
+                        : 'Embassies',
                     isMandatory: true),
                 items: controller.base_embassies.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(
@@ -134,7 +136,9 @@ class _Step3State extends State<Step3> {
                   controller.embassiesvalue.value = value;
                   controller.getBookedDates(value!.id!);
                 },
-                name: 'Embassies/branch',
+                name: controller.countryvalue.value!.name == "Ethiopia"
+                    ? "Branch"
+                    : 'Embassies',
                 validator: FormBuilderValidators.required(),
               )
             : SizedBox()),
