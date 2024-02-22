@@ -21,7 +21,7 @@ import '../../../controllers/new_origin_id_controller.dart';
 import '../../../data/model/base_model_orgin.dart';
 
 class Step1OrginId extends StatelessWidget {
-  final IcsCitizenModelOrginId? citizenModel;
+  final IcsApplicationModelOrginId? citizenModel;
   final NewOriginIdController controller;
 
   Step1OrginId({

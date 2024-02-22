@@ -116,16 +116,18 @@ class ProfileView extends GetView<NewPassportController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(height: AppSizes.mp_v_2 * 1.5),
-                          controller.icsCitizens.isEmpty
-                              ? EmpityWidget(title: "No Profile Found")
+                          controller.icsApplicationModel.isEmpty
+                              ? EmpityWidget(title: "No Application Found")
                               : ListView.separated(
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
-                                  itemCount: controller.icsCitizens.length,
+                                  itemCount:
+                                      controller.icsApplicationModel.length,
                                   separatorBuilder: (context, index) =>
                                       SizedBox(height: AppSizes.mp_v_2 * 1.5),
                                   itemBuilder: (context, index) {
-                                    var citizen = controller.icsCitizens[index];
+                                    var citizen =
+                                        controller.icsApplicationModel[index];
                                     return buildInfoItem(citizen);
                                   },
                                 ),
@@ -141,7 +143,7 @@ class ProfileView extends GetView<NewPassportController> {
   }
 
   Widget buildInfoItem(
-    IcsCitizenModel citizen,
+    IcsApplicationModel citizen,
   ) {
     return GestureDetector(
       onTap: () {

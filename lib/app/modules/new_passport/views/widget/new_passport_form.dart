@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -25,7 +24,6 @@ import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
 import 'package:ics/app/routes/app_pages.dart';
-import 'package:ics/gen/assets.gen.dart';
 import 'package:ics/utils/constants.dart';
 
 import 'package:im_stepper/stepper.dart';
@@ -33,13 +31,12 @@ import 'package:im_stepper/stepper.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:signature/signature.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'summery_newPassport.dart';
 
 class NewPassportForm extends StatefulWidget {
-  final IcsCitizenModel? citizenModel;
+  final IcsApplicationModel? citizenModel;
 
   const NewPassportForm({
     this.citizenModel,
@@ -494,25 +491,18 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
+    embassyId = citizenModel.embassy_id;
+    // controller.embassiesvalue.value =
+    //     controller.base_embassies.firstWhere((e) => e.id == embassyId);
+    // currentcontry = citizenModel.current_country_id ?? null;
 
-    if (citizenModel.newApplicationModel!.isNotEmpty) {
-      embassyId = citizenModel.newApplicationModel!.first.embassy_id;
-      Future.delayed(const Duration(seconds: 2), () {
-        controller.embassiesvalue.value =
-            controller.base_embassies.firstWhere((e) => e.id == embassyId);
-      });
+    // controller.currentcountryvalue.value =
+    //     controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
 
-      currentcontry =
-          citizenModel.newApplicationModel?.first.current_country_id ?? null;
+    // controller.countryvalue.value =
+    controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
 
-      controller.currentcountryvalue.value =
-          controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
-    }
-
-    controller.countryvalue.value =
-        controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
-
-    controller.getEmbassies(controller.countryvalue.value!.id);
+    // controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
   }

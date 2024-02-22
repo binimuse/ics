@@ -1,6 +1,6 @@
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 
-class IcsCitizenModel {
+class IcsApplicationModel {
   String? abroadAddress;
   String? abroadCountryId;
   String? abroadPhoneNumber;
@@ -26,10 +26,11 @@ class IcsCitizenModel {
   NameJson? fatherNameJson;
   NameJson? firstNameJson;
   NameJson? grandFatherNameJson;
-  final List<NewApplicationModel>? newApplicationModel;
+  final String embassy_id;
+  final String current_country_id;
   final List<FamilyModel>? familyModel;
 
-  IcsCitizenModel({
+  IcsApplicationModel({
     this.abroadAddress,
     this.abroadCountryId,
     this.abroadPhoneNumber,
@@ -54,12 +55,13 @@ class IcsCitizenModel {
     this.fatherNameJson,
     this.firstNameJson,
     this.grandFatherNameJson,
-    this.newApplicationModel,
+    required this.embassy_id,
+    required this.current_country_id,
     this.familyModel,
   });
 
-  factory IcsCitizenModel.fromJson(Map<String, dynamic> json) {
-    return IcsCitizenModel(
+  factory IcsApplicationModel.fromJson(Map<String, dynamic> json) {
+    return IcsApplicationModel(
       abroadAddress: json['abroad_address'],
       abroadCountryId: json['abroad_country_id'],
       abroadPhoneNumber: json['phone_number'],
@@ -93,9 +95,8 @@ class IcsCitizenModel {
       grandFatherNameJson: json['grand_father_name_json'] != null
           ? NameJson.fromJson(json['grand_father_name_json'])
           : null,
-      newApplicationModel: List.of(json["new_applications"])
-          .map((i) => NewApplicationModel.fromJson(i))
-          .toList(),
+      embassy_id: json['embassy_id'],
+      current_country_id: json['current_country_id'],
       familyModel: List.of(json["citizen_families"])
           .map((i) => FamilyModel.fromJson(i))
           .toList(),
@@ -116,23 +117,6 @@ class NameJson {
     return NameJson(
       am: json['am'],
       en: json['en'],
-    );
-  }
-}
-
-class NewApplicationModel {
-  final String embassy_id;
-  final String current_country_id;
-
-  const NewApplicationModel({
-    required this.embassy_id,
-    required this.current_country_id,
-  });
-
-  factory NewApplicationModel.fromJson(Map<String, dynamic> json) {
-    return NewApplicationModel(
-      embassy_id: json['embassy']["id"],
-      current_country_id: json['current_country_id'],
     );
   }
 }

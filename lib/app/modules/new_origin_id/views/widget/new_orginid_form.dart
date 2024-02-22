@@ -34,7 +34,7 @@ import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NewOrginIdForm extends StatefulWidget {
-  final IcsCitizenModelOrginId? citizenModel;
+  final IcsApplicationModelOrginId? citizenModel;
 
   const NewOrginIdForm({
     this.citizenModel,
@@ -529,7 +529,6 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
   }
 
   void createCitizen() async {
- 
     await controller.send(); // Wait for the send() method to complete
     if (controller.isSend.value) {
       setState(() {

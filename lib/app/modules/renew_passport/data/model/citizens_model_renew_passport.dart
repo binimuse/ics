@@ -1,4 +1,4 @@
-class IcsCitizenModelReNewPassport {
+class IcsApplicationModelReNewPassport {
   String? abroadAddress;
   String? abroadCountryId;
   String? abroadPhoneNumber;
@@ -26,7 +26,7 @@ class IcsCitizenModelReNewPassport {
   NameJson? grandFatherNameJson;
   List<ReNewPassportApplication> reNewPassportApplication;
 
-  IcsCitizenModelReNewPassport({
+  IcsApplicationModelReNewPassport({
     this.abroadAddress,
     this.abroadCountryId,
     this.abroadPhoneNumber,
@@ -54,8 +54,8 @@ class IcsCitizenModelReNewPassport {
     required this.reNewPassportApplication,
   });
 
-  factory IcsCitizenModelReNewPassport.fromJson(Map<String, dynamic> json) {
-    return IcsCitizenModelReNewPassport(
+  factory IcsApplicationModelReNewPassport.fromJson(Map<String, dynamic> json) {
+    return IcsApplicationModelReNewPassport(
       abroadAddress: json['abroad_address'],
       abroadCountryId: json['abroad_country_id'],
       abroadPhoneNumber: json['phone_number'],

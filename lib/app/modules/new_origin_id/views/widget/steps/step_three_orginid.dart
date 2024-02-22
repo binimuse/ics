@@ -17,7 +17,7 @@ import '../../../../../config/theme/app_sizes.dart';
 import '../../../data/model/base_model_orgin.dart';
 
 class Step3OrginId extends StatefulWidget {
-  final IcsCitizenModelOrginId? citizenModel;
+  final IcsApplicationModelOrginId? citizenModel;
   final NewOriginIdController controller;
 
   const Step3OrginId({

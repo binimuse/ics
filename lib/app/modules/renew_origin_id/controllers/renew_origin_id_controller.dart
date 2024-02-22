@@ -681,13 +681,13 @@ class RenewOriginIdController extends GetxController {
 
                   'current_passport_number': passportNumberContoller.text,
 
-                  'visa_expiry_date': visaExpiryDateController.text ?? null,
+                  'visa_expiry_date': visaExpiryDateController.text,
 
-                  'visa_issued_date': visaExpiryDateController.text ?? null,
+                  'visa_issued_date': visaExpiryDateController.text,
 
                   'visa_type_id': visatypevalue.value?.id ?? null,
 
-                  'visa_number': visanumberContoller.text ?? null,
+                  'visa_number': visanumberContoller.text,
 
                   'origin_id_number': orginIdnumberContoller.text,
 
@@ -981,9 +981,9 @@ class RenewOriginIdController extends GetxController {
   }
 
 
-  RxList<IcsCitizenModelReNewOrginId> icsCitizens =
+  RxList<IcsApplicationModelReNewOrginId> icsCitizens =
 
-      List<IcsCitizenModelReNewOrginId>.of([]).obs;
+      List<IcsApplicationModelReNewOrginId>.of([]).obs;
 
 
   var isfechediCitizens = false.obs;
@@ -1002,7 +1002,7 @@ class RenewOriginIdController extends GetxController {
 
         icsCitizens.value = (result['ics_citizens'] as List)
 
-            .map((e) => IcsCitizenModelReNewOrginId.fromJson(e))
+            .map((e) => IcsApplicationModelReNewOrginId.fromJson(e))
 
             .toList();
 

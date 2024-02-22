@@ -16,7 +16,7 @@ import 'package:flutter/services.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step3 extends StatefulWidget {
-  final IcsCitizenModel? citizenModel;
+  final IcsApplicationModel? citizenModel;
   final NewPassportController controller;
 
   const Step3({
@@ -108,7 +108,7 @@ class _Step3State extends State<Step3> {
           },
           name: 'Collaction place',
           initialValue: widget.citizenModel != null
-              ? controller.countryvalue.value!
+              ? controller.countryvalue.value
               : null,
         ),
         SizedBox(

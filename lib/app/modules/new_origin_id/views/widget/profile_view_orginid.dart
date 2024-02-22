@@ -142,7 +142,7 @@ class ProfileViewOrginid extends GetView<NewOriginIdController> {
   }
 
   Widget buildInfoItem(
-    IcsCitizenModelOrginId citizen,
+    IcsApplicationModelOrginId citizen,
   ) {
     return GestureDetector(
       onTap: () {

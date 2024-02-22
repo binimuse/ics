@@ -1,8 +1,4 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:ics/app/common/app_toasts.dart';
-import 'package:ics/app/common/fileupload/common_file_uploder.dart';
-import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';

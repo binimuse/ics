@@ -17,7 +17,7 @@ import 'package:flutter/services.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step3RenewOrginId extends StatefulWidget {
-  final IcsCitizenModelReNewOrginId? citizenModel;
+  final IcsApplicationModelReNewOrginId? citizenModel;
   final RenewOriginIdController controller;
 
   const Step3RenewOrginId({

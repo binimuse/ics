@@ -34,7 +34,7 @@ import 'steps/step_one_renew_passport.dart';
 import 'steps/step_three_renew_passport.dart';
 
 class ReNewPassportForm extends StatefulWidget {
-  final IcsCitizenModelReNewPassport? citizenModel;
+  final IcsApplicationModelReNewPassport? citizenModel;
 
   const ReNewPassportForm({
     this.citizenModel,

@@ -38,7 +38,7 @@ import 'steps/step_one_renew_orginid.dart';
 import 'steps/step_three_renew_orginid.dart';
 
 class ReNewOrginIdForm extends StatefulWidget {
-  final IcsCitizenModelReNewOrginId? citizenModel;
+  final IcsApplicationModelReNewOrginId? citizenModel;
 
   const ReNewOrginIdForm({
     this.citizenModel,

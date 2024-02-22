@@ -20,7 +20,6 @@ import 'package:ics/app/modules/new_passport/controllers/new_passport_controller
 import 'package:ics/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:ics/services/graphql_conf.dart';
-import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:io';
 
@@ -382,7 +381,7 @@ class NewOriginIdController extends GetxController {
                       passportIssueDateController.text,
                   'current_passport_number': passportNumberContoller.text,
                   'visa_type_id': visatypevalue.value?.id ?? null,
-                  'visa_number': visanumberContoller.text ?? null,
+                  'visa_number': visanumberContoller.text,
                   'embassy_id': embassiesvalue.value!.id,
                   'current_country_id': currentcountryvalue.value!.id,
                 }
@@ -525,8 +524,8 @@ class NewOriginIdController extends GetxController {
     return nameJson;
   }
 
-  RxList<IcsCitizenModelOrginId> icsCitizens =
-      List<IcsCitizenModelOrginId>.of([]).obs;
+  RxList<IcsApplicationModelOrginId> icsCitizens =
+      List<IcsApplicationModelOrginId>.of([]).obs;
   var isfechediCitizens = false.obs;
   void getCitizene() async {
     try {
@@ -535,7 +534,7 @@ class NewOriginIdController extends GetxController {
 
       if (result != null) {
         icsCitizens.value = (result['ics_citizens'] as List)
-            .map((e) => IcsCitizenModelOrginId.fromJson(e))
+            .map((e) => IcsApplicationModelOrginId.fromJson(e))
             .toList();
 
         // countLabours.value = getlabour.value.length;
@@ -595,16 +594,8 @@ class NewOriginIdController extends GetxController {
       SignatureController signatureController) async {
     try {
       // Convert the Signature to an image
-      final signatureImage = await signatureController.toImage(
-        width: 300,
-        height: 200,
-        // backgroundColor: AppColors.primaryDark,
-      );
 
       // Create a ByteData object from the image
-      final byteData =
-          await signatureImage!.toByteData(format: ui.ImageByteFormat.png);
-      final pngBytes = byteData!.buffer.asUint8List();
 
       // Encode the PNG image as a base64 string
 

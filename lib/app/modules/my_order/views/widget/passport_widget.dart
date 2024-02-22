@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
@@ -177,11 +179,8 @@ class PassportWidget extends StatelessWidget {
   String getApplicationTypeText(
       IcsAllPassportApplication passportIdApplication) {
     if (passportIdApplication.renewApplication != null) {
-      if (passportIdApplication.renewApplication!.passportRenewalType != null) {
-        return passportIdApplication.renewApplication!.passportRenewalType.name
-            .toString();
-      }
-      return "";
+      return passportIdApplication.renewApplication!.passportRenewalType.name
+          .toString();
     } else if (passportIdApplication.newApplication != null) {
       return "New Passport Application";
     } else {
@@ -206,21 +205,19 @@ class PassportWidget extends StatelessWidget {
 
   getColor(IcsAllPassportApplication passportIdApplication) {
     if (passportIdApplication.renewApplication != null) {
-      if (passportIdApplication.renewApplication!.passportRenewalType != null) {
-        if (passportIdApplication.renewApplication!.passportRenewalType.name
-            .contains("Lost")) {
-          return AppColors.danger;
-        } else if (passportIdApplication
-            .renewApplication!.passportRenewalType.name
-            .contains("Correction")) {
-          return AppColors.accent;
-        } else if (passportIdApplication
-            .renewApplication!.passportRenewalType.name
-            .contains("Renew")) {
-          return AppColors.warning;
-        }
+      if (passportIdApplication.renewApplication!.passportRenewalType.name
+          .contains("Lost")) {
+        return AppColors.danger;
+      } else if (passportIdApplication
+          .renewApplication!.passportRenewalType.name
+          .contains("Correction")) {
+        return AppColors.accent;
+      } else if (passportIdApplication
+          .renewApplication!.passportRenewalType.name
+          .contains("Renew")) {
+        return AppColors.warning;
       }
-    } else {
+        } else {
       return AppColors.success;
     }
   }

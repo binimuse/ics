@@ -130,14 +130,10 @@ class PhotoUpload extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       print(imageFile);
-                      if (imageFile != null) {
-                        selectedImages.removeAt(0);
-                        //imageFile.deleteSync();
-                        photoPath.removeAt(0);
-                      } else {
-                        AppToasts.showError("No image selected");
-                      }
-                    },
+                      selectedImages.removeAt(0);
+                      //imageFile.deleteSync();
+                      photoPath.removeAt(0);
+                                        },
                     child: const Icon(
                       Icons.delete,
                       color: Colors.red,

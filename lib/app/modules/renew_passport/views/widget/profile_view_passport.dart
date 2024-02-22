@@ -143,7 +143,7 @@ class ProfileViewRenewPassport extends GetView<RenewPassportController> {
   }
 
   Widget buildInfoItem(
-    IcsCitizenModelReNewPassport citizen,
+    IcsApplicationModelReNewPassport citizen,
   ) {
     return GestureDetector(
       onTap: () {

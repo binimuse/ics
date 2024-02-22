@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -235,7 +237,7 @@ class SummaryDialogNewPassport extends StatelessWidget {
       children: controller.familyModelvalue.map((element) {
         final firstName = element.first_name ?? '';
         final fatherName = element.father_name ?? '';
-        final type = element.family_type!.name ?? '';
+        final type = element.family_type!.name;
 
         return Column(
           children: [

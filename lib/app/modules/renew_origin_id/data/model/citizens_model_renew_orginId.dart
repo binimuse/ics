@@ -1,4 +1,4 @@
-class IcsCitizenModelReNewOrginId {
+class IcsApplicationModelReNewOrginId {
   String? abroadAddress;
   String? abroadCountryId;
   String? abroadPhoneNumber;
@@ -25,7 +25,7 @@ class IcsCitizenModelReNewOrginId {
   NameJson? grandFatherNameJson;
   List<ReNewOriginIdApplication> renewOriginIdApplications;
 
-  IcsCitizenModelReNewOrginId({
+  IcsApplicationModelReNewOrginId({
     this.abroadAddress,
     this.abroadCountryId,
     this.abroadPhoneNumber,
@@ -52,8 +52,8 @@ class IcsCitizenModelReNewOrginId {
     required this.renewOriginIdApplications,
   });
 
-  factory IcsCitizenModelReNewOrginId.fromJson(Map<String, dynamic> json) {
-    return IcsCitizenModelReNewOrginId(
+  factory IcsApplicationModelReNewOrginId.fromJson(Map<String, dynamic> json) {
+    return IcsApplicationModelReNewOrginId(
       abroadAddress: json['abroad_address'],
       abroadCountryId: json['abroad_country_id'],
       abroadPhoneNumber: json['phone_number'],

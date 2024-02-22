@@ -19,7 +19,7 @@ import '../../../../../config/theme/app_sizes.dart';
 import 'package:flutter/services.dart';
 
 class Step1 extends StatelessWidget {
-  final IcsCitizenModel? citizenModel;
+  final IcsApplicationModel? citizenModel;
   final NewPassportController controller;
 
   Step1({

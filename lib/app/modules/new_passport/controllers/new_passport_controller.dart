@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -411,19 +413,15 @@ class NewPassportController extends GetxController
         'eye_colour': eyecolorvalue.value!.name,
         'marital_status': maritalstatusvalue.value!.name,
         'height': height.text,
+        'application_type': "NEW_PASSPORT_APPLICATION",
         'is_adopted': isAdoption.value,
         'photo': photoPath.first,
         'skin_colour': skincolorvalue.value,
         'abroad_country_id': countryvalue.value!.id,
         'abroad_address': addressController.text,
         'phone_number': phonenumber.text,
-        'new_applications': {
-          "data": {
-            "delivery_date": null,
-            'embassy_id': embassiesvalue.value!.id,
-            'current_country_id': currentcountryvalue.value!.id,
-          }
-        },
+        'embassy_id': embassiesvalue.value!.id,
+        'current_country_id': currentcountryvalue.value!.id,
         'citizen_families': {
           "data": familyModelvalue.map((element) => element.toJson()).toList()
         }
@@ -436,9 +434,11 @@ class NewPassportController extends GetxController
       isSend.value = false;
       print("Error executing mutation: ${result.exception}");
     } else {
+      print(result.data!);
       isSend.value = true;
-      newApplicationId = result.data!['insert_ics_citizens']['returning'][0]
-              ['new_applications'][0]['id']
+
+      newApplicationId = result.data!['insert_ics_applications']['returning'][0]
+              ['id']
           .toString();
     }
   }
@@ -471,7 +471,7 @@ class NewPassportController extends GetxController
           document: gql(NewDocApplications.newDoc),
           variables: <String, dynamic>{
             'objects': {
-              'new_application_id': newApplicationId,
+              'application_id': newApplicationId,
               'files': {
                 'path': path,
               },
@@ -584,7 +584,8 @@ class NewPassportController extends GetxController
     return nameJson;
   }
 
-  RxList<IcsCitizenModel> icsCitizens = List<IcsCitizenModel>.of([]).obs;
+  RxList<IcsApplicationModel> icsApplicationModel =
+      List<IcsApplicationModel>.of([]).obs;
   var isfechediCitizens = false.obs;
   void getCitizene() async {
     networkStatus.value = NetworkStatus.LOADING;
@@ -594,8 +595,8 @@ class NewPassportController extends GetxController
           await graphQLCommonApi.query(getaicscitizens.fetchData(), {});
 
       if (result != null) {
-        icsCitizens.value = (result['ics_citizens'] as List)
-            .map((e) => IcsCitizenModel.fromJson(e))
+        icsApplicationModel.value = (result['ics_applications'] as List)
+            .map((e) => IcsApplicationModel.fromJson(e))
             .toList();
 
         // countLabours.value = getlabour.value.length;

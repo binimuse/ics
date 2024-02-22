@@ -21,7 +21,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step1RenewOrginId extends StatelessWidget {
-  final IcsCitizenModelReNewOrginId? citizenModel;
+  final IcsApplicationModelReNewOrginId? citizenModel;
   final RenewOriginIdController controller;
 
   Step1RenewOrginId({

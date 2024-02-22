@@ -18,7 +18,7 @@ import '../../../data/model/base_model_orgin.dart';
 import 'package:intl/intl.dart';
 
 class Step4OrginId extends StatefulWidget {
-  final IcsCitizenModelOrginId? citizenModel;
+  final IcsApplicationModelOrginId? citizenModel;
   final NewOriginIdController controller;
 
   const Step4OrginId({

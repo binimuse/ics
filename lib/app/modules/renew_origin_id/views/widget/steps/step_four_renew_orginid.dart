@@ -21,7 +21,7 @@ import '../../../controllers/renew_origin_id_controller.dart';
 import '../../../data/model/citizens_model_renew_orginId.dart';
 
 class Step4RenewOrginId extends StatefulWidget {
-  final IcsCitizenModelReNewOrginId? citizenModel;
+  final IcsApplicationModelReNewOrginId? citizenModel;
   final RenewOriginIdController controller;
 
   const Step4RenewOrginId({

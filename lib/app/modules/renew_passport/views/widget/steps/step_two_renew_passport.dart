@@ -15,7 +15,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step2RenewPassport extends StatelessWidget {
-  final IcsCitizenModelReNewPassport? citizenModel;
+  final IcsApplicationModelReNewPassport? citizenModel;
   final RenewPassportController controller;
 
   const Step2RenewPassport({

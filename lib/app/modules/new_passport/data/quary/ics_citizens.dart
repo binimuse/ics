@@ -2,7 +2,7 @@ class Getaicscitizens {
   dynamic fetchData() {
     return """
 query MyQuery {
-  ics_citizens(order_by: {created_at: desc}, limit: 5) {
+  ics_applications(order_by: {created_at: desc}, limit: 3) {
     abroad_address
     abroad_country_id
     phone_number
@@ -27,13 +27,9 @@ query MyQuery {
     grand_father_name
     first_name_json
     grand_father_name_json
-    new_applications {
       current_country_id
-      embassy {
-        id
-      }
-    }
-    citizen_families {
+      embassy_id 
+    	citizen_families {
       citizen_id
          family_type
       {
@@ -46,6 +42,7 @@ query MyQuery {
     }
   }
 }
+
 
 
 
