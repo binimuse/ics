@@ -8,6 +8,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/views/widget/orgin_widget.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import 'package:ics/app/modules/my_order/views/widget/passport_widget.dart';
+import 'package:sizer/sizer.dart';
 import '../../../common/loading/custom_loading_widget.dart';
 import '../controllers/my_order_controller.dart';
 
@@ -86,22 +87,44 @@ class _MyOrderViewState extends State<MyOrderView> {
                   child: TabBarView(
                     physics: const BouncingScrollPhysics(),
                     children: [
-                      controller.originIdApplication.isEmpty
-                          ? EmpityWidget(
-                              title: "Orgin ID Order Not found",
-                            )
-                          : OrginIdWidget(
-                              icsNewApplicationModel:
-                                  controller.originIdApplication),
-                      controller.passportApplication.isEmpty
-                          ? EmpityWidget(
-                              title: "Passport Order Not Found",
-                            )
-                          : PassportWidget(
-                              passportApplication:
-                                  controller.passportApplication,
+                      Container(
+                        height: 100.h,
+                        child: ListView.builder(
+                          itemCount: controller.allApplicationModel.length,
+                          itemBuilder: (context, index) {
+                            var element = controller.allApplicationModel[index];
+                            if (element.applicationType
+                                    .contains("NEW_ORIGIN_ID_APPLICATION") ||
+                                element.applicationType
+                                    .contains("RENEW_ORIGIN_ID_APPLICATION")) {
+                              return OrginIdWidget(
+                                icsApplication:
+                                    controller.allApplicationModel[index],
+                                controller: controller,
+                              );
+                            }
+                            return SizedBox();
+                          },
+                        ),
+                      ),
+                      ListView.builder(
+                        itemCount: controller.allApplicationModel.length,
+                        itemBuilder: (context, index) {
+                          var element = controller.allApplicationModel[index];
+                          if (element.applicationType
+                                  .contains("NEW_PASSPORT_APPLICATION") ||
+                              element.applicationType
+                                  .contains("RENEW_PASSPORT_APPLICATION")) {
+                            return PassportWidget(
+                              icsApplication:
+                                  controller.allApplicationModel[index],
                               controller: controller,
-                            ),
+                            );
+                          }
+
+                          return SizedBox();
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -113,6 +136,7 @@ class _MyOrderViewState extends State<MyOrderView> {
     );
   }
 }
+
 
 
   // buildBodyContent(BuildContext context) {

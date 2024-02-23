@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
-import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
+
 import 'package:ics/app/modules/my_order/views/widget/detail_page_passport.dart';
 import 'package:ics/gen/assets.gen.dart';
 
@@ -16,11 +17,11 @@ import 'package:sizer/sizer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PassportWidget extends StatelessWidget {
-  final RxList<IcsAllPassportApplication> passportApplication;
+  final IcsApplication icsApplication;
   final MyOrderController controller;
 
   const PassportWidget({
-    required this.passportApplication,
+    required this.icsApplication,
     required this.controller,
   });
   Widget build(BuildContext context) {
@@ -37,17 +38,7 @@ class PassportWidget extends StatelessWidget {
               SizedBox(
                 height: 1.h,
               ),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: passportApplication.length,
-                separatorBuilder: (context, index) =>
-                    SizedBox(height: AppSizes.mp_v_2 * 1.5),
-                itemBuilder: (context, index) {
-                  var passportApp = passportApplication[index];
-                  return buildCard(passportApp);
-                },
-              )
+              buildCard(icsApplication)
             ],
           ),
         ),
@@ -55,12 +46,12 @@ class PassportWidget extends StatelessWidget {
     );
   }
 
-  Widget buildCard(IcsAllPassportApplication passportApplication) {
+  Widget buildCard(IcsApplication icsApplication) {
     return GestureDetector(
       onTap: () {
-        controller.groupDocumnats(passportApplication.newApplication!.id);
+        controller.groupDocumnats(icsApplication.id);
         Get.to(DetailPassportWidget(
-          icsAllPassportIdApplication: passportApplication,
+          icsApplication: icsApplication,
         ));
       },
       child: Container(
@@ -89,12 +80,12 @@ class PassportWidget extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: SvgPicture.asset(Assets.icons.passport,
-                          color: getColor(passportApplication)),
+                          color: getColor(icsApplication)),
                       onPressed: () {
                         // showModal(context);
                       },
                     ),
-                    Text(getApplicationTypeText(passportApplication),
+                    Text(icsApplication.applicationType.toString(),
                         style: AppTextStyles.bodyLargeBold.copyWith(
                           fontWeight: FontWeight.w400,
                         )),
@@ -111,7 +102,7 @@ class PassportWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    getApplicationumber(passportApplication),
+                    getApplicationumber(icsApplication),
                     style: AppTextStyles.bodySmallBold.copyWith(
                       color: AppColors.primary,
                       fontSize: AppSizes.font_10,
@@ -134,10 +125,10 @@ class PassportWidget extends StatelessWidget {
                         height: 4.h,
                         width: 30.w,
                         decoration: BoxDecoration(
-                          color: getStatus(passportApplication)
-                                  .contains("REJECTED")
-                              ? AppColors.danger
-                              : AppColors.warning,
+                          color:
+                              icsApplication.reviewStatus.contains("REJECTED")
+                                  ? AppColors.danger
+                                  : AppColors.warning,
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Row(
@@ -145,7 +136,7 @@ class PassportWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              getStatus(passportApplication),
+                              icsApplication.reviewStatus.toString(),
                               style: AppTextStyles.bodySmallBold.copyWith(
                                 color: AppColors.whiteOff,
                                 fontSize: AppSizes.font_10,
@@ -158,8 +149,7 @@ class PassportWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        convertToTimeAgo(
-                            passportApplication.createdAt.toString()),
+                        convertToTimeAgo(icsApplication.createdAt.toString()),
                         style: AppTextStyles.displayOneRegular.copyWith(
                           color: AppColors.grayDark,
                           fontSize: AppSizes.font_10,
@@ -176,23 +166,10 @@ class PassportWidget extends StatelessWidget {
     );
   }
 
-  String getApplicationTypeText(
-      IcsAllPassportApplication passportIdApplication) {
-    if (passportIdApplication.renewApplication != null) {
-      return passportIdApplication.renewApplication!.passportRenewalType.name
+  String getApplicationumber(IcsApplication passportIdApplication) {
+    if (passportIdApplication.renewPassportApplications.isNotEmpty) {
+      return passportIdApplication.renewPassportApplications.first.applicationNo
           .toString();
-    } else if (passportIdApplication.newApplication != null) {
-      return "New Passport Application";
-    } else {
-      return "Unknown Renewal Application Type";
-    }
-  }
-
-  String getApplicationumber(IcsAllPassportApplication passportIdApplication) {
-    if (passportIdApplication.renewApplication != null) {
-      return passportIdApplication.renewApplication!.applicationNo.toString();
-    } else if (passportIdApplication.newApplication != null) {
-      return passportIdApplication.newApplication!.applicationNo.toString();
     } else {
       return "";
     }
@@ -203,32 +180,23 @@ class PassportWidget extends StatelessWidget {
     return timeago.format(dateTime);
   }
 
-  getColor(IcsAllPassportApplication passportIdApplication) {
-    if (passportIdApplication.renewApplication != null) {
-      if (passportIdApplication.renewApplication!.passportRenewalType.name
+  getColor(IcsApplication passportIdApplication) {
+    if (passportIdApplication.renewPassportApplications.isNotEmpty) {
+      if (passportIdApplication
+          .renewPassportApplications.first.passportRenewalType.name
           .contains("Lost")) {
         return AppColors.danger;
       } else if (passportIdApplication
-          .renewApplication!.passportRenewalType.name
+          .renewPassportApplications.first.passportRenewalType.name
           .contains("Correction")) {
         return AppColors.accent;
       } else if (passportIdApplication
-          .renewApplication!.passportRenewalType.name
+          .renewPassportApplications.first.passportRenewalType.name
           .contains("Renew")) {
         return AppColors.warning;
       }
-        } else {
-      return AppColors.success;
-    }
-  }
-
-  String getStatus(IcsAllPassportApplication passportApplication) {
-    if (passportApplication.renewApplication != null) {
-      return "Pending";
-    } else if (passportApplication.newApplication != null) {
-      return passportApplication.newApplication!.reviewStatus.toString();
     } else {
-      return "";
+      return AppColors.success;
     }
   }
 }

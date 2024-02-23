@@ -4,10 +4,9 @@ import 'package:ics/app/common/app_toasts.dart';
 
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/my_order/data/model/grouped_application.dart';
 
-import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
-
-import 'package:ics/app/modules/my_order/data/model/order_model_pasport.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
 
 import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart';
 
@@ -35,39 +34,41 @@ class MyOrderController extends GetxController
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
 
-  RxList<IcsAllOriginIdApplication> originIdApplication =
-      List<IcsAllOriginIdApplication>.of([]).obs;
-
-  RxList<IcsAllPassportApplication> passportApplication =
-      List<IcsAllPassportApplication>.of([]).obs;
-
-  RxList<GroupedAppliaction> groupedAppliaction =
-      List<GroupedAppliaction>.of([]).obs;
+  RxList<IcsApplication> allApplicationModel = List<IcsApplication>.of([]).obs;
 
   GetOrginOrder getOrginOrders = GetOrginOrder();
 
   var isfechedorder = false.obs;
   List<CommonModel> base_document_types = [];
   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
+
+  RxList<GroupedOriginAppliaction> groupedOriginAppliaction =
+      List<GroupedOriginAppliaction>.of([]).obs;
   getOrginOrder() async {
     networkStatus.value = NetworkStatus.LOADING;
     try {
       dynamic result =
           await graphQLCommonApi.query(getOrginOrders.fetchData(), {});
 
-      originIdApplication.clear();
-      passportApplication.clear();
+      allApplicationModel.clear();
 
       if (result != null) {
-        originIdApplication.value =
-            (result['ics_all_origin_id_applications'] as List)
-                .map((e) => IcsAllOriginIdApplication.fromMap(e))
-                .toList();
+        allApplicationModel.value = (result['ics_applications'] as List)
+            .map((e) => IcsApplication.fromMap(e))
+            .toList();
 
-        passportApplication.value =
-            (result['ics_all_passport_applications'] as List)
-                .map((e) => IcsAllPassportApplication.fromMap(e))
-                .toList();
+        allApplicationModel.forEach((element) {
+          if (element.applicationType.contains("NEW_ORIGIN_ID_APPLICATION") ||
+              element.applicationType.contains("RENEW_ORIGIN_ID_APPLICATION")) {
+            GroupedOriginAppliaction newGroup = GroupedOriginAppliaction(
+              origin: element,
+            );
+
+            groupedOriginAppliaction.add(newGroup);
+
+            print(groupedOriginAppliaction);
+          }
+        });
 
         networkStatus.value = NetworkStatus.SUCCESS;
       }
@@ -83,13 +84,16 @@ class MyOrderController extends GetxController
     }
   }
 
+  RxList<GroupedAppliaction> groupedAppliaction =
+      List<GroupedAppliaction>.of([]).obs;
+
   List<CurrentCountry> documentspassport = [];
   groupDocumnats(String applicationid) {
     groupedAppliaction.clear();
 
-    passportApplication.forEach((element) {
-      if (element.newApplication!.id == applicationid) {
-        element.newApplication!.newApplicationDocuments.forEach((element) {
+    allApplicationModel.forEach((element) {
+      if (element.id == applicationid) {
+        element.applicationDocuments.forEach((element) {
           final docTypeID = element.documentType.id;
           int existingIndex = groupedAppliaction
               .indexWhere((group) => group.documentType.id == docTypeID);
@@ -144,7 +148,7 @@ class MyOrderController extends GetxController
           document: gql(NewDocApplications.newDoc),
           variables: <String, dynamic>{
             'objects': {
-              'new_application_id': newApplicationId,
+              'application_id': newApplicationId,
               'files': {
                 'path': path,
               },

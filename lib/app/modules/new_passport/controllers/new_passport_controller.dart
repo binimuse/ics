@@ -290,14 +290,15 @@ class NewPassportController extends GetxController
   ];
 
   Future<void> getBookedDates(String embasiyId) async {
-    networkStatus.value = NetworkStatus.LOADING;
+    print(embasiyId);
+    //  networkStatus.value = NetworkStatus.LOADING;
     try {
       dynamic result =
           await graphQLCommonApi.query(getBookedDate.fetchData(embasiyId), {});
       bookedDate.value = BookedDate.fromMap(result);
 
       setFetchedStatus(true);
-      networkStatus.value = NetworkStatus.SUCCESS;
+      //   networkStatus.value = NetworkStatus.SUCCESS;
 
       // first clear
       occupiedDates.clear();
@@ -311,7 +312,6 @@ class NewPassportController extends GetxController
       }
       occupiedDates = fetchedDates;
     } catch (e, s) {
-      networkStatus.value = NetworkStatus.ERROR;
       print("Error occurred while fetching data: $s");
       setFetchedStatus(false);
     }
@@ -424,7 +424,12 @@ class NewPassportController extends GetxController
         'current_country_id': currentcountryvalue.value!.id,
         'citizen_families': {
           "data": familyModelvalue.map((element) => element.toJson()).toList()
-        }
+        },
+        'new_passport_applications': {
+          "data": {
+            'remark': null,
+          }
+        },
       }
     };
   }

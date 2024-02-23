@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
-import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
-
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
 import 'package:ics/app/modules/my_order/views/widget/detail_page_origin.dart';
+
 import 'package:ics/gen/assets.gen.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,10 +14,13 @@ import 'package:sizer/sizer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class OrginIdWidget extends StatelessWidget {
-  final RxList<IcsAllOriginIdApplication> icsNewApplicationModel;
+  final IcsApplication icsApplication;
+
+  final MyOrderController controller;
 
   const OrginIdWidget({
-    required this.icsNewApplicationModel,
+    required this.icsApplication,
+    required this.controller,
   });
   @override
   Widget build(BuildContext context) {
@@ -28,28 +32,19 @@ class OrginIdWidget extends StatelessWidget {
             SizedBox(
               height: 1.h,
             ),
-            ListView.separated(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: icsNewApplicationModel.length,
-              separatorBuilder: (context, index) =>
-                  SizedBox(height: AppSizes.mp_v_2 * 1.5),
-              itemBuilder: (context, index) {
-                var orginApplication = icsNewApplicationModel[index];
-                return buildCard(orginApplication);
-              },
-            )
+            buildCard(icsApplication),
           ],
         ),
       ),
     );
   }
 
-  Widget buildCard(IcsAllOriginIdApplication orginApplication) {
+  Widget buildCard(IcsApplication orginApplication) {
     return GestureDetector(
       onTap: () {
+        controller.groupDocumnats(orginApplication.id);
         Get.to(DetailOriginWidget(
-          icsNewApplicationModel: orginApplication,
+          icsApplication: orginApplication,
         ));
       },
       child: Container(
@@ -83,10 +78,12 @@ class OrginIdWidget extends StatelessWidget {
                         // showModal(context);
                       },
                     ),
-                    Text(getApplicationTypeText(orginApplication),
-                        style: AppTextStyles.bodyLargeBold.copyWith(
-                          fontWeight: FontWeight.w400,
-                        )),
+                    Text(
+                      getApplicationame(orginApplication),
+                      style: AppTextStyles.bodyLargeBold.copyWith(
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                     Spacer(),
                   ],
                 ),
@@ -131,7 +128,7 @@ class OrginIdWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Pending",
+                              icsApplication.reviewStatus,
                               style: AppTextStyles.bodySmallBold.copyWith(
                                 color: AppColors.whiteOff,
                                 fontSize: AppSizes.font_10,
@@ -161,22 +158,13 @@ class OrginIdWidget extends StatelessWidget {
     );
   }
 
-  String getApplicationTypeText(IcsAllOriginIdApplication orginApplication) {
-    if (orginApplication.renewApplication != null) {
-      return orginApplication.renewApplication!.originIdRenewalType.name
+  String getApplicationumber(IcsApplication orginApplication) {
+    if (orginApplication.newOriginIdApplications.isNotEmpty) {
+      return orginApplication.newOriginIdApplications.first.applicationNo
           .toString();
-    } else if (orginApplication.newApplication != null) {
-      return "New Orgin ID Application";
-    } else {
-      return "Unknown Renewal Application Type";
-    }
-  }
-
-  String getApplicationumber(IcsAllOriginIdApplication orginApplication) {
-    if (orginApplication.renewApplication != null) {
-      return orginApplication.renewApplication!.applicationNo.toString();
-    } else if (orginApplication.newApplication != null) {
-      return orginApplication.newApplication!.applicationNo.toString();
+    } else if (orginApplication.renewalOriginIdApplications.isNotEmpty) {
+      return orginApplication.renewalOriginIdApplications.first.applicationNo
+          .toString();
     } else {
       return "";
     }
@@ -187,20 +175,34 @@ class OrginIdWidget extends StatelessWidget {
     return timeago.format(dateTime);
   }
 
-  getColor(IcsAllOriginIdApplication orginApplication) {
-    if (orginApplication.renewApplication != null) {
-      if (orginApplication.renewApplication!.originIdRenewalType.name
+  getColor(IcsApplication orginApplication) {
+    if (orginApplication.renewalOriginIdApplications.isNotEmpty) {
+      if (orginApplication
+          .renewalOriginIdApplications.first.originIdRenewalType.name
           .contains("Lost")) {
         return AppColors.danger;
-      } else if (orginApplication.renewApplication!.originIdRenewalType.name
+      } else if (orginApplication
+          .renewalOriginIdApplications.first.originIdRenewalType.name
           .contains("Correction")) {
         return AppColors.accent;
-      } else if (orginApplication.renewApplication!.originIdRenewalType.name
+      } else if (orginApplication
+          .renewalOriginIdApplications.first.originIdRenewalType.name
           .contains("Renew")) {
         return AppColors.warning;
       }
     } else {
       return AppColors.success;
+    }
+  }
+
+  String getApplicationame(IcsApplication orginApplication) {
+    if (orginApplication.applicationType == "NEW_ORIGIN_ID_APPLICATION") {
+      return "New Origin Id Application";
+    } else if (orginApplication.applicationType ==
+        "RENEW_ORIGIN_ID_APPLICATION") {
+      return "ReNew Origin Id Application";
+    } else {
+      return "";
     }
   }
 }

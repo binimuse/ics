@@ -11,7 +11,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
-import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_causole.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:ics/utils/constants.dart';
@@ -20,10 +20,10 @@ import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 
 class DetailOriginWidget extends StatefulWidget {
-  final IcsAllOriginIdApplication icsNewApplicationModel;
+  final IcsApplication icsApplication;
 
   DetailOriginWidget({
-    required this.icsNewApplicationModel,
+    required this.icsApplication,
   });
 
   @override
@@ -61,7 +61,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Pending",
+                  widget.icsApplication.reviewStatus,
                   style: AppTextStyles.bodySmallBold.copyWith(
                     color: AppColors.whiteOff,
                     fontSize: AppSizes.font_10,
@@ -189,12 +189,15 @@ class _HomeViewState extends State<DetailOriginWidget> {
           MyTimeLineTiles(
             isFirst: false,
             isLast: false,
-            isPast: false,
+            isrejected: widget.icsApplication.reviewStatus.contains("REJECTED")
+                ? true
+                : false,
+            isPast: true,
             eventchild: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Immigration approved",
+                  widget.icsApplication.reviewStatus,
                   style: AppTextStyles.menuBold
                       .copyWith(color: AppColors.whiteOff),
                 ),
@@ -238,13 +241,13 @@ class _HomeViewState extends State<DetailOriginWidget> {
         child: Column(
           children: [
             _buildTitle("Personal Detail"),
-            SizedBox(width: 2.h),
+            _buildAppointemnt(),
             SizedBox(height: 2.h),
             Container(
                 width: 80.0,
                 height: 80.0,
                 child: QrImageView(
-                  data: getQrData(widget.icsNewApplicationModel),
+                  data: getQrData(widget.icsApplication),
                   version: QrVersions.auto,
                   size: 200.0,
                 )),
@@ -256,10 +259,10 @@ class _HomeViewState extends State<DetailOriginWidget> {
                 Container(
                     width: 80.0,
                     height: 80.0,
-                    child: getImage(widget.icsNewApplicationModel) != null
+                    child: widget.icsApplication.photo != null
                         ? CachedNetworkImage(
                             imageUrl: Constants.fileViewer +
-                                getImage(widget.icsNewApplicationModel)!,
+                                widget.icsApplication.photo,
                             fit: BoxFit.contain,
                             height: 28.h,
                             width: double.infinity,
@@ -288,13 +291,22 @@ class _HomeViewState extends State<DetailOriginWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      getName(widget.icsNewApplicationModel),
+                      widget.icsApplication.firstName.toString() +
+                          "" +
+                          widget.icsApplication.fatherName.toString() +
+                          widget.icsApplication.grandFatherName.toString() +
+                          "",
                       style: AppTextStyles.bodyLargeBold
                           .copyWith(color: AppColors.primary),
                     ),
                     SizedBox(height: 1.h),
                     Text(
-                      getNameAm(widget.icsNewApplicationModel),
+                      widget.icsApplication.firstNameJson.am.toString() +
+                          "" +
+                          widget.icsApplication.fatherNameJson.am.toString() +
+                          widget.icsApplication.grandFatherNameJson.am
+                              .toString() +
+                          "",
                       style: AppTextStyles.bodyLargeBold.copyWith(
                         color: AppColors.black,
                         fontSize: AppSizes.font_14,
@@ -310,7 +322,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
                         ),
                         SizedBox(width: 10.0),
                         Text(
-                          getNameCountry(widget.icsNewApplicationModel),
+                          widget.icsApplication.birthCountry.name.toString(),
                           style: AppTextStyles.bodySmallRegular.copyWith(
                             color: AppColors.black,
                             fontSize: AppSizes.font_10,
@@ -324,26 +336,52 @@ class _HomeViewState extends State<DetailOriginWidget> {
             ),
             _buildExperienceRow(
                 company: "Date of birth(GC)",
-                position: getDateOfBirth(widget.icsNewApplicationModel),
+                position: widget.icsApplication.dateOfBirth.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Nationality",
-                position: getNationality(widget.icsNewApplicationModel),
+                position: widget.icsApplication.nationality.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Birth Country",
-                position: getBirthCountry(widget.icsNewApplicationModel),
+                position: widget.icsApplication.birthCountry.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Birth Place",
-                position: getBirthPlace(widget.icsNewApplicationModel),
+                position: widget.icsApplication.birthPlace.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Gender",
-                position: getGender(widget.icsNewApplicationModel),
+                position: widget.icsApplication.gender.toString(),
                 duration: ""),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildAppointemnt() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "Appointemnt date :- ",
+            style: AppTextStyles.bodyLargeBold.copyWith(
+              color: AppColors.black,
+              fontSize: AppSizes.font_12,
+            ),
+          ),
+          Text(
+            "",
+            //, getAppointmentdate(widget.icsApplication),
+            style: AppTextStyles.bodyLargeBold.copyWith(
+              color: AppColors.black,
+              fontSize: AppSizes.font_12,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -358,35 +396,35 @@ class _HomeViewState extends State<DetailOriginWidget> {
             SizedBox(height: 2.h),
             _buildExperienceRow(
                 company: "Current Passport number",
-                position: getnumber(widget.icsNewApplicationModel),
+                position: getnumber(widget.icsApplication),
                 duration: ""),
             _buildExperienceRow(
                 company: "Passport Issue date",
-                position: getIssuedate(widget.icsNewApplicationModel),
+                position: getIssuedate(widget.icsApplication),
                 duration: ""),
             _buildExperienceRow(
                 company: "Passport Expiry date",
-                position: getExpirydate(widget.icsNewApplicationModel),
+                position: getExpirydate(widget.icsApplication),
                 duration: ""),
             _buildExperienceRow(
                 company: "Visa type",
-                position: getVisaType(widget.icsNewApplicationModel),
+                position: getVisaType(widget.icsApplication),
                 duration: ""),
             _buildExperienceRow(
                 company: "Visa Number",
-                position: getVisaNumber(widget.icsNewApplicationModel),
+                position: getVisaNumber(widget.icsApplication),
                 duration: ""),
             _buildExperienceRow(
                 company: "Visa Issue date",
-                position: getVisaIssuedDate(widget.icsNewApplicationModel),
+                position: getVisaIssuedDate(widget.icsApplication),
                 duration: ""),
             _buildExperienceRow(
                 company: "Visa Expiry date",
-                position: getVisaExpiryDate(widget.icsNewApplicationModel),
+                position: getVisaExpiryDate(widget.icsApplication),
                 duration: ""),
             _buildExperienceRow(
                 company: "Origin Id number",
-                position: getOriginnumber(widget.icsNewApplicationModel),
+                position: getOriginnumber(widget.icsApplication),
                 duration: ""),
           ],
         ),
@@ -404,31 +442,31 @@ class _HomeViewState extends State<DetailOriginWidget> {
             SizedBox(height: 2.h),
             _buildExperienceRow(
                 company: "Adoption",
-                position: getAdoption(widget.icsNewApplicationModel),
+                position: widget.icsApplication.isAdopted.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Occupation",
-                position: getOccupation(widget.icsNewApplicationModel),
+                position: widget.icsApplication.occupation.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Hair color",
-                position: getHair(widget.icsNewApplicationModel),
+                position: widget.icsApplication.hairColour.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "eye color",
-                position: geteyeColor(widget.icsNewApplicationModel),
+                position: widget.icsApplication.eyeColour.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Skin color",
-                position: getSkinColor(widget.icsNewApplicationModel),
+                position: widget.icsApplication.skinColour.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Marital Status",
-                position: getMarital(widget.icsNewApplicationModel),
+                position: widget.icsApplication.maritalStatus.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "height",
-                position: getheight(widget.icsNewApplicationModel),
+                position: widget.icsApplication.height.toString(),
                 duration: ""),
           ],
         ),
@@ -446,72 +484,20 @@ class _HomeViewState extends State<DetailOriginWidget> {
             SizedBox(height: 2.h),
             _buildExperienceRow(
                 company: "Current Country",
-                position: getCurrentCountry(widget.icsNewApplicationModel),
+                position: widget.icsApplication.currentCountry.name.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Address Detail",
-                position: getAddress(widget.icsNewApplicationModel),
+                position: widget.icsApplication.abroadAddress.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Phone Number",
-                position: getPhone(widget.icsNewApplicationModel),
+                position: widget.icsApplication.phoneNumber.toString(),
                 duration: ""),
           ],
         ),
       ),
     );
-  }
-
-  String getNameAm(IcsAllOriginIdApplication orginApplication) {
-    if (orginApplication.renewApplication != null) {
-      return orginApplication.renewApplication!.citizen.firstNameJson.am
-              .toString() +
-          " " +
-          orginApplication.renewApplication!.citizen.fatherNameJson.am
-              .toString() +
-          " " +
-          orginApplication.renewApplication!.citizen.grandFatherNameJson.am
-              .toString();
-    } else if (orginApplication.newApplication != null) {
-      return orginApplication.newApplication!.citizen.fatherNameJson.am
-              .toString() +
-          " " +
-          orginApplication.newApplication!.citizen.fatherNameJson.am
-              .toString() +
-          " " +
-          orginApplication.newApplication!.citizen.grandFatherNameJson.am
-              .toString();
-    } else {
-      return "";
-    }
-  }
-
-  String getName(IcsAllOriginIdApplication orginApplication) {
-    if (orginApplication.renewApplication != null) {
-      return orginApplication.renewApplication!.citizen.firstName.toString() +
-          " " +
-          orginApplication.renewApplication!.citizen.fatherName.toString() +
-          " " +
-          orginApplication.renewApplication!.citizen.grandFatherName.toString();
-    } else if (orginApplication.newApplication != null) {
-      return orginApplication.newApplication!.citizen.firstName.toString() +
-          " " +
-          orginApplication.newApplication!.citizen.fatherName.toString() +
-          " " +
-          orginApplication.newApplication!.citizen.grandFatherName.toString();
-    } else {
-      return "";
-    }
-  }
-
-  String getNameCountry(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.birthCountry.name;
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.birthCountry.name;
-    } else {
-      return "";
-    }
   }
 
   Widget _buildTitle(String title) {
@@ -575,9 +561,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
         SizedBox(
           height: 2.h,
         ),
-        widget.icsNewApplicationModel.renewApplication != null
-            ? Expanded(child: buildFaqListRenew())
-            : Expanded(child: buildFaqListForNew())
+        Expanded(child: buildFaqListForNew())
       ],
     );
   }
@@ -587,54 +571,43 @@ class _HomeViewState extends State<DetailOriginWidget> {
       separatorBuilder: (context, index) => const Divider(
         height: 1.0,
       ),
-      itemCount: widget
-          .icsNewApplicationModel.newApplication!.newOriginIdDocuments.length,
+      itemCount: widget.icsApplication.applicationDocuments.length,
       itemBuilder: (context, index) {
-        var data = widget.icsNewApplicationModel.newApplication!
-            .newOriginIdDocuments[index];
+        var data = widget.icsApplication.applicationDocuments[index];
         CurrentCountry documentType = data.documentType;
         return ItemDoc(
           title: data.documentType.name,
           documentType: documentType,
-          applicationId: '',
+          applicationId: widget.icsApplication.id,
           controller: controller,
-          listOfDoc: [],
+          listOfDoc: controller.groupedAppliaction[index].document,
         );
       },
     );
   }
 
-  ListView buildFaqListRenew() {
-    return ListView.separated(
-      separatorBuilder: (context, index) => const Divider(
-        height: 1.0,
-      ),
-      itemCount: widget.icsNewApplicationModel.renewApplication!
-          .renewOriginIdDocuments.length,
-      itemBuilder: (context, index) {
-        var data = widget.icsNewApplicationModel.renewApplication!
-            .renewOriginIdDocuments[index];
-        CurrentCountry documentType = data.documentType;
-        return ItemDoc(
-          title: data.documentType.name,
-          documentType: documentType,
-          applicationId: '',
-          controller: controller,
-          listOfDoc: [],
-        );
-      },
-    );
+  getnumber(IcsApplication icsApplication) {
+    if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
+      return icsApplication
+          .renewalOriginIdApplications.first.currentPassportNumber
+          .toString();
+    } else if (icsApplication.newOriginIdApplications.isNotEmpty) {
+      return icsApplication.newOriginIdApplications.first.currentPassportNumber
+          .toString();
+    } else {
+      return "";
+    }
   }
 
-  String getDateOfBirth(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      DateTime dateOfBirth =
-          icsNewApplicationModel.renewApplication!.citizen.dateOfBirth;
+  getIssuedate(IcsApplication icsApplication) {
+    if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
+      DateTime dateOfBirth = icsApplication
+          .renewalOriginIdApplications.first.currentPassportIssuedDate;
       String formattedDate = DateFormat.yMd().format(dateOfBirth);
       return formattedDate;
-    } else if (icsNewApplicationModel.newApplication != null) {
-      DateTime dateOfBirth =
-          icsNewApplicationModel.newApplication!.citizen.dateOfBirth;
+    } else if (icsApplication.newOriginIdApplications.isNotEmpty) {
+      DateTime dateOfBirth = icsApplication
+          .newOriginIdApplications.first.currentPassportIssuedDate;
       String formattedDate = DateFormat.yMd().format(dateOfBirth);
       return formattedDate;
     } else {
@@ -642,187 +615,15 @@ class _HomeViewState extends State<DetailOriginWidget> {
     }
   }
 
-  getNationality(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.nationality.name;
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.nationality.name;
-    } else {
-      return "";
-    }
-  }
-
-  getBirthCountry(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.birthCountry.name;
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.birthCountry.name;
-    } else {
-      return "";
-    }
-  }
-
-  getBirthPlace(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.birthPlace
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.birthPlace
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getGender(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.gender.toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.gender.toString();
-    } else {
-      return "";
-    }
-  }
-
-  getAdoption(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.isAdopted
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.isAdopted
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getOccupation(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.occupation.name
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.occupation.name
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getHair(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.hairColour
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.hairColour
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  geteyeColor(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.eyeColour
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.eyeColour
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getSkinColor(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.skinColour
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.skinColour
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getMarital(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.maritalStatus
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.maritalStatus
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getheight(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.height.toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.height.toString();
-    } else {
-      return "";
-    }
-  }
-
-  getCurrentCountry(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.currentCountry.name
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.currentCountry.name
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getAddress(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.abroadAddress
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.abroadAddress
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getPhone(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.citizen.phoneNumber
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.citizen.phoneNumber
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getnumber(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.currentPassportNumber
-          .toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.currentPassportNumber
-          .toString();
-    } else {
-      return "";
-    }
-  }
-
-  getIssuedate(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      DateTime dateOfBirth =
-          icsNewApplicationModel.renewApplication!.currentPassportIssuedDate;
+  getExpirydate(IcsApplication icsApplication) {
+    if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
+      DateTime dateOfBirth = icsApplication
+          .renewalOriginIdApplications.first.currentPassportExpiryDate;
       String formattedDate = DateFormat.yMd().format(dateOfBirth);
       return formattedDate;
-    } else if (icsNewApplicationModel.newApplication != null) {
-      DateTime dateOfBirth =
-          icsNewApplicationModel.newApplication!.currentPassportIssuedDate;
+    } else if (icsApplication.newOriginIdApplications.isNotEmpty) {
+      DateTime dateOfBirth = icsApplication
+          .newOriginIdApplications.first.currentPassportExpiryDate;
       String formattedDate = DateFormat.yMd().format(dateOfBirth);
       return formattedDate;
     } else {
@@ -830,49 +631,36 @@ class _HomeViewState extends State<DetailOriginWidget> {
     }
   }
 
-  getExpirydate(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      DateTime dateOfBirth =
-          icsNewApplicationModel.renewApplication!.currentPassportExpiryDate;
-      String formattedDate = DateFormat.yMd().format(dateOfBirth);
-      return formattedDate;
-    } else if (icsNewApplicationModel.newApplication != null) {
-      DateTime dateOfBirth =
-          icsNewApplicationModel.newApplication!.currentPassportExpiryDate;
-      String formattedDate = DateFormat.yMd().format(dateOfBirth);
-      return formattedDate;
+  getVisaType(IcsApplication icsApplication) {
+    if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
+      return icsApplication.renewalOriginIdApplications.first.visaType.name
+          .toString();
+    } else if (icsApplication.newOriginIdApplications.isNotEmpty) {
+      return icsApplication.newOriginIdApplications.first.visaType.name
+          .toString();
     } else {
       return "";
     }
   }
 
-  getVisaType(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.visaType.name.toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.visaType.name.toString();
+  getVisaNumber(IcsApplication icsApplication) {
+    if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
+      return icsApplication.renewalOriginIdApplications.first.visaNumber
+          .toString();
+    } else if (icsApplication.newOriginIdApplications.isNotEmpty) {
+      return icsApplication.newOriginIdApplications.first.visaNumber.toString();
     } else {
       return "";
     }
   }
 
-  getVisaNumber(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.visaNumber.toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
-      return icsNewApplicationModel.newApplication!.visaNumber.toString();
-    } else {
-      return "";
-    }
-  }
-
-  String getVisaExpiryDate(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
+  String getVisaExpiryDate(IcsApplication icsApplication) {
+    if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
       DateTime? visaExpiryDate =
-          icsNewApplicationModel.renewApplication!.visaExpiryDate;
+          icsApplication.renewalOriginIdApplications.first.visaExpiryDate;
       String formattedDate = DateFormat.yMd().format(visaExpiryDate);
       return formattedDate;
-    } else if (icsNewApplicationModel.newApplication != null) {
+    } else if (icsApplication.newOriginIdApplications.isNotEmpty) {
       DateTime? visaExpiryDate = null;
       if (visaExpiryDate != null) {
         String formattedDate = DateFormat.yMd().format(visaExpiryDate);
@@ -883,13 +671,13 @@ class _HomeViewState extends State<DetailOriginWidget> {
     return "";
   }
 
-  String getVisaIssuedDate(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
+  String getVisaIssuedDate(IcsApplication icsApplication) {
+    if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
       DateTime? visaIssuedDate =
-          icsNewApplicationModel.renewApplication!.visaIssuedDate;
+          icsApplication.renewalOriginIdApplications.first.visaIssuedDate;
       String formattedDate = DateFormat.yMd().format(visaIssuedDate);
       return formattedDate;
-    } else if (icsNewApplicationModel.newApplication != null) {
+    } else if (icsApplication.newOriginIdApplications.isNotEmpty) {
       DateTime? visaIssuedDate = null;
       if (visaIssuedDate != null) {
         String formattedDate = DateFormat.yMd().format(visaIssuedDate);
@@ -900,42 +688,34 @@ class _HomeViewState extends State<DetailOriginWidget> {
     return "";
   }
 
-  getOriginnumber(IcsAllOriginIdApplication icsNewApplicationModel) {
-    if (icsNewApplicationModel.renewApplication != null) {
-      return icsNewApplicationModel.renewApplication!.originIdNumber.toString();
-    } else if (icsNewApplicationModel.newApplication != null) {
+  getOriginnumber(IcsApplication icsApplication) {
+    if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
+      return icsApplication.renewalOriginIdApplications.first.originIdNumber
+          .toString();
+    } else if (icsApplication.newOriginIdApplications != null) {
       return "";
     } else {
       return "";
     }
   }
 
-  getQrData(IcsAllOriginIdApplication icsNewApplicationModel) {
+  getQrData(IcsApplication icsApplication) {
     {
-      if (icsNewApplicationModel.renewApplication != null) {
-        return icsNewApplicationModel.renewApplication!.applicationNo
+      if (icsApplication.renewalOriginIdApplications.isNotEmpty) {
+        return icsApplication.renewalOriginIdApplications.first.applicationNo
             .toString();
-      } else if (icsNewApplicationModel.newApplication != null) {
-        return icsNewApplicationModel.newApplication!.applicationNo.toString();
+      } else if (icsApplication.newOriginIdApplications != null) {
+        return icsApplication.newOriginIdApplications.first.applicationNo
+            .toString();
       } else {
         return "";
       }
     }
   }
 
-  String? getImage(IcsAllOriginIdApplication icsAllPassportIdApplication) {
-    if (icsAllPassportIdApplication.renewApplication != null) {
-      if (icsAllPassportIdApplication.renewApplication!.citizen.photo != null) {
-        return icsAllPassportIdApplication.renewApplication!.citizen.photo
-            .toString();
-      }
-    } else if (icsAllPassportIdApplication.newApplication != null) {
-      if (icsAllPassportIdApplication.newApplication!.citizen.photo != null) {
-        return icsAllPassportIdApplication.newApplication!.citizen.photo
-            .toString();
-      }
-    }
-
-    return null;
+  String getAppointmentdate(IcsApplication icsApplication) {
+    String formattedDateTime = DateFormat("EEE/d/yyyy")
+        .format(icsApplication.applicationAppointments.first.date);
+    return formattedDateTime;
   }
 }

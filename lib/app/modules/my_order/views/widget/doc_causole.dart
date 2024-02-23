@@ -8,7 +8,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
-import 'package:ics/app/modules/my_order/data/model/order_model_origin.dart';
+import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_viewer.dart';
 import 'package:ics/gen/assets.gen.dart';
 
@@ -24,7 +24,7 @@ class ItemDoc extends StatefulWidget {
 
   final String title;
 
-  final List<Document> listOfDoc;
+  final List<ApplicationDocument> listOfDoc;
 
   final MyOrderController controller;
   final String applicationId;
@@ -89,7 +89,7 @@ class _ItemFaqState extends State<ItemDoc> {
                     ),
             ),
           ),
-          widget.listOfDoc[0].reviewStatus.contains("REJECTED")
+          widget.listOfDoc[0].documentStatus.contains("REJECTED")
               ? GestureDetector(
                   onTap: () {
                     openPdfPicker();
@@ -160,10 +160,10 @@ class _ItemFaqState extends State<ItemDoc> {
         : const SizedBox();
   }
 
-  buildPDFViewer(Document document) {
+  buildPDFViewer(ApplicationDocument document) {
     return BuildDocViewer(
       pdfPath: document.files.path,
-      reviewStatus: document.reviewStatus,
+      reviewStatus: document.documentStatus,
       documentType: document.documentType,
       controller: widget.controller,
       applicationId: widget.applicationId,
