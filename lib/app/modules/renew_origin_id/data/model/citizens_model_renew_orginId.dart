@@ -23,6 +23,8 @@ class IcsApplicationModelReNewOrginId {
   NameJson? fatherNameJson;
   NameJson? firstNameJson;
   NameJson? grandFatherNameJson;
+  String embassyId;
+  String currentCountryId;
   List<ReNewOriginIdApplication> renewOriginIdApplications;
 
   IcsApplicationModelReNewOrginId({
@@ -49,6 +51,8 @@ class IcsApplicationModelReNewOrginId {
     this.fatherNameJson,
     this.firstNameJson,
     this.grandFatherNameJson,
+    required this.embassyId,
+    required this.currentCountryId,
     required this.renewOriginIdApplications,
   });
 
@@ -77,6 +81,8 @@ class IcsApplicationModelReNewOrginId {
       firstName: json['first_name'],
       father_name: json['father_name'],
       grand_father_name: json['grand_father_name'],
+      embassyId: json["embassy_id"],
+      currentCountryId: json["current_country_id"],
       fatherNameJson: json['father_name_json'] != null
           ? NameJson.fromJson(json['father_name_json'])
           : null,
@@ -120,8 +126,6 @@ class ReNewOriginIdApplication {
   final String? visa_number;
   final String? origin_id_number;
   final String? correction_type_id;
-  final String? embassy_id;
-  final String? current_country_id;
 
   const ReNewOriginIdApplication({
     this.current_passport_number,
@@ -131,10 +135,8 @@ class ReNewOriginIdApplication {
     this.visa_number,
     this.origin_id_number,
     this.correction_type_id,
-    this.embassy_id,
     this.visa_issued_date,
     this.visa_expiry_date,
-    this.current_country_id,
   });
 
   factory ReNewOriginIdApplication.fromJson(Map<String, dynamic> json) {
@@ -145,11 +147,9 @@ class ReNewOriginIdApplication {
       visa_number: json['visa_number'],
       origin_id_number: json['origin_id_number'],
       visa_type_id: json['visa_type_id'],
-      embassy_id: json['embassy_id'],
       correction_type_id: json['correction_type_id'],
       visa_issued_date: json['visa_issued_date'],
       visa_expiry_date: json['visa_expiry_date'],
-      current_country_id: json['current_country_id'],
     );
   }
 
@@ -161,11 +161,9 @@ class ReNewOriginIdApplication {
       'current_passport_issued_date': current_passport_issued_date,
       'current_passport_number': current_passport_number,
       'origin_id_number': origin_id_number,
-      'embassy_id': embassy_id,
       'correction_type_id': correction_type_id,
       'visa_expiry_date': visa_expiry_date,
       'visa_issued_date': visa_issued_date,
-      'current_country_id': current_country_id,
     };
   }
 }

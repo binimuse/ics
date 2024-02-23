@@ -7,12 +7,12 @@ class BookedDate {
 
   factory BookedDate.fromMap(Map<String, dynamic> json) => BookedDate(
         icsNewPassportBookedDates: List<IcsNewPassportBookedDate>.from(
-            json["ics_new_passport_booked_dates"]
+            json["ics_application_booked_dates"]
                 .map((x) => IcsNewPassportBookedDate.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "ics_new_passport_booked_dates":
+        "ics_application_booked_dates":
             List<dynamic>.from(icsNewPassportBookedDates.map((x) => x.toMap())),
       };
 }

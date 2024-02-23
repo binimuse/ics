@@ -23,6 +23,7 @@ import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_seven_orgi
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_six_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_three_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_two_orginid.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/summery_new_originid.dart';
 
 import 'package:ics/app/routes/app_pages.dart';
 
@@ -272,9 +273,10 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                           }
                         } else if (controller.currentStep == 3) {
                           if (controller.signatureController.isNotEmpty) {
+                            controller.handleDrawFinish();
                             controller.neworginIdformKey.currentState!
                                     .saveAndValidate()
-                                ? createCitizen()
+                                ? _showSummeryDiloag(context)
                                 : SizedBox();
                           } else {
                             AppToasts.showError("Please sign your signature");
@@ -282,7 +284,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                         } else if (controller.currentStep == 4) {
                           checkdoc();
                         } else if (controller.currentStep == 6) {
-                          finalstep();
+                          finalstep(context);
                         } else {
                           if (controller.neworginIdformKey.currentState!
                               .saveAndValidate()) {
@@ -303,6 +305,22 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     );
   }
 
+  _showSummeryDiloag(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SummaryDialogNewOriginId(
+          context: context,
+          controller: controller,
+          onTap: () {
+            Navigator.pop(context);
+            createCitizen();
+          },
+        );
+      },
+    );
+  }
+
   void checkdoc() async {
     if (controller.documents.isEmpty) {
       AppToasts.showError("Document are empty");
@@ -312,10 +330,12 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      print("object");
-      setState(() {
-        controller.currentStep++;
-      });
+      await controller.updateNewApplication();
+      if (controller.isUpdateSuccess.value) {
+        setState(() {
+          controller.currentStep++;
+        });
+      }
     }
   }
 
@@ -470,18 +490,18 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     var currentcontry;
     final citizenModel = widget.citizenModel;
     final abroadCountryId = citizenModel!.abroadCountryId;
+
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
-    if (citizenModel.newOriginIdApplications.isNotEmpty) {
-      embassyId = citizenModel.newOriginIdApplications.first.embassy_id;
+    if (citizenModel.embassyId.isNotEmpty) {
+      embassyId = citizenModel.embassyId;
       Future.delayed(const Duration(seconds: 2), () {
         controller.embassiesvalue.value =
             controller.base_embassies.firstWhere((e) => e.id == embassyId);
       });
 
-      currentcontry =
-          citizenModel.newOriginIdApplications.first.current_country_id ?? null;
+      currentcontry = citizenModel.currentCountryId;
 
       controller.currentcountryvalue.value =
           controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
@@ -489,11 +509,10 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
+
     controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
-
-    ;
   }
 
   void getDataForStep4() {
@@ -539,10 +558,12 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     }
   }
 
-  void finalstep() {
-    AppToasts.showSuccess("Origin Id request Sent successfully");
-    final MyOrderController controller = Get.put(MyOrderController());
-    controller.getOrginOrder();
-    Get.offAllNamed(Routes.MAIN_PAGE);
+  void finalstep(BuildContext context) {
+    if (controller.selectedDate != null ||
+        controller.selectedDateTime != null) {
+      controller.sendBookedDates(context);
+    } else {
+      AppToasts.showError("Please select both a date and a time");
+    }
   }
 }

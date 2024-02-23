@@ -7,9 +7,11 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/dialogs/upload_dilaog.dart';
 import 'package:ics/app/common/fileupload/common_file_uploder.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 
@@ -22,6 +24,7 @@ class PhotoUpload extends StatelessWidget {
   final RxList<File> selectedImages;
   RxList<String> photoPath;
 
+  Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -81,7 +84,9 @@ class PhotoUpload extends StatelessWidget {
                   )
                 ],
               ),
-              getImage(context),
+              Obx(() => networkStatus.value == NetworkStatus.LOADING
+                  ? CustomLoadingWidget()
+                  : getImage(context)),
             ],
           ),
         ),
@@ -133,7 +138,7 @@ class PhotoUpload extends StatelessWidget {
                       selectedImages.removeAt(0);
                       //imageFile.deleteSync();
                       photoPath.removeAt(0);
-                                        },
+                    },
                     child: const Icon(
                       Icons.delete,
                       color: Colors.red,
@@ -315,6 +320,7 @@ class PhotoUpload extends StatelessWidget {
   }
 
   handleFilePickedSuccess(PlatformFile pickedFile) async {
+    networkStatus.value = NetworkStatus.LOADING;
     print("bini ${pickedFile}");
     // Perform the async operations
 
@@ -325,9 +331,11 @@ class PhotoUpload extends StatelessWidget {
       selectedImages.add(File(pickedFile.path!));
       photoPath.clear();
       photoPath.add(responseUrl);
-
+      networkStatus.value = NetworkStatus.SUCCESS;
       // Response is successful
     } else {
+      networkStatus.value = NetworkStatus.ERROR;
+
       // Response is not successful
       print('Response is false');
     }

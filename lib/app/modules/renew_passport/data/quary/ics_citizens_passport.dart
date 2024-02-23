@@ -2,7 +2,7 @@ class GetaicscitizensRenewPassport {
   dynamic fetchData() {
     return """
 query MyQuery {
-  ics_citizens(order_by: {created_at: desc}, limit: 5) {
+  ics_applications(order_by: {created_at: desc}, limit: 3) {
     abroad_address
     abroad_country_id
     phone_number
@@ -16,6 +16,7 @@ query MyQuery {
     gender
     hair_colour
     height
+    photo
     id
     marital_status
     occupation_id
@@ -26,16 +27,18 @@ query MyQuery {
     grand_father_name
     first_name_json
     grand_father_name_json
+    current_country_id
+    embassy_id
+    current_country_id
     renew_passport_applications {
-      current_country_id
-      correction_type_id
-      embassy_id
-      current_country_id
       passport_number
-    
+      application_no
+      damage_type_id
     }
+    
   }
 }
+
 
 
    """;

@@ -13,6 +13,7 @@ class IcsApplicationModelReNewPassport {
   String? hairColour;
   double? height;
   String? id;
+  String? photo;
   String? maritalStatus;
   String? occupation_id;
   String? skinColour;
@@ -24,6 +25,8 @@ class IcsApplicationModelReNewPassport {
   NameJson? fatherNameJson;
   NameJson? firstNameJson;
   NameJson? grandFatherNameJson;
+  final String embassy_id;
+  final String current_country_id;
   List<ReNewPassportApplication> reNewPassportApplication;
 
   IcsApplicationModelReNewPassport({
@@ -39,6 +42,7 @@ class IcsApplicationModelReNewPassport {
     this.eyeColour,
     this.gender,
     this.hairColour,
+    this.photo,
     this.is_adopted,
     this.height,
     this.id,
@@ -51,6 +55,8 @@ class IcsApplicationModelReNewPassport {
     this.fatherNameJson,
     this.firstNameJson,
     this.grandFatherNameJson,
+    required this.embassy_id,
+    required this.current_country_id,
     required this.reNewPassportApplication,
   });
 
@@ -61,6 +67,7 @@ class IcsApplicationModelReNewPassport {
       abroadPhoneNumber: json['phone_number'],
       birthCountryId: json['birth_country_id'],
       is_adopted: json['is_adopted'],
+      photo: json['photo'],
       nationality_id: json['nationality_id'],
       birthPlace: json['birth_place'],
       createdAt:
@@ -88,6 +95,8 @@ class IcsApplicationModelReNewPassport {
       grandFatherNameJson: json['grand_father_name_json'] != null
           ? NameJson.fromJson(json['grand_father_name_json'])
           : null,
+      embassy_id: json['embassy_id'],
+      current_country_id: json['current_country_id'],
       reNewPassportApplication: List.of(json["renew_passport_applications"])
           .map((i) => ReNewPassportApplication.fromJson(i))
           .toList(),
@@ -114,22 +123,16 @@ class NameJson {
 
 class ReNewPassportApplication {
   final String? correction_type_id;
-  final String? embassy_id;
-  final String? current_country_id;
   final String? passport_number;
 
   const ReNewPassportApplication({
     this.correction_type_id,
-    this.embassy_id,
-    this.current_country_id,
     this.passport_number,
   });
 
   factory ReNewPassportApplication.fromJson(Map<String, dynamic> json) {
     return ReNewPassportApplication(
       passport_number: json['passport_number'],
-      embassy_id: json['embassy_id'],
-      current_country_id: json['current_country_id'],
       correction_type_id: json['correction_type_id'],
     );
   }
@@ -137,8 +140,6 @@ class ReNewPassportApplication {
   Map<String, dynamic> toJson() {
     return {
       'passport_number': passport_number,
-      'embassy_id': embassy_id,
-      'current_country_id': current_country_id,
       'correction_type_id': correction_type_id,
     };
   }

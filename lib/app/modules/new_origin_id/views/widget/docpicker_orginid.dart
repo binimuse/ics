@@ -103,7 +103,7 @@ class _BuildDocState extends State<BuildDocOrginID> {
                           return Stack(
                             children: [
                               Container(
-                                height: 20.h,
+                                height: 18.h,
                                 child: PDFView(
                                   filePath: file.path!,
                                 ),
@@ -225,9 +225,6 @@ class _BuildDocState extends State<BuildDocOrginID> {
     }
   }
 
-
-
-
   void handleFilePickedSuccess(PlatformFile pickedFile) {
     // Move the async code outside of setState
     _handleFilePickedSuccess(pickedFile);
@@ -253,10 +250,7 @@ class _BuildDocState extends State<BuildDocOrginID> {
     if (responseUrl.isNotEmpty) {
       // Response is successful
       print(responseUrl);
-      widget.controller.sendDoc(
-        widget.documentType.id,
-        responseUrl
-      );
+      widget.controller.sendDoc(widget.documentType.id, responseUrl);
     } else {
       // Response is not successful
       print('Response is false');
@@ -267,6 +261,4 @@ class _BuildDocState extends State<BuildDocOrginID> {
       widget.controller.isSendStared.value = false;
     });
   }
-
-
 }

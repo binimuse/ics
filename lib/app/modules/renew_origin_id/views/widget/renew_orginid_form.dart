@@ -24,6 +24,7 @@ import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_five_ren
 
 import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_six_renew_orginid.dart';
 import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_two_renew_orginid.dart';
+import 'package:ics/app/modules/renew_origin_id/views/widget/summery_renew_originid.dart';
 
 import 'package:ics/app/routes/app_pages.dart';
 
@@ -276,14 +277,11 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
                             }
                           } else if (controller.currentStep == 3) {
                             //  Get.dialog(ProfileFourDialog());
-                            setState(() {
-                              if (controller.reneworginIdformKey.currentState!
-                                  .saveAndValidate()) {
-                                createCitizen();
-                              } else {
-                                _scrollToBottom();
-                              }
-                            });
+                            controller.handleDrawFinish();
+                            controller.reneworginIdformKey.currentState!
+                                    .saveAndValidate()
+                                ? _showSummeryDiloag(context)
+                                : SizedBox();
                           } else if (controller.currentStep == 4) {
                             checkdoc();
                           } else if (controller.currentStep == 6) {
@@ -307,6 +305,22 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
     );
   }
 
+  _showSummeryDiloag(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SummaryDialogReNewOriginId(
+          context: context,
+          controller: controller,
+          onTap: () {
+            Navigator.pop(context);
+            createCitizen();
+          },
+        );
+      },
+    );
+  }
+
   void checkdoc() async {
     if (controller.documents.isEmpty) {
       AppToasts.showError("Document are empty");
@@ -316,10 +330,12 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      print("object");
-      setState(() {
-        controller.currentStep++;
-      });
+      await controller.updateNewApplication();
+      if (controller.isUpdateSuccess.value) {
+        setState(() {
+          controller.currentStep++;
+        });
+      }
     }
   }
 
@@ -474,19 +490,18 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
     var currentcontry;
     final citizenModel = widget.citizenModel;
     final abroadCountryId = citizenModel!.abroadCountryId;
+
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
-    if (citizenModel.renewOriginIdApplications.isNotEmpty) {
-      embassyId = citizenModel.renewOriginIdApplications.first.embassy_id;
+    if (citizenModel.embassyId.isNotEmpty) {
+      embassyId = citizenModel.embassyId;
       Future.delayed(const Duration(seconds: 2), () {
         controller.embassiesvalue.value =
             controller.base_embassies.firstWhere((e) => e.id == embassyId);
       });
 
-      currentcontry =
-          citizenModel.renewOriginIdApplications.first.current_country_id ??
-              null;
+      currentcontry = citizenModel.currentCountryId;
 
       controller.currentcountryvalue.value =
           controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
@@ -494,11 +509,10 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
 
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
+
     controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
-
-    ;
   }
 
   void getDataForStep4() {

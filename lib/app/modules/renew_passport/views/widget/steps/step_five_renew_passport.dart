@@ -82,122 +82,9 @@ class _Step4State extends State<Step5RenewPassport> {
         SizedBox(
           height: 2.h,
         ),
-        // FormBuilderDateTimePicker(
-        //   name: 'date_established',
-        //   initialValue:
-        //       widget.citizenModel?.reNewPassportApplication.isNotEmpty ?? false
-        //           ? DateTime.parse(controller.passportIssueDateController.text)
-        //           : null,
-        //   onChanged: (value) {
-        //     controller.passportIssueDateController.value = TextEditingValue(
-        //       text: value.toString(),
-        //     );
-        //   },
-        //   inputType: InputType.date,
-        //   format: DateFormat('dd/MM/yyyy'),
-        //   enabled: true,
-        //   decoration: ReusableInputDecoration.getDecoration(
-        //       'Passport Issue Date(GC)',
-        //       isMandatory: true),
-        //   style: AppTextStyles.titleBold.copyWith(
-        //     color: AppColors.blackLight,
-        //     fontSize: AppSizes.font_12,
-        //   ),
-        // ),
         SizedBox(
           height: 2.h,
         ),
-        // FormBuilderDateTimePicker(
-        //   name: 'date_established2',
-        //   initialValue: widget.citizenModel != null &&
-        //           widget.citizenModel!.reNewPassportApplication.isNotEmpty
-        //       ? DateTime.parse(controller.passportExpiryDateController.text)
-        //       : null,
-        //   onChanged: (value) {
-        //     controller.passportExpiryDateController.value = TextEditingValue(
-        //       text: value.toString(),
-        //     );
-        //   },
-        //   inputType: InputType.date,
-        //   format: DateFormat('dd/MM/yyyy'),
-        //   enabled: true,
-        //   decoration: ReusableInputDecoration.getDecoration(
-        //       'Passport Expiry Date(GC)',
-        //       isMandatory: true),
-        //   style: AppTextStyles.titleBold.copyWith(
-        //     color: AppColors.blackLight,
-        //     fontSize: AppSizes.font_12,
-        //   ),
-        // ),
-        // SizedBox(
-        //   height: 2.h,
-        // ),
-
-        // FormBuilderDateTimePicker(
-        //   name: 'date_established3',
-        //   initialValue:
-        //       widget.citizenModel?.reNewPassportApplication.isNotEmpty ?? false
-        //           ? DateTime.parse(controller.visaIssueDateController.text)
-        //           : null,
-        //   onChanged: (value) {
-        //     controller.visaIssueDateController.value = TextEditingValue(
-        //       text: value.toString(),
-        //     );
-        //   },
-        //   inputType: InputType.date,
-        //   format: DateFormat('dd/MM/yyyy'),
-        //   enabled: true,
-        //   decoration: ReusableInputDecoration.getDecoration(
-        //       'Visa Issue Date(GC)',
-        //       isMandatory: true),
-        //   style: AppTextStyles.titleBold.copyWith(
-        //     color: AppColors.blackLight,
-        //     fontSize: AppSizes.font_12,
-        //   ),
-        // ),
-        // SizedBox(
-        //   height: 2.h,
-        // ),
-        // FormBuilderDateTimePicker(
-        //   name: 'date_established2',
-        //   initialValue: widget.citizenModel != null &&
-        //           widget.citizenModel!.reNewPassportApplication.isNotEmpty
-        //       ? DateTime.parse(controller.visaExpiryDateController.text)
-        //       : null,
-        //   onChanged: (value) {
-        //     controller.visaExpiryDateController.value = TextEditingValue(
-        //       text: value.toString(),
-        //     );
-        //   },
-        //   inputType: InputType.date,
-        //   format: DateFormat('dd/MM/yyyy'),
-        //   enabled: true,
-        //   decoration: ReusableInputDecoration.getDecoration(
-        //       'Visa Expiry Date(GC)',
-        //       isMandatory: true),
-        //   style: AppTextStyles.titleBold.copyWith(
-        //     color: AppColors.blackLight,
-        //     fontSize: AppSizes.font_12,
-        //   ),
-        // ),
-        // SizedBox(
-        //   height: 2.h,
-        // ),
-        // TextFormBuilder(
-        //   isMandatory: true,
-        //   controller: controller.orginIdnumberContoller,
-        //   hint: 'Origin ID number',
-        //   labelText: 'Origin ID number',
-        //   validator: FormBuilderValidators.required(
-        //       errorText: "Origin ID number is required"),
-        //   showClearButton: false,
-        //   inputFormatters: [
-        //     FilteringTextInputFormatter.deny(RegExp(r"\s")),
-        //   ],
-        //   autoFocus: false,
-        //   onChanged: (value) {},
-        // ),
-
         iscorrection(),
         Obx(() =>
             controller.isDataCorrection.value ? correctiontype() : SizedBox()),
@@ -223,6 +110,8 @@ class _Step4State extends State<Step5RenewPassport> {
       ),
       activeColor: AppColors.primary,
       onChanged: (value) {
+        print(controller.correctionTypevalue.value);
+        controller.correctionTypevalue.value = null;
         controller.isDataCorrection.value = value!;
         _scrollToBottom();
       },

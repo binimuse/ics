@@ -135,6 +135,7 @@ class _Step3State extends State<Step3OrginId> {
                 }).toList(),
                 onChanged: (value) {
                   controller.embassiesvalue.value = value;
+                  controller.getBookedDates(value!.id!);
                 },
                 validator: FormBuilderValidators.required(),
                 name: controller.countryvalue.value!.name == "Ethiopia"

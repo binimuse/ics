@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -16,19 +19,24 @@ import 'package:ics/app/modules/new_origin_id/data/quary/get_emabassies_orginid.
 import 'package:ics/app/modules/new_origin_id/data/quary/get_url_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/data/quary/ics_citizens_orginid.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
+import 'package:ics/app/modules/new_passport/data/model/booked_date_model.dart';
+import 'package:ics/app/modules/new_passport/data/mutation/book_appointemts_mutation.dart';
+import 'package:ics/app/modules/new_passport/data/quary/get_booked_date.dart';
+import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:ics/services/graphql_conf.dart';
 import 'dart:async';
 import 'dart:io';
-
+import 'dart:ui' as ui;
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
 import 'package:signature/signature.dart';
 import '../data/quary/get_all_orginid.dart';
 
-class NewOriginIdController extends GetxController {
+class NewOriginIdController extends GetxController
+    with SingleGetTickerProviderMixin {
   final TextEditingController AmfatherNameController = TextEditingController();
   final TextEditingController AmfirstNameController = TextEditingController();
   final TextEditingController AmgrandFatherNameController =
@@ -140,7 +148,7 @@ class NewOriginIdController extends GetxController {
   final TextEditingController phonenumber = TextEditingController();
 
   final reasonController = TextEditingController();
-  var selectedDate = DateTime.now().obs;
+
   final RxString skincolorvalue = ''.obs;
   final List<bool> termCheckedList = [
     false,
@@ -158,20 +166,97 @@ class NewOriginIdController extends GetxController {
 
   //for birthDate
   final TextEditingController yearController = TextEditingController();
-
+  late TabController tabController;
   @override
   void onInit() {
+    tabController = TabController(length: 4, vsync: this);
     getAll();
     getCitizene();
 
     super.onInit();
   }
 
+  final Rxn<BookedDate> bookedDate = Rxn<BookedDate>();
+  GetBookedDate getBookedDate = GetBookedDate();
+  var setFetchedStatus = false.obs;
   List<DateTime> occupiedDates = [
-    DateTime(2024, 2, 1),
-    DateTime(2024, 2, 3),
     // Add more dates...
   ];
+
+  Future<void> getBookedDates(String embasiyId) async {
+    networkStatus.value = NetworkStatus.LOADING;
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getBookedDate.fetchData(embasiyId), {});
+      bookedDate.value = BookedDate.fromMap(result);
+
+      setFetchedStatus(true);
+      networkStatus.value = NetworkStatus.SUCCESS;
+
+      // first clear
+      occupiedDates.clear();
+      // Add fetched dates to occupiedDates list
+      List<DateTime> fetchedDates = [];
+      for (var bookedDate in bookedDate.value!.icsNewPassportBookedDates) {
+        // Remove the time component from the DateTime object
+        DateTime dateWithoutTime = DateTime(bookedDate.bookingDate.year,
+            bookedDate.bookingDate.month, bookedDate.bookingDate.day);
+        fetchedDates.add(dateWithoutTime);
+      }
+      occupiedDates = fetchedDates;
+    } catch (e, s) {
+      networkStatus.value = NetworkStatus.ERROR;
+      print("Error occurred while fetching data: $s");
+      setFetchedStatus(false);
+    }
+  }
+
+  late DateTime? selectedDate;
+  late DateTime? selectedDateTime;
+  Future<void> sendBookedDates(BuildContext context) async {
+    networkStatus.value = NetworkStatus.LOADING;
+    try {
+      GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
+      // Remove the time component from the selectedDate
+      // Convert selectedDate to a date string without the time component
+      String dateString = selectedDate!.toIso8601String().split('T').first;
+
+      print(dateString);
+
+      String timetz = DateFormat("HH:mm:ss").format(selectedDateTime!);
+
+      print(timetz);
+
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(NewAppointments.newApp),
+          variables: <String, dynamic>{
+            "objects": {
+              "date": dateString,
+              "application_id": newApplicationID,
+              "start_time": timetz,
+            }
+          },
+        ),
+      );
+
+      if (!result.hasException) {
+        networkStatus.value = NetworkStatus.SUCCESS;
+        AppToasts.showSuccess("Origin Id request Sent");
+
+        Get.offAllNamed(Routes.MAIN_PAGE);
+      } else {
+        networkStatus.value = NetworkStatus.ERROR;
+        AppToasts.showError("Something went wrong");
+        print(result);
+      }
+    } catch (e, s) {
+      AppToasts.showError("Something went wrong");
+      print(e);
+      print(s);
+      networkStatus.value = NetworkStatus.ERROR;
+    }
+  }
 
   Future<List<NewOrginIdConfirmationModel>> fetchorginId() async {
     // simulate network delay
@@ -263,10 +348,6 @@ class NewOriginIdController extends GetxController {
     return true;
   }
 
-  void updateSelectedDate(DateTime newDate) {
-    selectedDate.value = newDate;
-  }
-
   //signature
   Future<VideoTypenew> getVideoType(File file) async {
     final String? mimeType = lookupMimeType(file.path);
@@ -329,7 +410,7 @@ class NewOriginIdController extends GetxController {
 
   var isSend = false.obs;
   var isSendStared = false.obs;
-  var neworginID;
+  var newApplicationID;
   RxList<String> photoPath = <String>[].obs;
   Future<void> send() async {
     networkStatus.value = NetworkStatus.LOADING;
@@ -373,6 +454,9 @@ class NewOriginIdController extends GetxController {
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
               'phone_number': phonenumber.text,
+              'embassy_id': embassiesvalue.value!.id,
+              'current_country_id': currentcountryvalue.value!.id,
+              'application_type': "NEW_ORIGIN_ID_APPLICATION",
               'new_origin_id_applications': {
                 "data": {
                   'current_passport_expiry_date':
@@ -382,8 +466,6 @@ class NewOriginIdController extends GetxController {
                   'current_passport_number': passportNumberContoller.text,
                   'visa_type_id': visatypevalue.value?.id ?? null,
                   'visa_number': visanumberContoller.text,
-                  'embassy_id': embassiesvalue.value!.id,
-                  'current_country_id': currentcountryvalue.value!.id,
                 }
               },
             }
@@ -404,8 +486,8 @@ class NewOriginIdController extends GetxController {
         isSend.value = true;
         isSendStared.value = false;
 
-        neworginID = result.data!['insert_ics_citizens']['returning'][0]
-                ['new_origin_id_applications'][0]['id']
+        newApplicationID = result.data!['insert_ics_applications']['returning']
+                [0]['id']
             .toString();
       }
     } catch (e) {
@@ -439,7 +521,7 @@ class NewOriginIdController extends GetxController {
           document: gql(NewDocApplicationsOrginId.newDoc),
           variables: <String, dynamic>{
             'objects': {
-              'new_origin_id_application_id': neworginID,
+              'application_id': newApplicationID,
               'files': {
                 'path': path,
               },
@@ -461,6 +543,34 @@ class NewOriginIdController extends GetxController {
       }
     } catch (e) {
       isSendStared.value = false;
+      print('Error: $e');
+    }
+  }
+
+  var isUpdateSuccess = false.obs;
+  Future<void> updateNewApplication() async {
+    try {
+      //file upload
+
+      GraphQLClient graphQLClient;
+
+      graphQLClient = GraphQLConfiguration().clientToQuery();
+
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(UpdateNewApplication.update(newApplicationID)),
+        ),
+      );
+
+      if (result.hasException) {
+        isUpdateSuccess(false);
+        print(result.exception.toString());
+      } else {
+        isUpdateSuccess(true);
+      }
+    } catch (e) {
+      print(e.toString());
+      isUpdateSuccess(false);
       print('Error: $e');
     }
   }
@@ -533,7 +643,7 @@ class NewOriginIdController extends GetxController {
           await graphQLCommonApi.query(getaicscitizens.fetchData(), {});
 
       if (result != null) {
-        icsCitizens.value = (result['ics_citizens'] as List)
+        icsCitizens.value = (result['ics_applications'] as List)
             .map((e) => IcsApplicationModelOrginId.fromJson(e))
             .toList();
 
@@ -586,6 +696,8 @@ class NewOriginIdController extends GetxController {
     exportBackgroundColor: AppColors.grayLight,
   );
 
+  var showImage = false.obs;
+  ImageProvider? signatureImage;
   void handleDrawFinish() {
     exportSignatureToPng(signatureController);
   }
@@ -593,18 +705,34 @@ class NewOriginIdController extends GetxController {
   Future<ExportResult> exportSignatureToPng(
       SignatureController signatureController) async {
     try {
+      showImage.value = false;
       // Convert the Signature to an image
+      final Uint8List? pngBytes = await signatureController.toPngBytes();
 
-      // Create a ByteData object from the image
+      if (pngBytes != null) {
+        // Encode the PNG image as a base64 string
+        String base64Image = base64.encode(pngBytes);
 
-      // Encode the PNG image as a base64 string
+        signatureImage = base64ToImage(base64Image);
 
-      print('Exported signature image successfully');
-      return ExportResult.success;
+        // Here you can use the base64Image string as needed
+        print('Exported signature image successfully');
+        return ExportResult.success;
+      } else {
+        showImage.value = false;
+        throw Exception('Failed to export signature image');
+      }
     } catch (e) {
+      showImage.value = false;
       print('Failed to export signature image: $e');
       return ExportResult.error;
     }
+  }
+
+  ImageProvider base64ToImage(String base64String) {
+    Uint8List bytes = base64Decode(base64String);
+    showImage.value = true;
+    return MemoryImage(bytes);
   }
 }
 

@@ -13,6 +13,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/new_passport/views/widget/summery_newpassport.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
 import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_four_renew_passport.dart';
@@ -21,6 +22,7 @@ import 'package:ics/app/modules/renew_passport/views/widget/steps/step_five_rene
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_eight_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_seven_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_two_renew_passport.dart';
+import 'package:ics/app/modules/renew_passport/views/widget/summery_renewpassport.dart';
 
 import 'package:ics/app/routes/app_pages.dart';
 
@@ -265,14 +267,10 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
                             }
                           } else if (controller.currentStep == 4) {
                             //  Get.dialog(ProfileFourDialog());
-                            setState(() {
-                              if (controller.renewPassportformKey.currentState!
-                                  .saveAndValidate()) {
-                                createCitizen();
-                              } else {
-                                _scrollToBottom();
-                              }
-                            });
+                            controller.renewPassportformKey.currentState!
+                                    .saveAndValidate()
+                                ? _showSummeryDiloag(context)
+                                : SizedBox();
                           } else if (controller.currentStep == 5) {
                             checkdoc();
                           } else if (controller.currentStep == 7) {
@@ -296,6 +294,22 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
     );
   }
 
+  _showSummeryDiloag(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SummaryDialogReNewPassport(
+          context: context,
+          controller: controller,
+          onTap: () {
+            Navigator.pop(context);
+            createCitizen();
+          },
+        );
+      },
+    );
+  }
+
   void checkdoc() async {
     if (controller.documents.isEmpty) {
       AppToasts.showError("Document are empty");
@@ -305,10 +319,12 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      print("object");
-      setState(() {
-        controller.currentStep++;
-      });
+      await controller.updateNewApplication();
+      if (controller.isUpdateSuccess.value) {
+        setState(() {
+          controller.currentStep++;
+        });
+      }
     }
   }
 
@@ -462,23 +478,20 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
   void getDataForStep3() {
     var embassyId;
     var currentcontry;
-
     final citizenModel = widget.citizenModel;
-
     final abroadCountryId = citizenModel!.abroadCountryId;
 
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
-    if (citizenModel.reNewPassportApplication.isNotEmpty) {
-      currentcontry =
-          citizenModel.reNewPassportApplication.first.current_country_id;
-      embassyId = citizenModel.reNewPassportApplication.first.embassy_id;
-
-      Future.delayed(const Duration(seconds: 1), () {
+    if (citizenModel.embassy_id.isNotEmpty) {
+      embassyId = citizenModel.embassy_id;
+      Future.delayed(const Duration(seconds: 2), () {
         controller.embassiesvalue.value =
             controller.base_embassies.firstWhere((e) => e.id == embassyId);
       });
+
+      currentcontry = citizenModel.current_country_id;
 
       controller.currentcountryvalue.value =
           controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
@@ -490,8 +503,6 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
     controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
-
-    ;
   }
 
   void getDataForStep4() {

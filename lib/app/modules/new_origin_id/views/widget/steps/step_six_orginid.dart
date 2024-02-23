@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
+import 'package:interval_time_picker/interval_time_picker.dart';
 
 import 'package:sizer/sizer.dart';
 import '../../../../../common/callender/custom_callender.dart';
@@ -50,7 +51,31 @@ class Step6Orginid extends StatelessWidget {
           blackoutDates: controller.occupiedDates,
           minDate: today,
           maxDate: DateTime(today.year, today.month + 3, today.day),
-          onTap: (CalendarTapDetails details) {},
+          onTap: (CalendarTapDetails details) {
+            controller.selectedDate = details.date!;
+            print(controller.selectedDate);
+
+            // Show the time picker with one-hour intervals
+            showIntervalTimePicker(
+              context: context,
+              initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+              interval: 60,
+            ).then((pickedTime) {
+              if (pickedTime != null) {
+                // Combine the selected date and time
+                DateTime selectedDateTime = DateTime(
+                  controller.selectedDate!.year,
+                  controller.selectedDate!.month,
+                  controller.selectedDate!.day,
+                  pickedTime.hour,
+                  pickedTime.minute,
+                );
+
+                // Update your controller or state with the selectedDateTime
+                controller.selectedDateTime = selectedDateTime;
+              }
+            });
+          },
         ),
         SizedBox(
           height: 2.h,

@@ -14,6 +14,7 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
@@ -94,7 +95,10 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                   height: 1.h,
                 ),
 
-                buildForm(context),
+                Obx(() =>
+                    controller.networkStatus.value == NetworkStatus.LOADING
+                        ? Center(child: CustomLoadingWidget())
+                        : buildForm(context)),
                 // Spacer(),
               ],
             ),
@@ -491,18 +495,24 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
     final abroadAddress = citizenModel.abroadAddress!;
     final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
-    embassyId = citizenModel.embassy_id;
-    // controller.embassiesvalue.value =
-    //     controller.base_embassies.firstWhere((e) => e.id == embassyId);
-    // currentcontry = citizenModel.current_country_id ?? null;
 
-    // controller.currentcountryvalue.value =
-    //     controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
+    if (citizenModel.embassy_id.isNotEmpty) {
+      embassyId = citizenModel.embassy_id;
+      Future.delayed(const Duration(seconds: 2), () {
+        controller.embassiesvalue.value =
+            controller.base_embassies.firstWhere((e) => e.id == embassyId);
+      });
 
-    // controller.countryvalue.value =
-    controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
+      currentcontry = citizenModel.current_country_id;
 
-    // controller.getEmbassies(controller.countryvalue.value!.id);
+      controller.currentcountryvalue.value =
+          controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
+    }
+
+    controller.countryvalue.value =
+        controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
+
+    controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
   }

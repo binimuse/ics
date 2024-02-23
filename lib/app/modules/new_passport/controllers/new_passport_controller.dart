@@ -341,7 +341,7 @@ class NewPassportController extends GetxController
           variables: <String, dynamic>{
             "objects": {
               "date": dateString,
-              "new_application_id": newApplicationId,
+              "application_id": newApplicationId,
               "start_time": timetz,
             }
           },
