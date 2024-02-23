@@ -67,6 +67,7 @@ dependencies:
   flutter_cached_pdfview: ^0.4.2
   interval_time_picker: ^2.0.0+5
   flutter_easyrefresh: ^2.2.2
+  dotted_line: ^3.2.2
 
 
 

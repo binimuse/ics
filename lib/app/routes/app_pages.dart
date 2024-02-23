@@ -1,5 +1,11 @@
 import 'package:get/get.dart';
 
+import '../modules/about_us/bindings/about_us_binding.dart';
+import '../modules/about_us/views/about_us_view.dart';
+import '../modules/account/bindings/account_binding.dart';
+import '../modules/account/views/account_view.dart';
+import '../modules/contact_us/bindings/contact_us_binding.dart';
+import '../modules/contact_us/views/contact_us_view.dart';
 import '../modules/email_verification/bindings/email_verification_binding.dart';
 import '../modules/email_verification/views/email_verification_view.dart';
 import '../modules/evisa/bindings/evisa_binding.dart';
@@ -26,6 +32,8 @@ import '../modules/on_bording/bindings/on_bording_binding.dart';
 import '../modules/on_bording/views/on_bording_view.dart';
 import '../modules/otp_varification/bindings/otp_varification_binding.dart';
 import '../modules/otp_varification/views/otp_varification_view.dart';
+import '../modules/privacy_policy/bindings/privacy_policy_binding.dart';
+import '../modules/privacy_policy/views/privacy_policy_view.dart';
 import '../modules/renew_origin_id/bindings/renew_origin_id_binding.dart';
 import '../modules/renew_origin_id/views/renew_origin_id_view.dart';
 import '../modules/renew_passport/bindings/renew_passport_binding.dart';
@@ -36,6 +44,8 @@ import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/terms_and_conditions/bindings/terms_and_conditions_binding.dart';
+import '../modules/terms_and_conditions/views/terms_and_conditions_view.dart';
 
 part 'app_routes.dart';
 
@@ -134,6 +144,31 @@ class AppPages {
       name: _Paths.EVISA,
       page: () => const EvisaView(),
       binding: EvisaBinding(),
+    ),
+    GetPage(
+      name: _Paths.ACCOUNT,
+      page: () => const AccountView(),
+      binding: AccountBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABOUT_US,
+      page: () => const AboutUsView(),
+      binding: AboutUsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CONTACT_US,
+      page: () => const ContactUsView(),
+      binding: ContactUsBinding(),
+    ),
+    GetPage(
+      name: _Paths.TERMS_AND_CONDITIONS,
+      page: () => const TermsAndConditionsView(),
+      binding: TermsAndConditionsBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRIVACY_POLICY,
+      page: () => const PrivacyPolicyView(),
+      binding: PrivacyPolicyBinding(),
     ),
   ];
 }

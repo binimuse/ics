@@ -23,6 +23,11 @@ abstract class Routes {
   static const RENEW_ORIGIN_ID = _Paths.RENEW_ORIGIN_ID;
   static const CORRECTION_ORIGIN_ID = _Paths.CORRECTION_ORIGIN_ID;
   static const EVISA = _Paths.EVISA;
+  static const ACCOUNT = _Paths.ACCOUNT;
+  static const ABOUT_US = _Paths.ABOUT_US;
+  static const CONTACT_US = _Paths.CONTACT_US;
+  static const TERMS_AND_CONDITIONS = _Paths.TERMS_AND_CONDITIONS;
+  static const PRIVACY_POLICY = _Paths.PRIVACY_POLICY;
 }
 
 abstract class _Paths {
@@ -47,4 +52,9 @@ abstract class _Paths {
   static const RENEW_ORIGIN_ID = '/renew-origin-id';
   static const CORRECTION_ORIGIN_ID = '/correction-origin-id';
   static const EVISA = '/evisa';
+  static const ACCOUNT = '/account';
+  static const ABOUT_US = '/about-us';
+  static const CONTACT_US = '/contact-us';
+  static const TERMS_AND_CONDITIONS = '/terms-and-conditions';
+  static const PRIVACY_POLICY = '/privacy-policy';
 }

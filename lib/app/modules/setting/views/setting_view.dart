@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+
 import 'package:ics/app/common/customappbar.dart';
+
 import 'package:ics/app/config/theme/app_colors.dart';
+
 import 'package:ics/app/config/theme/app_text_styles.dart';
+
 import 'package:ics/app/modules/logout/views/logout_view.dart';
+
+import 'package:ics/app/routes/app_pages.dart';
+
 import 'package:sizer/sizer.dart';
 
 import '../controllers/setting_controller.dart';
 
 class SettingView extends GetView<SettingController> {
   const SettingView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,56 +41,78 @@ class SettingView extends GetView<SettingController> {
               icon: Icons.person,
               title: 'Account'.tr,
               subtitle: 'Manage your Account'.tr,
-              ontaps: () {},
+              ontaps: () {
+                Get.toNamed(Routes.ACCOUNT);
+              },
             ),
+
             SizedBox(
               height: 1.h,
             ),
+
             _buildSettingCard(
               icon: Icons.info,
               title: 'About us'.tr,
               subtitle: 'Learn more about us'.tr,
-              ontaps: () {},
+              ontaps: () {
+                Get.toNamed(Routes.ABOUT_US);
+              },
             ),
+
             SizedBox(
               height: 1.h,
             ),
+
             _buildSettingCard(
               icon: Icons.message,
               title: 'Contact us'.tr,
               subtitle: 'Get in touch with us'.tr,
-              ontaps: () {},
+              ontaps: () {
+                Get.toNamed(Routes.CONTACT_US);
+              },
             ),
+
             SizedBox(
               height: 1.h,
             ),
+
             _buildSettingCard(
               icon: Icons.document_scanner_sharp,
               title: 'Terms and Conditions'.tr,
               subtitle: 'Read the terms and conditions'.tr,
-              ontaps: () {},
+              ontaps: () {
+//Get.toNamed(Routes.TERMS_AND_CONDITIONS);
+              },
             ),
+
             SizedBox(
               height: 1.h,
             ),
+
             _buildSettingCard(
               icon: Icons.shield,
               title: 'Privacy Policy'.tr,
               subtitle: 'View our privacy policy'.tr,
-              ontaps: () {},
+              ontaps: () {
+                // Get.toNamed(Routes.PRIVACY_POLICY);
+              },
             ),
+
             SizedBox(
               height: 1.h,
             ),
+
             _buildSettingCard(
               icon: Icons.thumb_up,
               title: 'Rate us'.tr,
               subtitle: 'Leave a rating and review'.tr,
               ontaps: () {},
             ),
+
             SizedBox(
               height: 1.h,
             ),
+
             _buildSettingCard(
               icon: Icons.logout,
               title: 'Logout'.tr,
@@ -93,6 +123,7 @@ class SettingView extends GetView<SettingController> {
             ),
 
             // Add more notification cards here
+
             // Add more cards here
           ],
         ),
@@ -108,10 +139,15 @@ class SettingView extends GetView<SettingController> {
   }) {
     return Card(
       color: AppColors.whiteOff,
+
       elevation: 0,
+
       // shape: RoundedRectangleBorder(
+
       //   borderRadius: BorderRadius.circular(10),
+
       // ),
+
       child: ListTile(
         leading: Icon(
           icon,
