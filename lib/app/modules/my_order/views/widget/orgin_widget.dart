@@ -118,9 +118,12 @@ class OrginIdWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         height: 4.h,
-                        width: 20.w,
+                        width: 25.w,
                         decoration: BoxDecoration(
-                          color: AppColors.warning,
+                          color:
+                              icsApplication.reviewStatus.contains("REJECTED")
+                                  ? AppColors.danger
+                                  : AppColors.warning,
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Row(
@@ -131,7 +134,7 @@ class OrginIdWidget extends StatelessWidget {
                               icsApplication.reviewStatus,
                               style: AppTextStyles.bodySmallBold.copyWith(
                                 color: AppColors.whiteOff,
-                                fontSize: AppSizes.font_10,
+                                fontSize: 12,
                               ),
                             ),
                           ],

@@ -25,22 +25,16 @@ class PassportWidget extends StatelessWidget {
     required this.controller,
   });
   Widget build(BuildContext context) {
-    return EasyRefresh(
-      onRefresh: () async {
-        await controller.getOrginOrder();
-      },
-      header: MaterialHeader(),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 1.h,
-              ),
-              buildCard(icsApplication)
-            ],
-          ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 1.h,
+            ),
+            buildCard(icsApplication),
+          ],
         ),
       ),
     );
@@ -85,10 +79,12 @@ class PassportWidget extends StatelessWidget {
                         // showModal(context);
                       },
                     ),
-                    Text(icsApplication.applicationType.toString(),
-                        style: AppTextStyles.bodyLargeBold.copyWith(
-                          fontWeight: FontWeight.w400,
-                        )),
+                    Text(
+                      getApplicationame(icsApplication),
+                      style: AppTextStyles.bodyLargeBold.copyWith(
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                     Spacer(),
                   ],
                 ),
@@ -170,9 +166,11 @@ class PassportWidget extends StatelessWidget {
     if (passportIdApplication.renewPassportApplications.isNotEmpty) {
       return passportIdApplication.renewPassportApplications.first.applicationNo
           .toString();
-    } else {
-      return "";
+    } else if (passportIdApplication.newPassportApplications.isNotEmpty) {
+      return passportIdApplication.newPassportApplications.first.applicationNo
+          .toString();
     }
+    return "";
   }
 
   String convertToTimeAgo(String dateString) {
@@ -197,6 +195,17 @@ class PassportWidget extends StatelessWidget {
       }
     } else {
       return AppColors.success;
+    }
+  }
+
+  String getApplicationame(IcsApplication orginApplication) {
+    if (orginApplication.applicationType == "NEW_PASSPORT_APPLICATION") {
+      return "New Passport Application";
+    } else if (orginApplication.applicationType ==
+        "RENEW_PASSPORT_APPLICATION") {
+      return "ReNew Passport Application";
+    } else {
+      return "";
     }
   }
 }

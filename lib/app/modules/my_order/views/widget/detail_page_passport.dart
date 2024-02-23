@@ -52,31 +52,35 @@ class _HomeViewState extends State<DetailPassportWidget> {
           showActions: true,
           showLeading: true,
           actionIcon: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 4.h,
-              width: 20.w,
-              decoration: BoxDecoration(
-                color: widget.icsApplication.reviewStatus.contains("REJECTED")
-                    ? AppColors.danger
-                    : AppColors.warning,
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.icsApplication.reviewStatus,
-                    style: AppTextStyles.bodySmallBold.copyWith(
-                      color: AppColors.whiteOff,
-                      fontSize: 9,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+              padding: const EdgeInsets.all(8.0),
+              child: Obx(
+                () => controller.isfechedorder.value
+                    ? Container(
+                        height: 4.h,
+                        width: 20.w,
+                        decoration: BoxDecoration(
+                          color: widget.icsApplication.reviewStatus
+                                  .contains("REJECTED")
+                              ? AppColors.danger
+                              : AppColors.warning,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.icsApplication.reviewStatus,
+                              style: AppTextStyles.bodySmallBold.copyWith(
+                                color: AppColors.whiteOff,
+                                fontSize: 9,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(),
+              )),
         ),
         backgroundColor: AppColors.whiteOff,
         body: Obx(
@@ -494,9 +498,12 @@ class _HomeViewState extends State<DetailPassportWidget> {
   }
 
   String getAppointmentdate(IcsApplication icsApplication) {
-    String formattedDateTime = DateFormat("EEE/d/yyyy")
-        .format(icsApplication.applicationAppointments.first.date);
-    return formattedDateTime;
+    if (icsApplication.applicationAppointments.isNotEmpty) {
+      String formattedDateTime = DateFormat("EEE/d/yyyy")
+          .format(icsApplication.applicationAppointments.first.date);
+      return formattedDateTime;
+    }
+    return "";
   }
 
   Widget _buildTitle(String title) {
@@ -554,19 +561,8 @@ class _HomeViewState extends State<DetailPassportWidget> {
   }
 
   buildDocument() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 2.h,
-        ),
-        Expanded(child: buildFaqListForNew())
-      ],
-    );
-  }
-
-  ListView buildFaqListForNew() {
     return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
       separatorBuilder: (context, index) => const Divider(
         height: 1.0,
       ),
@@ -585,11 +581,11 @@ class _HomeViewState extends State<DetailPassportWidget> {
 
   getQrData(IcsApplication icsNewApplicationModel) {
     {
-      if (icsNewApplicationModel.renewPassportApplications != null) {
+      if (icsNewApplicationModel.renewPassportApplications.isNotEmpty) {
         return icsNewApplicationModel
             .renewPassportApplications.first.applicationNo
             .toString();
-      } else if (icsNewApplicationModel.newPassportApplications != null) {
+      } else if (icsNewApplicationModel.newPassportApplications.isNotEmpty) {
         return icsNewApplicationModel
             .newPassportApplications.first.applicationNo
             .toString();

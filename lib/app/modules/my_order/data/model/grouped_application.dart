@@ -9,19 +9,3 @@ class GroupedAppliaction {
     required this.document,
   });
 }
-
-class GroupedPassportAppliaction {
-  List<IcsApplication> passport;
-
-  GroupedPassportAppliaction({
-    required this.passport,
-  });
-}
-
-class GroupedOriginAppliaction {
-  IcsApplication origin;
-
-  GroupedOriginAppliaction({
-    required this.origin,
-  });
-}

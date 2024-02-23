@@ -42,41 +42,26 @@ class MyOrderController extends GetxController
   List<CommonModel> base_document_types = [];
   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
 
-  RxList<GroupedOriginAppliaction> groupedOriginAppliaction =
-      List<GroupedOriginAppliaction>.of([]).obs;
   getOrginOrder() async {
+    print("bini");
     networkStatus.value = NetworkStatus.LOADING;
     try {
       dynamic result =
           await graphQLCommonApi.query(getOrginOrders.fetchData(), {});
 
-      allApplicationModel.clear();
-
       if (result != null) {
+        allApplicationModel.clear();
         allApplicationModel.value = (result['ics_applications'] as List)
             .map((e) => IcsApplication.fromMap(e))
             .toList();
 
-        allApplicationModel.forEach((element) {
-          if (element.applicationType.contains("NEW_ORIGIN_ID_APPLICATION") ||
-              element.applicationType.contains("RENEW_ORIGIN_ID_APPLICATION")) {
-            GroupedOriginAppliaction newGroup = GroupedOriginAppliaction(
-              origin: element,
-            );
-
-            groupedOriginAppliaction.add(newGroup);
-
-            print(groupedOriginAppliaction);
-          }
-        });
-
         networkStatus.value = NetworkStatus.SUCCESS;
-      }
 
-      isfechedorder(true);
+        isfechedorder.value = true;
+      }
     } catch (e, s) {
       networkStatus.value = NetworkStatus.ERROR;
-      isfechedorder(false);
+      isfechedorder.value = false;
 
       print(">>>>>>>>>>>>>>>>>> $e");
 
@@ -165,7 +150,6 @@ class MyOrderController extends GetxController
 
         AppToasts.showSuccess("Document uploaded successfully");
         getOrginOrder();
-        update();
       }
     } catch (e) {
       print('Error: $e');

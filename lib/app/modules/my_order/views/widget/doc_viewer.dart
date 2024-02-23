@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -71,12 +72,16 @@ class _BuildDocState extends State<BuildDocViewer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            widget.reviewStatus.toString(),
-                            style: AppTextStyles.bodySmallBold.copyWith(
-                                color: AppColors.whiteOff,
-                                fontSize: AppSizes.font_10),
-                          ),
+                          Obx(
+                            () => widget.controller.isfechedorder.value
+                                ? Text(
+                                    widget.reviewStatus.toString(),
+                                    style: AppTextStyles.bodySmallBold.copyWith(
+                                        color: AppColors.whiteOff,
+                                        fontSize: AppSizes.font_10),
+                                  )
+                                : SizedBox(),
+                          )
                         ],
                       ),
                     ),

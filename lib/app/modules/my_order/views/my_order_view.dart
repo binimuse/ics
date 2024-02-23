@@ -107,23 +107,26 @@ class _MyOrderViewState extends State<MyOrderView> {
                           },
                         ),
                       ),
-                      ListView.builder(
-                        itemCount: controller.allApplicationModel.length,
-                        itemBuilder: (context, index) {
-                          var element = controller.allApplicationModel[index];
-                          if (element.applicationType
-                                  .contains("NEW_PASSPORT_APPLICATION") ||
-                              element.applicationType
-                                  .contains("RENEW_PASSPORT_APPLICATION")) {
-                            return PassportWidget(
-                              icsApplication:
-                                  controller.allApplicationModel[index],
-                              controller: controller,
-                            );
-                          }
+                      Container(
+                        height: 100.h,
+                        child: ListView.builder(
+                          itemCount: controller.allApplicationModel.length,
+                          itemBuilder: (context, index) {
+                            var element = controller.allApplicationModel[index];
+                            if (element.applicationType
+                                    .contains("NEW_PASSPORT_APPLICATION") ||
+                                element.applicationType
+                                    .contains("RENEW_PASSPORT_APPLICATION")) {
+                              return PassportWidget(
+                                icsApplication:
+                                    controller.allApplicationModel[index],
+                                controller: controller,
+                              );
+                            }
 
-                          return SizedBox();
-                        },
+                            return SizedBox();
+                          },
+                        ),
                       ),
                     ],
                   ),

@@ -203,18 +203,18 @@ class _ItemFaqState extends State<ItemDoc> {
 
     if (responseUrl.isNotEmpty) {
       // Response is successful
-      print(responseUrl);
-      widget.controller.sendDoc(
-        widget.documentType.id,
-        responseUrl,
-        widget.applicationId,
-      );
+      setState(() {
+        widget.controller.sendDoc(
+          widget.documentType.id,
+          responseUrl,
+          widget.applicationId,
+        );
+      });
     } else {
       // Response is not successful
       print('Response is false');
     }
 
     // Update the state
-    widget.controller.isSendStared.value = false;
   }
 }
