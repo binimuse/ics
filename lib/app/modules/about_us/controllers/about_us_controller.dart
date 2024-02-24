@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
+import 'package:ics/app/modules/setting/data/model/configartionmodel.dart';
 
 class AboutUsController extends GetxController {
-  //TODO: Implement AboutUsController
-
-  final count = 0.obs;
+  late BaseSiteConfiguration baseSiteConfiguration;
+  dynamic argumentdata = Get.arguments;
   @override
   void onInit() {
+    baseSiteConfiguration = argumentdata["ConfigModel"];
     super.onInit();
   }
 
@@ -18,6 +19,4 @@ class AboutUsController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

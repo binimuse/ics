@@ -211,8 +211,8 @@ class NewOriginIdController extends GetxController
     }
   }
 
-  late DateTime? selectedDate;
-  late DateTime? selectedDateTime;
+  DateTime? selectedDate;
+  DateTime? selectedDateTime;
   Future<void> sendBookedDates(BuildContext context) async {
     networkStatus.value = NetworkStatus.LOADING;
     try {

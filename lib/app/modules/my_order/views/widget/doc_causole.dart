@@ -89,7 +89,8 @@ class _ItemFaqState extends State<ItemDoc> {
                     ),
             ),
           ),
-          widget.listOfDoc[0].documentStatus.contains("REJECTED")
+          widget.listOfDoc[0].documentStatus.contains("REJECTED") ||
+                  !widget.controller.isSendDocSuccess.value
               ? GestureDetector(
                   onTap: () {
                     openPdfPicker();

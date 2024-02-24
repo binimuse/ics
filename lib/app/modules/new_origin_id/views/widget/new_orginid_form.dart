@@ -283,9 +283,10 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                           }
                         } else if (controller.currentStep == 4) {
                           checkdoc();
-                        } else if (controller.currentStep == 6) {
+                        } else if (controller.currentStep == 5) {
                           finalstep(context);
                         } else {
+                          print(controller.currentStep);
                           if (controller.neworginIdformKey.currentState!
                               .saveAndValidate()) {
                             setState(() {

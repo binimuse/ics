@@ -16,8 +16,22 @@ import 'package:sizer/sizer.dart';
 
 import '../controllers/setting_controller.dart';
 
-class SettingView extends GetView<SettingController> {
+class SettingView extends StatefulWidget {
   const SettingView({Key? key}) : super(key: key);
+
+  @override
+  State<SettingView> createState() => _MyOrderViewState();
+}
+
+class _MyOrderViewState extends State<SettingView> {
+  late SettingController controller;
+
+  @override
+  void initState() {
+    controller = Get.put(SettingController());
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +56,9 @@ class SettingView extends GetView<SettingController> {
               title: 'Account'.tr,
               subtitle: 'Manage your Account'.tr,
               ontaps: () {
-                Get.toNamed(Routes.ACCOUNT);
+                Get.toNamed(
+                  Routes.ACCOUNT,
+                );
               },
             ),
 
@@ -55,7 +71,9 @@ class SettingView extends GetView<SettingController> {
               title: 'About us'.tr,
               subtitle: 'Learn more about us'.tr,
               ontaps: () {
-                Get.toNamed(Routes.ABOUT_US);
+                Get.toNamed(Routes.ABOUT_US, arguments: {
+                  "ConfigModel": controller.configurationClassModel
+                });
               },
             ),
 

@@ -150,8 +150,10 @@ class MyOrderController extends GetxController
 
         AppToasts.showSuccess("Document uploaded successfully");
         getOrginOrder();
+        Get.back();
       }
     } catch (e) {
+      isSendDocSuccess(false);
       print('Error: $e');
     }
   }
