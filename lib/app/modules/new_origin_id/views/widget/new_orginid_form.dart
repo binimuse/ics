@@ -54,7 +54,6 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -67,12 +66,6 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
       getDataForStep4();
     }
   }
-
-  final SignatureController _controller = SignatureController(
-    penStrokeWidth: 5,
-    penColor: Colors.red,
-    exportBackgroundColor: Colors.blue,
-  );
 
   final picker = ImagePicker();
   final int maxSizeInBytes = 50 * 1024 * 1024; // 50 MB

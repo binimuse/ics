@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
+import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
@@ -32,6 +33,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 import '../data/quary/get_all_orginid.dart';
 
@@ -412,6 +414,7 @@ class NewOriginIdController extends GetxController
   var isSendStared = false.obs;
   var newApplicationID;
   RxList<String> photoPath = <String>[].obs;
+  RxList<String> signaturePath = <String>[].obs;
   Future<void> send() async {
     networkStatus.value = NetworkStatus.LOADING;
     try {
@@ -459,6 +462,7 @@ class NewOriginIdController extends GetxController
               'application_type': "NEW_ORIGIN_ID_APPLICATION",
               'new_origin_id_applications': {
                 "data": {
+                  'signature': signaturePath.last,
                   'current_passport_expiry_date':
                       passportExpiryDateController.text,
                   'current_passport_issued_date':
@@ -699,7 +703,31 @@ class NewOriginIdController extends GetxController
   var showImage = false.obs;
   ImageProvider? signatureImage;
   void handleDrawFinish() {
+    exportSignatureToFile(signatureController);
     exportSignatureToPng(signatureController);
+  }
+
+  Future<PlatformFile?> exportSignatureToFile(
+      SignatureController signatureController) async {
+    // Get the signature as a Uint8List
+    Uint8List? signatureBytes = await signatureController.toPngBytes();
+
+    // Create a temporary file
+    final tempDir = await getTemporaryDirectory();
+    final file = await File('${tempDir.path}/signature.png').create();
+    await file.writeAsBytes(signatureBytes!);
+
+    // Create a PlatformFile from the file
+    PlatformFile platformFile = PlatformFile(
+      name: 'signature.png',
+      size: file.lengthSync(),
+      bytes: signatureBytes,
+      path: file.path,
+    );
+
+    sendSignature(platformFile);
+
+    return platformFile;
   }
 
   Future<ExportResult> exportSignatureToPng(
@@ -726,6 +754,32 @@ class NewOriginIdController extends GetxController
       showImage.value = false;
       print('Failed to export signature image: $e');
       return ExportResult.error;
+    }
+  }
+
+  sendSignature(PlatformFile pickedFile) async {
+    networkStatus.value = NetworkStatus.LOADING;
+
+    // Perform the async operations
+
+    try {
+      print("bini ${pickedFile}");
+      MinioUploader uploader = MinioUploader();
+      String responseUrl = await uploader.uploadFileToMinio(pickedFile, "");
+
+      if (responseUrl.isNotEmpty) {
+        signaturePath.clear();
+        signaturePath.add(responseUrl);
+        networkStatus.value = NetworkStatus.SUCCESS;
+
+        // Response is successful
+      }
+    } on Exception catch (e, s) {
+      networkStatus.value = NetworkStatus.ERROR;
+
+      // Response is not successful
+
+      print(s);
     }
   }
 
