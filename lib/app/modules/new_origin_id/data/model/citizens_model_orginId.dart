@@ -7,6 +7,7 @@ class IcsApplicationModelOrginId {
   String? birthPlace;
   DateTime? createdAt;
   DateTime? dateOfBirth;
+  String? photo;
   String? eyeColour;
   String? gender;
   String? hairColour;
@@ -40,6 +41,7 @@ class IcsApplicationModelOrginId {
     this.hairColour,
     this.is_adopted,
     this.height,
+    this.photo,
     this.id,
     this.maritalStatus,
     this.occupation_id,
@@ -64,6 +66,7 @@ class IcsApplicationModelOrginId {
       is_adopted: json['is_adopted'],
       nationality_id: json['nationality_id'],
       birthPlace: json['birth_place'],
+      photo: json['photo'],
       createdAt:
           json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       dateOfBirth: json['date_of_birth'] != null

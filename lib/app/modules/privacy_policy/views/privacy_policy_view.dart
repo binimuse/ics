@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/customappbar.dart';
 
 import '../controllers/privacy_policy_controller.dart';
 
@@ -9,13 +10,15 @@ class PrivacyPolicyView extends GetView<PrivacyPolicyController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('PrivacyPolicyView'),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: 'Privacy',
+        title2: 'Policy',
+        showActions: false,
+        showLeading: true,
       ),
-      body: const Center(
+      body: Center(
         child: Text(
-          'PrivacyPolicyView is working',
+          controller.baseSiteConfiguration.first.privacyPolicy!.en.toString(),
           style: TextStyle(fontSize: 20),
         ),
       ),

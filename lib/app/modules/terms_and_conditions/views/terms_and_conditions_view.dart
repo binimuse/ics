@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:ics/app/common/customappbar.dart';
 
 import '../controllers/terms_and_conditions_controller.dart';
 
@@ -9,13 +10,15 @@ class TermsAndConditionsView extends GetView<TermsAndConditionsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('TermsAndConditionsView'),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: 'Terms And',
+        title2: 'Conditions',
+        showActions: false,
+        showLeading: true,
       ),
-      body: const Center(
+      body: Center(
         child: Text(
-          'TermsAndConditionsView is working',
+          controller.baseSiteConfiguration.first.privacyPolicy!.en.toString(),
           style: TextStyle(fontSize: 20),
         ),
       ),

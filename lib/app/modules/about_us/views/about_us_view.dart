@@ -21,10 +21,10 @@ class AboutUsView extends GetView<AboutUsController> {
         showLeading: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Text(
-          "text",
-          style: AppTextStyles.bodySmallBold.copyWith(
+          controller.baseSiteConfiguration.first.siteAbout!.en.toString(),
+          style: AppTextStyles.bodySmallRegular.copyWith(
             color: AppColors.black,
           ),
         ),

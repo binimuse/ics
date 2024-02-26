@@ -12,8 +12,9 @@ class SettingController extends GetxController {
   }
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
+  RxList<BaseSiteConfiguration> configurationClassModel =
+      List<BaseSiteConfiguration>.of([]).obs;
 
-  late BaseSiteConfiguration configurationClassModel = BaseSiteConfiguration();
   var startTermPage = false.obs;
   var hasGetTermFetched = false.obs;
   void getConfigration() async {
@@ -21,16 +22,16 @@ class SettingController extends GetxController {
       final result = await graphQLCommonApi
           .query(ConfigurationQuery.getconfiguration(), {});
       startTermPage(false);
-      print(result);
+
       if (result != null) {
-        configurationClassModel =
-            BaseSiteConfiguration.fromMap(result["base_site_configurations"]);
+        configurationClassModel.value =
+            (result['base_site_configurations'] as List)
+                .map((e) => BaseSiteConfiguration.fromMap(e))
+                .toList();
 
         hasGetTermFetched(true);
-
-        print("base_site_configurations");
       } else {
-        print(result);
+        //print(result);
       }
     } catch (e, s) {
       print(s);

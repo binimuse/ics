@@ -9,6 +9,7 @@ class IcsApplicationModelReNewOrginId {
   DateTime? dateOfBirth;
   String? eyeColour;
   String? gender;
+  String? photo;
   String? hairColour;
   double? height;
   String? id;
@@ -37,6 +38,7 @@ class IcsApplicationModelReNewOrginId {
     this.createdAt,
     this.dateOfBirth,
     this.eyeColour,
+    this.photo,
     this.gender,
     this.hairColour,
     this.is_adopted,
@@ -62,6 +64,7 @@ class IcsApplicationModelReNewOrginId {
       abroadCountryId: json['abroad_country_id'],
       abroadPhoneNumber: json['phone_number'],
       birthCountryId: json['birth_country_id'],
+      photo: json['photo'],
       is_adopted: json['is_adopted'],
       nationality_id: json['nationality_id'],
       birthPlace: json['birth_place'],

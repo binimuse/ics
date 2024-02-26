@@ -99,7 +99,9 @@ class _MyOrderViewState extends State<SettingView> {
               title: 'Terms and Conditions'.tr,
               subtitle: 'Read the terms and conditions'.tr,
               ontaps: () {
-//Get.toNamed(Routes.TERMS_AND_CONDITIONS);
+                Get.toNamed(Routes.TERMS_AND_CONDITIONS, arguments: {
+                  "ConfigModel": controller.configurationClassModel
+                });
               },
             ),
 
@@ -112,7 +114,9 @@ class _MyOrderViewState extends State<SettingView> {
               title: 'Privacy Policy'.tr,
               subtitle: 'View our privacy policy'.tr,
               ontaps: () {
-                // Get.toNamed(Routes.PRIVACY_POLICY);
+                Get.toNamed(Routes.PRIVACY_POLICY, arguments: {
+                  "ConfigModel": controller.configurationClassModel
+                });
               },
             ),
 

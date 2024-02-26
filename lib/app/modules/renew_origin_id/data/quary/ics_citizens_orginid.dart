@@ -18,6 +18,7 @@ query MyQuery {
     height
     id
     marital_status
+    photo
     occupation_id
     skin_colour
     first_name

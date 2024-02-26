@@ -17,6 +17,7 @@ query MyQuery {
     hair_colour
     height
     id
+    photo
     marital_status
     occupation_id
     skin_colour

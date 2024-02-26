@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
+import 'package:ics/app/modules/setting/data/model/configartionmodel.dart';
 
 class TermsAndConditionsController extends GetxController {
-  //TODO: Implement TermsAndConditionsController
-
-  final count = 0.obs;
+  late RxList<BaseSiteConfiguration> baseSiteConfiguration;
+  dynamic argumentdata = Get.arguments;
   @override
   void onInit() {
+    baseSiteConfiguration = argumentdata["ConfigModel"];
+
     super.onInit();
   }
 
@@ -18,6 +20,4 @@ class TermsAndConditionsController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }
