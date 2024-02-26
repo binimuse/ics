@@ -15,7 +15,6 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
-import 'package:ics/app/modules/new_passport/views/widget/summery_newpassport.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
 import 'package:ics/app/modules/renew_passport/data/model/citizens_model_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_four_renew_passport.dart';

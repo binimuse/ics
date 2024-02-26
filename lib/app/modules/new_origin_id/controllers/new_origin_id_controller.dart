@@ -30,7 +30,6 @@ import 'package:flutter/material.dart';
 import 'package:ics/services/graphql_conf.dart';
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:mime/mime.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';

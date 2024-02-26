@@ -1,10 +1,9 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, unnecessary_null_comparison
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
@@ -16,6 +15,9 @@ import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_causole.dart';
+import 'package:ics/app/modules/my_order/views/widget/doc_picker.dart';
+import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
+
 import 'package:ics/gen/assets.gen.dart';
 import 'package:ics/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -46,7 +48,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
-          title: 'Orders',
+          title: 'Order',
           title2: 'Status',
           showActions: true,
           showLeading: true,
@@ -574,22 +576,24 @@ class _HomeViewState extends State<DetailOriginWidget> {
   }
 
   buildDocument() {
-    return ListView.separated(
-      physics: const NeverScrollableScrollPhysics(),
-      separatorBuilder: (context, index) => const Divider(
-        height: 1.0,
-      ),
-      itemCount: controller.groupedAppliaction.length,
-      itemBuilder: (context, index) {
-        return ItemDoc(
-          title: controller.groupedAppliaction[index].documentType.name,
-          documentType: controller.groupedAppliaction[index].documentType,
-          controller: controller,
-          listOfDoc: controller.groupedAppliaction[index].document,
-          applicationId: widget.icsApplication.id,
-        );
-      },
-    );
+    return controller.groupedAppliaction.length != 0
+        ? ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (context, index) => const Divider(
+              height: 1.0,
+            ),
+            itemCount: controller.groupedAppliaction.length,
+            itemBuilder: (context, index) {
+              return ItemDoc(
+                title: controller.groupedAppliaction[index].documentType.name,
+                documentType: controller.groupedAppliaction[index].documentType,
+                controller: controller,
+                listOfDoc: controller.groupedAppliaction[index].document,
+                applicationId: widget.icsApplication.id,
+              );
+            },
+          )
+        : SizedBox();
   }
 
   getnumber(IcsApplication icsApplication) {
@@ -726,5 +730,47 @@ class _HomeViewState extends State<DetailOriginWidget> {
       return formattedDateTime;
     }
     return "";
+  }
+
+  newUpload() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            'Upload document ...',
+            style: AppTextStyles.bodySmallRegular.copyWith(
+                fontSize: AppSizes.font_12, color: AppColors.grayDark),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: controller.base_document_types.length,
+            itemBuilder: (BuildContext context, int index) {
+              CommonModel documentType = controller.base_document_types[index];
+              return BuildDocForOrder(
+                documentType: documentType,
+                controller: controller,
+                applicationId: widget.icsApplication.id,
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                  height: 8.0); // Adjust the space between items as needed
+            },
+          ),
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+      ],
+    );
   }
 }

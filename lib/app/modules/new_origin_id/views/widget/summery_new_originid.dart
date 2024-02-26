@@ -8,7 +8,6 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
-import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 

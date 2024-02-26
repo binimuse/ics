@@ -6,7 +6,6 @@ import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/routes/app_pages.dart';
 import '../controllers/account_controller.dart';
 
 class AccountView extends GetView<AccountController> {

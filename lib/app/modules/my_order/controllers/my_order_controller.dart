@@ -4,6 +4,7 @@ import 'package:ics/app/common/app_toasts.dart';
 
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/my_order/data/model/doc_type_model.dart';
 import 'package:ics/app/modules/my_order/data/model/grouped_application.dart';
 
 import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
@@ -13,9 +14,13 @@ import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart'
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
+import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
+
 import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
 import 'package:ics/services/graphql_conf.dart';
+
+import '../data/quary/get_doc_type.dart';
 
 class MyOrderController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -26,7 +31,7 @@ class MyOrderController extends GetxController
   @override
   void onInit() {
     getOrginOrder();
-
+    getDoc();
     tabController = TabController(length: 6, vsync: this);
 
     super.onInit();
@@ -39,11 +44,10 @@ class MyOrderController extends GetxController
   GetOrginOrder getOrginOrders = GetOrginOrder();
 
   var isfechedorder = false.obs;
-  List<CommonModel> base_document_types = [];
+
   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
 
   getOrginOrder() async {
-    print("bini");
     networkStatus.value = NetworkStatus.LOADING;
     try {
       dynamic result =
@@ -66,6 +70,29 @@ class MyOrderController extends GetxController
       print(">>>>>>>>>>>>>>>>>> $e");
 
       print(">>>>>>>>>>>>>>>>>> $s");
+    }
+  }
+
+  GetDocType getDocType = GetDocType();
+  List<CommonModel> base_document_types = [];
+  List<OrginIDDocuments> documents = [];
+  final Rxn<BaseDocModel> baseData = Rxn<BaseDocModel>();
+  Future<void> getDoc() async {
+    try {
+      dynamic result = await graphQLCommonApi.query(getDocType.fetchData(), {});
+
+      baseData.value = BaseDocModel.fromJson(result);
+
+      base_document_types =
+          baseData.value!.base_document_types.map((e) => e).toList();
+
+      for (var documentType in base_document_types) {
+        documents
+            .add(OrginIDDocuments(documentTypeId: documentType.id, files: []));
+      }
+    } catch (e, s) {
+      print(e);
+      print(s);
     }
   }
 
@@ -149,6 +176,7 @@ class MyOrderController extends GetxController
         isSendDocSuccess(true);
 
         AppToasts.showSuccess("Document uploaded successfully");
+        documents.clear();
         getOrginOrder();
         Get.back();
       }
