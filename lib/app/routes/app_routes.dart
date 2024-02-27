@@ -28,6 +28,7 @@ abstract class Routes {
   static const CONTACT_US = _Paths.CONTACT_US;
   static const TERMS_AND_CONDITIONS = _Paths.TERMS_AND_CONDITIONS;
   static const PRIVACY_POLICY = _Paths.PRIVACY_POLICY;
+  static const LANGUAGE = _Paths.LANGUAGE;
 }
 
 abstract class _Paths {
@@ -57,4 +58,5 @@ abstract class _Paths {
   static const CONTACT_US = '/contact-us';
   static const TERMS_AND_CONDITIONS = '/terms-and-conditions';
   static const PRIVACY_POLICY = '/privacy-policy';
+  static const LANGUAGE = '/language';
 }

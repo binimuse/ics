@@ -130,25 +130,28 @@ class MainPageView extends GetView<MainPageController> {
             bottom: 45.0,
             right: 40.0,
             child: GestureDetector(
-              onTap: () {
-                controller.changeBottomPage(3);
-              },
-              child: Container(
-                width: 13.w,
-                height: 13.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: AppColors.primary,
-                  boxShadow: [],
-                ),
-                child: buildBottomAppBarButton(
-                  Icons.settings,
-                  "Setting".tr,
-                  3,
-                  context,
-                ),
-              ),
-            ),
+                onTap: () {
+                  controller.changeBottomPage(3);
+                },
+                child: Obx(
+                  () => Container(
+                    width: 13.w,
+                    height: 13.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: controller.selectedViewIndex.value == 3
+                          ? AppColors.grayLight
+                          : AppColors.primary,
+                      boxShadow: [],
+                    ),
+                    child: buildBottomAppBarButton(
+                      Icons.settings,
+                      "Setting".tr,
+                      3,
+                      context,
+                    ),
+                  ),
+                )),
           ),
         ]),
       ),
@@ -172,15 +175,13 @@ class MainPageView extends GetView<MainPageController> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Icon(
-                icon,
-                color: controller.selectedViewIndex.value == pageIndex
-                    ? AppColors.primary
-                    : label == "Setting"
-                        ? AppColors.whiteOff
+              Obx(() => Icon(
+                    icon,
+                    color: controller.selectedViewIndex.value == pageIndex
+                        ? AppColors.primary
                         : AppColors.grayLight,
-                size: AppSizes.icon_size_4 * 2,
-              ),
+                    size: AppSizes.icon_size_4 * 2,
+                  )),
             ],
           ),
         ));

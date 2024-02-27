@@ -62,6 +62,17 @@ class _MyOrderViewState extends State<SettingView> {
               },
             ),
 
+            _buildSettingCard(
+              icon: Icons.language,
+              title: 'Language'.tr,
+              subtitle: 'Select your preferred language'.tr,
+              ontaps: () {
+                Get.toNamed(
+                  Routes.LANGUAGE,
+                );
+              },
+            ),
+
             SizedBox(
               height: 1.h,
             ),
