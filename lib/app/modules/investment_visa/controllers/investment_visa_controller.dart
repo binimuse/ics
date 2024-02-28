@@ -15,7 +15,6 @@ import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/booked_date_model.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_booked_date.dart';
-import 'package:ics/app/modules/new_passport/data/quary/get_emabassies.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_url.dart';
 import 'package:ics/app/modules/new_passport/data/quary/ics_citizens.dart';
 
@@ -25,61 +24,73 @@ import 'dart:async';
 import 'dart:io';
 
 class InvestmentVisaController extends GetxController {
-  final TextEditingController AmfatherNameController = TextEditingController();
-  final TextEditingController AmfirstNameController = TextEditingController();
-  final TextEditingController AmgrandFatherNameController =
+  //setp 1
+  final TextEditingController givenNameController = TextEditingController();
+  final TextEditingController surNameController = TextEditingController();
+  final Rxn<CommonModel> gendervalue = Rxn<CommonModel>();
+  List<CommonModel> gender = [];
+  final Rxn<CommonModel> citizenship = Rxn<CommonModel>();
+  final Rxn<CommonModel> birthCountryvalue = Rxn<CommonModel>();
+  final TextEditingController yearController = TextEditingController();
+  final TextEditingController monthController = TextEditingController();
+  final TextEditingController dayController = TextEditingController();
+  final TextEditingController birthplace = TextEditingController();
+  final TextEditingController emailAdress = TextEditingController();
+  List<CommonModel> occupations = [];
+  final Rxn<CommonModel> occupationvalue = Rxn<CommonModel>();
+  //setp 2
+  final Rxn<AllowedContreyModel> countryvalue = Rxn<AllowedContreyModel>();
+  final Rxn<AllowedContreyModel> adresscountryvalue =
+      Rxn<AllowedContreyModel>();
+
+  final TextEditingController addresscityController = TextEditingController();
+  final TextEditingController streetaddressController = TextEditingController();
+  final TextEditingController phonenumber = TextEditingController();
+  //step 3
+
+  final TextEditingController arrivaldDateController = TextEditingController();
+
+  final Rxn<AllowedContreyModel> departurecountry = Rxn<AllowedContreyModel>();
+
+  final TextEditingController departurecity = TextEditingController();
+  final TextEditingController airline = TextEditingController();
+  final TextEditingController flight_Number = TextEditingController();
+
+  //setp 4
+
+  final Rxn<AllowedContreyModel> accommodationtype = Rxn<AllowedContreyModel>();
+  final TextEditingController accommodation_name = TextEditingController();
+  final TextEditingController accommodation_city = TextEditingController();
+  final TextEditingController accommodation_street_address =
       TextEditingController();
+  final TextEditingController accommodation_Telephone = TextEditingController();
+
   RxList<PlatformFile> selectedFile = <PlatformFile>[].obs;
 
-  List<String> SkinColor = [
-    'Black',
-    'Brown',
-    'Blue',
-    'Other',
-  ];
-
-  final TextEditingController addressController = TextEditingController();
   final Rxn<Basemodel> baseData = Rxn<Basemodel>();
   final Rxn<BookedDate> bookedDate = Rxn<BookedDate>();
-  final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
 
   List<AllowedContreyModel> allwoedCountries = [];
   List<CommonModel> base_document_types = [];
   List<PassportDocuments> documents = [];
 
-  final Rxn<CommonModel> birthCountryvalue = Rxn<CommonModel>();
   final Rxn<CommonModel> natinalityvalue = Rxn<CommonModel>();
   final Rxn<CommonModel> familynatinalityvalue = Rxn<CommonModel>();
-  final Rxn<CommonModel> embassiesvalue = Rxn<CommonModel>();
 
   final TextEditingController countryController = TextEditingController();
 
-  final Rxn<AllowedContreyModel> countryvalue = Rxn<AllowedContreyModel>();
-  final Rxn<AllowedContreyModel> currentcountryvalue =
-      Rxn<AllowedContreyModel>();
-
   int currentStep = 0;
   final TextEditingController dateofbirth = TextEditingController();
-  final TextEditingController dayController = TextEditingController();
+
   final Rxn<CommonModel> eyecolorvalue = Rxn<CommonModel>();
 
-  final TextEditingController fatherNameController = TextEditingController();
   //Step 1
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController emailAdress = TextEditingController();
-  final TextEditingController birthplace = TextEditingController();
-  final TextEditingController grandFatherNameController =
-      TextEditingController();
-  final TextEditingController yearController = TextEditingController();
-
-  final TextEditingController arrivaldDateController = TextEditingController();
 
   GetallQueryInvestemntVisa getallQueryInvestemntVisa =
       GetallQueryInvestemntVisa();
   GetBookedDate getBookedDate = GetBookedDate();
   GetUrlQuery geturlQuery = GetUrlQuery();
   Getaicscitizens getaicscitizens = Getaicscitizens();
-  GetEmbassiesQuery getEmbassiesQuery = GetEmbassiesQuery();
 
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
   final Rxn<CommonModel> haircolorvalue = Rxn<CommonModel>();
@@ -87,29 +98,20 @@ class InvestmentVisaController extends GetxController {
   var isSendStared = false.obs;
   //Step 2
 
-  final TextEditingController height = TextEditingController();
-
-  final TextEditingController familyfirstNameController =
-      TextEditingController();
-  final TextEditingController familyFatherNameController =
-      TextEditingController();
-
   var isfeched = false.obs;
-  var isAdoption = false.obs;
+
   var showAdoption = false.obs;
 
   final Rxn<CommonModel> maritalstatusvalue = Rxn<CommonModel>();
-  final Rxn<CommonModel> gendervalue = Rxn<CommonModel>();
 
   List<CommonModel> martial = [];
-  List<CommonModel> gender = [];
-  List<CommonModel> occupations = [];
+
   List<CommonModel> familytype = [];
   List<CommonModel> bcountries = [];
   List<CommonModel> natinality = [];
   List<CommonModel> haircolor = [];
   List<CommonModel> eyecolor = [];
-  final TextEditingController monthController = TextEditingController();
+
   final newPassportformKey = GlobalKey<FormBuilderState>();
   RxList<File> selectedImages = <File>[].obs;
   final phoneFocusNode = FocusNode();
@@ -124,11 +126,6 @@ class InvestmentVisaController extends GetxController {
       return false;
     }
   }
-
-  final Rxn<CommonModel> occupationvalue = Rxn<CommonModel>();
-  final Rxn<CommonModel> familytypevalue = Rxn<CommonModel>();
-  //Step 3
-  final TextEditingController phonenumber = TextEditingController();
 
   final reasonController = TextEditingController();
 
@@ -211,8 +208,6 @@ class InvestmentVisaController extends GetxController {
   }
 
   var isfechedEmbassies = false.obs;
-
-  List<CommonModel> base_embassies = [];
 
   Future<void> getAll() async {
     networkStatus.value = NetworkStatus.LOADING;

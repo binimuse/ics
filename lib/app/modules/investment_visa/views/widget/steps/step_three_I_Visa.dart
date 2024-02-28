@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
-import 'package:ics/app/common/forms/phone_number_input.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
@@ -65,7 +63,7 @@ class _Step3State extends State<Step3_I_Visa> {
           height: 4.h,
         ),
         FormBuilderDateTimePicker(
-          name: 'date_established',
+          name: 'date_Arrival',
           initialValue: null,
           onChanged: (value) {
             controller.arrivaldDateController.value = TextEditingValue(
@@ -100,11 +98,11 @@ class _Step3State extends State<Step3_I_Visa> {
             );
           }).toList(),
           onChanged: (value) {
-            controller.currentcountryvalue.value = value!;
+            controller.departurecountry.value = value!;
           },
           name: 'Departure  Country',
           initialValue: widget.citizenModel != null
-              ? controller.currentcountryvalue.value
+              ? controller.departurecountry.value
               : null,
         ),
         SizedBox(
@@ -112,7 +110,7 @@ class _Step3State extends State<Step3_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: true,
-          controller: controller.addressController,
+          controller: controller.departurecity,
           hint: 'Departure City',
           labelText: 'Departure City',
           validator: ValidationBuilder()
@@ -130,7 +128,7 @@ class _Step3State extends State<Step3_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: false,
-          controller: controller.addressController,
+          controller: controller.airline,
           hint: 'Airline',
           labelText: 'Airline',
           showClearButton: false,
@@ -145,7 +143,7 @@ class _Step3State extends State<Step3_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: false,
-          controller: controller.addressController,
+          controller: controller.flight_Number,
           hint: 'Flight Number',
           labelText: 'Flight Number',
           showClearButton: false,

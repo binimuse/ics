@@ -65,7 +65,7 @@ class Step1_I_Visa extends StatelessWidget {
             validator:
                 ValidationBuilder().required('Given name is required').build(),
             labelText: "Given name",
-            controller: controller.firstNameController,
+            controller: controller.givenNameController,
             inputFormatters: [
               NoNumberInputFormatter(),
             ],
@@ -79,7 +79,7 @@ class Step1_I_Visa extends StatelessWidget {
           ),
           TextFormBuilder(
             isMandatory: true,
-            controller: controller.fatherNameController,
+            controller: controller.surNameController,
             validator:
                 ValidationBuilder().required('Surname is required').build(),
             hint: 'Surname',
@@ -129,11 +129,11 @@ class Step1_I_Visa extends StatelessWidget {
               );
             }).toList(),
             onChanged: (value) {
-              controller.birthCountryvalue.value = value;
+              controller.citizenship.value = value;
             },
             name: 'Citizenship',
-            initialValue: citizenModel != null
-                ? controller.birthCountryvalue.value!
+            initialValue: controller.citizenship != null
+                ? controller.citizenship.value
                 : null,
           ),
           SizedBox(

@@ -13,7 +13,6 @@ import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/services.dart';
 
@@ -80,11 +79,11 @@ class _Step3State extends State<Step4_I_Visa> {
             );
           }).toList(),
           onChanged: (value) {
-            controller.currentcountryvalue.value = value!;
+            controller.accommodationtype.value = value!;
           },
           name: 'Accommodation Type',
           initialValue: widget.citizenModel != null
-              ? controller.currentcountryvalue.value
+              ? controller.adresscountryvalue.value
               : null,
         ),
         SizedBox(
@@ -92,7 +91,7 @@ class _Step3State extends State<Step4_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: true,
-          controller: controller.addressController,
+          controller: controller.accommodation_name,
           hint: 'Accommodation name',
           labelText: 'Accommodation name',
           validator: ValidationBuilder()
@@ -110,7 +109,7 @@ class _Step3State extends State<Step4_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: true,
-          controller: controller.addressController,
+          controller: controller.accommodation_city,
           hint: 'Accommodation City',
           labelText: 'Accommodation City',
           validator: ValidationBuilder()
@@ -128,7 +127,7 @@ class _Step3State extends State<Step4_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: true,
-          controller: controller.addressController,
+          controller: controller.accommodation_street_address,
           hint: 'Accommodation Street Address',
           labelText: 'Accommodation Street Address',
           validator: ValidationBuilder()
@@ -146,7 +145,7 @@ class _Step3State extends State<Step4_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: true,
-          controller: controller.addressController,
+          controller: controller.accommodation_street_address,
           hint: 'Accommodation Telephone',
           labelText: 'Accommodation Telephone',
           validator: ValidationBuilder()

@@ -255,24 +255,27 @@ class ProfileViewInvestmentvisa extends GetView<InvestmentVisaController> {
   }
 
   void clearforstep1() {
-    controller.firstNameController.clear();
-    controller.fatherNameController.clear();
-    controller.grandFatherNameController.clear();
+    controller.givenNameController.clear();
+    controller.surNameController.clear();
+
     controller.birthplace.clear();
-    controller.AmfirstNameController.clear();
-    controller.AmfatherNameController.clear();
-    controller.AmgrandFatherNameController.clear();
+    controller.emailAdress.clear();
+
     controller.dayController.clear();
     controller.monthController.clear();
     controller.yearController.clear();
   }
 
   void clearforstep2() {
-    controller.height.clear();
+    controller.streetaddressController.clear();
+    controller.addresscityController.clear();
+    controller.phonenumber.clear();
   }
 
   void clearforstep3() {
-    controller.addressController.clear();
-    controller.phonenumber.clear();
+    controller.arrivaldDateController.clear();
+    controller.departurecity.clear();
+    controller.airline.clear();
+    controller.flight_Number.clear();
   }
 }

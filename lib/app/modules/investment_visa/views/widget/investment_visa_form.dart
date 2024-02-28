@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -25,7 +23,6 @@ import 'package:ics/app/modules/investment_visa/views/widget/steps/step_two_i_vi
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
 import 'package:ics/app/routes/app_pages.dart';
-import 'package:ics/utils/constants.dart';
 
 import 'package:im_stepper/stepper.dart';
 
@@ -63,7 +60,6 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
       getDataForStep1();
       getDataForStep2();
       getDataForStep3();
-      getDataForStep4();
     }
   }
 
@@ -254,21 +250,7 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
                           horizontal: AppSizes.mp_w_6,
                         ),
                         onPressed: () async {
-                          if (controller.currentStep == 1) {
-                            if (controller.newPassportformKey.currentState!
-                                .saveAndValidate()) {
-                              if (controller.selectedImages.isNotEmpty) {
-                                setState(() {
-                                  controller.currentStep++;
-                                });
-                              } else {
-                                _scrollToBottom();
-                                AppToasts.showError("Please upload a photo.");
-                              }
-                            } else {
-                              _scrollToBottom();
-                            }
-                          } else if (controller.currentStep == 3) {
+                          if (controller.currentStep == 3) {
                             // controller.handleDrawFinish();
                             controller.newPassportformKey.currentState!
                                     .saveAndValidate()
@@ -431,92 +413,49 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
     final citizenModel = widget.citizenModel;
     final firstName = citizenModel!.firstName!;
     final fatherName = citizenModel.father_name!;
-    final grandFatherName = citizenModel.grand_father_name!;
+    final occupationId = citizenModel.occupation_id;
     final birthplace = citizenModel.birthPlace!;
-    final firstNameAm = citizenModel.firstNameJson!.am!;
-    final fatherNameAm = citizenModel.fatherNameJson!.am!;
-    final grandFatherNameAm = citizenModel.grandFatherNameJson!.am!;
+
     final birthCountryId = citizenModel.birthCountryId;
     final nationalityId = citizenModel.nationality_id;
     final gender = citizenModel.gender;
     final dateOfBirth = citizenModel.dateOfBirth!;
 
-    controller.firstNameController.text = firstName;
-    controller.fatherNameController.text = fatherName;
-    controller.grandFatherNameController.text = grandFatherName;
+    controller.givenNameController.text = firstName;
+    controller.surNameController.text = fatherName;
+    controller.gendervalue.value =
+        controller.gender.firstWhere((e) => e.name == gender);
+
     controller.birthplace.text = birthplace;
-    controller.AmfirstNameController.text = firstNameAm;
-    controller.AmfatherNameController.text = fatherNameAm;
-    controller.AmgrandFatherNameController.text = grandFatherNameAm;
-    controller.isAdoption.value = citizenModel.is_adopted!;
+
     controller.birthCountryvalue.value =
         controller.bcountries.firstWhere((e) => e.id == birthCountryId);
     controller.natinalityvalue.value =
         controller.natinality.firstWhere((e) => e.id == nationalityId);
-    controller.gendervalue.value =
-        controller.gender.firstWhere((e) => e.name == gender);
+
     controller.dayController.text = dateOfBirth.day.toString();
     controller.monthController.text = dateOfBirth.month.toString();
     controller.yearController.text = dateOfBirth.year.toString();
+
+    controller.occupationvalue.value =
+        controller.occupations.firstWhere((e) => e.id == occupationId);
   }
 
   void getDataForStep2() {
     final citizenModel = widget.citizenModel;
-    final occupationId = citizenModel!.occupation_id;
-    final hairColour = citizenModel.hairColour;
-    final eyeColour = citizenModel.eyeColour;
-    final skinColour = citizenModel.skinColour!;
-    final height = citizenModel.height!;
-    final maritalStatus = citizenModel.maritalStatus;
-    final photo = citizenModel.photo;
+    final address = citizenModel!.abroadAddress!;
+    final phoneNumber = citizenModel.abroadPhoneNumber!;
+    var addresscontry;
+    // controller.adresscountryvalue.value =
+    //     controller.allwoedCountries.firstWhere((e) => e.id == addresscontry);
 
-    controller.photoPath.add(photo!);
-    controller.selectedImages.add(File(Constants.fileViewer + photo));
-    // controller.selectedImages.add(photo!);
-
-    controller.occupationvalue.value =
-        controller.occupations.firstWhere((e) => e.id == occupationId);
-    controller.haircolorvalue.value =
-        controller.haircolor.firstWhere((e) => e.name == hairColour);
-    controller.eyecolorvalue.value =
-        controller.eyecolor.firstWhere((e) => e.name == eyeColour);
-    controller.skincolorvalue.value = skinColour.toString();
-    controller.height.text = height.toString();
-    controller.maritalstatusvalue.value =
-        controller.martial.firstWhere((e) => e.name == maritalStatus);
+    controller.addresscityController.text = address;
+    controller.streetaddressController.text = address;
+    controller.phonenumber.text = phoneNumber;
   }
 
   void getDataForStep3() {
-    var embassyId;
-    var currentcontry;
     final citizenModel = widget.citizenModel;
-    final abroadCountryId = citizenModel!.abroadCountryId;
-
-    final abroadAddress = citizenModel.abroadAddress!;
-    final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
-
-    if (citizenModel.embassy_id.isNotEmpty) {
-      embassyId = citizenModel.embassy_id;
-      Future.delayed(const Duration(seconds: 2), () {
-        controller.embassiesvalue.value =
-            controller.base_embassies.firstWhere((e) => e.id == embassyId);
-      });
-
-      currentcontry = citizenModel.current_country_id;
-
-      controller.currentcountryvalue.value =
-          controller.allwoedCountries.firstWhere((e) => e.id == currentcontry);
-    }
-
-    controller.countryvalue.value =
-        controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
-
-    controller.addressController.text = abroadAddress;
-    controller.phonenumber.text = abroadPhoneNumber;
-  }
-
-  void getDataForStep4() {
-    controller.familyModelvalue.value = widget.citizenModel!.familyModel!;
   }
 
   _showSummeryDiloag(BuildContext context) {

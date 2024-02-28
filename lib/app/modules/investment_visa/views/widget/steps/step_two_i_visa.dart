@@ -5,13 +5,11 @@ import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
-import 'package:ics/app/common/photo_upload/photo_upload.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
-import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
@@ -80,11 +78,11 @@ class _Step3State extends State<Step2_I_Visa> {
             );
           }).toList(),
           onChanged: (value) {
-            controller.currentcountryvalue.value = value!;
+            controller.adresscountryvalue.value = value!;
           },
           name: 'Address  Country',
           initialValue: widget.citizenModel != null
-              ? controller.currentcountryvalue.value
+              ? controller.adresscountryvalue.value
               : null,
         ),
         SizedBox(
@@ -92,7 +90,7 @@ class _Step3State extends State<Step2_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: true,
-          controller: controller.addressController,
+          controller: controller.addresscityController,
           hint: 'Address city',
           labelText: 'Address city',
           validator:
@@ -109,7 +107,7 @@ class _Step3State extends State<Step2_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: true,
-          controller: controller.addressController,
+          controller: controller.streetaddressController,
           hint: 'Street Address',
           labelText: 'Street Address',
           validator:
