@@ -190,7 +190,11 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
                           controller: controller,
                         ),
 
-                      if (controller.currentStep == 4) Step5_I_Visa(),
+                      if (controller.currentStep == 4)
+                        Step5_I_Visa(
+                          citizenModel: widget.citizenModel,
+                          controller: controller,
+                        ),
 
                       if (controller.currentStep == 5) Step6(),
 
@@ -216,9 +220,7 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
                         color: AppColors.whiteOff,
                       ),
                       textcolor: AppColors.whiteOff,
-                      buttoncolor: controller.areAllTermsSelected()
-                          ? AppColors.grayLight
-                          : AppColors.grayLight,
+                      buttoncolor: AppColors.grayLight,
                       borderRadius: AppSizes.radius_16,
                       padding: EdgeInsets.symmetric(
                         vertical: AppSizes.mp_v_1,
@@ -250,7 +252,7 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
                           horizontal: AppSizes.mp_w_6,
                         ),
                         onPressed: () async {
-                          if (controller.currentStep == 3) {
+                          if (controller.currentStep == 4) {
                             // controller.handleDrawFinish();
                             controller.newPassportformKey.currentState!
                                     .saveAndValidate()

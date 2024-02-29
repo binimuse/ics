@@ -24,6 +24,9 @@ import 'dart:async';
 import 'dart:io';
 
 class InvestmentVisaController extends GetxController {
+//terms
+  final TextEditingController companyreference = TextEditingController();
+
   //setp 1
   final TextEditingController givenNameController = TextEditingController();
   final TextEditingController surNameController = TextEditingController();
@@ -64,6 +67,16 @@ class InvestmentVisaController extends GetxController {
   final TextEditingController accommodation_street_address =
       TextEditingController();
   final TextEditingController accommodation_Telephone = TextEditingController();
+  //step 5
+  final Rxn<AllowedContreyModel> passporttype = Rxn<AllowedContreyModel>();
+  final TextEditingController passport_number = TextEditingController();
+  final TextEditingController passportIssueDate = TextEditingController();
+  final TextEditingController passportexpiryDate = TextEditingController();
+  final Rxn<AllowedContreyModel> passportIssueCountry =
+      Rxn<AllowedContreyModel>();
+  final TextEditingController passportIssueAuthority = TextEditingController();
+
+  var isAgreedToTerms = false.obs;
 
   RxList<PlatformFile> selectedFile = <PlatformFile>[].obs;
 
@@ -83,8 +96,6 @@ class InvestmentVisaController extends GetxController {
   final TextEditingController dateofbirth = TextEditingController();
 
   final Rxn<CommonModel> eyecolorvalue = Rxn<CommonModel>();
-
-  //Step 1
 
   GetallQueryInvestemntVisa getallQueryInvestemntVisa =
       GetallQueryInvestemntVisa();
@@ -138,61 +149,6 @@ class InvestmentVisaController extends GetxController {
   ];
 
   final count = 0.obs;
-  final List<bool> termCheckedList = [
-    false,
-    false,
-    false,
-    false,
-  ].obs;
-  Future<List<NewConfirmationModel>> fetchConfirmationModelCar() async {
-    // simulate network delay
-
-    // This is the dummy data
-    List<Map<String, dynamic>> data = [
-      {
-        "name": "New applicants",
-        "description":
-            "New applicants who are unable to attend on the appointment date will apply again.",
-        "image": Assets.icons.camera,
-      },
-      {
-        "name": "Amharic Keybord",
-        "description":
-            "make sure you have amahric keybord installed on your Phone.",
-        "image": Assets.icons.batteryLow,
-      },
-      {
-        "name": "Document in PDF Fromat",
-        "description": "we only accept documents in PDF format. ",
-        "image": Assets.icons.paper,
-      },
-      {
-        "name": "Passport",
-        "description": "To use more than one passport is strictly prohibited",
-        "image": Assets.icons.origin,
-      },
-    ];
-
-    return data.map((item) => NewConfirmationModel.fromJson(item)).toList();
-  }
-
-  bool isTermChecked(int index) {
-    return termCheckedList[index];
-  }
-
-  void toggleTerm(int index) {
-    termCheckedList[index] = !termCheckedList[index];
-    update();
-  }
-
-  bool areAllTermsSelected() {
-    for (var isChecked in termCheckedList) {
-      if (!isChecked) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   var setFetchedStatus = false.obs;
   var isfechediCitizens = false.obs;

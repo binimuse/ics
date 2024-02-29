@@ -2,14 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ics/app/common/callender/custom_callender.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
+import 'package:ics/app/modules/investment_visa/views/widget/doc_picker_i_visa.dart';
+import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:interval_time_picker/interval_time_picker.dart';
 
 class Step6_I_Visa extends StatelessWidget {
   final InvestmentVisaController controller =
@@ -17,13 +16,12 @@ class Step6_I_Visa extends StatelessWidget {
   // other properties go here
 
   Widget build(BuildContext context) {
-    final DateTime today = DateTime.now();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 20.w,
+          width: 80.w,
           child: Text(
             'Step 6',
             style: AppTextStyles.bodyLargeBold
@@ -36,8 +34,9 @@ class Step6_I_Visa extends StatelessWidget {
           height: 2.h,
         ),
         SizedBox(
+          width: 80.w,
           child: Text(
-            'schedule appointment here',
+            'Upload documents ...',
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,
@@ -47,35 +46,24 @@ class Step6_I_Visa extends StatelessWidget {
         SizedBox(
           height: 4.h,
         ),
-        CustomCalendar(
-          blackoutDates: controller.occupiedDates,
-          minDate: today,
-          maxDate: DateTime(today.year, today.month + 3, today.day),
-          onTap: (CalendarTapDetails details) {
-            controller.selectedDate = details.date!;
-            print(controller.selectedDate);
-
-            // Show the time picker with one-hour intervals
-            showIntervalTimePicker(
-              context: context,
-              initialTime: TimeOfDay.fromDateTime(DateTime.now()),
-              interval: 60,
-            ).then((pickedTime) {
-              if (pickedTime != null) {
-                // Combine the selected date and time
-                DateTime selectedDateTime = DateTime(
-                  controller.selectedDate!.year,
-                  controller.selectedDate!.month,
-                  controller.selectedDate!.day,
-                  pickedTime.hour,
-                  pickedTime.minute,
-                );
-
-                // Update your controller or state with the selectedDateTime
-                controller.selectedDateTime = selectedDateTime;
-              }
-            });
-          },
+        Container(
+          height: 100.h,
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: controller.base_document_types.length,
+            itemBuilder: (BuildContext context, int index) {
+              CommonModel documentType = controller.base_document_types[index];
+              return BuildDoc_I_Visa(
+                documentType: documentType,
+                controller: controller,
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                  height: 8.0); // Adjust the space between items as needed
+            },
+          ),
         ),
         SizedBox(
           height: 2.h,
