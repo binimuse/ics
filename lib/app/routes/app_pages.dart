@@ -4,6 +4,8 @@ import '../modules/about_us/bindings/about_us_binding.dart';
 import '../modules/about_us/views/about_us_view.dart';
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
+import '../modules/complain_page/bindings/complain_page_binding.dart';
+import '../modules/complain_page/views/complain_page_view.dart';
 import '../modules/contact_us/bindings/contact_us_binding.dart';
 import '../modules/contact_us/views/contact_us_view.dart';
 import '../modules/email_verification/bindings/email_verification_binding.dart';
@@ -183,6 +185,11 @@ class AppPages {
       name: _Paths.INVESTMENT_VISA,
       page: () => const InvestmentVisaView(),
       binding: InvestmentVisaBinding(),
+    ),
+    GetPage(
+      name: _Paths.COMPLAIN_PAGE,
+      page: () => const ComplainPageView(),
+      binding: ComplainPageBinding(),
     ),
   ];
 }

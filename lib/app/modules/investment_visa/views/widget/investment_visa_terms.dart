@@ -6,11 +6,9 @@ import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
 
 import 'package:ics/app/common/customappbar.dart';
-import 'package:ics/app/common/forms/check_box.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
 import 'package:ics/app/modules/investment_visa/views/widget/profile_view_i_visa.dart';
 import 'package:sizer/sizer.dart';

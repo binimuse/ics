@@ -30,6 +30,7 @@ abstract class Routes {
   static const PRIVACY_POLICY = _Paths.PRIVACY_POLICY;
   static const LANGUAGE = _Paths.LANGUAGE;
   static const INVESTMENT_VISA = _Paths.INVESTMENT_VISA;
+  static const COMPLAIN_PAGE = _Paths.COMPLAIN_PAGE;
 }
 
 abstract class _Paths {
@@ -61,4 +62,5 @@ abstract class _Paths {
   static const PRIVACY_POLICY = '/privacy-policy';
   static const LANGUAGE = '/language';
   static const INVESTMENT_VISA = '/investment-visa';
+  static const COMPLAIN_PAGE = '/complain-page';
 }

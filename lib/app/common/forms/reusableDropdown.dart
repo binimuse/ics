@@ -13,7 +13,7 @@ class ReusableInputDecoration {
                 text: labelText,
                 style: AppTextStyles.titleBold.copyWith(
                   color: AppColors.grayLight,
-                  fontSize: AppSizes.font_12,
+                  fontSize: AppSizes.font_10,
                 ),
                 children: [
                   TextSpan(

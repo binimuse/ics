@@ -447,7 +447,6 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
     final citizenModel = widget.citizenModel;
     final address = citizenModel!.abroadAddress!;
     final phoneNumber = citizenModel.abroadPhoneNumber!;
-    var addresscontry;
     // controller.adresscountryvalue.value =
     //     controller.allwoedCountries.firstWhere((e) => e.id == addresscontry);
 
@@ -457,7 +456,6 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
   }
 
   void getDataForStep3() {
-    final citizenModel = widget.citizenModel;
   }
 
   _showSummeryDiloag(BuildContext context) {

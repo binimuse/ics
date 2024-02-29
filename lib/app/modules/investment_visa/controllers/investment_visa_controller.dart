@@ -3,8 +3,6 @@ import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/investment_visa/data/query/get_all_renew_orginid.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
-import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
-import 'package:ics/gen/assets.gen.dart';
 
 // ignore_for_file: deprecated_member_use
 

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -6,7 +8,6 @@ import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/investment_visa/views/widget/investment_visa_terms.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/profile_view_i_visa.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controllers/investment_visa_controller.dart';

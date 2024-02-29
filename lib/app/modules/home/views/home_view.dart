@@ -579,6 +579,7 @@ class _HomeViewState extends State<HomeView> {
               iconColor: controller.color[index],
               onPressed: () {
                 if (index == 0) {
+                  Get.toNamed(Routes.COMPLAIN_PAGE);
                 } else if (index == 1) {}
               });
         },
