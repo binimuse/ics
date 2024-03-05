@@ -29,7 +29,7 @@ abstract class Routes {
   static const TERMS_AND_CONDITIONS = _Paths.TERMS_AND_CONDITIONS;
   static const PRIVACY_POLICY = _Paths.PRIVACY_POLICY;
   static const LANGUAGE = _Paths.LANGUAGE;
-  static const INVESTMENT_VISA = _Paths.INVESTMENT_VISA;
+  static const ALL_VISA = _Paths.ALL_VISA;
   static const COMPLAIN_PAGE = _Paths.COMPLAIN_PAGE;
 }
 
@@ -61,6 +61,6 @@ abstract class _Paths {
   static const TERMS_AND_CONDITIONS = '/terms-and-conditions';
   static const PRIVACY_POLICY = '/privacy-policy';
   static const LANGUAGE = '/language';
-  static const INVESTMENT_VISA = '/investment-visa';
+  static const ALL_VISA = '/investment-visa';
   static const COMPLAIN_PAGE = '/complain-page';
 }

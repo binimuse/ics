@@ -8,20 +8,21 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/investment_visa_form.dart';
+import 'package:ics/app/modules/all_visa/views/widget/all_visa_form.dart';
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 
-class ProfileViewInvestmentvisa extends GetView<InvestmentVisaController> {
+class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
   const ProfileViewInvestmentvisa({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Profile',
-        title2: "Page",
+        title: 'Visa',
+        title2: "Applications",
         showLeading: true,
       ),
       backgroundColor: AppColors.whiteOff,
@@ -50,7 +51,7 @@ class ProfileViewInvestmentvisa extends GetView<InvestmentVisaController> {
         SizedBox(
           width: 80.w,
           child: Text(
-            'Your Passport  is an essential document while living in Ethiopia for identification purposes.',
+            'Your Visa  is an essential document for ...',
             style: AppTextStyles.captionRegular.copyWith(
                 fontSize: AppSizes.font_14, color: AppColors.grayDark),
             maxLines: 4,
@@ -90,7 +91,7 @@ class ProfileViewInvestmentvisa extends GetView<InvestmentVisaController> {
                 clearforstep2();
                 clearforstep3();
 
-                Get.to(() => InvestmentVisaForm());
+                Get.to(() => AllVisaForm());
               },
             ),
           ),
@@ -146,7 +147,7 @@ class ProfileViewInvestmentvisa extends GetView<InvestmentVisaController> {
   ) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => InvestmentVisaForm(
+        Get.to(() => AllVisaForm(
               citizenModel: citizen,
             ));
       },

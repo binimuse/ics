@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:ics/app/data/enums.dart';
-import 'package:ics/app/modules/investment_visa/data/query/get_all_renew_orginid.dart';
+import 'package:ics/app/modules/all_visa/data/query/get_all_renew_orginid.dart';
+import 'package:ics/app/modules/evisa/data/models/base_visatype_model.dart';
+
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 
@@ -21,7 +23,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
 
-class InvestmentVisaController extends GetxController {
+class ALLVisaController extends GetxController {
 //terms
   final TextEditingController companyreference = TextEditingController();
 
@@ -81,6 +83,7 @@ class InvestmentVisaController extends GetxController {
   final Rxn<Basemodel> baseData = Rxn<Basemodel>();
   final Rxn<BookedDate> bookedDate = Rxn<BookedDate>();
 
+  BaseVisaTypeModel baseVisaTypeModel = BaseVisaTypeModel();
   List<AllowedContreyModel> allwoedCountries = [];
   List<CommonModel> base_document_types = [];
   List<PassportDocuments> documents = [];
@@ -95,8 +98,7 @@ class InvestmentVisaController extends GetxController {
 
   final Rxn<CommonModel> eyecolorvalue = Rxn<CommonModel>();
 
-  GetallQueryInvestemntVisa getallQueryInvestemntVisa =
-      GetallQueryInvestemntVisa();
+  GetallQueryVisa getallQueryVisa = GetallQueryVisa();
   GetBookedDate getBookedDate = GetBookedDate();
   GetUrlQuery geturlQuery = GetUrlQuery();
   Getaicscitizens getaicscitizens = Getaicscitizens();
@@ -139,12 +141,6 @@ class InvestmentVisaController extends GetxController {
   final reasonController = TextEditingController();
 
   final RxString skincolorvalue = ''.obs;
-  final List<String> investmentType = [
-    'Single entry 30 days',
-    'Multiple entry 90 days',
-    'Multiple entry 6 months',
-    'Multiple entry 1 year',
-  ];
 
   final count = 0.obs;
 
@@ -153,10 +149,12 @@ class InvestmentVisaController extends GetxController {
   RxList<IcsApplicationModel> icsApplicationModel =
       List<IcsApplicationModel>.of([]).obs;
   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
+
   @override
   void onInit() {
     getAll();
     getCitizene();
+    baseVisaTypeModel = Get.arguments["VisaType"];
 
     super.onInit();
   }
@@ -166,8 +164,8 @@ class InvestmentVisaController extends GetxController {
   Future<void> getAll() async {
     networkStatus.value = NetworkStatus.LOADING;
     try {
-      dynamic result = await graphQLCommonApi
-          .query(getallQueryInvestemntVisa.fetchData(), {});
+      dynamic result =
+          await graphQLCommonApi.query(getallQueryVisa.fetchData(), {});
       baseData.value = Basemodel.fromJson(result);
 
       if (baseData.value == null) {

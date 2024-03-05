@@ -7,13 +7,15 @@ import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+
+
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:sizer/sizer.dart';
 
 class BuildDoc_I_Visa extends StatefulWidget {
   final CommonModel documentType;
-  final InvestmentVisaController controller;
+  final ALLVisaController controller;
 
   const BuildDoc_I_Visa({required this.documentType, required this.controller});
 

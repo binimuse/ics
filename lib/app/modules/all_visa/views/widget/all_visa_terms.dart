@@ -9,21 +9,22 @@ import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/profile_view_i_visa.dart';
+import 'package:ics/app/modules/all_visa/views/widget/profile_view_i_visa.dart';
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+
 import 'package:sizer/sizer.dart';
 
 import 'package:ics/app/config/theme/app_sizes.dart';
 
 import 'package:flutter/services.dart';
 
-class InvestmentVisaTerms extends GetView<InvestmentVisaController> {
-  const InvestmentVisaTerms({Key? key}) : super(key: key);
+class AllVisaTerms extends GetView<ALLVisaController> {
+  const AllVisaTerms({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Investment Visa',
+        title: controller.baseVisaTypeModel.name.toString(),
         title2: "Terms",
         showLeading: true,
       ),

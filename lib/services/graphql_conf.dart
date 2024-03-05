@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class GraphQLConfiguration {
   //static const String _baseUrl = "http://196.189.21.165:8080/v1/graphql";
   static const String _baseUrlProduaction = Constants.baseProdactionUrl;
-  static const String _websocketUrl = "ws://196.189.21.165:8080/v1/graphql";
+  static const String _websocketUrl = "ws://196.189.30.153:8080/v1/graphql";
   static const String xhasurarole = "user";
 
   static HttpLink httpLink = HttpLink(_baseUrlProduaction, defaultHeaders: {

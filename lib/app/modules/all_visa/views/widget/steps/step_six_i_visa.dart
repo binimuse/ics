@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/doc_picker_i_visa.dart';
+import 'package:ics/app/modules/all_visa/views/widget/doc_picker_i_visa.dart';
+
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step6_I_Visa extends StatelessWidget {
-  final InvestmentVisaController controller =
-      Get.find<InvestmentVisaController>();
+  final ALLVisaController controller = Get.find<ALLVisaController>();
   // other properties go here
 
   Widget build(BuildContext context) {

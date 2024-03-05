@@ -8,7 +8,9 @@ import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+
+
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/utils/validator_util.dart';
@@ -18,7 +20,7 @@ import 'package:flutter/services.dart';
 
 class Step1_I_Visa extends StatelessWidget {
   final IcsApplicationModel? citizenModel;
-  final InvestmentVisaController controller;
+  final ALLVisaController controller;
 
   Step1_I_Visa({
     this.citizenModel,

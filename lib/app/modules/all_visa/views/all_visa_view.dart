@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/investment_visa_terms.dart';
-import 'package:sizer/sizer.dart';
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+import 'package:ics/app/modules/all_visa/views/widget/all_visa_terms.dart';
 
-import '../controllers/investment_visa_controller.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:ics/app/common/app_icon_button.dart';
 
@@ -20,15 +20,15 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 
-class InvestmentVisaView extends GetView<InvestmentVisaController> {
-  const InvestmentVisaView({Key? key}) : super(key: key);
+class AllVisaView extends GetView<ALLVisaController> {
+  const AllVisaView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Investment',
-        title2: "Visa",
+        title: controller.baseVisaTypeModel.name.toString(),
         showLeading: true,
+        title2: '',
       ),
       backgroundColor: AppColors.whiteOff,
       body: Padding(
@@ -66,13 +66,15 @@ class InvestmentVisaView extends GetView<InvestmentVisaController> {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.investmentType.length,
+              itemCount: controller
+                  .baseVisaTypeModel.visaCategoryValidityTypes!.length,
               itemBuilder: (context, index) {
-                final confirmation = controller.investmentType[index];
+                final confirmation = controller
+                    .baseVisaTypeModel.visaCategoryValidityTypes![index];
 
                 return GestureDetector(
                   onTap: () {
-                    Get.to(InvestmentVisaTerms());
+                    Get.to(AllVisaTerms());
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -103,7 +105,8 @@ class InvestmentVisaView extends GetView<InvestmentVisaController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    confirmation,
+                                    confirmation.visaValidityType!.name
+                                        .toString(),
                                     style: AppTextStyles.bodySmallBold.copyWith(
                                       fontSize: 12.sp,
                                       color: AppColors.black,

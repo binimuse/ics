@@ -13,12 +13,13 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
-import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/steps/step_five_i_visa.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/steps/step_four_i_visa.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/steps/step_one_i_visa.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/steps/step_three_I_Visa.dart';
-import 'package:ics/app/modules/investment_visa/views/widget/steps/step_two_i_visa.dart';
+import 'package:ics/app/modules/all_visa/views/widget/steps/step_five_i_visa.dart';
+import 'package:ics/app/modules/all_visa/views/widget/steps/step_four_i_visa.dart';
+import 'package:ics/app/modules/all_visa/views/widget/steps/step_one_i_visa.dart';
+import 'package:ics/app/modules/all_visa/views/widget/steps/step_three_I_Visa.dart';
+import 'package:ics/app/modules/all_visa/views/widget/steps/step_two_i_visa.dart';
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+
 
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
@@ -31,19 +32,18 @@ import 'package:sizer/sizer.dart';
 import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
-class InvestmentVisaForm extends StatefulWidget {
+class AllVisaForm extends StatefulWidget {
   final IcsApplicationModel? citizenModel;
 
-  const InvestmentVisaForm({
+  const AllVisaForm({
     this.citizenModel,
   });
   @override
   _StepperWithFormExampleState createState() => _StepperWithFormExampleState();
 }
 
-class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
-  final InvestmentVisaController controller =
-      Get.find<InvestmentVisaController>();
+class _StepperWithFormExampleState extends State<AllVisaForm> {
+  final ALLVisaController controller = Get.find<ALLVisaController>();
   final ScrollController _scrollController = ScrollController();
 
   XFile? image;
@@ -455,8 +455,7 @@ class _StepperWithFormExampleState extends State<InvestmentVisaForm> {
     controller.phonenumber.text = phoneNumber;
   }
 
-  void getDataForStep3() {
-  }
+  void getDataForStep3() {}
 
   _showSummeryDiloag(BuildContext context) {
     showDialog(

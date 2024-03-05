@@ -8,7 +8,8 @@ import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/investment_visa/controllers/investment_visa_controller.dart';
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:sizer/sizer.dart';
@@ -18,7 +19,7 @@ import 'package:flutter/services.dart';
 
 class Step5_I_Visa extends StatefulWidget {
   final IcsApplicationModel? citizenModel;
-  final InvestmentVisaController controller;
+  final ALLVisaController controller;
 
   const Step5_I_Visa({
     this.citizenModel,
@@ -29,8 +30,7 @@ class Step5_I_Visa extends StatefulWidget {
 }
 
 class _Step3State extends State<Step5_I_Visa> {
-  final InvestmentVisaController controller =
-      Get.find<InvestmentVisaController>();
+  final ALLVisaController controller = Get.find<ALLVisaController>();
 
   // other properties go here
   Widget build(BuildContext context) {

@@ -390,13 +390,4 @@ class SummaryDialogNewPassport extends StatelessWidget {
       ),
     );
   }
-
-  void show() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return this;
-      },
-    );
-  }
 }

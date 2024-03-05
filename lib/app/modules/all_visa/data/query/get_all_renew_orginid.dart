@@ -1,4 +1,4 @@
-class GetallQueryInvestemntVisa {
+class GetallQueryVisa {
   dynamic fetchData() {
     return """
 {
