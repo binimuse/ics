@@ -50,7 +50,7 @@ class _MyOrderViewState extends State<MyOrderView> {
       child: SafeArea(
         child: Container(
           child: DefaultTabController(
-            length: 2,
+            length: 3,
             child: Stack(
               children: [
                 Padding(
@@ -62,7 +62,7 @@ class _MyOrderViewState extends State<MyOrderView> {
                     indicatorColor: AppColors.primary,
                     tabTextColor: Colors.black45,
                     selectedTabTextColor: Colors.white,
-                    squeezeIntensity: 2,
+                    squeezeIntensity: 3,
                     height: 45,
                     tabPadding: const EdgeInsets.symmetric(horizontal: 8),
                     textStyle: AppTextStyles.bodyLargeBold.copyWith(
@@ -75,6 +75,10 @@ class _MyOrderViewState extends State<MyOrderView> {
                       ),
                       SegmentTab(
                         label: 'Passport',
+                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
+                      ),
+                      SegmentTab(
+                        label: 'Visa',
                         // For example, this overrides [indicatorColor] from [SegmentedTabControl]
                       ),
                     ],
@@ -102,6 +106,27 @@ class _MyOrderViewState extends State<MyOrderView> {
                                 controller: controller,
                               );
                             }
+                            return SizedBox();
+                          },
+                        ),
+                      ),
+                      Container(
+                        height: 100.h,
+                        child: ListView.builder(
+                          itemCount: controller.allApplicationModel.length,
+                          itemBuilder: (context, index) {
+                            var element = controller.allApplicationModel[index];
+                            if (element.applicationType
+                                    .contains("NEW_PASSPORT_APPLICATION") ||
+                                element.applicationType
+                                    .contains("RENEW_PASSPORT_APPLICATION")) {
+                              return PassportWidget(
+                                icsApplication:
+                                    controller.allApplicationModel[index],
+                                controller: controller,
+                              );
+                            }
+
                             return SizedBox();
                           },
                         ),
