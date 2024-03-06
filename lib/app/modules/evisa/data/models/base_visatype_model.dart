@@ -84,21 +84,25 @@ class VisaCategory {
 class DocumentCategory {
   String? id;
   String? name;
+  String? code;
 
   DocumentCategory({
     this.id,
     this.name,
+    this.code,
   });
 
   factory DocumentCategory.fromMap(Map<String, dynamic> json) =>
       DocumentCategory(
         id: json["id"],
         name: json["name"],
+        code: json["code"],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "name": name,
+        "code": code,
       };
 }
 

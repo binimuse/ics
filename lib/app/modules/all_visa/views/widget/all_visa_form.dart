@@ -13,16 +13,16 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_five_i_visa.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_four_i_visa.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_one_i_visa.dart';
+import 'package:ics/app/modules/all_visa/views/widget/steps/step_six_i_visa.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_three_I_Visa.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_two_i_visa.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+import 'package:ics/app/modules/all_visa/views/widget/summery_all_visa.dart';
 
-
-import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
-import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
 import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:im_stepper/stepper.dart';
@@ -33,10 +33,10 @@ import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AllVisaForm extends StatefulWidget {
-  final IcsApplicationModel? citizenModel;
+  final IcsVisaApplicationModel? visaApplicationModel;
 
   const AllVisaForm({
-    this.citizenModel,
+    this.visaApplicationModel,
   });
   @override
   _StepperWithFormExampleState createState() => _StepperWithFormExampleState();
@@ -56,10 +56,12 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
 
   void initState() {
     super.initState();
-    if (widget.citizenModel != null) {
+    if (widget.visaApplicationModel != null) {
       getDataForStep1();
       getDataForStep2();
       getDataForStep3();
+      getDataForStep4();
+      getDataForStep5();
     }
   }
 
@@ -76,8 +78,8 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
     return Scaffold(
       appBar: CustomAppBar(
         stoppop: true,
-        title: 'Investment',
-        title2: "Visa Form",
+        title: controller.baseVisaTypeModel.name.toString(),
+        title2: "Form",
         showLeading: true,
       ),
       body: Stack(
@@ -141,7 +143,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                 color: AppColors.whiteOff,
               ),
               Icon(
-                Icons.calendar_month,
+                Icons.file_copy,
                 color: AppColors.whiteOff,
               ),
             ],
@@ -170,33 +172,33 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                     children: [
                       if (controller.currentStep == 0)
                         Step1_I_Visa(
-                          citizenModel: widget.citizenModel,
+                          citizenModel: widget.visaApplicationModel,
                           controller: controller,
                         ),
 
                       if (controller.currentStep == 1)
                         Step2_I_Visa(
-                          citizenModel: widget.citizenModel,
+                          citizenModel: widget.visaApplicationModel,
                           controller: controller,
                         ),
                       if (controller.currentStep == 2)
                         Step3_I_Visa(
-                          citizenModel: widget.citizenModel,
+                          citizenModel: widget.visaApplicationModel,
                           controller: controller,
                         ),
                       if (controller.currentStep == 3)
                         Step4_I_Visa(
-                          citizenModel: widget.citizenModel,
+                          citizenModel: widget.visaApplicationModel,
                           controller: controller,
                         ),
 
                       if (controller.currentStep == 4)
                         Step5_I_Visa(
-                          citizenModel: widget.citizenModel,
+                          citizenModel: widget.visaApplicationModel,
                           controller: controller,
                         ),
 
-                      if (controller.currentStep == 5) Step6(),
+                      if (controller.currentStep == 5) Step6_I_Visa(),
 
                       // Add more form fields as needed for each step
                     ],
@@ -258,10 +260,8 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                                     .saveAndValidate()
                                 ? _showSummeryDiloag(context)
                                 : SizedBox();
-                          } else if (controller.currentStep == 4) {
-                            checkdoc();
                           } else if (controller.currentStep == 5) {
-                            finalstep(context);
+                            checkdoc(context);
                           } else {
                             if (controller.newPassportformKey.currentState!
                                 .saveAndValidate()) {
@@ -281,7 +281,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
     );
   }
 
-  void checkdoc() async {
+  void checkdoc(BuildContext context) async {
     if (controller.documents.isEmpty) {
       AppToasts.showError("Document are empty");
       return;
@@ -290,21 +290,8 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      await controller.updateNewApplication();
-      if (controller.isUpdateSuccess.value) {
-        setState(() {
-          controller.currentStep++;
-        });
-      }
-    }
-  }
-
-  void finalstep(BuildContext context) {
-    if (controller.selectedDate != null ||
-        controller.selectedDateTime != null) {
-      controller.sendBookedDates(context);
-    } else {
-      AppToasts.showError("Please select both a date and a time");
+      print("object");
+      controller.updateNewApplication();
     }
   }
 
@@ -412,19 +399,26 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
   }
 
   void getDataForStep1() {
-    final citizenModel = widget.citizenModel;
-    final firstName = citizenModel!.firstName!;
-    final fatherName = citizenModel.father_name!;
-    final occupationId = citizenModel.occupation_id;
-    final birthplace = citizenModel.birthPlace!;
+    final visaApplication = widget.visaApplicationModel;
+    final firstName = visaApplication!.givenName!;
+    final fatherName = visaApplication.surname!;
+    final gender = visaApplication.gender;
+    final occupationId = visaApplication.occupationId;
+    final email = visaApplication.email;
+    final citizenshipId = visaApplication.birthCountryId;
+    controller.citizenship.value =
+        controller.natinality.firstWhere((e) => e.id == citizenshipId);
 
-    final birthCountryId = citizenModel.birthCountryId;
-    final nationalityId = citizenModel.nationality_id;
-    final gender = citizenModel.gender;
-    final dateOfBirth = citizenModel.dateOfBirth!;
+    final birthplace = visaApplication.birthPlace!;
+
+    final birthCountryId = visaApplication.birthCountryId;
+    final nationalityId = visaApplication.nationalityId;
+
+    final dateOfBirth = visaApplication.birthDate!;
 
     controller.givenNameController.text = firstName;
     controller.surNameController.text = fatherName;
+    controller.emailAdress.text = email!;
     controller.gendervalue.value =
         controller.gender.firstWhere((e) => e.name == gender);
 
@@ -444,32 +438,85 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
   }
 
   void getDataForStep2() {
-    final citizenModel = widget.citizenModel;
-    final address = citizenModel!.abroadAddress!;
-    final phoneNumber = citizenModel.abroadPhoneNumber!;
-    // controller.adresscountryvalue.value =
-    //     controller.allwoedCountries.firstWhere((e) => e.id == addresscontry);
+    final citizenModel = widget.visaApplicationModel;
+    final address = citizenModel!.streetAddress!;
+    final phoneNumber = citizenModel.phoneNumber!;
+    final addresscontry = citizenModel.abroadCountry!;
+
+    controller.adresscountryvalue.value =
+        controller.allwoedCountries.firstWhere((e) => e.id == addresscontry.id);
 
     controller.addresscityController.text = address;
     controller.streetaddressController.text = address;
     controller.phonenumber.text = phoneNumber;
   }
 
-  void getDataForStep3() {}
+  void getDataForStep3() {
+    final visaApplication = widget.visaApplicationModel;
+    final arrivaldDate = visaApplication!.arrivalDate!;
+    final departurecountry = visaApplication.departureCountry!;
+    final departurecity = visaApplication.city!;
+    final airline = visaApplication.airline!;
+    final flightnumber = visaApplication.flightNumber!;
+
+    controller.departurecountry.value = controller.allwoedCountries
+        .firstWhere((e) => e.id == departurecountry.id);
+    controller.arrivaldDateController.text = arrivaldDate.toString();
+    controller.arrivaldDateController.text = arrivaldDate.toString();
+    controller.departurecity.text = departurecity.toString();
+    controller.flight_Number.text = flightnumber.toString();
+    controller.airline.text = airline.toString();
+  }
+
+  void getDataForStep4() {
+    final visaApplication = widget.visaApplicationModel;
+    final accommodation = visaApplication!.accommodationTypeId;
+
+    controller.accommodationtypevalue.value =
+        controller.accommodationTypes.firstWhere((e) => e.id == accommodation);
+    final accommodationname = visaApplication.accommodationName!;
+    final accommodationcity = visaApplication.accommodationCity!;
+    final accommodationaddress = visaApplication.accommodationCity!;
+    final accommodationphone = visaApplication.accommodationTelephone!;
+
+    controller.accommodation_name.text = accommodationname.toString();
+    controller.accommodation_city.text = accommodationcity.toString();
+    controller.accommodation_street_address.text =
+        accommodationaddress.toString();
+
+    controller.accommodation_Telephone.text = accommodationphone.toString();
+  }
+
+  void getDataForStep5() {
+    final visaApplication = widget.visaApplicationModel;
+    final passporttype = visaApplication!.passportType;
+    final passpornumber = visaApplication.passportNumber!;
+    final passporissueDate = visaApplication.passportIssuedDate!;
+    final passporexpiryDate = visaApplication.passportExpiryDate!;
+    final passportissueAuthority = visaApplication.passportIssuingAuthority!;
+    final passportIssueCountry = visaApplication.passportIssuingCountryId!;
+    controller.passporttypevalue.value =
+        controller.passportTypes.firstWhere((e) => e.id == passporttype!.id);
+    controller.passport_number.text = passpornumber.toString();
+    controller.passportIssueDate.text = passporissueDate.toString();
+    controller.passportexpiryDate.text = passporexpiryDate.toString();
+    controller.passportIssueCountry.value = controller.allwoedCountries
+        .firstWhere((e) => e.id == passportIssueCountry);
+    controller.passportIssueAuthority.text = passportissueAuthority.toString();
+  }
 
   _showSummeryDiloag(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SizedBox();
-        // return SummaryDialogNewPassport(
-        //   context: context,
-        //   controller: controller,
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //     createCitizen();
-        //   },
-        // );
+        return SummaryAllVisa(
+          context: context,
+          controller: controller,
+          onTap: () {
+            Navigator.pop(context);
+            createCitizen();
+          },
+        );
       },
     );
   }

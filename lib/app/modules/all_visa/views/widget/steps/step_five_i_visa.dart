@@ -9,16 +9,16 @@ import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
 
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
-import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 
 class Step5_I_Visa extends StatefulWidget {
-  final IcsApplicationModel? citizenModel;
+  final IcsVisaApplicationModel? citizenModel;
   final ALLVisaController controller;
 
   const Step5_I_Visa({
@@ -65,10 +65,9 @@ class _Step3State extends State<Step5_I_Visa> {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration('Passport Type',
-              isMandatory: true),
-          items: controller.allwoedCountries.map((AllowedContreyModel value) {
-            return DropdownMenuItem<AllowedContreyModel>(
+          decoration: ReusableInputDecoration.getDecoration('Passport Type'),
+          items: controller.passportTypes.map((CommonModel value) {
+            return DropdownMenuItem<CommonModel>(
               value: value,
               child: Text(
                 value.name,
@@ -78,11 +77,11 @@ class _Step3State extends State<Step5_I_Visa> {
             );
           }).toList(),
           onChanged: (value) {
-            controller.passporttype.value = value!;
+            controller.passporttypevalue.value = value!;
           },
           name: 'Passport Type',
           initialValue: widget.citizenModel != null
-              ? controller.passporttype.value
+              ? controller.passporttypevalue.value
               : null,
         ),
         SizedBox(
@@ -107,8 +106,10 @@ class _Step3State extends State<Step5_I_Visa> {
           height: 2.h,
         ),
         FormBuilderDateTimePicker(
-          name: 'date_Arrival',
-          initialValue: null,
+          name: 'Pasport_Issue_Date',
+          initialValue: widget.citizenModel != null
+              ? DateTime.parse(controller.passportIssueDate.text)
+              : null,
           onChanged: (value) {
             controller.passportIssueDate.value = TextEditingValue(
               text: value.toString(),
@@ -129,8 +130,10 @@ class _Step3State extends State<Step5_I_Visa> {
           height: 2.h,
         ),
         FormBuilderDateTimePicker(
-          name: 'date_Arrival',
-          initialValue: null,
+          name: 'Pasport_Expiry_Date',
+          initialValue: widget.citizenModel != null
+              ? DateTime.parse(controller.passportexpiryDate.text)
+              : null,
           onChanged: (value) {
             controller.passportexpiryDate.value = TextEditingValue(
               text: value.toString(),

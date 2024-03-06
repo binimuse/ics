@@ -10,16 +10,16 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
 
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
-import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 import 'package:flutter/services.dart';
 
 class Step4_I_Visa extends StatefulWidget {
-  final IcsApplicationModel? citizenModel;
+  final IcsVisaApplicationModel? citizenModel;
   final ALLVisaController controller;
 
   const Step4_I_Visa({
@@ -66,11 +66,10 @@ class _Step3State extends State<Step4_I_Visa> {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          decoration: ReusableInputDecoration.getDecoration(
-              'Accommodation Type',
-              isMandatory: true),
-          items: controller.allwoedCountries.map((AllowedContreyModel value) {
-            return DropdownMenuItem<AllowedContreyModel>(
+          decoration:
+              ReusableInputDecoration.getDecoration('Accommodation Type'),
+          items: controller.accommodationTypes.map((CommonModel value) {
+            return DropdownMenuItem<CommonModel>(
               value: value,
               child: Text(
                 value.name,
@@ -80,11 +79,11 @@ class _Step3State extends State<Step4_I_Visa> {
             );
           }).toList(),
           onChanged: (value) {
-            controller.accommodationtype.value = value!;
+            controller.accommodationtypevalue.value = value!;
           },
           name: 'Accommodation Type',
           initialValue: widget.citizenModel != null
-              ? controller.adresscountryvalue.value
+              ? controller.accommodationtypevalue.value
               : null,
         ),
         SizedBox(
@@ -154,7 +153,10 @@ class _Step3State extends State<Step4_I_Visa> {
               .build(),
           showClearButton: false,
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(
+                15), // Limit the input to 10 digits
+            // Custom formatter for phone numbers
           ],
           autoFocus: false,
           onChanged: (value) {},

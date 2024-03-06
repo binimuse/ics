@@ -9,17 +9,16 @@ import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
-
+import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
 
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
-import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/utils/validator_util.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 import 'package:flutter/services.dart';
 
 class Step1_I_Visa extends StatelessWidget {
-  final IcsApplicationModel? citizenModel;
+  final IcsVisaApplicationModel? citizenModel;
   final ALLVisaController controller;
 
   Step1_I_Visa({
@@ -206,9 +205,6 @@ class Step1_I_Visa extends StatelessWidget {
                 .build(),
             labelText: "Email address",
             controller: controller.emailAdress,
-            inputFormatters: [
-              NoNumberInputFormatter(),
-            ],
             hint: 'Email address',
             showClearButton: false,
             autoFocus: false,

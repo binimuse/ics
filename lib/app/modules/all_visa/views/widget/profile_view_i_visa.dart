@@ -8,10 +8,10 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
 import 'package:ics/app/modules/all_visa/views/widget/all_visa_form.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
 
-import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
@@ -116,18 +116,18 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(height: AppSizes.mp_v_2 * 1.5),
-                          controller.icsApplicationModel.isEmpty
-                              ? EmpityWidget(title: "No Application Found")
+                          controller.icsVisaApplicationModel.isEmpty
+                              ? EmpityWidget(title: "No visa Application Found")
                               : ListView.separated(
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
                                   itemCount:
-                                      controller.icsApplicationModel.length,
+                                      controller.icsVisaApplicationModel.length,
                                   separatorBuilder: (context, index) =>
                                       SizedBox(height: AppSizes.mp_v_2 * 1.5),
                                   itemBuilder: (context, index) {
-                                    var citizen =
-                                        controller.icsApplicationModel[index];
+                                    var citizen = controller
+                                        .icsVisaApplicationModel[index];
                                     return buildInfoItem(citizen);
                                   },
                                 ),
@@ -143,12 +143,12 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
   }
 
   Widget buildInfoItem(
-    IcsApplicationModel citizen,
+    IcsVisaApplicationModel citizen,
   ) {
     return GestureDetector(
       onTap: () {
         Get.to(() => AllVisaForm(
-              citizenModel: citizen,
+              visaApplicationModel: citizen,
             ));
       },
       child: Container(
@@ -187,11 +187,9 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
                     width: AppSizes.mp_v_1,
                   ),
                   Text(
-                    citizen.firstName.toString() +
+                    citizen.givenName.toString() +
                         " " +
-                        citizen.father_name.toString() +
-                        " " +
-                        citizen.grand_father_name.toString(),
+                        citizen.surname.toString(),
                     style: AppTextStyles.bodySmallBold.copyWith(
                         color: AppColors.grayDark,
                         fontSize: AppSizes.font_12 * 1.0),
@@ -218,7 +216,7 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
                         width: 1.w,
                       ),
                       Text(
-                        citizen.abroadAddress.toString(),
+                        citizen.abroadCountry!.name.toString(),
                         style: AppTextStyles.bodySmallRegular.copyWith(
                           color: AppColors.grayDark,
                         ),
@@ -239,7 +237,7 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
                         width: 1.w,
                       ),
                       Text(
-                        citizen.abroadPhoneNumber.toString(),
+                        citizen.phoneNumber.toString(),
                         style: AppTextStyles.bodySmallRegular.copyWith(
                           color: AppColors.grayDark,
                         ),

@@ -251,7 +251,7 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
     if (responseUrl.isNotEmpty) {
       // Response is successful
       print(responseUrl);
-      widget.controller.sendDoc(
+      widget.controller.sendDocs(
         widget.documentType.id,
         responseUrl,
       );

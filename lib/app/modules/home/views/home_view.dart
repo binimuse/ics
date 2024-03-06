@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
@@ -36,146 +37,24 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Hello',
-        title2: "welcome",
-        logo: AppAssets.splasehimage2,
-        showActions: true,
-        actionIcon: SvgPicture.asset(
-          color: AppColors.primary,
-          Assets.icons.questionmark,
-          height: 6.w,
-          width: 9.w,
+        appBar: CustomAppBar(
+          title: 'Hello',
+          title2: "welcome",
+          logo: AppAssets.splasehimage2,
+          showActions: true,
+          actionIcon: SvgPicture.asset(
+            color: AppColors.primary,
+            Assets.icons.questionmark,
+            height: 6.w,
+            width: 9.w,
+          ),
+          routeName: Routes.HELP,
+          showLeading: false,
         ),
-        routeName: Routes.HELP,
-        showLeading: false,
-      ),
-      backgroundColor: AppColors.whiteOff.withOpacity(0.9),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 1.h,
-          ),
-          __buildBanner(),
-          TabBar(
-            controller: controller.tabController,
-            tabAlignment: TabAlignment.start,
-            isScrollable: true,
-            labelStyle: AppTextStyles.bodyLargeBold
-                .copyWith(fontSize: AppSizes.font_10, color: AppColors.primary),
-            tabs: [
-              Tab(
-                  text: 'Passport',
-                  icon: SvgPicture.asset(
-                    Assets.icons.passport,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-              Tab(
-                  text: 'Origin ID',
-                  icon: SvgPicture.asset(
-                    Assets.icons.profileDefault,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-              Tab(
-                  text: 'Visa',
-                  icon: SvgPicture.asset(
-                    Assets.icons.paper,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-              Tab(
-                  text: 'Resident Permit',
-                  icon: SvgPicture.asset(
-                    Assets.icons.memo,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-              Tab(
-                  text: 'Service Complaint',
-                  icon: SvgPicture.asset(
-                    Assets.icons.question,
-                    color: AppColors.primary,
-                    fit: BoxFit.contain,
-                  )),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: controller.tabController,
-              children: [
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildPassport(context),
-                        buildcardsPassport(),
-                      ],
-                    ),
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildOrgin(context),
-                        buildOriginId(),
-                      ],
-                    ),
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildEVisa(context),
-                        buildEVisaCard(),
-                      ],
-                    ),
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildRE(context),
-                        buildRECard(),
-                      ],
-                    ),
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildSC(context),
-                        buildbuildSCCard(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        backgroundColor: AppColors.whiteOff.withOpacity(0.9),
+        body: Obx(() => controller.hasgettype.value
+            ? buildBody()
+            : Center(child: CustomLoadingWidget())));
   }
 
   __buildBanner() {
@@ -584,6 +463,133 @@ class _HomeViewState extends State<HomeView> {
               });
         },
       ),
+    );
+  }
+
+  buildBody() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 1.h,
+        ),
+        __buildBanner(),
+        TabBar(
+          controller: controller.tabController,
+          tabAlignment: TabAlignment.start,
+          isScrollable: true,
+          labelStyle: AppTextStyles.bodyLargeBold
+              .copyWith(fontSize: AppSizes.font_10, color: AppColors.primary),
+          tabs: [
+            Tab(
+                text: 'Passport',
+                icon: SvgPicture.asset(
+                  Assets.icons.passport,
+                  color: AppColors.primary,
+                  fit: BoxFit.contain,
+                )),
+            Tab(
+                text: 'Origin ID',
+                icon: SvgPicture.asset(
+                  Assets.icons.profileDefault,
+                  color: AppColors.primary,
+                  fit: BoxFit.contain,
+                )),
+            Tab(
+                text: 'Visa',
+                icon: SvgPicture.asset(
+                  Assets.icons.paper,
+                  color: AppColors.primary,
+                  fit: BoxFit.contain,
+                )),
+            Tab(
+                text: 'Resident Permit',
+                icon: SvgPicture.asset(
+                  Assets.icons.memo,
+                  color: AppColors.primary,
+                  fit: BoxFit.contain,
+                )),
+            Tab(
+                text: 'Service Complaint',
+                icon: SvgPicture.asset(
+                  Assets.icons.question,
+                  color: AppColors.primary,
+                  fit: BoxFit.contain,
+                )),
+          ],
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: controller.tabController,
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildPassport(context),
+                      buildcardsPassport(),
+                    ],
+                  ),
+                ),
+              ),
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildOrgin(context),
+                      buildOriginId(),
+                    ],
+                  ),
+                ),
+              ),
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildEVisa(context),
+                      buildEVisaCard(),
+                    ],
+                  ),
+                ),
+              ),
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildRE(context),
+                      buildRECard(),
+                    ],
+                  ),
+                ),
+              ),
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildSC(context),
+                      buildbuildSCCard(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

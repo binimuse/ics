@@ -512,7 +512,6 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     controller.countryvalue.value =
         controller.allwoedCountries.firstWhere((e) => e.id == abroadCountryId);
 
-    controller.getEmbassies(controller.countryvalue.value!.id);
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
   }

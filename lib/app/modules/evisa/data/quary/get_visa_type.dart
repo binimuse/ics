@@ -15,6 +15,7 @@ class GetVisaTypeQuery {
         {
           id
           name
+          code
         }
         
       }

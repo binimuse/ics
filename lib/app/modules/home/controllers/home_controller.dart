@@ -120,8 +120,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     getRenewtypePassport();
 
-    getRenewtype();
-
     super.onInit();
   }
 
@@ -195,7 +193,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
               .map((e) => BaseOriginIdRenewalType.fromJson(e))
               .toList();
 
-      hasgettype(true);
+      getRenewtype();
     } else {
       hasgettype(false);
 

@@ -7,17 +7,16 @@ import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
-
+import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
 
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
-import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
 class Step3_I_Visa extends StatefulWidget {
-  final IcsApplicationModel? citizenModel;
+  final IcsVisaApplicationModel? citizenModel;
   final ALLVisaController controller;
 
   const Step3_I_Visa({
@@ -65,7 +64,9 @@ class _Step3State extends State<Step3_I_Visa> {
         ),
         FormBuilderDateTimePicker(
           name: 'date_Arrival',
-          initialValue: null,
+          initialValue: widget.citizenModel != null
+              ? DateTime.parse(controller.arrivaldDateController.text)
+              : null,
           onChanged: (value) {
             controller.arrivaldDateController.value = TextEditingValue(
               text: value.toString(),
