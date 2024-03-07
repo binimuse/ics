@@ -14,3 +14,18 @@ class GetUrlModel {
     );
   }
 }
+
+class DocPathModel {
+  String? path;
+  String? docTypeId;
+
+  DocPathModel({
+    this.path,
+    this.docTypeId,
+  });
+
+  Map<String, dynamic> toJson() => {
+        "files": {"path": path},
+        "document_type_id": docTypeId,
+      };
+}

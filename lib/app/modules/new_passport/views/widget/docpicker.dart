@@ -9,6 +9,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:sizer/sizer.dart';
 
 class BuildDoc extends StatefulWidget {
@@ -248,11 +249,9 @@ class _BuildDocState extends State<BuildDoc> {
 
     if (responseUrl.isNotEmpty) {
       // Response is successful
-      print(responseUrl);
-      widget.controller.sendDoc(
-        widget.documentType.id,
-        responseUrl,
-      );
+
+      widget.controller.docList.add(
+          DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
     } else {
       // Response is not successful
       print('Response is false');

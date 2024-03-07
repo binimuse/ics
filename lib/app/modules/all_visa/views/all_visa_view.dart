@@ -109,7 +109,7 @@ class AllVisaView extends GetView<ALLVisaController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    confirmation.visaValidityType!.name
+                                    confirmation.visaValidityType.name
                                         .toString(),
                                     style: AppTextStyles.bodySmallBold.copyWith(
                                       fontSize: 12.sp,

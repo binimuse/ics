@@ -13,7 +13,6 @@ import 'package:ics/app/modules/new_passport/data/model/booked_date_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/confirmation_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
-import 'package:ics/app/modules/new_passport/data/mutation/book_appointemts_mutation.dart';
 import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_booked_date.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_emabassies.dart';
@@ -258,22 +257,11 @@ class NewPassportController extends GetxController
     natinality = baseData.value!.base_countries;
     allwoedCountries = baseData.value!.allowed_countries;
 
-    print("nini${baseData.value!.base_document_types}");
     base_document_types = baseData.value!.base_document_types;
 
     for (var documentType in base_document_types) {
       documents
           .add(PassportDocuments(documentTypeId: documentType.id, files: []));
-    }
-  }
-
-  void check() {
-    final isValid = newPassportformKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    } else {
-      newPassportformKey.currentState!.save();
-      send(); // Call report() when the form is valid
     }
   }
 
@@ -319,54 +307,11 @@ class NewPassportController extends GetxController
 
   late DateTime? selectedDate;
   late DateTime? selectedDateTime;
-  Future<void> sendBookedDates(BuildContext context) async {
-    networkStatus.value = NetworkStatus.LOADING;
-    try {
-      GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
-      // Remove the time component from the selectedDate
-      // Convert selectedDate to a date string without the time component
-      String dateString = selectedDate!.toIso8601String().split('T').first;
-
-      print(dateString);
-
-      print(newApplicationId);
-
-      String timetz = DateFormat("HH:mm:ss").format(selectedDateTime!);
-
-      print(timetz);
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(NewAppointments.newApp),
-          variables: <String, dynamic>{
-            "objects": {
-              "date": dateString,
-              "application_id": newApplicationId,
-              "start_time": timetz,
-            }
-          },
-        ),
-      );
-
-      if (!result.hasException) {
-        networkStatus.value = NetworkStatus.SUCCESS;
-        AppToasts.showSuccess("New Passport Sent successfully");
-
-        Get.offAllNamed(Routes.MAIN_PAGE);
-      } else {
-        networkStatus.value = NetworkStatus.ERROR;
-        AppToasts.showError("Something went wrong");
-        print(result);
-      }
-    } catch (e, s) {
-      AppToasts.showError("Something went wrong");
-      print(e);
-      print(s);
-      networkStatus.value = NetworkStatus.ERROR;
-    }
-  }
 
   RxList<String> photoPath = <String>[].obs;
+
+  //
+  List<DocPathModel> docList = [];
   Future<void> send() async {
     try {
       isSendStared.value = true;
@@ -386,15 +331,29 @@ class NewPassportController extends GetxController
         ),
       );
 
-      handleMutationResult(result);
-    } catch (e) {
+      handleMutationResult(
+        result,
+      );
+    } catch (e, s) {
+      print(s);
       handleSendException(e);
     } finally {
       isSendStared.value = false;
     }
   }
 
-  Map<String, dynamic> buildVariablesMap(String formattedDateOfBirth) {
+  Map<String, dynamic> buildVariablesMap(
+    String formattedDateOfBirth,
+  ) {
+    String dateString = selectedDate!.toIso8601String().split('T').first;
+
+    print(dateString);
+
+    print(newApplicationId);
+
+    String timetz = DateFormat("HH:mm:ss").format(selectedDateTime!);
+
+    print(timetz);
     return {
       'objects': {
         'first_name': firstNameController.text,
@@ -422,12 +381,22 @@ class NewPassportController extends GetxController
         'phone_number': phonenumber.text,
         'embassy_id': embassiesvalue.value!.id,
         'current_country_id': currentcountryvalue.value!.id,
+        //'submitted': true,
         'citizen_families': {
           "data": familyModelvalue.map((element) => element.toJson()).toList()
         },
         'new_passport_applications': {
           "data": {
             'remark': null,
+          }
+        },
+        'application_documents': {
+          "data": docList.map((e) => e.toJson()).toList()
+        },
+        'application_appointments': {
+          "data": {
+            "date": dateString,
+            "start_time": timetz,
           }
         },
       }
@@ -445,6 +414,8 @@ class NewPassportController extends GetxController
       newApplicationId = result.data!['insert_ics_applications']['returning'][0]
               ['id']
           .toString();
+
+      updateNewApplication();
     }
   }
 
@@ -459,48 +430,6 @@ class NewPassportController extends GetxController
 
   var isSendDocSuccess = false.obs;
   var newDocId;
-  Future<void> sendDoc(
-    var documentTypeId,
-    var path,
-  ) async {
-    try {
-      isSendStared.value = true;
-      // file upload
-
-      GraphQLClient graphQLClient;
-
-      graphQLClient = GraphQLConfiguration().clientToQuery();
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(NewDocApplications.newDoc),
-          variables: <String, dynamic>{
-            'objects': {
-              'application_id': newApplicationId,
-              'files': {
-                'path': path,
-              },
-              'document_type_id': documentTypeId,
-            }
-          },
-        ),
-      );
-
-      if (result.hasException) {
-        isSendStared.value = false;
-
-        print(result.exception.toString());
-      } else {
-        isSendDocSuccess(true);
-        isSendStared.value = false;
-
-        AppToasts.showSuccess("Document uploaded successfully");
-      }
-    } catch (e) {
-      isSendStared.value = false;
-      print('Error: $e');
-    }
-  }
 
   var isUpdateSuccess = false.obs;
   Future<void> updateNewApplication() async {
@@ -522,6 +451,9 @@ class NewPassportController extends GetxController
         print(result.exception.toString());
       } else {
         isUpdateSuccess(true);
+
+        AppToasts.showSuccess("New Passport Sent successfully");
+        Get.offAllNamed(Routes.MAIN_PAGE);
       }
     } catch (e) {
       print(e.toString());

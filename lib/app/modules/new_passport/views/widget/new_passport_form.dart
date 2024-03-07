@@ -307,32 +307,24 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      await controller.updateNewApplication();
-      if (controller.isUpdateSuccess.value) {
-        setState(() {
-          controller.currentStep++;
-        });
-      }
+      setState(() {
+        controller.currentStep++;
+      });
+      // await controller.updateNewApplication();
+      // if (controller.isUpdateSuccess.value) {
+      //   setState(() {
+      //     controller.currentStep++;
+      //   });
+      // }
     }
   }
 
   void finalstep(BuildContext context) {
     if (controller.selectedDate != null ||
         controller.selectedDateTime != null) {
-      controller.sendBookedDates(context);
+      controller.send();
     } else {
       AppToasts.showError("Please select both a date and a time");
-    }
-  }
-
-  void createCitizen() async {
-    await controller.send(); // Wait for the send() method to complete
-    if (controller.isSend.value) {
-      setState(() {
-        controller.currentStep++;
-      });
-    } else {
-      AppToasts.showError("Fill all the required fields");
     }
   }
 
@@ -529,7 +521,9 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
           controller: controller,
           onTap: () {
             Navigator.pop(context);
-            createCitizen();
+            setState(() {
+              controller.currentStep++;
+            });
           },
         );
       },
