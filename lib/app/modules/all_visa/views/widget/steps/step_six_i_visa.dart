@@ -9,6 +9,7 @@ import 'package:ics/app/modules/all_visa/views/widget/doc_picker_i_visa.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
 
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../config/theme/app_sizes.dart';
 
@@ -37,7 +38,7 @@ class Step6_I_Visa extends StatelessWidget {
         SizedBox(
           width: 80.w,
           child: Text(
-            'Upload documents ...',
+            'Upload Attachements',
             style: AppTextStyles.bodySmallRegular.copyWith(
                 fontSize: AppSizes.font_12, color: AppColors.grayDark),
             maxLines: 4,
@@ -45,7 +46,66 @@ class Step6_I_Visa extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 4.h,
+          height: 2.h,
+        ),
+        SizedBox(
+          width: 100.w,
+          child: Text(
+            'Note info:',
+            style: AppTextStyles.displayTwoBold.copyWith(
+                fontSize: AppSizes.font_14, color: AppColors.grayDark),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ...controller.contentTexts.map((text) {
+              return ListTile(
+                dense: true,
+                visualDensity: VisualDensity.comfortable,
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            color: AppColors.primary,
+                            size: 9,
+                          ),
+                          // Add some spacing between the icon and text
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex:
+                          9, // Give more flex to the text to allow it to occupy more space
+                      child: Text(text,
+                          style: AppTextStyles.bodySmallRegular.copyWith(
+                            color: AppColors.black,
+                            fontSize: 15,
+                          )),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+            // Add the image at the top of the list
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Image.asset(
+                Assets.images.visaphoto.path, // Use the passed image path
+                fit: BoxFit.contain,
+              ),
+            ),
+            // Map over the contentTexts to create the list tiles
+          ],
+        ),
+        SizedBox(
+          height: 2.h,
         ),
         Container(
           height: 100.h,

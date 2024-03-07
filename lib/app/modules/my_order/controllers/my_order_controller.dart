@@ -6,6 +6,7 @@ import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/data/model/doc_type_model.dart';
 import 'package:ics/app/modules/my_order/data/model/grouped_application.dart';
+import 'package:ics/app/modules/my_order/data/model/ics_visa_application.dart';
 
 import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
 
@@ -14,6 +15,7 @@ import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart'
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:ics/app/modules/my_order/data/quary/ics_visa_order.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
 
@@ -32,6 +34,7 @@ class MyOrderController extends GetxController
   void onInit() {
     getOrginOrder();
     getDoc();
+    getVisaApplication();
     tabController = TabController(length: 6, vsync: this);
 
     super.onInit();
@@ -40,8 +43,11 @@ class MyOrderController extends GetxController
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
 
   RxList<IcsApplication> allApplicationModel = List<IcsApplication>.of([]).obs;
+  RxList<IcsVisaApplication> allVisaApplicationModel =
+      List<IcsVisaApplication>.of([]).obs;
 
   GetOrginOrder getOrginOrders = GetOrginOrder();
+  GetVisaOrder getVisaOrder = GetVisaOrder();
 
   var isfechedorder = false.obs;
 
@@ -58,6 +64,33 @@ class MyOrderController extends GetxController
         allApplicationModel.value = (result['ics_applications'] as List)
             .map((e) => IcsApplication.fromMap(e))
             .toList();
+
+        networkStatus.value = NetworkStatus.SUCCESS;
+
+        isfechedorder.value = true;
+      }
+    } catch (e, s) {
+      networkStatus.value = NetworkStatus.ERROR;
+      isfechedorder.value = false;
+
+      print(">>>>>>>>>>>>>>>>>> $e");
+
+      print(">>>>>>>>>>>>>>>>>> $s");
+    }
+  }
+
+  getVisaApplication() async {
+    networkStatus.value = NetworkStatus.LOADING;
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getVisaOrder.fetchData(), {});
+
+      if (result != null) {
+        allApplicationModel.clear();
+        allVisaApplicationModel.value =
+            (result['ics_visa_applications'] as List)
+                .map((e) => IcsVisaApplication.fromJson(e))
+                .toList();
 
         networkStatus.value = NetworkStatus.SUCCESS;
 

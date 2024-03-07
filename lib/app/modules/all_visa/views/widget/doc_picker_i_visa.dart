@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,8 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
 
-
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 
 class BuildDoc_I_Visa extends StatefulWidget {
@@ -28,37 +30,14 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
   double uploadProgress = 0.0;
   bool hasError = false;
 
-  Future<void> openPdfPicker() async {
-    widget.controller.isSendStared.value = true;
-    try {
-      PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
-      if (pickedFile != null) {
-        try {
-          handleFilePickedSuccess(pickedFile);
-        } catch (e, s) {
-          setState(() {
-            hasError = true;
-          });
-          widget.controller.isSendStared.value = false;
-          AppToasts.showError("error  while getting the URL.");
-
-          print("Error in geturl: $s");
-        }
-      }
-    } catch (e) {
-      widget.controller.isSendStared.value = false;
-      // Handle the error
-      print("Error: $e");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // Add a flag to track loading state
 
     return InkWell(
       onTap: () {
-        openPdfPicker();
+        _showBottomNavigationSheet();
+        // ();
       },
       child: hasError
           ? Container() // Return an empty Container when there's an error
@@ -105,9 +84,14 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
                             children: [
                               Container(
                                 height: 18.h,
-                                child: PDFView(
-                                  filePath: file.path!,
-                                ),
+                                child: isPDFFile(file)
+                                    ? PDFView(
+                                        filePath: file.path!,
+                                      )
+                                    : Image.file(
+                                        fit: BoxFit.fitWidth,
+                                        File(file.path!),
+                                      ),
                               ),
                               Positioned(
                                 top: 8.0,
@@ -128,6 +112,11 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
               ),
             ),
     );
+  }
+
+  bool isPDFFile(PlatformFile file) {
+    final extension = file.path!.split('.').last.toLowerCase();
+    return extension == 'pdf';
   }
 
   void deleteFile(int index) async {
@@ -264,5 +253,103 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
     setState(() {
       widget.controller.isSendStared.value = false;
     });
+  }
+
+  void _showBottomNavigationSheet() {
+    Get.bottomSheet(
+      backgroundColor: AppColors.whiteOff,
+      Container(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: Icon(
+                Icons.file_copy,
+                color: AppColors.primary,
+              ),
+              title: Text(
+                'Pick from File',
+                style: AppTextStyles.bodySmallBold.copyWith(
+                  color: AppColors.grayDark,
+                ),
+              ),
+              onTap: () {
+                Get.back();
+                openPdfPicker();
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.photo_library,
+                color: AppColors.primary,
+              ),
+              title: Text(
+                'Pick from Gallery',
+                style: AppTextStyles.bodySmallBold.copyWith(
+                  color: AppColors.grayDark,
+                ),
+              ),
+              onTap: () {
+                Get.back();
+                _pickFromGallery();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _pickFromGallery() async {
+    widget.controller.isSendStared.value = true;
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final PlatformFile pickedFile = PlatformFile(
+        path: image.path,
+        name: image.name,
+        size: 0,
+        bytes: null,
+      );
+
+      final int maxSizeInBytes = 30 * 1024 * 1024; // 10 MB
+
+      try {
+        if (pickedFile.size <= maxSizeInBytes) {
+          handleFilePickedSuccess(pickedFile);
+          widget.controller.isSendStared.value = false;
+        } else {
+          widget.controller.isSendStared.value = false;
+          AppToasts.showError("Invalid File, Please select an Image.");
+        }
+      } catch (e) {
+        widget.controller.isSendStared.value = false;
+        print("Error: $e");
+      }
+    }
+  }
+
+  Future<void> openPdfPicker() async {
+    widget.controller.isSendStared.value = true;
+    try {
+      PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
+      if (pickedFile != null) {
+        try {
+          handleFilePickedSuccess(pickedFile);
+        } catch (e, s) {
+          setState(() {
+            hasError = true;
+          });
+          widget.controller.isSendStared.value = false;
+          AppToasts.showError("error  while getting the URL.");
+
+          print("Error in geturl: $s");
+        }
+      }
+    } catch (e) {
+      widget.controller.isSendStared.value = false;
+      // Handle the error
+      print("Error: $e");
+    }
   }
 }

@@ -7,6 +7,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/views/widget/orgin_widget.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import 'package:ics/app/modules/my_order/views/widget/passport_widget.dart';
+import 'package:ics/app/modules/my_order/views/widget/visa_widget.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/loading/custom_loading_widget.dart';
 import '../controllers/my_order_controller.dart';
@@ -134,21 +135,13 @@ class _MyOrderViewState extends State<MyOrderView> {
                       Container(
                         height: 100.h,
                         child: ListView.builder(
-                          itemCount: controller.allApplicationModel.length,
+                          itemCount: controller.allVisaApplicationModel.length,
                           itemBuilder: (context, index) {
-                            var element = controller.allApplicationModel[index];
-                            if (element.applicationType
-                                    .contains("NEW_PASSPORT_APPLICATION") ||
-                                element.applicationType
-                                    .contains("RENEW_PASSPORT_APPLICATION")) {
-                              return PassportWidget(
-                                icsApplication:
-                                    controller.allApplicationModel[index],
-                                controller: controller,
-                              );
-                            }
-
-                            return SizedBox();
+                            return VisaWidget(
+                              icsApplication:
+                                  controller.allVisaApplicationModel[index],
+                              controller: controller,
+                            );
                           },
                         ),
                       ),

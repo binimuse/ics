@@ -864,8 +864,20 @@ class $AssetsImagesGen {
   AssetGenImage get onbording3 =>
       const AssetGenImage('assets/images/onbording3.png');
 
+  /// File path: assets/images/passportImage.png
+  AssetGenImage get passportImage =>
+      const AssetGenImage('assets/images/passportImage.png');
+
+  /// File path: assets/images/qrcode.png
+  AssetGenImage get qrcode => const AssetGenImage('assets/images/qrcode.png');
+
+  /// File path: assets/images/visaphoto.jpg
+  AssetGenImage get visaphoto =>
+      const AssetGenImage('assets/images/visaphoto.jpg');
+
   /// List of all assets
-  List<AssetGenImage> get values => [onbording1, onbording2, onbording3];
+  List<AssetGenImage> get values =>
+      [onbording1, onbording2, onbording3, passportImage, qrcode, visaphoto];
 }
 
 class $AssetsLogosGen {

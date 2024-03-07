@@ -128,6 +128,17 @@ class ALLVisaController extends GetxController
   List<CommonModel> bcountries = [];
   List<CommonModel> natinality = [];
 
+  List<String> contentTexts = [
+    'Size of the image/document should be less than 2MB.'.tr,
+    'Photo and Passport Copy should be only in Image file type of JPEG, JPG, PNG format.'
+        .tr,
+    'Allowed Images/documents file type extensions are JPEG, JPG, PNG and PDF format only.'
+        .tr,
+    'An image/document with blurred or unclean background is not acceptable.'
+        .tr,
+    'Please use the below Screenshot for Photograph Tips.'.tr,
+  ];
+
   //tab
   late TabController tabController;
 
