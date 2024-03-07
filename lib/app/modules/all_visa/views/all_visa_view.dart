@@ -74,8 +74,9 @@ class AllVisaView extends GetView<ALLVisaController> {
 
                 return GestureDetector(
                   onTap: () {
-                    controller.getDoctype(
-                        confirmation.visaCategory!.documentCategory!.code!);
+                    final doccode =
+                        controller.baseVisaTypeModel.documentCategory!.code;
+                    controller.getDoctype(doccode);
                     controller.visa_category_validity_type_id = confirmation.id;
                     Get.to(AllVisaTerms());
                   },

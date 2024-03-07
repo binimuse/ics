@@ -1,127 +1,101 @@
 class BaseVisaTypeModel {
   String? id;
   String? name;
+  DocumentCategory? documentCategory;
   List<VisaCategoryValidityType>? visaCategoryValidityTypes;
 
   BaseVisaTypeModel({
     this.id,
     this.name,
+    this.documentCategory,
     this.visaCategoryValidityTypes,
   });
 
-  factory BaseVisaTypeModel.fromMap(Map<String, dynamic> json) =>
+  factory BaseVisaTypeModel.fromJson(Map<String, dynamic> json) =>
       BaseVisaTypeModel(
         id: json["id"],
         name: json["name"],
-        visaCategoryValidityTypes: json["visa_category_validity_types"] == null
-            ? []
-            : List<VisaCategoryValidityType>.from(
-                json["visa_category_validity_types"]!
-                    .map((x) => VisaCategoryValidityType.fromMap(x))),
+        documentCategory: DocumentCategory.fromJson(json["document_category"]),
+        visaCategoryValidityTypes: List<VisaCategoryValidityType>.from(
+            json["visa_category_validity_types"]
+                .map((x) => VisaCategoryValidityType.fromJson(x))),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
-        "visa_category_validity_types": visaCategoryValidityTypes == null
-            ? []
-            : List<dynamic>.from(
-                visaCategoryValidityTypes!.map((x) => x.toMap())),
-      };
-}
-
-class VisaCategoryValidityType {
-  String? id;
-  int? price;
-  VisaCategory? visaCategory;
-  VisaValidityType? visaValidityType;
-
-  VisaCategoryValidityType({
-    this.id,
-    this.price,
-    this.visaCategory,
-    this.visaValidityType,
-  });
-
-  factory VisaCategoryValidityType.fromMap(Map<String, dynamic> json) =>
-      VisaCategoryValidityType(
-        id: json["id"],
-        price: json["price"],
-        visaCategory: json["visa_category"] == null
-            ? null
-            : VisaCategory.fromMap(json["visa_category"]),
-        visaValidityType: json["visa_validity_type"] == null
-            ? null
-            : VisaValidityType.fromMap(json["visa_validity_type"]),
-      );
-
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "price": price,
-        "visa_category": visaCategory?.toMap(),
-        "visa_validity_type": visaValidityType?.toMap(),
-      };
-}
-
-class VisaCategory {
-  DocumentCategory? documentCategory;
-
-  VisaCategory({
-    this.documentCategory,
-  });
-
-  factory VisaCategory.fromMap(Map<String, dynamic> json) => VisaCategory(
-        documentCategory: json["document_category"] == null
-            ? null
-            : DocumentCategory.fromMap(json["document_category"]),
-      );
-
-  Map<String, dynamic> toMap() => {
-        "document_category": documentCategory?.toMap(),
+        "document_category": documentCategory!.toJson(),
+        "visa_category_validity_types": List<dynamic>.from(
+            visaCategoryValidityTypes!.map((x) => x.toJson())),
       };
 }
 
 class DocumentCategory {
-  String? id;
-  String? name;
-  String? code;
+  String id;
+  String name;
+  String code;
 
   DocumentCategory({
-    this.id,
-    this.name,
-    this.code,
+    required this.id,
+    required this.name,
+    required this.code,
   });
 
-  factory DocumentCategory.fromMap(Map<String, dynamic> json) =>
+  factory DocumentCategory.fromJson(Map<String, dynamic> json) =>
       DocumentCategory(
         id: json["id"],
         name: json["name"],
         code: json["code"],
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "code": code,
       };
 }
 
-class VisaValidityType {
-  String? name;
-  String? description;
+class VisaCategoryValidityType {
+  String id;
+  int price;
+  VisaValidityType visaValidityType;
 
-  VisaValidityType({
-    this.name,
-    this.description,
+  VisaCategoryValidityType({
+    required this.id,
+    required this.price,
+    required this.visaValidityType,
   });
 
-  factory VisaValidityType.fromMap(Map<String, dynamic> json) =>
+  factory VisaCategoryValidityType.fromJson(Map<String, dynamic> json) =>
+      VisaCategoryValidityType(
+        id: json["id"],
+        price: json["price"],
+        visaValidityType: VisaValidityType.fromJson(json["visa_validity_type"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "price": price,
+        "visa_validity_type": visaValidityType.toJson(),
+      };
+}
+
+class VisaValidityType {
+  String name;
+  String description;
+
+  VisaValidityType({
+    required this.name,
+    required this.description,
+  });
+
+  factory VisaValidityType.fromJson(Map<String, dynamic> json) =>
       VisaValidityType(
         name: json["name"],
         description: json["description"],
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "name": name,
         "description": description,
       };

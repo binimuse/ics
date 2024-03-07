@@ -37,7 +37,7 @@ class EvisaController extends GetxController {
 
     if (result != null) {
       baseVisaTypeModel.value = (result['base_visa_categories'] as List)
-          .map((e) => BaseVisaTypeModel.fromMap(e))
+          .map((e) => BaseVisaTypeModel.fromJson(e))
           .toList();
 
       hasgettype(true);

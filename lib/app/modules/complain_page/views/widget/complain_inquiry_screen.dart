@@ -15,7 +15,7 @@ import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:ics/app/modules/complain_page/controllers/complain_page_controller.dart';
 import 'package:ics/gen/assets.gen.dart';
@@ -118,13 +118,32 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
             ),
             buildTextFieald(),
             SizedBox(
-              height: 2.h,
+              height: 1.h,
             ),
             buildFilePicker(),
+            SizedBox(height: 1.h),
+            RatingBar.builder(
+              initialRating: 3,
+              minRating: 1,
+              direction: Axis.horizontal,
+              tapOnlyMode: false,
+              glow: false,
+              allowHalfRating: true,
+              itemCount: 5,
+              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) => Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (rating) {
+                print(rating);
+              },
+            ),
+            SizedBox(height: 2.h),
             Visibility(
               visible: fileName.isNotEmpty,
               child: SizedBox(
-                height: 30.h,
+                height: 25.h,
                 child: Padding(
                   padding: EdgeInsets.only(left: 3.w),
                   child: ListView.builder(
@@ -134,7 +153,7 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 3.h),
+            SizedBox(height: 2.h),
             buildSubmitButton(),
           ],
         ),
