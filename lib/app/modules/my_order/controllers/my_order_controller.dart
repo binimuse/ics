@@ -33,8 +33,9 @@ class MyOrderController extends GetxController
   @override
   void onInit() {
     getOrginOrder();
-    getDoc();
+
     getVisaApplication();
+    // getDoc();
     tabController = TabController(length: 6, vsync: this);
 
     super.onInit();
