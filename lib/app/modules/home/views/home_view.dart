@@ -42,13 +42,11 @@ class _HomeViewState extends State<HomeView> {
           title2: "welcome",
           logo: AppAssets.splasehimage2,
           showActions: true,
-          actionIcon: SvgPicture.asset(
+          actionIcon: Icon(
+            Icons.language,
             color: AppColors.primary,
-            Assets.icons.questionmark,
-            height: 6.w,
-            width: 9.w,
           ),
-          routeName: Routes.HELP,
+          routeName: Routes.LANGUAGE,
           showLeading: false,
         ),
         backgroundColor: AppColors.whiteOff.withOpacity(0.9),

@@ -63,12 +63,12 @@ class _MyOrderViewState extends State<SettingView> {
             ),
 
             _buildSettingCard(
-              icon: Icons.language,
-              title: 'Language'.tr,
-              subtitle: 'Select your preferred language'.tr,
+              icon: Icons.question_mark_outlined,
+              title: 'Help'.tr,
+              subtitle: 'Read the  FAQs'.tr,
               ontaps: () {
                 Get.toNamed(
-                  Routes.LANGUAGE,
+                  Routes.HELP,
                 );
               },
             ),
