@@ -87,7 +87,7 @@ class MyOrderController extends GetxController
           await graphQLCommonApi.query(getVisaOrder.fetchData(), {});
 
       if (result != null) {
-        allApplicationModel.clear();
+        allVisaApplicationModel.clear();
         allVisaApplicationModel.value =
             (result['ics_visa_applications'] as List)
                 .map((e) => IcsVisaApplication.fromJson(e))

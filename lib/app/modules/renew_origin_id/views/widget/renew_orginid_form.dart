@@ -15,6 +15,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/main_page/controllers/main_page_controller.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/renew_origin_id/controllers/renew_origin_id_controller.dart';
 import 'package:ics/app/modules/renew_origin_id/data/model/citizens_model_renew_orginId.dart';
@@ -588,9 +589,12 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
   }
 
   void finalstep() {
-    AppToasts.showSuccess("orgin id request Sent successfully");
-    final MyOrderController controller = Get.put(MyOrderController());
-    controller.getOrginOrder();
-    Get.offAllNamed(Routes.MAIN_PAGE);
+    AppToasts.showSuccess("OrginId request Sent successfully");
+    MyOrderController myOrderController = Get.put(MyOrderController());
+
+    myOrderController.getOrginOrder();
+
+    Get.toNamed(Routes.MAIN_PAGE);
+    Get.find<MainPageController>().changeBottomPage(1);
   }
 }

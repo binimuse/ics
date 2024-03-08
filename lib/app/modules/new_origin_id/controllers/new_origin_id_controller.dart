@@ -11,6 +11,8 @@ import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/main_page/controllers/main_page_controller.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/base_model_orgin.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/confirmation_model_orginid.dart';
@@ -244,8 +246,11 @@ class NewOriginIdController extends GetxController
       if (!result.hasException) {
         networkStatus.value = NetworkStatus.SUCCESS;
         AppToasts.showSuccess("Origin Id request Sent");
+        MyOrderController myOrderController = Get.put(MyOrderController());
+        myOrderController.getOrginOrder();
 
-        Get.offAllNamed(Routes.MAIN_PAGE);
+        Get.toNamed(Routes.MAIN_PAGE);
+        Get.find<MainPageController>().changeBottomPage(1);
       } else {
         networkStatus.value = NetworkStatus.ERROR;
         AppToasts.showError("Something went wrong");

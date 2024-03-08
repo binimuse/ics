@@ -254,6 +254,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                           horizontal: AppSizes.mp_w_6,
                         ),
                         onPressed: () async {
+                          print(controller.currentStep);
                           if (controller.currentStep == 4) {
                             // controller.handleDrawFinish();
                             controller.newPassportformKey.currentState!
@@ -261,7 +262,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                                 ? _showSummeryDiloag(context)
                                 : SizedBox();
                           } else if (controller.currentStep == 5) {
-                            checkdoc(context);
+                            checkdoc();
                           } else {
                             if (controller.newPassportformKey.currentState!
                                 .saveAndValidate()) {
@@ -281,7 +282,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
     );
   }
 
-  void checkdoc(BuildContext context) async {
+  void checkdoc() async {
     if (controller.documents.isEmpty) {
       AppToasts.showError("Document are empty");
       return;
@@ -290,20 +291,18 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      print("object");
-      controller.updateNewApplication();
+      finalstep(context);
+      // await controller.updateNewApplication();
+      // if (controller.isUpdateSuccess.value) {
+      //   setState(() {
+      //     controller.currentStep++;
+      //   });
+      // }
     }
   }
 
-  void createCitizen() async {
-    await controller.send(); // Wait for the send() method to complete
-    if (controller.isSend.value) {
-      setState(() {
-        controller.currentStep++;
-      });
-    } else {
-      AppToasts.showError("Fill all the required fields");
-    }
+  void finalstep(BuildContext context) {
+    controller.send();
   }
 
   void _scrollToBottom() {
@@ -514,7 +513,9 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
           controller: controller,
           onTap: () {
             Navigator.pop(context);
-            createCitizen();
+            setState(() {
+              controller.currentStep++;
+            });
           },
         );
       },

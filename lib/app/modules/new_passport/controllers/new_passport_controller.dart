@@ -3,11 +3,12 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/main_page/controllers/main_page_controller.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/booked_date_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
@@ -453,7 +454,12 @@ class NewPassportController extends GetxController
         isUpdateSuccess(true);
 
         AppToasts.showSuccess("New Passport Sent successfully");
-        Get.offAllNamed(Routes.MAIN_PAGE);
+        MyOrderController myOrderController = Get.put(MyOrderController());
+
+        myOrderController.getOrginOrder();
+
+        Get.toNamed(Routes.MAIN_PAGE);
+        Get.find<MainPageController>().changeBottomPage(1);
       }
     } catch (e) {
       print(e.toString());

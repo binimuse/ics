@@ -9,6 +9,9 @@ import 'package:ics/app/modules/all_visa/data/query/get_all_renew_orginid.dart';
 import 'package:ics/app/modules/all_visa/data/query/ics_visa_application.dart';
 
 import 'package:ics/app/modules/evisa/data/models/base_visatype_model.dart';
+import 'package:ics/app/modules/main_page/controllers/main_page_controller.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
+import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:ics/services/graphql_conf.dart';
@@ -295,8 +298,12 @@ class ALLVisaController extends GetxController
       } else {
         isSendStared.value = false;
         AppToasts.showSuccess("Visa Application successfully");
+        MyOrderController myOrderController = Get.put(MyOrderController());
 
-        Get.offAllNamed(Routes.MAIN_PAGE);
+        myOrderController.getVisaApplication();
+
+        Get.toNamed(Routes.MAIN_PAGE);
+        Get.find<MainPageController>().changeBottomPage(1);
       }
     } catch (e) {
       isSendStared.value = false;
@@ -336,6 +343,7 @@ class ALLVisaController extends GetxController
     }
   }
 
+  List<DocPathModel> docList = [];
   Map<String, dynamic> buildVariablesMap(String formattedDateOfBirth) {
     return {
       'objects': {
@@ -371,6 +379,9 @@ class ALLVisaController extends GetxController
         'visa_category_id': baseVisaTypeModel.id,
         'visa_category_validity_type_id': visa_category_validity_type_id,
         'company_reference_number': companyreference.text,
+        'visa_application_documents': {
+          "data": docList.map((e) => e.toJson()).toList()
+        },
       }
     };
   }
@@ -386,6 +397,7 @@ class ALLVisaController extends GetxController
       visaApplicationId = result.data!['insert_ics_visa_applications']
               ['returning'][0]['id']
           .toString();
+      updateNewApplication();
     }
   }
 
@@ -428,51 +440,6 @@ class ALLVisaController extends GetxController
     } catch (e) {
       print(e.toString());
       isDeleteDocSuccess(false);
-      print('Error: $e');
-    }
-  }
-
-  var isSendDocSuccess = false.obs;
-  var newDocId;
-  Future<void> sendDocs(
-    var documentTypeId,
-    var path,
-  ) async {
-    try {
-      isSendStared.value = true;
-      // file upload
-
-      GraphQLClient graphQLClient;
-
-      graphQLClient = GraphQLConfiguration().clientToQuery();
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(VisaApplicationsDoc.newDoc),
-          variables: <String, dynamic>{
-            'objects': {
-              'visa_application_id': visaApplicationId,
-              'files': {
-                'path': path,
-              },
-              'document_type_id': documentTypeId,
-            }
-          },
-        ),
-      );
-
-      if (result.hasException) {
-        isSendStared.value = false;
-
-        print(result.exception.toString());
-      } else {
-        isSendDocSuccess(true);
-        isSendStared.value = false;
-
-        AppToasts.showSuccess("Document uploaded successfully");
-      }
-    } catch (e) {
-      isSendStared.value = false;
       print('Error: $e');
     }
   }
