@@ -106,9 +106,6 @@ class AllVisaTerms extends GetView<ALLVisaController> {
                     .required('Company Reference number is required')
                     .build(),
                 showClearButton: false,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
-                ],
                 autoFocus: false,
                 onChanged: (value) {},
               ),

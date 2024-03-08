@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -113,11 +111,11 @@ class ComplainPageController extends GetxController {
   }
 
   List<String> icons = [
+    'assets/icons/passport.svg',
     'assets/icons/profile_default.svg',
     'assets/icons/paper.svg',
     'assets/icons/memo.svg',
     'assets/icons/question.svg',
-    'assets/icons/passport.svg',
   ];
 
   final List<Color> color = [

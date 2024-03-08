@@ -51,7 +51,7 @@ class _MyOrderViewState extends State<MyOrderView> {
       child: SafeArea(
         child: Container(
           child: DefaultTabController(
-            length: 3,
+            length: 5,
             child: Stack(
               children: [
                 Padding(
@@ -63,16 +63,18 @@ class _MyOrderViewState extends State<MyOrderView> {
                     indicatorColor: AppColors.primary,
                     tabTextColor: Colors.black45,
                     selectedTabTextColor: Colors.white,
-                    squeezeIntensity: 3,
-                    height: 45,
-                    tabPadding: const EdgeInsets.symmetric(horizontal: 8),
-                    textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                        fontSize: AppSizes.font_16, color: AppColors.primary),
+                    squeezeIntensity: 5,
+                    height: 50,
+
+                    tabPadding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    textStyle: AppTextStyles.bodySmallBold
+                        .copyWith(fontSize: 12, color: AppColors.primary),
                     // Options for selection
                     // All specified values will override the [SegmentedTabControl] setting
                     tabs: [
                       SegmentTab(
-                        label: 'Orgin ID',
+                        label: 'Origin',
                       ),
                       SegmentTab(
                         label: 'Passport',
@@ -80,6 +82,14 @@ class _MyOrderViewState extends State<MyOrderView> {
                       ),
                       SegmentTab(
                         label: 'Visa',
+                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
+                      ),
+                      SegmentTab(
+                        label: 'Resident',
+                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
+                      ),
+                      SegmentTab(
+                        label: 'Complaint',
                         // For example, this overrides [indicatorColor] from [SegmentedTabControl]
                       ),
                     ],
@@ -145,6 +155,8 @@ class _MyOrderViewState extends State<MyOrderView> {
                           },
                         ),
                       ),
+                      Container(height: 100.h, child: SizedBox()),
+                      Container(height: 100.h, child: SizedBox())
                     ],
                   ),
                 ),

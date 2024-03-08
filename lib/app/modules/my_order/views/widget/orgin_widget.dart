@@ -48,7 +48,7 @@ class OrginIdWidget extends StatelessWidget {
         ));
       },
       child: Container(
-        height: 21.h,
+        height: 23.5.h,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -118,7 +118,7 @@ class OrginIdWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         height: 4.h,
-                        width: 25.w,
+                        width: 26.w,
                         decoration: BoxDecoration(
                           color:
                               icsApplication.reviewStatus.contains("REJECTED")

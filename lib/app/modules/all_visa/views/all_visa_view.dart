@@ -137,7 +137,14 @@ class AllVisaView extends GetView<ALLVisaController> {
                               child: AppSvgButton(
                                 iconColor: AppColors.whiteOff,
                                 imagePath: Assets.icons.arrowright,
-                                onPressed: () {},
+                                onPressed: () {
+                                  final doccode = controller
+                                      .baseVisaTypeModel.documentCategory!.code;
+                                  controller.getDoctype(doccode);
+                                  controller.visa_category_validity_type_id =
+                                      confirmation.id;
+                                  Get.to(AllVisaTerms());
+                                },
                                 size: AppSizes.icon_size_8 * 0.7,
                               ),
                             ),

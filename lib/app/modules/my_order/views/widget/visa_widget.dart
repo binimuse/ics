@@ -46,7 +46,7 @@ class VisaWidget extends StatelessWidget {
         // ));
       },
       child: Container(
-        height: 21.h,
+        height: 23.5.h,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

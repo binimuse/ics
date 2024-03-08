@@ -137,7 +137,10 @@ class EvisaView extends GetView<EvisaController> {
                                   child: AppSvgButton(
                                     iconColor: AppColors.whiteOff,
                                     imagePath: Assets.icons.arrowright,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.toNamed(Routes.ALL_VISA,
+                                          arguments: {"VisaType": type});
+                                    },
                                     size: AppSizes.icon_size_8 * 0.7,
                                   ),
                                 ),

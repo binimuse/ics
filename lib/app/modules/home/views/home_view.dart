@@ -459,7 +459,9 @@ class _HomeViewState extends State<HomeView> {
               onPressed: () {
                 if (index == 0) {
                   Get.toNamed(Routes.COMPLAIN_PAGE);
-                } else if (index == 1) {}
+                } else if (index == 1) {
+                  Get.toNamed(Routes.FEEDBACK_PAGE);
+                }
               });
         },
       ),
@@ -641,14 +643,17 @@ class CardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 5.h),
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: AppTextStyles.bodySmallBold.copyWith(
-                      fontSize: AppSizes.font_10,
+                SizedBox(height: 6.h),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: AppTextStyles.bodySmallBold.copyWith(
+                        fontSize: AppSizes.font_10,
+                      ),
+                      children: getTitleTextSpans(title),
                     ),
-                    children: getTitleTextSpans(title),
                   ),
                 )
               ],
