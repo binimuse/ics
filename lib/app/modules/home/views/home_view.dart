@@ -99,7 +99,7 @@ class _HomeViewState extends State<HomeView> {
                 // Render default value at index 0
                 return CardWidget(
                   isOrgin: true,
-                  title: "New \n Passport",
+                  title: "New Passport",
                   svgPath: controller.svgPathsOrgin[0],
                   iconColor: controller.color[0],
                   onPressed: () {
@@ -151,7 +151,7 @@ class _HomeViewState extends State<HomeView> {
                 // Render default value at index 0
                 return CardWidget(
                   isOrgin: true,
-                  title: "New \n Origin Id",
+                  title: "New Origin Id",
                   svgPath: controller.svgPathsOrgin[0],
                   iconColor: controller.color[0],
                   onPressed: () {
@@ -425,7 +425,7 @@ class _HomeViewState extends State<HomeView> {
           SizedBox(
             width: 80.w,
             child: Text(
-              'Your Service Complaint is an essential document in international travel and for identification purposes.',
+              'Your feedback is important for our service improvement. Please pick the service you have an issue with',
               style: AppTextStyles.captionRegular.copyWith(
                   fontSize: AppSizes.font_12, color: AppColors.grayDark),
               maxLines: 4,
@@ -642,18 +642,38 @@ class CardWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 5.h),
-                Text(
-                  title,
-                  style: AppTextStyles.menuBold.copyWith(
-                    fontSize: AppSizes.font_10,
-                  ),
+                RichText(
                   textAlign: TextAlign.center,
-                ),
+                  text: TextSpan(
+                    style: AppTextStyles.bodySmallBold.copyWith(
+                      fontSize: AppSizes.font_10,
+                    ),
+                    children: getTitleTextSpans(title),
+                  ),
+                )
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  List<TextSpan> getTitleTextSpans(String title) {
+    List<String> words = title.split(' ');
+
+    // If the title contains only one word, return a single TextSpan
+    if (words.length == 1) {
+      return [
+        TextSpan(text: words[0]),
+      ];
+    }
+
+    // If the title contains two words, split the second word into a new line
+    return [
+      TextSpan(text: words[0]),
+      TextSpan(text: '\n'),
+      TextSpan(text: words[1]),
+    ];
   }
 }

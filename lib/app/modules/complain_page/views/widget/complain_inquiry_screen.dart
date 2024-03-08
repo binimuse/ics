@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -10,20 +11,25 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/complain_page/controllers/complain_page_controller.dart';
+import 'package:ics/app/modules/complain_page/data/model/base_complaint_services.dart';
+import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/foundation.dart';
 
 class ComplainInquiryScreen extends StatefulWidget {
-  final ComplainType complainType;
+  final BaseComplaintService complainType;
   const ComplainInquiryScreen({required this.complainType, super.key});
 
   @override
@@ -63,7 +69,27 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
       Uint8List myfile = await myRaw.readAsBytes();
       String base64String = base64Encode(myfile);
       getFileType(myRaw);
+      final PlatformFile pickedFile = PlatformFile(
+        path: result.files.single.path,
+        name: result.files.single.name,
+        size: 0,
+        bytes: null,
+      );
 
+      final int maxSizeInBytes = 30 * 1024 * 1024; // 10 MB
+
+      try {
+        if (pickedFile.size <= maxSizeInBytes) {
+          handleFilePickedSuccess(pickedFile);
+          uploaded = true;
+        } else {
+          uploaded = false;
+          AppToasts.showError("Invalid File, Please select an Image.");
+        }
+      } catch (e) {
+        uploaded = false;
+        print("Error: $e");
+      }
       setState(() {
         meFile.add(base64String);
         fileName.add(result.files.single.name);
@@ -71,6 +97,32 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
         uploaded = true;
       });
     }
+  }
+
+  void handleFilePickedSuccess(PlatformFile pickedFile) {
+    // Move the async code outside of setState
+    _handleFilePickedSuccess(pickedFile);
+  }
+
+  Future<void> _handleFilePickedSuccess(PlatformFile pickedFile) async {
+    // Perform the async operations
+    controller.documents.clear(); // Clear the existing files
+
+    MinioUploader uploader = MinioUploader();
+    String responseUrl = await uploader.uploadFileToMinio(pickedFile, '');
+
+    if (responseUrl.isNotEmpty) {
+      // Response is successful
+      print(responseUrl);
+      controller.documents.add(DocPathModel(
+        path: responseUrl,
+      ));
+    } else {
+      // Response is not successful
+      print('Response is false');
+    }
+
+    // Call setState to update the state
   }
 
   void getFileType(File file) {
@@ -85,79 +137,110 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title:
-            '${capitalizeFirstLetter(widget.complainType.name, widget.complainType == ComplainType.residentPermit)} ',
-        title2: 'Services',
+        title: widget.complainType.name,
+        title2: '',
         showActions: false,
         showLeading: true,
       ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.fromLTRB(7.w, 7.w, 7.w, 0),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 2.h,
-            ),
-            SizedBox(
-              width: 85.w,
-              child: Text(
-                'Your Complain is important for our service improvement. Please pick the service you have an issue with.',
-                style: AppTextStyles.captionRegular.copyWith(
-                    fontSize: AppSizes.font_12, color: AppColors.grayDark),
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            buildDropDown(),
-            SizedBox(
-              height: 2.h,
-            ),
-            buildTextFieald(),
-            SizedBox(
-              height: 1.h,
-            ),
-            buildFilePicker(),
-            SizedBox(height: 1.h),
-            RatingBar.builder(
-              initialRating: 3,
-              minRating: 1,
-              direction: Axis.horizontal,
-              tapOnlyMode: false,
-              glow: false,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              onRatingUpdate: (rating) {
-                print(rating);
-              },
-            ),
-            SizedBox(height: 2.h),
-            Visibility(
-              visible: fileName.isNotEmpty,
-              child: SizedBox(
-                height: 25.h,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 3.w),
-                  child: ListView.builder(
-                    itemCount: fileName.length,
-                    itemBuilder: (context, index) => _buildListItem(index),
+      body: Obx(() => controller.networkStatus.value == NetworkStatus.LOADING
+          ? Center(child: CustomLoadingWidget())
+          : SingleChildScrollView(
+              child: Padding(
+              padding: EdgeInsets.fromLTRB(7.w, 7.w, 7.w, 0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 2.h,
                   ),
-                ),
+                  SizedBox(
+                    width: 85.w,
+                    child: Text(
+                      'Your Complain is important for our service improvement. Please pick the service you have an issue with.',
+                      style: AppTextStyles.captionRegular.copyWith(
+                          fontSize: AppSizes.font_12,
+                          color: AppColors.grayDark),
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  buildDropDown(),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  buildDropDowncountry(),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Obx(() => controller.isfechedEmbassies.value
+                      ? FormBuilderDropdown(
+                          decoration: ReusableInputDecoration.getDecoration(
+                              'Embassies/branch',
+                              isMandatory: true),
+                          items: controller.base_embassies
+                              .map((CommonModel value) {
+                            return DropdownMenuItem<CommonModel>(
+                              value: value,
+                              child: Text(
+                                value.name,
+                                style: AppTextStyles.captionBold
+                                    .copyWith(color: AppColors.grayDark),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            controller.embassiesvalue.value = value;
+                          },
+                          name: 'Embassies/branch',
+                        )
+                      : SizedBox()),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  buildTextFieald(),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  RatingBar.builder(
+                    initialRating: 1,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    tapOnlyMode: false,
+                    glow: false,
+                    allowHalfRating: false,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      controller.rating = rating.toInt();
+                    },
+                  ),
+                  SizedBox(height: 2.h),
+                  buildFilePicker(),
+                  SizedBox(height: 2.h),
+                  Visibility(
+                    visible: fileName.isNotEmpty,
+                    child: SizedBox(
+                      height: 25.h,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 3.w),
+                        child: ListView.builder(
+                          itemCount: fileName.length,
+                          itemBuilder: (context, index) =>
+                              _buildListItem(index),
+                        ),
+                      ),
+                    ),
+                  ),
+                  buildSubmitButton(),
+                ],
               ),
-            ),
-            SizedBox(height: 2.h),
-            buildSubmitButton(),
-          ],
-        ),
-      )),
+            ))),
     );
   }
 
@@ -246,23 +329,45 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
     return SizedBox.shrink();
   }
 
-  buildDropDown() {
+  buildDropDowncountry() {
     return FormBuilderDropdown(
-      validator: ValidationBuilder().required('Complain Type').build(),
-      decoration: ReusableInputDecoration.getDecoration('Complain Type',
-          isMandatory: true),
-      items: controller.complaintType.map((String value) {
-        return DropdownMenuItem<String>(
+      decoration:
+          ReusableInputDecoration.getDecoration('Country', isMandatory: true),
+      items: controller.baseCountries.map((BaseCountryModel value) {
+        return DropdownMenuItem<BaseCountryModel>(
           value: value,
           child: Text(
-            value,
+            value.name,
             style:
                 AppTextStyles.captionBold.copyWith(color: AppColors.grayDark),
           ),
         );
       }).toList(),
       onChanged: (value) {
-        controller.complaintypevalue.value = value!;
+        controller.baseCountriesvalue.value = value;
+        controller.getEmbassies(controller.baseCountriesvalue.value!.id);
+        controller.embassiesvalue.value = null;
+      },
+      name: 'Country',
+    );
+  }
+
+  buildDropDown() {
+    return FormBuilderDropdown(
+      decoration: ReusableInputDecoration.getDecoration('Complain Type',
+          isMandatory: true),
+      items: widget.complainType.complaintTypes.map((ComplaintType value) {
+        return DropdownMenuItem<ComplaintType>(
+          value: value,
+          child: Text(
+            value.name,
+            style:
+                AppTextStyles.captionBold.copyWith(color: AppColors.grayDark),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        controller.complaintTypevalue.value = value!;
       },
       name: 'Complain',
     );
@@ -346,7 +451,13 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
         vertical: AppSizes.mp_v_2,
         horizontal: AppSizes.mp_w_6,
       ),
-      onPressed: () {},
+      onPressed: () {
+        if (controller.complaintTypevalue.value != null) {
+          controller.send();
+        } else {
+          AppToasts.showError("please select a complaint type");
+        }
+      },
     );
   }
 }
