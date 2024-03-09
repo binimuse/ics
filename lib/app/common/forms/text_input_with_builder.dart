@@ -24,6 +24,7 @@ class TextFormBuilder extends StatefulWidget {
     this.focusNode,
     this.keyboardType,
     this.maxline,
+    this.maxlength,
     this.inputFormatters,
     required this.showClearButton,
     this.onChanged, // Added onChanged callback
@@ -33,6 +34,7 @@ class TextFormBuilder extends StatefulWidget {
   final String hint;
   final String? labelText;
   final int? maxline;
+  final int? maxlength;
   final bool? isPassword;
   final bool showClearButton;
   final List<String>? moreInstructions;
@@ -79,7 +81,7 @@ class _TextInputLoginState extends State<TextFormBuilder> {
         FormBuilderTextField(
           maxLines: widget.maxline,
           inputFormatters: widget.inputFormatters,
-
+          maxLength: widget.maxlength,
           keyboardType: widget.keyboardType,
           validator: widget.validator,
           textInputAction: TextInputAction.next,

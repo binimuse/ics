@@ -65,37 +65,30 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
 
     if (result != null && result.files.single.path != null) {
       final myRaw = File(result.files.single.path!);
-      final size = await myRaw.length() / 1024;
-      Uint8List myfile = await myRaw.readAsBytes();
-      String base64String = base64Encode(myfile);
-      getFileType(myRaw);
-      final PlatformFile pickedFile = PlatformFile(
-        path: result.files.single.path,
-        name: result.files.single.name,
-        size: 0,
-        bytes: null,
-      );
+      final size = await myRaw.length() / 1024; // Size in KB
 
-      final int maxSizeInBytes = 30 * 1024 * 1024; // 10 MB
+      // Validate file size before adding to the list
+      final int maxSizeInBytes = 50000; // 10 MB
 
-      try {
-        if (pickedFile.size <= maxSizeInBytes) {
-          handleFilePickedSuccess(pickedFile);
-          uploaded = true;
-        } else {
-          uploaded = false;
-          AppToasts.showError("Invalid File, Please select an Image.");
-        }
-      } catch (e) {
-        uploaded = false;
-        print("Error: $e");
-      }
-      setState(() {
+      if (size <= maxSizeInBytes) {
+        Uint8List myfile = await myRaw.readAsBytes();
+        String base64String = base64Encode(myfile);
+        getFileType(myRaw);
+        final PlatformFile pickedFile = PlatformFile(
+          path: result.files.single.path,
+          name: result.files.single.name,
+          size: size.toInt(),
+          bytes: myfile,
+        );
+
+        handleFilePickedSuccess(pickedFile);
         meFile.add(base64String);
         fileName.add(result.files.single.name);
         fileSize.add(size);
-        uploaded = true;
-      });
+      } else {
+        uploaded = false;
+        AppToasts.showError("File Too Large");
+      }
     }
   }
 
@@ -178,7 +171,7 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
                       ? FormBuilderDropdown(
                           decoration: ReusableInputDecoration.getDecoration(
                               'Embassies/branch',
-                              isMandatory: true),
+                              isMandatory: false),
                           items: controller.base_embassies
                               .map((CommonModel value) {
                             return DropdownMenuItem<CommonModel>(
@@ -203,7 +196,6 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
                   SizedBox(
                     height: 2.h,
                   ),
-          
                   buildFilePicker(),
                   SizedBox(height: 2.h),
                   Visibility(
@@ -315,7 +307,7 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
   buildDropDowncountry() {
     return FormBuilderDropdown(
       decoration:
-          ReusableInputDecoration.getDecoration('Country', isMandatory: true),
+          ReusableInputDecoration.getDecoration('Country', isMandatory: false),
       items: controller.baseCountries.map((BaseCountryModel value) {
         return DropdownMenuItem<BaseCountryModel>(
           value: value,
@@ -358,8 +350,9 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
 
   buildTextFieald() {
     return TextFormBuilder(
-      isMandatory: true,
+      isMandatory: false,
       maxline: 3,
+      maxlength: 100,
       controller: controller.complaint,
       hint: 'State your complaint',
       labelText: 'Complaint',

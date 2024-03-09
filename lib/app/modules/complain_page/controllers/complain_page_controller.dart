@@ -154,7 +154,7 @@ class ComplainPageController extends GetxController {
       'objects': {
         'complaint_type_id': complaintTypevalue.value!.id,
         'message': complaint.text,
-        'rating': rating,
+        'rating': 0,
         'embassy_id': embassiesvalue.value!.id,
         'files': documents.map((e) => e.toJson()).toList(),
       }

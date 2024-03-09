@@ -123,8 +123,8 @@ class _ComplainInquiryScreenState extends State<ComplainFeedBackInquiryScreen> {
               height: 2.h,
             ),
             RatingBar.builder(
-              initialRating: 1,
-              minRating: 1,
+              initialRating: 0,
+              minRating: 0,
               direction: Axis.horizontal,
               tapOnlyMode: false,
               glow: false,
@@ -271,8 +271,9 @@ class _ComplainInquiryScreenState extends State<ComplainFeedBackInquiryScreen> {
 
   buildTextFieald() {
     return TextFormBuilder(
-      isMandatory: true,
+      isMandatory: false,
       maxline: 3,
+      maxlength: 100,
       controller: controller.complaint,
       hint: 'State your feedback',
       labelText: 'feedbacks',

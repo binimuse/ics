@@ -641,7 +641,7 @@ class CardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 6.h),
+                SizedBox(height: 5.h),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RichText(
