@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -18,7 +17,6 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/complain_page/controllers/complain_page_controller.dart';

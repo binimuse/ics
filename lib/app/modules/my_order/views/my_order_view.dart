@@ -6,10 +6,10 @@ import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/my_order/views/widget/complaint_widget.dart';
-import 'package:ics/app/modules/my_order/views/widget/orgin_widget.dart';
-import 'package:ics/app/modules/my_order/views/widget/passport_widget.dart';
-import 'package:ics/app/modules/my_order/views/widget/visa_widget.dart';
+import 'package:ics/app/modules/my_order/views/widget/view_widget/complaint_widget.dart';
+import 'package:ics/app/modules/my_order/views/widget/view_widget/orgin_widget.dart';
+import 'package:ics/app/modules/my_order/views/widget/view_widget/passport_widget.dart';
+import 'package:ics/app/modules/my_order/views/widget/view_widget/visa_widget.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/loading/custom_loading_widget.dart';
 import '../controllers/my_order_controller.dart';
@@ -162,7 +162,7 @@ class _MyOrderViewState extends State<MyOrderView> {
                 itemCount: controller.icsServiceComplaintModel.length,
                 itemBuilder: (context, index) {
                   return ComplaintWidget(
-                    icsApplication: controller.icsServiceComplaintModel[index],
+                    icsComplain: controller.icsServiceComplaintModel[index],
                     controller: controller,
                   );
                 },

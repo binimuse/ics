@@ -10,6 +10,7 @@ import 'package:ics/app/modules/my_order/data/model/ics_complaint_model.dart';
 import 'package:ics/app/modules/my_order/data/model/ics_visa_application.dart';
 
 import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
+import 'package:ics/app/modules/my_order/data/mutation/update_rating.dart';
 import 'package:ics/app/modules/my_order/data/quary/ics_complaint.dart';
 
 import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart';
@@ -29,9 +30,9 @@ import '../data/quary/get_doc_type.dart';
 class MyOrderController extends GetxController
     with SingleGetTickerProviderMixin {
   final count = 0.obs;
-
+  var selectedRating = 0.obs;
   late TabController tabController;
-
+  final TextEditingController complaint = TextEditingController();
   @override
   void onInit() {
     getOrginOrder();
@@ -102,6 +103,8 @@ class MyOrderController extends GetxController
         networkStatus.value = NetworkStatus.SUCCESS;
 
         isfechedorder.value = true;
+
+        
       }
     } catch (e, s) {
       networkStatus.value = NetworkStatus.ERROR;
@@ -249,6 +252,41 @@ class MyOrderController extends GetxController
       }
     } catch (e) {
       isSendDocSuccess(false);
+      print('Error: $e');
+    }
+  }
+
+  Future<void> rateComplaint(
+      String id, int rating, BuildContext context) async {
+    networkStatus.value = NetworkStatus.LOADING;
+    try {
+      //file upload
+
+      GraphQLClient graphQLClient;
+
+      graphQLClient = GraphQLConfiguration().clientToQuery();
+
+      final QueryResult result = await graphQLClient.mutate(
+        MutationOptions(
+          document: gql(Updaterating.update(id, rating)),
+        ),
+      );
+      selectedRating.value = 0;
+      if (result.hasException) {
+        networkStatus.value = NetworkStatus.ERROR;
+        print(result.exception.toString());
+      } else {
+        Navigator.pop(context); // Return false if cancel is pressed
+        networkStatus.value = NetworkStatus.SUCCESS;
+        AppToasts.showSuccess("Rated successfully");
+        MyOrderController myOrderController = Get.put(MyOrderController());
+
+        myOrderController.getComplaint();
+      }
+    } catch (e) {
+      networkStatus.value = NetworkStatus.ERROR;
+      print(e.toString());
+
       print('Error: $e');
     }
   }

@@ -5,21 +5,19 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/my_order/data/model/ics_complaint_model.dart';
-import 'package:ics/app/modules/my_order/data/model/ics_visa_application.dart';
-
+import 'package:ics/app/modules/my_order/views/widget/detail_page_complaint.dart';
 import 'package:ics/gen/assets.gen.dart';
-
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:sizer/sizer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ComplaintWidget extends StatelessWidget {
-  final IcsServiceComplaintModel icsApplication;
+  final IcsServiceComplaintModel icsComplain;
   final MyOrderController controller;
 
   const ComplaintWidget({
-    required this.icsApplication,
+    required this.icsComplain,
     required this.controller,
   });
   Widget build(BuildContext context) {
@@ -31,18 +29,21 @@ class ComplaintWidget extends StatelessWidget {
             SizedBox(
               height: 1.h,
             ),
-            buildCard(icsApplication),
+            buildCard(icsComplain, context),
           ],
         ),
       ),
     );
   }
 
-  Widget buildCard(IcsServiceComplaintModel icsApplication) {
+  Widget buildCard(IcsServiceComplaintModel icsComplain, BuildContext context) {
     return GestureDetector(
       onTap: () {
+        controller.selectedRating.value = icsComplain.rating;
+        ;
+        _showSummeryDiloag(context);
         // Get.to(DetailPassportWidget(
-        //   icsApplication: icsApplication,
+        //   icsComplain: icsComplain,
         // ));
       },
       child: Container(
@@ -77,7 +78,7 @@ class ComplaintWidget extends StatelessWidget {
                       },
                     ),
                     Text(
-                      icsApplication.complaintType.name,
+                      icsComplain.complaintType.name,
                       style: AppTextStyles.titleBold
                           .copyWith(fontWeight: FontWeight.w400, fontSize: 17),
                     ),
@@ -94,7 +95,7 @@ class ComplaintWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    icsApplication.complaintType.complaintService.name.toString(),
+                    icsComplain.complaintType.complaintService.name.toString(),
                     style: AppTextStyles.bodySmallBold.copyWith(
                       color: AppColors.primary,
                       fontSize: AppSizes.font_10,
@@ -117,7 +118,7 @@ class ComplaintWidget extends StatelessWidget {
                         height: 4.h,
                         width: 30.w,
                         decoration: BoxDecoration(
-                          color: icsApplication.resolved == null
+                          color: icsComplain.resolved == null
                               ? AppColors.danger
                               : AppColors.warning,
                           borderRadius: BorderRadius.circular(12.0),
@@ -127,7 +128,7 @@ class ComplaintWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              icsApplication.resolved == null
+                              icsComplain.resolved == null
                                   ? "Not Resolved yet"
                                   : "Resolved",
                               style: AppTextStyles.bodySmallBold.copyWith(
@@ -142,7 +143,7 @@ class ComplaintWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        convertToTimeAgo(icsApplication.createdAt.toString()),
+                        convertToTimeAgo(icsComplain.createdAt.toString()),
                         style: AppTextStyles.displayOneRegular.copyWith(
                           color: AppColors.grayDark,
                           fontSize: AppSizes.font_10,
@@ -156,6 +157,23 @@ class ComplaintWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  _showSummeryDiloag(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DetailComplaintWidget(
+          context: context,
+          icsComplain: icsComplain,
+          onTap: () {
+            controller.rateComplaint(
+                icsComplain.id, controller.selectedRating.value, context);
+          },
+          controller: controller,
+        );
+      },
     );
   }
 
