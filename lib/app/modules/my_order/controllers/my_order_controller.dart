@@ -6,9 +6,11 @@ import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/data/model/doc_type_model.dart';
 import 'package:ics/app/modules/my_order/data/model/grouped_application.dart';
+import 'package:ics/app/modules/my_order/data/model/ics_complaint_model.dart';
 import 'package:ics/app/modules/my_order/data/model/ics_visa_application.dart';
 
 import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
+import 'package:ics/app/modules/my_order/data/quary/ics_complaint.dart';
 
 import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart';
 
@@ -35,6 +37,7 @@ class MyOrderController extends GetxController
     getOrginOrder();
 
     getVisaApplication();
+    getComplaint();
     // getDoc();
     tabController = TabController(length: 5, vsync: this);
 
@@ -65,6 +68,36 @@ class MyOrderController extends GetxController
         allApplicationModel.value = (result['ics_applications'] as List)
             .map((e) => IcsApplication.fromMap(e))
             .toList();
+
+        networkStatus.value = NetworkStatus.SUCCESS;
+
+        isfechedorder.value = true;
+      }
+    } catch (e, s) {
+      networkStatus.value = NetworkStatus.ERROR;
+      isfechedorder.value = false;
+
+      print(">>>>>>>>>>>>>>>>>> $e");
+
+      print(">>>>>>>>>>>>>>>>>> $s");
+    }
+  }
+
+  RxList<IcsServiceComplaintModel> icsServiceComplaintModel =
+      List<IcsServiceComplaintModel>.of([]).obs;
+  GetIcsComplaint getIcsComplaint = GetIcsComplaint();
+  getComplaint() async {
+    networkStatus.value = NetworkStatus.LOADING;
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getIcsComplaint.fetchData(), {});
+
+      if (result != null) {
+        icsServiceComplaintModel.clear();
+        icsServiceComplaintModel.value =
+            (result['ics_service_complaints'] as List)
+                .map((e) => IcsServiceComplaintModel.fromJson(e))
+                .toList();
 
         networkStatus.value = NetworkStatus.SUCCESS;
 
