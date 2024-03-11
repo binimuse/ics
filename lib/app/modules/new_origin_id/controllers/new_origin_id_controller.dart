@@ -251,6 +251,7 @@ class NewOriginIdController extends GetxController
 
         Get.toNamed(Routes.MAIN_PAGE);
         Get.find<MainPageController>().changeBottomPage(1);
+        myOrderController.tabController.index = 1;
       } else {
         networkStatus.value = NetworkStatus.ERROR;
         AppToasts.showError("Something went wrong");

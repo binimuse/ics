@@ -596,5 +596,6 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
 
     Get.toNamed(Routes.MAIN_PAGE);
     Get.find<MainPageController>().changeBottomPage(1);
+    myOrderController.tabController.index = 1;
   }
 }

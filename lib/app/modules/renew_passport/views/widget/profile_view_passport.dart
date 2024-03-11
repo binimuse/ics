@@ -156,7 +156,7 @@ class ProfileViewRenewPassport extends GetView<RenewPassportController> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(
-            color: AppColors.grayLight,
+            color: AppColors.primaryDark,
             width: 1.0,
           ),
           color: AppColors.whiteOff,
@@ -170,7 +170,7 @@ class ProfileViewRenewPassport extends GetView<RenewPassportController> {
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
                 ),
-                color: AppColors.grayLighter,
+                color: AppColors.primaryLighter,
               ),
               height: 5.h,
               child: Row(
@@ -195,6 +195,14 @@ class ProfileViewRenewPassport extends GetView<RenewPassportController> {
                     style: AppTextStyles.bodySmallBold.copyWith(
                         color: AppColors.grayDark,
                         fontSize: AppSizes.font_12 * 1.0),
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.arrow_forward,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ],
               ),

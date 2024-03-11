@@ -78,7 +78,16 @@ class AllVisaView extends GetView<ALLVisaController> {
                         controller.baseVisaTypeModel.documentCategory!.code;
                     controller.getDoctype(doccode);
                     controller.visa_category_validity_type_id = confirmation.id;
-                    Get.to(AllVisaTerms());
+                    print(controller.baseVisaTypeModel.name);
+                    if (controller.baseVisaTypeModel.name == "Tourist Visa") {
+                      Get.to(AllVisaTerms(
+                        isTourst: true,
+                      ));
+                    } else {
+                      Get.to(AllVisaTerms(
+                        isTourst: false,
+                      ));
+                    }
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -143,7 +152,17 @@ class AllVisaView extends GetView<ALLVisaController> {
                                   controller.getDoctype(doccode);
                                   controller.visa_category_validity_type_id =
                                       confirmation.id;
-                                  Get.to(AllVisaTerms());
+                                  print(controller.baseVisaTypeModel.name);
+                                  if (controller.baseVisaTypeModel.name ==
+                                      "Tourist Visa") {
+                                    Get.to(AllVisaTerms(
+                                      isTourst: true,
+                                    ));
+                                  } else {
+                                    Get.to(AllVisaTerms(
+                                      isTourst: false,
+                                    ));
+                                  }
                                 },
                                 size: AppSizes.icon_size_8 * 0.7,
                               ),

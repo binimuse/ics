@@ -137,85 +137,88 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
       ),
       body: Obx(() => controller.networkStatus.value == NetworkStatus.LOADING
           ? Center(child: CustomLoadingWidget())
-          : SingleChildScrollView(
-              child: Padding(
-              padding: EdgeInsets.fromLTRB(7.w, 7.w, 7.w, 0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  SizedBox(
-                    width: 85.w,
-                    child: Text(
-                      'Your Complain is important for our service improvement. Please pick the service you have an issue with.',
-                      style: AppTextStyles.captionRegular.copyWith(
-                          fontSize: AppSizes.font_12,
-                          color: AppColors.grayDark),
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  buildDropDown(),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  buildDropDowncountry(),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Obx(() => controller.isfechedEmbassies.value
-                      ? FormBuilderDropdown(
-                          decoration: ReusableInputDecoration.getDecoration(
-                              'Embassies/branch',
-                              isMandatory: false),
-                          items: controller.base_embassies
-                              .map((CommonModel value) {
-                            return DropdownMenuItem<CommonModel>(
-                              value: value,
-                              child: Text(
-                                value.name,
-                                style: AppTextStyles.captionBold
-                                    .copyWith(color: AppColors.grayDark),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            controller.embassiesvalue.value = value;
-                          },
-                          name: 'Embassies/branch',
-                        )
-                      : SizedBox()),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  buildTextFieald(),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  buildFilePicker(),
-                  SizedBox(height: 2.h),
-                  Visibility(
-                    visible: fileName.isNotEmpty,
-                    child: SizedBox(
-                      height: 25.h,
+          : Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
                       child: Padding(
-                        padding: EdgeInsets.only(left: 3.w),
-                        child: ListView.builder(
-                          itemCount: fileName.length,
-                          itemBuilder: (context, index) =>
-                              _buildListItem(index),
+                    padding: EdgeInsets.fromLTRB(7.w, 7.w, 7.w, 0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 2.h,
                         ),
-                      ),
+                        SizedBox(
+                          width: 85.w,
+                          child: Text(
+                            'Your Complain is important for our service improvement. Please pick the service you have an issue with.',
+                            style: AppTextStyles.captionRegular.copyWith(
+                                fontSize: AppSizes.font_12,
+                                color: AppColors.grayDark),
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        buildDropDown(),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        buildDropDowncountry(),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Obx(() => controller.isfechedEmbassies.value
+                            ? FormBuilderDropdown(
+                                decoration:
+                                    ReusableInputDecoration.getDecoration(
+                                        'Embassies/branch',
+                                        isMandatory: false),
+                                items: controller.base_embassies
+                                    .map((CommonModel value) {
+                                  return DropdownMenuItem<CommonModel>(
+                                    value: value,
+                                    child: Text(
+                                      value.name,
+                                      style: AppTextStyles.captionBold
+                                          .copyWith(color: AppColors.grayDark),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  controller.embassiesvalue.value = value;
+                                },
+                                name: 'Embassies/branch',
+                              )
+                            : SizedBox()),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        buildTextFieald(),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        buildFilePicker(),
+                        SizedBox(height: 2.h),
+                        Visibility(
+                          visible: fileName.isNotEmpty,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: fileName.length,
+                            itemBuilder: (context, index) =>
+                                _buildListItem(index),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  buildSubmitButton(),
-                ],
-              ),
-            ))),
+                  )),
+                ),
+                buildSubmitButton(),
+              ],
+            )),
     );
   }
 
@@ -415,25 +418,28 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
   }
 
   buildSubmitButton() {
-    return CustomNormalButton(
-      text: 'Submit',
-      textStyle: AppTextStyles.bodyLargeBold.copyWith(
-        color: AppColors.whiteOff,
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: CustomNormalButton(
+        text: 'Submit',
+        textStyle: AppTextStyles.bodyLargeBold.copyWith(
+          color: AppColors.whiteOff,
+        ),
+        textcolor: AppColors.whiteOff,
+        buttoncolor: AppColors.primary,
+        borderRadius: AppSizes.radius_8,
+        padding: EdgeInsets.symmetric(
+          vertical: AppSizes.mp_v_2,
+          horizontal: AppSizes.mp_w_6,
+        ),
+        onPressed: () {
+          if (controller.complaintTypevalue.value != null) {
+            controller.send();
+          } else {
+            AppToasts.showError("please select a complaint type");
+          }
+        },
       ),
-      textcolor: AppColors.whiteOff,
-      buttoncolor: AppColors.primary,
-      borderRadius: AppSizes.radius_8,
-      padding: EdgeInsets.symmetric(
-        vertical: AppSizes.mp_v_2,
-        horizontal: AppSizes.mp_w_6,
-      ),
-      onPressed: () {
-        if (controller.complaintTypevalue.value != null) {
-          controller.send();
-        } else {
-          AppToasts.showError("please select a complaint type");
-        }
-      },
     );
   }
 }

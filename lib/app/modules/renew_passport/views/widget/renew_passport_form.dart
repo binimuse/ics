@@ -554,5 +554,6 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
 
     Get.toNamed(Routes.MAIN_PAGE);
     Get.find<MainPageController>().changeBottomPage(1);
+    myOrderController.tabController.index = 0;
   }
 }

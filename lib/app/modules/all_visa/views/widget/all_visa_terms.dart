@@ -16,10 +16,14 @@ import 'package:sizer/sizer.dart';
 
 import 'package:ics/app/config/theme/app_sizes.dart';
 
-import 'package:flutter/services.dart';
-
 class AllVisaTerms extends GetView<ALLVisaController> {
-  const AllVisaTerms({Key? key}) : super(key: key);
+  const AllVisaTerms({
+    super.key,
+    required this.isTourst,
+  });
+
+  final bool isTourst;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +41,9 @@ class AllVisaTerms extends GetView<ALLVisaController> {
               height: 1.h,
             ),
 
-            buildAdditionalCard(),
+            !isTourst ? buildAdditionalCard() : SizedBox(),
+
+            buildCheckboxFormField(),
             // Spacer(),
             buildActionButtons(),
           ],
@@ -70,8 +76,12 @@ class AllVisaTerms extends GetView<ALLVisaController> {
                       controller.isAgreedToTerms.value) {
                     Get.to(ProfileViewInvestmentvisa());
                   } else {
-                    AppToasts.showError(
-                        " Error, \n Please enter the company \n reference number \n and check the terms");
+                    if (isTourst && controller.isAgreedToTerms.value) {
+                      Get.to(ProfileViewInvestmentvisa());
+                    } else {
+                      AppToasts.showError(
+                          " Error, \n Please enter the company \n reference number \n and check the terms");
+                    }
                   }
                 },
               )),
@@ -98,7 +108,7 @@ class AllVisaTerms extends GetView<ALLVisaController> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormBuilder(
-                isMandatory: true,
+                isMandatory: isTourst ? false : true,
                 controller: controller.companyreference,
                 hint: 'Company Reference number',
                 labelText: 'Company Reference number',
@@ -111,7 +121,6 @@ class AllVisaTerms extends GetView<ALLVisaController> {
               ),
             ),
             SizedBox(height: 2.h),
-            buildCheckboxFormField(),
           ],
         ),
       ),

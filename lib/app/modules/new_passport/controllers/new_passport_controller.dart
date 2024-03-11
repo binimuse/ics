@@ -460,6 +460,7 @@ class NewPassportController extends GetxController
 
         Get.toNamed(Routes.MAIN_PAGE);
         Get.find<MainPageController>().changeBottomPage(1);
+        myOrderController.tabController.index = 0;
       }
     } catch (e) {
       print(e.toString());

@@ -36,7 +36,7 @@ class MyOrderController extends GetxController
 
     getVisaApplication();
     // getDoc();
-    tabController = TabController(length: 6, vsync: this);
+    tabController = TabController(length: 5, vsync: this);
 
     super.onInit();
   }

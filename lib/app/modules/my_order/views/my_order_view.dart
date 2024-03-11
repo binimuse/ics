@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
@@ -5,12 +7,15 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/my_order/views/widget/orgin_widget.dart';
-import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import 'package:ics/app/modules/my_order/views/widget/passport_widget.dart';
 import 'package:ics/app/modules/my_order/views/widget/visa_widget.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/loading/custom_loading_widget.dart';
 import '../controllers/my_order_controller.dart';
+
+import 'package:flutter_svg/svg.dart';
+
+import '../../../../gen/assets.gen.dart';
 
 class MyOrderView extends StatefulWidget {
   const MyOrderView({Key? key}) : super(key: key);
@@ -46,126 +51,115 @@ class _MyOrderViewState extends State<MyOrderView> {
   }
 
   buildBodyContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SafeArea(
-        child: Container(
-          child: DefaultTabController(
-            length: 5,
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SegmentedTabControl(
-                    // Customization of widget
-                    radius: const Radius.circular(3),
-                    backgroundColor: Colors.grey.shade300,
-                    indicatorColor: AppColors.primary,
-                    tabTextColor: Colors.black45,
-                    selectedTabTextColor: Colors.white,
-                    squeezeIntensity: 5,
-                    height: 50,
+    return Column(children: [
+      TabBar(
+        controller: controller.tabController,
+        tabAlignment: TabAlignment.start,
+        isScrollable: true,
+        labelStyle: AppTextStyles.bodyLargeBold
+            .copyWith(fontSize: AppSizes.font_10, color: AppColors.primary),
+        tabs: [
+          Tab(
+              text: 'Passport',
+              icon: SvgPicture.asset(
+                Assets.icons.passport,
+                color: AppColors.primary,
+                fit: BoxFit.contain,
+              )),
+          Tab(
+              text: 'Origin ID',
+              icon: SvgPicture.asset(
+                Assets.icons.profileDefault,
+                color: AppColors.primary,
+                fit: BoxFit.contain,
+              )),
+          Tab(
+              text: 'Visa',
+              icon: SvgPicture.asset(
+                Assets.icons.paper,
+                color: AppColors.primary,
+                fit: BoxFit.contain,
+              )),
+          Tab(
+              text: 'Resident Permit',
+              icon: SvgPicture.asset(
+                Assets.icons.memo,
+                color: AppColors.primary,
+                fit: BoxFit.contain,
+              )),
+          Tab(
+              text: 'Service Complaint',
+              icon: SvgPicture.asset(
+                Assets.icons.question,
+                color: AppColors.primary,
+                fit: BoxFit.contain,
+              )),
+        ],
+      ),
+      Expanded(
+        child: TabBarView(
+          controller: controller.tabController,
+          children: [
+            Container(
+              height: 100.h,
+              child: ListView.builder(
+                itemCount: controller.allApplicationModel.length,
+                itemBuilder: (context, index) {
+                  var element = controller.allApplicationModel[index];
+                  if (element.applicationType
+                          .contains("NEW_PASSPORT_APPLICATION") ||
+                      element.applicationType
+                          .contains("RENEW_PASSPORT_APPLICATION")) {
+                    return PassportWidget(
+                      icsApplication: controller.allApplicationModel[index],
+                      controller: controller,
+                    );
+                  }
 
-                    tabPadding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    textStyle: AppTextStyles.bodySmallBold
-                        .copyWith(fontSize: 12, color: AppColors.primary),
-                    // Options for selection
-                    // All specified values will override the [SegmentedTabControl] setting
-                    tabs: [
-                      SegmentTab(
-                        label: 'Origin',
-                      ),
-                      SegmentTab(
-                        label: 'Passport',
-                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
-                      ),
-                      SegmentTab(
-                        label: 'Visa',
-                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
-                      ),
-                      SegmentTab(
-                        label: 'Resident',
-                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
-                      ),
-                      SegmentTab(
-                        label: 'Complaint',
-                        // For example, this overrides [indicatorColor] from [SegmentedTabControl]
-                      ),
-                    ],
-                  ),
-                ),
-                // Sample pages
-                Padding(
-                  padding: const EdgeInsets.only(top: 70),
-                  child: TabBarView(
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      Container(
-                        height: 100.h,
-                        child: ListView.builder(
-                          itemCount: controller.allApplicationModel.length,
-                          itemBuilder: (context, index) {
-                            var element = controller.allApplicationModel[index];
-                            if (element.applicationType
-                                    .contains("NEW_ORIGIN_ID_APPLICATION") ||
-                                element.applicationType
-                                    .contains("RENEW_ORIGIN_ID_APPLICATION")) {
-                              return OrginIdWidget(
-                                icsApplication:
-                                    controller.allApplicationModel[index],
-                                controller: controller,
-                              );
-                            }
-                            return SizedBox();
-                          },
-                        ),
-                      ),
-                      Container(
-                        height: 100.h,
-                        child: ListView.builder(
-                          itemCount: controller.allApplicationModel.length,
-                          itemBuilder: (context, index) {
-                            var element = controller.allApplicationModel[index];
-                            if (element.applicationType
-                                    .contains("NEW_PASSPORT_APPLICATION") ||
-                                element.applicationType
-                                    .contains("RENEW_PASSPORT_APPLICATION")) {
-                              return PassportWidget(
-                                icsApplication:
-                                    controller.allApplicationModel[index],
-                                controller: controller,
-                              );
-                            }
-
-                            return SizedBox();
-                          },
-                        ),
-                      ),
-                      Container(
-                        height: 100.h,
-                        child: ListView.builder(
-                          itemCount: controller.allVisaApplicationModel.length,
-                          itemBuilder: (context, index) {
-                            return VisaWidget(
-                              icsApplication:
-                                  controller.allVisaApplicationModel[index],
-                              controller: controller,
-                            );
-                          },
-                        ),
-                      ),
-                      Container(height: 100.h, child: SizedBox()),
-                      Container(height: 100.h, child: SizedBox())
-                    ],
-                  ),
-                ),
-              ],
+                  return SizedBox();
+                },
+              ),
             ),
-          ),
+            // Sample pages
+            Container(
+              height: 100.h,
+              child: ListView.builder(
+                itemCount: controller.allApplicationModel.length,
+                itemBuilder: (context, index) {
+                  var element = controller.allApplicationModel[index];
+                  if (element.applicationType
+                          .contains("NEW_ORIGIN_ID_APPLICATION") ||
+                      element.applicationType
+                          .contains("RENEW_ORIGIN_ID_APPLICATION")) {
+                    return OrginIdWidget(
+                      icsApplication: controller.allApplicationModel[index],
+                      controller: controller,
+                    );
+                  }
+                  return SizedBox();
+                },
+              ),
+            ),
+
+            Container(
+              height: 100.h,
+              child: ListView.builder(
+                itemCount: controller.allVisaApplicationModel.length,
+                itemBuilder: (context, index) {
+                  return VisaWidget(
+                    icsApplication: controller.allVisaApplicationModel[index],
+                    controller: controller,
+                  );
+                },
+              ),
+            ),
+
+            Container(height: 100.h, child: SizedBox()),
+            Container(height: 100.h, child: SizedBox()),
+          ],
         ),
       ),
-    );
+    ]);
   }
 }
 

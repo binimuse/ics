@@ -304,6 +304,7 @@ class ALLVisaController extends GetxController
 
         Get.toNamed(Routes.MAIN_PAGE);
         Get.find<MainPageController>().changeBottomPage(1);
+        myOrderController.tabController.index = 2;
       }
     } catch (e) {
       isSendStared.value = false;

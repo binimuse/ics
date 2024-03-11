@@ -93,72 +93,80 @@ class _ComplainInquiryScreenState extends State<ComplainFeedBackInquiryScreen> {
         showActions: false,
         showLeading: true,
       ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.fromLTRB(7.w, 7.w, 7.w, 0),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 2.h,
-            ),
-            SizedBox(
-              width: 85.w,
-              child: Text(
-                'Your feedback is important for our service improvement. Please pick the service you have an issue with.',
-                style: AppTextStyles.captionRegular.copyWith(
-                    fontSize: AppSizes.font_12, color: AppColors.grayDark),
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            buildDropDown(),
-            SizedBox(
-              height: 2.h,
-            ),
-            buildTextFieald(),
-            SizedBox(
-              height: 2.h,
-            ),
-            RatingBar.builder(
-              initialRating: 0,
-              minRating: 0,
-              direction: Axis.horizontal,
-              tapOnlyMode: false,
-              glow: false,
-              allowHalfRating: false,
-              itemCount: 5,
-              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              onRatingUpdate: (rating) {
-                //   controller.rating = rating.toInt();
-              },
-            ),
-            // SizedBox(height: 2.h),
-            // buildFilePicker(),
-            Visibility(
-              visible: fileName.isNotEmpty,
-              child: SizedBox(
-                height: 30.h,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 3.w),
-                  child: ListView.builder(
-                    itemCount: fileName.length,
-                    itemBuilder: (context, index) => _buildListItem(index),
+              padding: EdgeInsets.fromLTRB(7.w, 7.w, 7.w, 0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 2.h,
                   ),
-                ),
+                  SizedBox(
+                    width: 85.w,
+                    child: Text(
+                      'Your feedback is important for our service improvement. Please pick the service you have an issue with.',
+                      style: AppTextStyles.captionRegular.copyWith(
+                          fontSize: AppSizes.font_12,
+                          color: AppColors.grayDark),
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  buildDropDown(),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  buildTextFieald(),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  RatingBar.builder(
+                    initialRating: 0,
+                    minRating: 0,
+                    direction: Axis.horizontal,
+                    tapOnlyMode: false,
+                    glow: false,
+                    allowHalfRating: false,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      //   controller.rating = rating.toInt();
+                    },
+                  ),
+                  // SizedBox(height: 2.h),
+                  // buildFilePicker(),
+                  Visibility(
+                    visible: fileName.isNotEmpty,
+                    child: SizedBox(
+                      height: 30.h,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 3.w),
+                        child: ListView.builder(
+                          itemCount: fileName.length,
+                          itemBuilder: (context, index) =>
+                              _buildListItem(index),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 3.h),
+                ],
               ),
-            ),
-            SizedBox(height: 3.h),
-            buildSubmitButton(),
-          ],
-        ),
-      )),
+            )),
+          ),
+          buildSubmitButton(),
+        ],
+      ),
     );
   }
 
@@ -336,19 +344,22 @@ class _ComplainInquiryScreenState extends State<ComplainFeedBackInquiryScreen> {
   }
 
   buildSubmitButton() {
-    return CustomNormalButton(
-      text: 'Submit',
-      textStyle: AppTextStyles.bodyLargeBold.copyWith(
-        color: AppColors.whiteOff,
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: CustomNormalButton(
+        text: 'Submit',
+        textStyle: AppTextStyles.bodyLargeBold.copyWith(
+          color: AppColors.whiteOff,
+        ),
+        textcolor: AppColors.whiteOff,
+        buttoncolor: AppColors.primary,
+        borderRadius: AppSizes.radius_8,
+        padding: EdgeInsets.symmetric(
+          vertical: AppSizes.mp_v_2,
+          horizontal: AppSizes.mp_w_6,
+        ),
+        onPressed: () {},
       ),
-      textcolor: AppColors.whiteOff,
-      buttoncolor: AppColors.primary,
-      borderRadius: AppSizes.radius_8,
-      padding: EdgeInsets.symmetric(
-        vertical: AppSizes.mp_v_2,
-        horizontal: AppSizes.mp_w_6,
-      ),
-      onPressed: () {},
     );
   }
 }
