@@ -7,6 +7,7 @@ import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
 import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
 
@@ -249,8 +250,8 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
 
     if (responseUrl.isNotEmpty) {
       // Response is successful
-      print(responseUrl);
-      widget.controller.sendDoc(widget.documentType.id, responseUrl);
+      widget.controller.docList.add(
+          DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
     } else {
       // Response is not successful
       print('Response is false');

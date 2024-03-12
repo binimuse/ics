@@ -307,7 +307,9 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
           controller: controller,
           onTap: () {
             Navigator.pop(context);
-            createCitizen();
+            setState(() {
+              controller.currentStep++;
+            });
           },
         );
       },
@@ -323,12 +325,9 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      await controller.updateNewApplication();
-      if (controller.isUpdateSuccess.value) {
-        setState(() {
-          controller.currentStep++;
-        });
-      }
+      setState(() {
+        controller.currentStep++;
+      });
     }
   }
 
@@ -545,15 +544,7 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
   }
 
   void finalstep() {
-    AppToasts.showSuccess("Passport request Sent successfully");
-    // final MyOrderController controller = Get.put(MyOrderController());
-    // controller.getNewPassport();
-    MyOrderController myOrderController = Get.put(MyOrderController());
+    controller.send();
 
-    myOrderController.getOrginOrder();
-
-    Get.toNamed(Routes.MAIN_PAGE);
-    Get.find<MainPageController>().changeBottomPage(1);
-    myOrderController.tabController.index = 0;
   }
 }

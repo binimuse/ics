@@ -13,6 +13,9 @@ import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
 
 import 'package:ics/app/modules/home/data/models/base_renewtype_passport_model.dart';
+import 'package:ics/app/modules/main_page/controllers/main_page_controller.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
+import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:ics/app/modules/new_passport/data/mutation/ics_citizens_mutuation.dart';
 
 import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
@@ -32,6 +35,7 @@ import 'package:ics/app/modules/renew_passport/data/quary/get_url_passport.dart'
 import 'package:ics/app/modules/renew_passport/data/quary/ics_citizens_passport.dart';
 
 import 'package:flutter/material.dart';
+import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:ics/services/graphql_conf.dart';
 
@@ -373,7 +377,7 @@ class RenewPassportController extends GetxController
   RxList<String> photoPath = <String>[].obs;
 
   var applicattionId;
-
+  List<DocPathModel> docList = [];
   Future<void> send() async {
     networkStatus.value = NetworkStatus.LOADING;
 
@@ -426,16 +430,19 @@ class RenewPassportController extends GetxController
               'renew_passport_applications': {
                 "data": {
                   'passport_number': passportNumberContoller.text,
-                  // 'correction_type_id': correctionTypevalue.value != null
-                  //     ? correctionTypevalue.value!.id
-                  //     : null,
+                  'correction_type_id': correctionTypevalue.value != null
+                      ? correctionTypevalue.value!.id
+                      : null,
                   'passport_renewal_type_id': renewType.id,
                 }
               },
               'citizen_families': {
                 "data":
                     familyModelvalue.map((element) => element.toJson()).toList()
-              }
+              },
+              'application_documents': {
+                "data": docList.map((e) => e.toJson()).toList()
+              },
             }
           },
         ),
@@ -463,6 +470,7 @@ class RenewPassportController extends GetxController
         applicattionId = result.data!['insert_ics_applications']['returning'][0]
                 ['id']
             .toString();
+        updateNewApplication();
       }
     } catch (e, s) {
       networkStatus.value = NetworkStatus.ERROR;
@@ -481,55 +489,55 @@ class RenewPassportController extends GetxController
     }
   }
 
-  var isSendDocSuccess = false.obs;
+  // var isSendDocSuccess = false.obs;
 
-  var newDocId;
+  // var newDocId;
 
-  Future<void> sendDoc(
-    var documentTypeId,
-    var path,
-  ) async {
-    try {
-      isSendStared.value = true;
+  // Future<void> sendDoc(
+  //   var documentTypeId,
+  //   var path,
+  // ) async {
+  //   try {
+  //     isSendStared.value = true;
 
-      // file upload
+  //     // file upload
 
-      GraphQLClient graphQLClient;
+  //     GraphQLClient graphQLClient;
 
-      graphQLClient = GraphQLConfiguration().clientToQuery();
+  //     graphQLClient = GraphQLConfiguration().clientToQuery();
 
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(NewDocApplications.newDoc),
-          variables: <String, dynamic>{
-            'objects': {
-              'application_id': applicattionId,
-              'files': {
-                'path': path,
-              },
-              'document_type_id': documentTypeId,
-            }
-          },
-        ),
-      );
+  //     final QueryResult result = await graphQLClient.mutate(
+  //       MutationOptions(
+  //         document: gql(NewDocApplications.newDoc),
+  //         variables: <String, dynamic>{
+  //           'objects': {
+  //             'application_id': applicattionId,
+  //             'files': {
+  //               'path': path,
+  //             },
+  //             'document_type_id': documentTypeId,
+  //           }
+  //         },
+  //       ),
+  //     );
 
-      if (result.hasException) {
-        isSendStared.value = false;
+  //     if (result.hasException) {
+  //       isSendStared.value = false;
 
-        print(result.exception.toString());
-      } else {
-        isSendDocSuccess(true);
+  //       print(result.exception.toString());
+  //     } else {
+  //       isSendDocSuccess(true);
 
-        isSendStared.value = false;
+  //       isSendStared.value = false;
 
-        AppToasts.showSuccess("Document uploaded successfully");
-      }
-    } catch (e) {
-      isSendStared.value = false;
+  //       AppToasts.showSuccess("Document uploaded successfully");
+  //     }
+  //   } catch (e) {
+  //     isSendStared.value = false;
 
-      print('Error: $e');
-    }
-  }
+  //     print('Error: $e');
+  //   }
+  // }
 
   var isUpdateSuccess = false.obs;
   Future<void> updateNewApplication() async {
@@ -550,6 +558,16 @@ class RenewPassportController extends GetxController
         isUpdateSuccess(false);
         print(result.exception.toString());
       } else {
+        AppToasts.showSuccess("Passport request Sent successfully");
+        // final MyOrderController controller = Get.put(MyOrderController());
+        // controller.getNewPassport();
+        MyOrderController myOrderController = Get.put(MyOrderController());
+
+        myOrderController.getOrginOrder();
+
+        Get.toNamed(Routes.MAIN_PAGE);
+        Get.find<MainPageController>().changeBottomPage(1);
+        myOrderController.tabController.index = 0;
         isUpdateSuccess(true);
       }
     } catch (e) {

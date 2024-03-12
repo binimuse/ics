@@ -92,7 +92,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
                       height: 1.h,
                     ),
                     TabBar(
-                      controller: controller.tabController,
+                      controller: controller.tabControllerPassport,
                       tabAlignment: TabAlignment.center,
                       isScrollable: true,
                       labelStyle: AppTextStyles.bodyLargeBold.copyWith(
@@ -147,7 +147,7 @@ class _HomeViewState extends State<DetailPassportWidget> {
                           width: double
                               .infinity, // Set the width to occupy all available space
                           child: TabBarView(
-                            controller: controller.tabController,
+                            controller: controller.tabControllerPassport,
                             children: [
                               buildStatus(),
                               buildProfile(),

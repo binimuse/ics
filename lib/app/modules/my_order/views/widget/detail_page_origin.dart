@@ -89,7 +89,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
                       height: 1.h,
                     ),
                     TabBar(
-                      controller: controller.tabController,
+                      controller: controller.tabControllerorgin,
                       tabAlignment: TabAlignment.center,
                       isScrollable: true,
                       labelStyle: AppTextStyles.bodyLargeBold.copyWith(
@@ -144,7 +144,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
                           width: double
                               .infinity, // Set the width to occupy all available space
                           child: TabBarView(
-                            controller: controller.tabController,
+                            controller: controller.tabControllerorgin,
                             children: [
                               buildStatus(),
                               buildProfile(),

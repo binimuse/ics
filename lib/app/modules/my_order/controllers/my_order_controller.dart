@@ -32,6 +32,8 @@ class MyOrderController extends GetxController
   final count = 0.obs;
   var selectedRating = 0.obs;
   late TabController tabController;
+  late TabController tabControllerorgin;
+  late TabController tabControllerPassport;
   final TextEditingController complaint = TextEditingController();
   @override
   void onInit() {
@@ -41,6 +43,8 @@ class MyOrderController extends GetxController
     getComplaint();
     // getDoc();
     tabController = TabController(length: 5, vsync: this);
+    tabControllerorgin = TabController(length: 6, vsync: this);
+    tabControllerPassport = TabController(length: 6, vsync: this);
 
     super.onInit();
   }
@@ -103,8 +107,6 @@ class MyOrderController extends GetxController
         networkStatus.value = NetworkStatus.SUCCESS;
 
         isfechedorder.value = true;
-
-        
       }
     } catch (e, s) {
       networkStatus.value = NetworkStatus.ERROR;
