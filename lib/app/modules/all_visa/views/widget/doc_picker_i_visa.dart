@@ -9,6 +9,7 @@ import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
 
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
@@ -216,11 +217,6 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
     }
   }
 
-  void handleFilePickedSuccess(PlatformFile pickedFile) {
-    // Move the async code outside of setState
-    _handleFilePickedSuccess(pickedFile);
-  }
-
   Future<void> _handleFilePickedSuccess(PlatformFile pickedFile) async {
     // Perform the async operations
     widget.controller.documents
@@ -240,18 +236,20 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
 
     if (responseUrl.isNotEmpty) {
       // Response is successful
-      print(responseUrl);
+
       widget.controller.docList.add(
           DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
+      widget.controller.networkStatus.value = NetworkStatus.SUCCESS;
     } else {
+      widget.controller.networkStatus.value = NetworkStatus.ERROR;
       // Response is not successful
       print('Response is false');
     }
 
     // Call setState to update the state
-    setState(() {
-      widget.controller.isSendStared.value = false;
-    });
+    // setState(() {
+    //   widget.controller.isSendStared.value = false;
+    // });
   }
 
   void _showBottomNavigationSheet() {
@@ -299,7 +297,8 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
   }
 
   void _pickFromGallery() async {
-    widget.controller.isSendStared.value = true;
+    widget.controller.networkStatus.value = NetworkStatus.LOADING;
+
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
@@ -315,38 +314,39 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
 
       try {
         if (pickedFile.size <= maxSizeInBytes) {
-          handleFilePickedSuccess(pickedFile);
-          widget.controller.isSendStared.value = false;
+          _handleFilePickedSuccess(pickedFile);
+          widget.controller.networkStatus.value = NetworkStatus.ERROR;
         } else {
-          widget.controller.isSendStared.value = false;
+          widget.controller.networkStatus.value = NetworkStatus.ERROR;
           AppToasts.showError("Invalid File, Please select an Image.");
         }
       } catch (e) {
-        widget.controller.isSendStared.value = false;
+        widget.controller.networkStatus.value = NetworkStatus.ERROR;
+
         print("Error: $e");
       }
     }
   }
 
   Future<void> openPdfPicker() async {
-    widget.controller.isSendStared.value = true;
+    widget.controller.networkStatus.value = NetworkStatus.LOADING;
+
     try {
       PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
       if (pickedFile != null) {
         try {
-          handleFilePickedSuccess(pickedFile);
+          _handleFilePickedSuccess(pickedFile);
         } catch (e, s) {
-          setState(() {
-            hasError = true;
-          });
-          widget.controller.isSendStared.value = false;
+          widget.controller.networkStatus.value = NetworkStatus.ERROR;
+
           AppToasts.showError("error  while getting the URL.");
 
           print("Error in geturl: $s");
         }
       }
     } catch (e) {
-      widget.controller.isSendStared.value = false;
+      widget.controller.networkStatus.value = NetworkStatus.ERROR;
+
       // Handle the error
       print("Error: $e");
     }

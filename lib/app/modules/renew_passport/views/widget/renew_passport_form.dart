@@ -154,7 +154,6 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
               padding: EdgeInsets.all(16.0),
               child: FormBuilder(
                 key: controller.renewPassportformKey,
-                enabled: true,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 skipDisabled: true,
                 canPop: false,
@@ -543,6 +542,5 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
 
   void finalstep() {
     controller.send();
-
   }
 }

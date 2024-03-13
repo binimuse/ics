@@ -7,6 +7,7 @@ import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
 import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
@@ -28,6 +29,7 @@ class _BuildDocState extends State<BuildDoc> {
   bool hasError = false;
 
   Future<void> openPdfPicker() async {
+    widget.controller.networkStatus.value = NetworkStatus.LOADING;
     widget.controller.isSendStared.value = true;
     try {
       PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
@@ -35,6 +37,7 @@ class _BuildDocState extends State<BuildDoc> {
         try {
           handleFilePickedSuccess(pickedFile);
         } catch (e, s) {
+          widget.controller.networkStatus.value = NetworkStatus.ERROR;
           setState(() {
             hasError = true;
           });
@@ -45,6 +48,7 @@ class _BuildDocState extends State<BuildDoc> {
         }
       }
     } catch (e) {
+      widget.controller.networkStatus.value = NetworkStatus.ERROR;
       widget.controller.isSendStared.value = false;
       // Handle the error
       print("Error: $e");
@@ -252,7 +256,9 @@ class _BuildDocState extends State<BuildDoc> {
 
       widget.controller.docList.add(
           DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
+      widget.controller.networkStatus.value = NetworkStatus.SUCCESS;
     } else {
+      widget.controller.networkStatus.value = NetworkStatus.ERROR;
       // Response is not successful
       print('Response is false');
     }

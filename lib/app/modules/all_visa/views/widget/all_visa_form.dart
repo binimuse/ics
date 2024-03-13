@@ -100,11 +100,6 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
               ],
             ),
           ),
-          Obx(
-            () => controller.isSendStared.value
-                ? CustomLoadingWidget()
-                : const SizedBox(),
-          ),
         ],
       ),
     );
@@ -287,7 +282,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
       AppToasts.showError("Document are empty");
       return;
     } else if (controller.documents.any((element) => element.files.isEmpty)) {
-      controller.isSendStared.value = false;
+      controller.networkStatus.value = NetworkStatus.ERROR;
       AppToasts.showError("Document must not be empty");
       return;
     } else {

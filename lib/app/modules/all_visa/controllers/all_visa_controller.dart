@@ -117,7 +117,7 @@ class ALLVisaController extends GetxController
   GraphQLCommonApi graphQLCommonApi = GraphQLCommonApi();
   final Rxn<CommonModel> haircolorvalue = Rxn<CommonModel>();
   var isSend = false.obs;
-  var isSendStared = false.obs;
+
   //Step 2
 
   var isfeched = false.obs;
@@ -280,7 +280,7 @@ class ALLVisaController extends GetxController
   Future<void> updateNewApplication() async {
     try {
       //file upload
-      isSendStared.value = true;
+      networkStatus.value = NetworkStatus.LOADING;
       GraphQLClient graphQLClient;
 
       graphQLClient = GraphQLConfiguration().clientToQuery();
@@ -292,11 +292,11 @@ class ALLVisaController extends GetxController
       );
 
       if (result.hasException) {
-        isSendStared.value = false;
+        networkStatus.value = NetworkStatus.ERROR;
         isUpdateSuccess(false);
         print(result.exception.toString());
       } else {
-        isSendStared.value = false;
+        networkStatus.value = NetworkStatus.SUCCESS;
         AppToasts.showSuccess("Visa Application successfully");
         MyOrderController myOrderController = Get.put(MyOrderController());
 
@@ -307,7 +307,7 @@ class ALLVisaController extends GetxController
         myOrderController.tabController.index = 2;
       }
     } catch (e) {
-      isSendStared.value = false;
+      networkStatus.value = NetworkStatus.ERROR;
       print(e.toString());
       isUpdateSuccess(false);
       print('Error: $e');
@@ -319,7 +319,7 @@ class ALLVisaController extends GetxController
   RxList<String> photoPath = <String>[].obs;
   Future<void> send() async {
     try {
-      isSendStared.value = true;
+      networkStatus.value = NetworkStatus.LOADING;
       DateTime dateOfBirth = DateTime(
         int.parse(yearController.text),
         int.parse(monthController.text),
@@ -340,7 +340,7 @@ class ALLVisaController extends GetxController
     } catch (e) {
       handleSendException(e);
     } finally {
-      isSendStared.value = false;
+      networkStatus.value = NetworkStatus.ERROR;
     }
   }
 
@@ -404,7 +404,7 @@ class ALLVisaController extends GetxController
 
   void handleSendException(dynamic e) {
     isSend.value = false;
-    isSendStared.value = false;
+    networkStatus.value = NetworkStatus.ERROR;
     print('Error sending data: $e');
     if (!e.toString().contains("Null")) {
       AppToasts.showError("An error occurred while sending data.");

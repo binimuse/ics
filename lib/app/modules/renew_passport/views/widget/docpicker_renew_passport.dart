@@ -7,6 +7,7 @@ import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/common/fileupload/pdfpicker.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:ics/app/modules/renew_passport/controllers/renew_passport_controller.dart';
 import 'package:ics/app/modules/renew_passport/data/model/base_model_renew_passport.dart';
@@ -30,6 +31,7 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
   bool hasError = false;
 
   Future<void> openPdfPicker() async {
+    widget.controller.networkStatus.value = NetworkStatus.LOADING;
     widget.controller.isSendStared.value = true;
     try {
       PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
@@ -37,6 +39,7 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
         try {
           handleFilePickedSuccess(pickedFile);
         } catch (e, s) {
+          widget.controller.networkStatus.value = NetworkStatus.ERROR;
           setState(() {
             hasError = true;
           });
@@ -47,6 +50,7 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
         }
       }
     } catch (e) {
+      widget.controller.networkStatus.value = NetworkStatus.ERROR;
       // Handle the error
       print("Error: $e");
     }
@@ -252,7 +256,10 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
       // Response is successful
       widget.controller.docList.add(
           DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
+
+      widget.controller.networkStatus.value = NetworkStatus.SUCCESS;
     } else {
+      widget.controller.networkStatus.value = NetworkStatus.ERROR;
       // Response is not successful
       print('Response is false');
     }

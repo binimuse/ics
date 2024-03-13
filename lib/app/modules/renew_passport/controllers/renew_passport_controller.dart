@@ -558,6 +558,7 @@ class RenewPassportController extends GetxController
         isUpdateSuccess(false);
         print(result.exception.toString());
       } else {
+        Get.delete<RenewPassportController>();
         AppToasts.showSuccess("Passport request Sent successfully");
         // final MyOrderController controller = Get.put(MyOrderController());
         // controller.getNewPassport();

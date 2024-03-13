@@ -40,14 +40,14 @@ class ComplaintWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         controller.selectedRating.value = icsComplain.rating;
-        ;
+
         _showSummeryDiloag(context);
         // Get.to(DetailPassportWidget(
         //   icsComplain: icsComplain,
         // ));
       },
       child: Container(
-        height: 23.5.h,
+        height: 25.h,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -67,12 +67,16 @@ class ComplaintWidget extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 7.0),
                 child: Row(
                   children: [
                     IconButton(
                       icon: SvgPicture.asset(Assets.icons.passport,
-                          color: AppColors.danger),
+                          color: icsComplain.complaintType.complaintService.name
+                                      .toString() ==
+                                  "Passport"
+                              ? AppColors.success
+                              : AppColors.danger),
                       onPressed: () {
                         // showModal(context);
                       },
@@ -83,6 +87,25 @@ class ComplaintWidget extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w400, fontSize: 17),
                     ),
                     Spacer(),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: SvgPicture.asset(Assets.icons.message,
+                          color: AppColors.grayDark),
+                      onPressed: () {
+                        // showModal(context);
+                      },
+                    ),
+                    Text(
+                      icsComplain.message,
+                      style: AppTextStyles.titleBold
+                          .copyWith(fontWeight: FontWeight.w400, fontSize: 17),
+                    ),
                   ],
                 ),
               ),

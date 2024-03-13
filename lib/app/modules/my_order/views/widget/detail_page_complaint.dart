@@ -111,32 +111,7 @@ class DetailComplaintWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Message".tr,
-                style: AppTextStyles.bodyLargeBold
-                    .copyWith(color: AppColors.black),
-              ),
-            ),
-            Card(
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                children: [
-                  Center(
-                    child: Text(
-                      icsComplain.message.toString(),
-                      style: AppTextStyles.bodySmallRegular
-                          .copyWith(color: AppColors.primary),
-                    ),
-                  ),
-                  SizedBox(width: 2.w),
-                ],
-              ),
-            ),
+            SizedBox(height: 2.h),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
