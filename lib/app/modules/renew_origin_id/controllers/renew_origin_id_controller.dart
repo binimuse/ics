@@ -29,7 +29,6 @@ import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/booked_date_model.dart';
 import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
-import 'package:ics/app/modules/new_passport/data/mutation/book_appointemts_mutation.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_booked_date.dart';
 
 import 'package:ics/app/modules/renew_origin_id/data/model/base_model_renew_orgin.dart';

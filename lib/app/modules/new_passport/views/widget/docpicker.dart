@@ -30,7 +30,7 @@ class _BuildDocState extends State<BuildDoc> {
 
   Future<void> openPdfPicker() async {
     widget.controller.networkStatus.value = NetworkStatus.LOADING;
-    widget.controller.isSendStared.value = true;
+
     try {
       PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
       if (pickedFile != null) {
@@ -41,7 +41,7 @@ class _BuildDocState extends State<BuildDoc> {
           setState(() {
             hasError = true;
           });
-          widget.controller.isSendStared.value = false;
+
           AppToasts.showError("error  while getting the URL.");
 
           print("Error in geturl: $s");
@@ -49,7 +49,7 @@ class _BuildDocState extends State<BuildDoc> {
       }
     } catch (e) {
       widget.controller.networkStatus.value = NetworkStatus.ERROR;
-      widget.controller.isSendStared.value = false;
+
       // Handle the error
       print("Error: $e");
     }
@@ -252,11 +252,13 @@ class _BuildDocState extends State<BuildDoc> {
         await uploader.uploadFileToMinio(pickedFile, widget.documentType.id!);
 
     if (responseUrl.isNotEmpty) {
+      widget.controller.networkStatus.value = NetworkStatus.SUCCESS;
       // Response is successful
 
       widget.controller.docList.add(
           DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
-      widget.controller.networkStatus.value = NetworkStatus.SUCCESS;
+
+      setState(() {});
     } else {
       widget.controller.networkStatus.value = NetworkStatus.ERROR;
       // Response is not successful
@@ -264,8 +266,5 @@ class _BuildDocState extends State<BuildDoc> {
     }
 
     // Call setState to update the state
-    setState(() {
-      widget.controller.isSendStared.value = false;
-    });
   }
 }

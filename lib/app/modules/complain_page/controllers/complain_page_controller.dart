@@ -13,8 +13,11 @@ import 'package:ics/app/modules/complain_page/data/model/base_complaint_services
 import 'package:ics/app/modules/complain_page/data/mutation/comlinat_mutuation.dart';
 
 import 'package:ics/app/modules/complain_page/data/quary/get_com_services.dart';
+import 'package:ics/app/modules/main_page/controllers/main_page_controller.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_origin_id/data/quary/get_emabassies_orginid.dart';
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
+import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/services/graphql_conf.dart';
 
 class ComplainPageController extends GetxController {
@@ -166,9 +169,18 @@ class ComplainPageController extends GetxController {
       networkStatus.value = NetworkStatus.ERROR;
       print("Error executing mutation: ${result.exception}");
     } else {
+      complaint.clear();
+      documents.clear();
       networkStatus.value = NetworkStatus.SUCCESS;
       AppToasts.showSuccess("Complaint Sent");
-      Get.back();
+
+      MyOrderController myOrderController = Get.put(MyOrderController());
+
+      myOrderController.getOrginOrder();
+
+      Get.toNamed(Routes.MAIN_PAGE);
+      Get.find<MainPageController>().changeBottomPage(1);
+      myOrderController.tabController.index = 4;
     }
   }
 

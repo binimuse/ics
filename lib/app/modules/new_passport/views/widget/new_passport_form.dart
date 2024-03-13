@@ -95,18 +95,15 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
                   height: 1.h,
                 ),
 
-                Obx(() =>
-                    controller.networkStatus.value == NetworkStatus.LOADING
-                        ? Center(child: CustomLoadingWidget())
-                        : buildForm(context)),
+                buildForm(context),
                 // Spacer(),
               ],
             ),
           ),
           Obx(
-            () => controller.isSendStared.value
-                ? CustomLoadingWidget()
-                : const SizedBox(),
+            () => controller.networkStatus.value == NetworkStatus.LOADING
+                ? Center(child: CustomLoadingWidget())
+                : SizedBox(),
           ),
         ],
       ),
@@ -303,7 +300,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
       AppToasts.showError("Document are empty");
       return;
     } else if (controller.documents.any((element) => element.files.isEmpty)) {
-      controller.isSendStared.value = false;
+      controller.networkStatus.value = NetworkStatus.ERROR;
       AppToasts.showError("Document must not be empty");
       return;
     } else {

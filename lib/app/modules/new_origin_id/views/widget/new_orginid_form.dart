@@ -93,7 +93,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
           ),
           Obx(
             () => controller.networkStatus.value == NetworkStatus.LOADING
-                ? CustomLoadingWidget()
+                ? Center(child: CustomLoadingWidget())
                 : const SizedBox(),
           ),
         ],

@@ -271,7 +271,7 @@ class NewPassportController extends GetxController
   var isGetDocUrlStarted = false.obs;
 
   var isSend = false.obs;
-  var isSendStared = false.obs;
+
   var newApplicationId;
   late DateTime selelctedate;
   List<DateTime> occupiedDates = [
@@ -315,7 +315,7 @@ class NewPassportController extends GetxController
   List<DocPathModel> docList = [];
   Future<void> send() async {
     try {
-      isSendStared.value = true;
+      networkStatus.value = NetworkStatus.LOADING;
       DateTime dateOfBirth = DateTime(
         int.parse(yearController.text),
         int.parse(monthController.text),
@@ -339,7 +339,7 @@ class NewPassportController extends GetxController
       print(s);
       handleSendException(e);
     } finally {
-      isSendStared.value = false;
+      networkStatus.value = NetworkStatus.ERROR;
     }
   }
 
@@ -422,7 +422,7 @@ class NewPassportController extends GetxController
 
   void handleSendException(dynamic e) {
     isSend.value = false;
-    isSendStared.value = false;
+    networkStatus.value = NetworkStatus.ERROR;
     print('Error sending data: $e');
     if (!e.toString().contains("Null")) {
       AppToasts.showError("An error occurred while sending data.");

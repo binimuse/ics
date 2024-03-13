@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
@@ -39,9 +40,13 @@ class ComplaintWidget extends StatelessWidget {
   Widget buildCard(IcsServiceComplaintModel icsComplain, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        controller.selectedRating.value = icsComplain.rating;
+        if (icsComplain.resolved != null) {
+          controller.selectedRating.value = icsComplain.rating;
+          _showSummeryDiloag(context);
+        } else {
+          AppToasts.showError("your Complaint not resolved yet");
+        }
 
-        _showSummeryDiloag(context);
         // Get.to(DetailPassportWidget(
         //   icsComplain: icsComplain,
         // ));

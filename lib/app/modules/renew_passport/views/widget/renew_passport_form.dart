@@ -92,7 +92,7 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
           ),
           Obx(
             () => controller.networkStatus.value == NetworkStatus.LOADING
-                ? CustomLoadingWidget()
+                ? Center(child: CustomLoadingWidget())
                 : const SizedBox(),
           ),
         ],

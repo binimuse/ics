@@ -240,6 +240,7 @@ class _BuildDocState extends State<BuildDoc_I_Visa> {
       widget.controller.docList.add(
           DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
       widget.controller.networkStatus.value = NetworkStatus.SUCCESS;
+      setState(() {});
     } else {
       widget.controller.networkStatus.value = NetworkStatus.ERROR;
       // Response is not successful

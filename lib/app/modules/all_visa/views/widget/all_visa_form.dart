@@ -92,13 +92,15 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                   height: 1.h,
                 ),
 
-                Obx(() =>
-                    controller.networkStatus.value == NetworkStatus.LOADING
-                        ? Center(child: CustomLoadingWidget())
-                        : buildForm(context)),
+                buildForm(context),
                 // Spacer(),
               ],
             ),
+          ),
+          Obx(
+            () => controller.networkStatus.value == NetworkStatus.LOADING
+                ? Center(child: CustomLoadingWidget())
+                : SizedBox(),
           ),
         ],
       ),
