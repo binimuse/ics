@@ -24,8 +24,11 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/data/enums.dart';
 
 import 'package:ics/app/modules/home/data/models/base_renewtype_model.dart';
+import 'package:ics/app/modules/main_page/controllers/main_page_controller.dart';
+import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/booked_date_model.dart';
+import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:ics/app/modules/new_passport/data/mutation/book_appointemts_mutation.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_booked_date.dart';
 
@@ -289,50 +292,6 @@ class RenewOriginIdController extends GetxController
 
   late DateTime? selectedDate;
   late DateTime? selectedDateTime;
-  Future<void> sendBookedDates(BuildContext context) async {
-    networkStatus.value = NetworkStatus.LOADING;
-    try {
-      GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
-      // Remove the time component from the selectedDate
-      // Convert selectedDate to a date string without the time component
-      String dateString = selectedDate!.toIso8601String().split('T').first;
-
-      print(dateString);
-
-      String timetz = DateFormat("HH:mm:ss").format(selectedDateTime!);
-
-      print(timetz);
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(NewAppointments.newApp),
-          variables: <String, dynamic>{
-            "objects": {
-              "date": dateString,
-              "application_id": newApplicationID,
-              "start_time": timetz,
-            }
-          },
-        ),
-      );
-
-      if (!result.hasException) {
-        networkStatus.value = NetworkStatus.SUCCESS;
-        AppToasts.showSuccess("Renew Origin Sent");
-
-        Get.offAllNamed(Routes.MAIN_PAGE);
-      } else {
-        networkStatus.value = NetworkStatus.ERROR;
-        AppToasts.showError("Something went wrong");
-        print(result);
-      }
-    } catch (e, s) {
-      AppToasts.showError("Something went wrong");
-      print(e);
-      print(s);
-      networkStatus.value = NetworkStatus.ERROR;
-    }
-  }
 
   //signature
 
@@ -442,167 +401,128 @@ class RenewOriginIdController extends GetxController
   RxList<String> photoPath = <String>[].obs;
 
   var newApplicationID;
-
+  List<DocPathModel> docList = [];
   Future<void> send() async {
     networkStatus.value = NetworkStatus.LOADING;
+    isSendStared.value = true;
 
     try {
-      isSendStared.value = true;
-
       DateTime dateOfBirth = DateTime(
         int.parse(yearController.text),
         int.parse(monthController.text),
         int.parse(dayController.text),
       );
-
       String formattedDateOfBirth =
           DateFormat('yyyy-MM-dd').format(dateOfBirth);
 
-      GraphQLClient graphQLClient;
+      GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
 
-      graphQLClient = GraphQLConfiguration().clientToQuery();
+      Map<String, dynamic> variables = {
+        'objects': {
+          'first_name': firstNameController.text,
+          'father_name': fatherNameController.text,
+          'grand_father_name': grandFatherNameController.text,
+          'first_name_json': firstnameToJson(),
+          'father_name_json': fathernameToJson(),
+          'grand_father_name_json': gfathernameToJson(),
+          'gender': gendervalue.value!.name,
+          'birth_place': birthplace.text,
+          'birth_country_id': birthCountryvalue.value!.id,
+          'nationality_id': natinalityvalue.value!.id,
+          'date_of_birth': formattedDateOfBirth,
+          'occupation_id': occupationvalue.value!.id,
+          'hair_colour': haircolorvalue.value!.name,
+          'eye_colour': eyecolorvalue.value!.name,
+          'photo': photoPath.first,
+          'marital_status': maritalstatusvalue.value!.name,
+          'height': height.text,
+          'is_adopted': isAdoption.value,
+          'skin_colour': skincolorvalue.value,
+          'abroad_country_id': countryvalue.value!.id,
+          'abroad_address': addressController.text,
+          'phone_number': phonenumber.text,
+          'embassy_id': embassiesvalue.value!.id,
+          'current_country_id': currentcountryvalue.value!.id,
+          'application_type': "RENEW_ORIGIN_ID_APPLICATION",
+          'renewal_origin_id_applications': {
+            "data": {
+              'current_passport_issued_date': passportIssueDateController.text,
+              'current_passport_expiry_date': passportExpiryDateController.text,
+              'current_passport_number': passportNumberContoller.text,
+              'visa_expiry_date': visaExpiryDateController.text,
+              'visa_issued_date': visaExpiryDateController.text,
+              'visa_type_id': visatypevalue.value?.id ?? null,
+              'visa_number': visanumberContoller.text,
+              'origin_id_number': orginIdnumberContoller.text,
+              'correction_type_id': correctionTypevalue.value != null
+                  ? correctionTypevalue.value!.id
+                  : null,
+              'origin_id_renewal_type_id': renewType.id,
+            }
+          },
+          'application_documents': {
+            "data": docList.map((e) => e.toJson()).toList()
+          },
+        }
+      };
+
+      if (renewType.name.toString().contains("Correction")) {
+        String dateString = selectedDate!.toIso8601String().split('T').first;
+        String timetz = DateFormat("HH:mm:ss").format(selectedDateTime!);
+        variables['objects']['application_appointments'] = {
+          "data": {
+            "date": dateString,
+            "start_time": timetz,
+          }
+        };
+      }
 
       final QueryResult result = await graphQLClient.mutate(
         MutationOptions(
           document: gql(IcscitizensMutationReNewOrginId.ics_citizens),
-          variables: <String, dynamic>{
-            'objects': {
-              'first_name': firstNameController.text,
-              'father_name': fatherNameController.text,
-              'grand_father_name': grandFatherNameController.text,
-              'first_name_json': firstnameToJson(),
-              'father_name_json': fathernameToJson(),
-              'grand_father_name_json': gfathernameToJson(),
-              'gender': gendervalue.value!.name,
-              'birth_place': birthplace.text,
-              'birth_country_id': birthCountryvalue.value!.id,
-              'nationality_id': natinalityvalue.value!.id,
-              'date_of_birth': formattedDateOfBirth,
-              'occupation_id': occupationvalue.value!.id,
-              'hair_colour': haircolorvalue.value!.name,
-              'eye_colour': eyecolorvalue.value!.name,
-              'photo': photoPath.first,
-              'marital_status': maritalstatusvalue.value!.name,
-              'height': height.text,
-              'is_adopted': isAdoption.value,
-              'skin_colour': skincolorvalue.value,
-              'abroad_country_id': countryvalue.value!.id,
-              'abroad_address': addressController.text,
-              'phone_number': phonenumber.text,
-              'embassy_id': embassiesvalue.value!.id,
-              'current_country_id': currentcountryvalue.value!.id,
-              'application_type': "RENEW_ORIGIN_ID_APPLICATION",
-              'renewal_origin_id_applications': {
-                "data": {
-                  'current_passport_issued_date':
-                      passportIssueDateController.text,
-                  'current_passport_expiry_date':
-                      passportExpiryDateController.text,
-                  'current_passport_number': passportNumberContoller.text,
-                  'visa_expiry_date': visaExpiryDateController.text,
-                  'visa_issued_date': visaExpiryDateController.text,
-                  'visa_type_id': visatypevalue.value?.id ?? null,
-                  'visa_number': visanumberContoller.text,
-                  'origin_id_number': orginIdnumberContoller.text,
-                  'correction_type_id': correctionTypevalue.value != null
-                      ? correctionTypevalue.value!.id
-                      : null,
-                  'origin_id_renewal_type_id': renewType.id,
-                }
-              },
-            }
-          },
+          variables: variables,
         ),
       );
 
-      if (result.hasException) {
-        networkStatus.value = NetworkStatus.ERROR;
-
-        print("""objects""");
-
-        isSend.value = false;
-
-        print(result.exception.toString());
-
-        isSendStared.value = false;
-      } else {
-        networkStatus.value = NetworkStatus.SUCCESS;
-
-        print(result.data);
-
-        isSend.value = true;
-
-        isSendStared.value = false;
-        newApplicationID = result.data!['insert_ics_applications']['returning']
-                [0]['id']
-            .toString();
-      }
+      handleQueryResult(result);
     } catch (e, s) {
+      handleError(e, s);
+    }
+  }
+
+  void handleQueryResult(QueryResult result) {
+    if (result.hasException) {
       networkStatus.value = NetworkStatus.ERROR;
-
-      isSendStared.value = false;
-
       isSend.value = false;
+      print(result.exception.toString());
+      isSendStared.value = false;
+    } else {
+      networkStatus.value = NetworkStatus.SUCCESS;
+      print(result.data);
+      isSend.value = true;
+      isSendStared.value = false;
+      newApplicationID = result.data!['insert_ics_applications']['returning'][0]
+              ['id']
+          .toString();
+      updateNewApplication();
+    }
+  }
 
-      print('Errors: $s');
-
-      if (e.toString().contains("Null ")) {
-        //  AppToasts.showError("please provide Emabases");
-      } else {
-        AppToasts.showError("Something went wrong");
-      }
+  void handleError(dynamic e, StackTrace s) {
+    networkStatus.value = NetworkStatus.ERROR;
+    isSendStared.value = false;
+    isSend.value = false;
+    print('Errors: $s');
+    if (e.toString().contains("Null ")) {
+      // AppToasts.showError("please provide Emabases");
+    } else {
+      AppToasts.showError("Something went wrong");
     }
   }
 
   var isSendDocSuccess = false.obs;
 
   var newDocId;
-
-  Future<void> sendDoc(
-    var documentTypeId,
-    var path,
-  ) async {
-    try {
-      isSendStared.value = true;
-
-      // file upload
-
-      GraphQLClient graphQLClient;
-
-      graphQLClient = GraphQLConfiguration().clientToQuery();
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(ReNewDocApplicationsOrginId.newDoc),
-          variables: <String, dynamic>{
-            'objects': {
-              'application_id': newApplicationID,
-              'files': {
-                'path': path,
-              },
-              'document_type_id': documentTypeId,
-            }
-          },
-        ),
-      );
-
-      if (result.hasException) {
-        isSendStared.value = false;
-
-        print(result.exception.toString());
-      } else {
-        isSendDocSuccess(true);
-
-        isSendStared.value = false;
-
-        AppToasts.showSuccess("Document uploaded successfully");
-      }
-    } catch (e) {
-      isSendStared.value = false;
-
-      print('Error: $e');
-    }
-  }
 
   var isUpdateSuccess = false.obs;
   Future<void> updateNewApplication() async {
@@ -624,6 +544,14 @@ class RenewOriginIdController extends GetxController
         print(result.exception.toString());
       } else {
         isUpdateSuccess(true);
+        AppToasts.showSuccess("OrginId request Sent successfully");
+        MyOrderController myOrderController = Get.put(MyOrderController());
+
+        myOrderController.getOrginOrder();
+
+        Get.toNamed(Routes.MAIN_PAGE);
+        Get.find<MainPageController>().changeBottomPage(1);
+        myOrderController.tabController.index = 1;
       }
     } catch (e) {
       print(e.toString());

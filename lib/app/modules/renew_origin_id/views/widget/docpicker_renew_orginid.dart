@@ -13,6 +13,8 @@ import 'package:ics/app/modules/renew_origin_id/data/model/base_model_renew_orgi
 
 import 'package:sizer/sizer.dart';
 
+import '../../../new_passport/data/model/fileurl.dart';
+
 class BuildDocRenewOrginID extends StatefulWidget {
   final CommonModel documentType;
   final RenewOriginIdController controller;
@@ -254,7 +256,8 @@ class _BuildDocState extends State<BuildDocRenewOrginID> {
     if (responseUrl.isNotEmpty) {
       // Response is successful
       print(responseUrl);
-      widget.controller.sendDoc(widget.documentType.id, responseUrl);
+      widget.controller.docList.add(
+          DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
       widget.controller.networkStatus.value = NetworkStatus.SUCCESS;
     } else {
       widget.controller.networkStatus.value = NetworkStatus.ERROR;

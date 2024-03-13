@@ -23,7 +23,7 @@ import 'package:ics/app/modules/new_origin_id/data/quary/get_url_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/data/quary/ics_citizens_orginid.dart';
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/booked_date_model.dart';
-import 'package:ics/app/modules/new_passport/data/mutation/book_appointemts_mutation.dart';
+import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 import 'package:ics/app/modules/new_passport/data/quary/get_booked_date.dart';
 import 'package:ics/app/routes/app_pages.dart';
 
@@ -216,54 +216,6 @@ class NewOriginIdController extends GetxController
 
   DateTime? selectedDate;
   DateTime? selectedDateTime;
-  Future<void> sendBookedDates(BuildContext context) async {
-    networkStatus.value = NetworkStatus.LOADING;
-    try {
-      GraphQLClient graphQLClient = GraphQLConfiguration().clientToQuery();
-      // Remove the time component from the selectedDate
-      // Convert selectedDate to a date string without the time component
-      String dateString = selectedDate!.toIso8601String().split('T').first;
-
-      print(dateString);
-
-      String timetz = DateFormat("HH:mm:ss").format(selectedDateTime!);
-
-      print(timetz);
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(NewAppointments.newApp),
-          variables: <String, dynamic>{
-            "objects": {
-              "date": dateString,
-              "application_id": newApplicationID,
-              "start_time": timetz,
-            }
-          },
-        ),
-      );
-
-      if (!result.hasException) {
-        networkStatus.value = NetworkStatus.SUCCESS;
-        AppToasts.showSuccess("Origin Id request Sent");
-        MyOrderController myOrderController = Get.put(MyOrderController());
-        myOrderController.getOrginOrder();
-
-        Get.toNamed(Routes.MAIN_PAGE);
-        Get.find<MainPageController>().changeBottomPage(1);
-        myOrderController.tabController.index = 1;
-      } else {
-        networkStatus.value = NetworkStatus.ERROR;
-        AppToasts.showError("Something went wrong");
-        print(result);
-      }
-    } catch (e, s) {
-      AppToasts.showError("Something went wrong");
-      print(e);
-      print(s);
-      networkStatus.value = NetworkStatus.ERROR;
-    }
-  }
 
   Future<List<NewOrginIdConfirmationModel>> fetchorginId() async {
     // simulate network delay
@@ -414,7 +366,7 @@ class NewOriginIdController extends GetxController
   }
 
   final Rxn<GetUrlModelOrginid> getUrlModel = Rxn<GetUrlModelOrginid>();
-
+  List<DocPathModel> docList = [];
   var isSend = false.obs;
   var isSendStared = false.obs;
   var newApplicationID;
@@ -434,6 +386,14 @@ class NewOriginIdController extends GetxController
       GraphQLClient graphQLClient;
 
       graphQLClient = GraphQLConfiguration().clientToQuery();
+
+      String dateString = selectedDate!.toIso8601String().split('T').first;
+
+      print(dateString);
+
+      String timetz = DateFormat("HH:mm:ss").format(selectedDateTime!);
+
+      print(timetz);
 
       final QueryResult result = await graphQLClient.mutate(
         MutationOptions(
@@ -477,6 +437,15 @@ class NewOriginIdController extends GetxController
                   'visa_number': visanumberContoller.text,
                 }
               },
+              'application_documents': {
+                "data": docList.map((e) => e.toJson()).toList()
+              },
+              'application_appointments': {
+                "data": {
+                  "date": dateString,
+                  "start_time": timetz,
+                }
+              },
             }
           },
         ),
@@ -498,6 +467,8 @@ class NewOriginIdController extends GetxController
         newApplicationID = result.data!['insert_ics_applications']['returning']
                 [0]['id']
             .toString();
+
+        updateNewApplication();
       }
     } catch (e) {
       networkStatus.value = NetworkStatus.ERROR;
@@ -508,51 +479,6 @@ class NewOriginIdController extends GetxController
       } else {
         AppToasts.showError("Something went wrong");
       }
-    }
-  }
-
-  var isSendDocSuccess = false.obs;
-  var newDocId;
-  Future<void> sendDoc(
-    var documentTypeId,
-    var path,
-  ) async {
-    try {
-      isSendStared.value = true;
-      // file upload
-
-      GraphQLClient graphQLClient;
-
-      graphQLClient = GraphQLConfiguration().clientToQuery();
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(NewDocApplicationsOrginId.newDoc),
-          variables: <String, dynamic>{
-            'objects': {
-              'application_id': newApplicationID,
-              'files': {
-                'path': path,
-              },
-              'document_type_id': documentTypeId,
-            }
-          },
-        ),
-      );
-
-      if (result.hasException) {
-        isSendStared.value = false;
-
-        print(result.exception.toString());
-      } else {
-        isSendDocSuccess(true);
-        isSendStared.value = false;
-
-        AppToasts.showSuccess("Document uploaded successfully");
-      }
-    } catch (e) {
-      isSendStared.value = false;
-      print('Error: $e');
     }
   }
 
@@ -576,6 +502,15 @@ class NewOriginIdController extends GetxController
         print(result.exception.toString());
       } else {
         isUpdateSuccess(true);
+
+        AppToasts.showSuccess("New Orogin Sent successfully");
+        MyOrderController myOrderController = Get.put(MyOrderController());
+
+        myOrderController.getOrginOrder();
+
+        Get.toNamed(Routes.MAIN_PAGE);
+        Get.find<MainPageController>().changeBottomPage(1);
+        myOrderController.tabController.index = 1;
       }
     } catch (e) {
       print(e.toString());

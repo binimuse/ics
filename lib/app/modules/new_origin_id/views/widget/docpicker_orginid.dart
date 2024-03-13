@@ -9,6 +9,7 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
+import 'package:ics/app/modules/new_passport/data/model/fileurl.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -254,7 +255,8 @@ class _BuildDocState extends State<BuildDocOrginID> {
     if (responseUrl.isNotEmpty) {
       // Response is successful
       print(responseUrl);
-      widget.controller.sendDoc(widget.documentType.id, responseUrl);
+      widget.controller.docList.add(
+          DocPathModel(path: responseUrl, docTypeId: widget.documentType.id));
 
       widget.controller.networkStatus.value = NetworkStatus.SUCCESS;
     } else {

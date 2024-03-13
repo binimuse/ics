@@ -309,7 +309,9 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
           controller: controller,
           onTap: () {
             Navigator.pop(context);
-            createCitizen();
+            setState(() {
+              controller.currentStep++;
+            });
           },
         );
       },
@@ -325,12 +327,9 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      await controller.updateNewApplication();
-      if (controller.isUpdateSuccess.value) {
-        setState(() {
-          controller.currentStep++;
-        });
-      }
+      setState(() {
+        controller.currentStep++;
+      });
     }
   }
 
@@ -561,7 +560,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
   void finalstep(BuildContext context) {
     if (controller.selectedDate != null ||
         controller.selectedDateTime != null) {
-      controller.sendBookedDates(context);
+      controller.send();
     } else {
       AppToasts.showError("Please select both a date and a time");
     }

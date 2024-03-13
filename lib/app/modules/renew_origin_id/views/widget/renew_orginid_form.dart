@@ -318,7 +318,9 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
           controller: controller,
           onTap: () {
             Navigator.pop(context);
-            createCitizen();
+            setState(() {
+              controller.currentStep++;
+            });
           },
         );
       },
@@ -334,12 +336,9 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      await controller.updateNewApplication();
-      if (controller.isUpdateSuccess.value) {
-        setState(() {
-          controller.currentStep++;
-        });
-      }
+      setState(() {
+        controller.currentStep++;
+      });
     }
   }
 
@@ -589,13 +588,6 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
   }
 
   void finalstep() {
-    AppToasts.showSuccess("OrginId request Sent successfully");
-    MyOrderController myOrderController = Get.put(MyOrderController());
-
-    myOrderController.getOrginOrder();
-
-    Get.toNamed(Routes.MAIN_PAGE);
-    Get.find<MainPageController>().changeBottomPage(1);
-    myOrderController.tabController.index = 1;
+    controller.send();
   }
 }
