@@ -87,6 +87,7 @@ class RenewOriginIdController extends GetxController
   List<AllowedContreyModel> allwoedCountries = [];
 
   RxList<File> selectedImages = <File>[].obs;
+  var countryCode = "+251";
 
   List<CommonModel> base_document_types = [];
 
@@ -439,7 +440,7 @@ class RenewOriginIdController extends GetxController
           'skin_colour': skincolorvalue.value,
           'abroad_country_id': countryvalue.value!.id,
           'abroad_address': addressController.text,
-          'phone_number': phonenumber.text,
+          'phone_number': countryCode.toString() + phonenumber.text,
           'embassy_id': embassiesvalue.value!.id,
           'current_country_id': currentcountryvalue.value!.id,
           'application_type': "RENEW_ORIGIN_ID_APPLICATION",

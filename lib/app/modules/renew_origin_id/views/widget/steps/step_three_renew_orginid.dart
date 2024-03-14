@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -121,7 +122,9 @@ class _Step3State extends State<Step3RenewOrginId> {
         Obx(() => controller.isfechedEmbassies.value
             ? FormBuilderDropdown(
                 decoration: ReusableInputDecoration.getDecoration(
-                    'Embassies/branch',
+                    controller.countryvalue.value!.name == "Ethiopia"
+                        ? "Branch"
+                        : "Embassies",
                     isMandatory: true),
                 items: controller.base_embassies.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(
@@ -138,7 +141,9 @@ class _Step3State extends State<Step3RenewOrginId> {
                   controller.getBookedDates(value!.id!);
                 },
                 validator: FormBuilderValidators.required(),
-                name: 'Embassies/branch',
+                name: controller.countryvalue.value!.name == "Ethiopia"
+                    ? "Branch"
+                    : 'Embassies',
               )
             : SizedBox()),
         SizedBox(
@@ -161,8 +166,55 @@ class _Step3State extends State<Step3RenewOrginId> {
         SizedBox(
           height: 2.h,
         ),
-        buildPhonenumber(),
+        buildPhoneinput(),
       ],
+    );
+  }
+
+  buildPhoneinput() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 5,
+          child: buildCountryCode(),
+        ),
+        SizedBox(
+          width: AppSizes.mp_w_4,
+        ),
+        Expanded(
+          flex: 10,
+          child: buildPhonenumber(),
+        )
+      ],
+    );
+  }
+
+  buildCountryCode() {
+    return CountryCodePicker(
+      flagDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: AppColors.primaryDark,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(3, 3), // changes the shadow position
+            ),
+          ]),
+      onChanged: (element) {
+        debugPrint(element.dialCode);
+
+        controller.countryCode = element.dialCode.toString();
+      },
+      textStyle: AppTextStyles.captionBold,
+      initialSelection: 'et',
+      textOverflow: TextOverflow.fade,
+      showCountryOnly: false,
+      showOnlyCountryWhenClosed: false,
+      alignLeft: false,
+      padding: EdgeInsets.symmetric(vertical: 20),
     );
   }
 

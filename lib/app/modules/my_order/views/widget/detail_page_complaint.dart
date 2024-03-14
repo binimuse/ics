@@ -29,7 +29,7 @@ class DetailComplaintWidget extends StatelessWidget {
     return AlertDialog(
       actions: [
         SizedBox(
-          height: 30.h,
+          height: 32.h,
           width: 100.w, // Set the width to occupy all available space
           child: buildDiscriptionAndRatingForm(),
         ),
@@ -111,6 +111,27 @@ class DetailComplaintWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Message'.tr,
+                style: AppTextStyles.bodyLargeBold
+                    .copyWith(color: AppColors.black),
+              ),
+            ),
+            Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(
+                child: Text(
+                  ''.tr,
+                  style: AppTextStyles.bodySmallRegular
+                      .copyWith(color: AppColors.primary),
+                ),
+              ),
+            ),
             SizedBox(height: 2.h),
             Padding(
               padding: const EdgeInsets.all(8.0),

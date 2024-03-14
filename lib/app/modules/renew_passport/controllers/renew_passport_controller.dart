@@ -225,6 +225,8 @@ class RenewPassportController extends GetxController
 
   final RxList<FamilyModel> familyModelvalue = RxList<FamilyModel>();
 
+  var countryCode = "+251";
+
   //Step 3
 
   final TextEditingController phonenumber = TextEditingController();
@@ -423,7 +425,7 @@ class RenewPassportController extends GetxController
               'skin_colour': skincolorvalue.value,
               'abroad_country_id': countryvalue.value!.id,
               'abroad_address': addressController.text,
-              'phone_number': phonenumber.text,
+              'phone_number': countryCode.toString() + phonenumber.text,
               'embassy_id': embassiesvalue.value!.id,
               'current_country_id': currentcountryvalue.value!.id,
               'application_type': "RENEW_PASSPORT_APPLICATION",
