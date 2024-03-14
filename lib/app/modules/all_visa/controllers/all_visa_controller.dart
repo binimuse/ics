@@ -296,13 +296,15 @@ class ALLVisaController extends GetxController
         isUpdateSuccess(false);
         print(result.exception.toString());
       } else {
+        Get.delete<ALLVisaController>();
+
         networkStatus.value = NetworkStatus.SUCCESS;
         AppToasts.showSuccess("Visa Application successfully");
         MyOrderController myOrderController = Get.put(MyOrderController());
 
         myOrderController.getVisaApplication();
 
-        Get.toNamed(Routes.MAIN_PAGE);
+        Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
         Get.find<MainPageController>().changeBottomPage(1);
         myOrderController.tabController.index = 2;
       }

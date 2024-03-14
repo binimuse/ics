@@ -29,7 +29,7 @@ class DetailComplaintWidget extends StatelessWidget {
     return AlertDialog(
       actions: [
         SizedBox(
-          height: 32.h,
+          height: 49.h,
           width: 100.w, // Set the width to occupy all available space
           child: buildDiscriptionAndRatingForm(),
         ),

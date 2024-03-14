@@ -166,6 +166,9 @@ class LanguageView extends GetView<LanguageController> {
     List<String> languages = [
       Constants.lanEn,
       Constants.lanAm,
+      Constants.lanor,
+      Constants.lanti,
+      Constants.lanso,
     ];
 
     List<bool> isSelectedFlags =
@@ -209,7 +212,53 @@ class LanguageView extends GetView<LanguageController> {
                 ),
               ],
             ),
-
+            SizedBox(height: 2.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                LanguageButton(
+                  languageName: 'Affan Oromoo',
+                  isSelected: isSelectedFlags[2],
+                  onPressed: () {
+                    // isSelectedFlags = List.filled(languages.length, false);
+                    // isSelectedFlags[2] = true;
+                    // LanUtil.saveLanguage(Constants.lanor);
+                    // languagehController.changeLang(Constants.lanor);
+                  },
+                ),
+                LanguageButton(
+                  languageName: 'ትግርኛ',
+                  isSelected: isSelectedFlags[3],
+                  onPressed: () {
+                    // isSelectedFlags = List.filled(languages.length, false);
+                    // isSelectedFlags[3] = true;
+                    // LanUtil.saveLanguage(Constants.lanti);
+                    // languagehController.changeLang(Constants.lanti);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 2.h),
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  LanguageButton(
+                    languageName: 'Soomaali',
+                    isSelected: isSelectedFlags[4],
+                    onPressed: () {
+                      // setState(() {
+                      //   isSelectedFlags = List.filled(languages.length, false);
+                      //   isSelectedFlags[4] = true;
+                      //   LanUtil.saveLanguage(Constants.lanso);
+                      //   languagehController.changeLang(Constants.lanso);
+                      // });
+                    },
+                  ),
+                ],
+              ),
+            ),
             // Second row
 
             SizedBox(height: 2.h),

@@ -52,7 +52,7 @@ class ComplaintWidget extends StatelessWidget {
         // ));
       },
       child: Container(
-        height: 25.h,
+        height: 28.h,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -89,7 +89,7 @@ class ComplaintWidget extends StatelessWidget {
                     Text(
                       icsComplain.complaintType.name,
                       style: AppTextStyles.titleBold
-                          .copyWith(fontWeight: FontWeight.w400, fontSize: 17),
+                          .copyWith(fontWeight: FontWeight.w400, fontSize: 15),
                     ),
                     Spacer(),
                   ],
@@ -109,7 +109,7 @@ class ComplaintWidget extends StatelessWidget {
                     Text(
                       icsComplain.message,
                       style: AppTextStyles.titleBold
-                          .copyWith(fontWeight: FontWeight.w400, fontSize: 17),
+                          .copyWith(fontWeight: FontWeight.w400, fontSize: 15),
                     ),
                   ],
                 ),
@@ -144,7 +144,7 @@ class ComplaintWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         height: 4.h,
-                        width: 30.w,
+                        width: 35.w,
                         decoration: BoxDecoration(
                           color: icsComplain.resolved == null
                               ? AppColors.danger

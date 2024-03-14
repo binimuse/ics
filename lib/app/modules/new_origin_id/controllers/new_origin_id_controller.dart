@@ -502,6 +502,7 @@ class NewOriginIdController extends GetxController
         print(result.exception.toString());
       } else {
         isUpdateSuccess(true);
+
         Get.delete<NewOriginIdController>();
         AppToasts.showSuccess("New Orogin Sent successfully");
         MyOrderController myOrderController = Get.put(MyOrderController());

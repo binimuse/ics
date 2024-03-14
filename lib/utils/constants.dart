@@ -8,7 +8,8 @@ class Constants {
   static const String verifyEmail = 'verifyEmail';
   //file
   static const String fileViewer = 'http://196.189.30.153:9000/';
-  static const String fileUploader = 'http://196.189.30.153:3002/direct-single-file-upload';
+  static const String fileUploader =
+      'http://196.189.30.153:3002/direct-single-file-upload';
   //base url
   static const String baseProdactionUrl =
       'http://196.189.30.153:8000/v1/graphql';
@@ -20,6 +21,9 @@ class Constants {
   static const String selectedLanguage = "SELECTED_LANGUAGE";
   static const String lanAm = "am";
   static const String lanEn = "en";
+  static const String lanor = "or";
+  static const String lanti = "ti";
+  static const String lanso = "so";
 
   static const String REFRESHER_STATE = "REFRESHER_STATE";
 
