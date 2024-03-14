@@ -6,7 +6,7 @@ import 'package:ics/app/modules/notifications/views/notifications_view.dart';
 import 'package:ics/app/modules/setting/views/setting_view.dart';
 
 class MainPageController extends GetxController {
-  final GlobalKey<ScaffoldState> keyforall = GlobalKey<ScaffoldState>();
+
 
   List<Widget> pages = const [
     HomeView(),

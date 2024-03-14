@@ -568,7 +568,7 @@ class RenewPassportController extends GetxController
 
         myOrderController.getOrginOrder();
 
-        Get.toNamed(Routes.MAIN_PAGE);
+        Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
         Get.find<MainPageController>().changeBottomPage(1);
         myOrderController.tabController.index = 0;
         isUpdateSuccess(true);

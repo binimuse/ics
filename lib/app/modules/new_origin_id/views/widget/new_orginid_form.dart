@@ -391,7 +391,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
-                Get.offAllNamed(Routes.MAIN_PAGE);
+                Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
               },
               child: Container(
                 alignment: Alignment.center,

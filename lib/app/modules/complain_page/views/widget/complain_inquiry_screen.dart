@@ -135,87 +135,93 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
       ),
       body: Obx(() => controller.networkStatus.value == NetworkStatus.LOADING
           ? Center(child: CustomLoadingWidget())
-          : Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                      child: Padding(
-                    padding: EdgeInsets.fromLTRB(7.w, 7.w, 7.w, 0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        SizedBox(
-                          width: 85.w,
-                          child: Text(
-                            'Your Complain is important for our service improvement. Please pick the service you have an issue with.',
-                            style: AppTextStyles.captionRegular.copyWith(
-                                fontSize: AppSizes.font_12,
-                                color: AppColors.grayDark),
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
+          : FormBuilder(
+              key: controller.complainFromKey,
+              autovalidateMode: AutovalidateMode.disabled,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                        child: Padding(
+                      padding: EdgeInsets.fromLTRB(7.w, 7.w, 7.w, 0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 2.h,
                           ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        buildDropDown(),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        buildDropDowncountry(),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Obx(() => controller.isfechedEmbassies.value
-                            ? FormBuilderDropdown(
-                                decoration:
-                                    ReusableInputDecoration.getDecoration(
-                                        'Embassies/branch',
-                                        isMandatory: false),
-                                items: controller.base_embassies
-                                    .map((CommonModel value) {
-                                  return DropdownMenuItem<CommonModel>(
-                                    value: value,
-                                    child: Text(
-                                      value.name,
-                                      style: AppTextStyles.captionBold
-                                          .copyWith(color: AppColors.grayDark),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  controller.embassiesvalue.value = value;
-                                },
-                                name: 'Embassies/branch',
-                              )
-                            : SizedBox()),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        buildTextFieald(),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        buildFilePicker(),
-                        SizedBox(height: 2.h),
-                        Visibility(
-                          visible: fileName.isNotEmpty,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: fileName.length,
-                            itemBuilder: (context, index) =>
-                                _buildListItem(index),
+                          SizedBox(
+                            width: 85.w,
+                            child: Text(
+                              'Your Complain is important for our service improvement. Please pick the service you have an issue with.',
+                              style: AppTextStyles.captionRegular.copyWith(
+                                  fontSize: AppSizes.font_12,
+                                  color: AppColors.grayDark),
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )),
-                ),
-                buildSubmitButton(),
-              ],
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          buildDropDown(),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          buildDropDowncountry(),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          Obx(() => controller.isfechedEmbassies.value
+                              ? FormBuilderDropdown(
+                                  decoration:
+                                      ReusableInputDecoration.getDecoration(
+                                    'Embassies/branch',
+                                    isMandatory: true,
+                                  ),
+                                  items: controller.base_embassies
+                                      .map((CommonModel value) {
+                                    return DropdownMenuItem<CommonModel>(
+                                      value: value,
+                                      child: Text(
+                                        value.name,
+                                        style: AppTextStyles.captionBold
+                                            .copyWith(
+                                                color: AppColors.grayDark),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    controller.embassiesvalue.value = value;
+                                  },
+                                  name: 'Embassies/branch',
+                                )
+                              : SizedBox()),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          buildTextFieald(),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          buildFilePicker(),
+                          SizedBox(height: 2.h),
+                          Visibility(
+                            visible: fileName.isNotEmpty,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: fileName.length,
+                              itemBuilder: (context, index) =>
+                                  _buildListItem(index),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                  ),
+                  buildSubmitButton(),
+                ],
+              ),
             )),
     );
   }
@@ -308,7 +314,7 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
   buildDropDowncountry() {
     return FormBuilderDropdown(
       decoration:
-          ReusableInputDecoration.getDecoration('Country', isMandatory: false),
+          ReusableInputDecoration.getDecoration('Country', isMandatory: true),
       items: controller.baseCountries.map((BaseCountryModel value) {
         return DropdownMenuItem<BaseCountryModel>(
           value: value,
@@ -432,9 +438,9 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
         ),
         onPressed: () {
           if (controller.complaintTypevalue.value != null) {
-            controller.send();
+            controller.check();
           } else {
-            AppToasts.showError("please select a complaint type");
+            AppToasts.showError("please select a complaint type \nand Country");
           }
         },
       ),

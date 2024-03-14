@@ -452,13 +452,15 @@ class NewPassportController extends GetxController
         print(result.exception.toString());
       } else {
         isUpdateSuccess(true);
+        Get.delete<NewPassportController>();
 
         AppToasts.showSuccess("New Passport Sent successfully");
+
         MyOrderController myOrderController = Get.put(MyOrderController());
 
         myOrderController.getOrginOrder();
 
-        Get.toNamed(Routes.MAIN_PAGE);
+        Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
         Get.find<MainPageController>().changeBottomPage(1);
         myOrderController.tabController.index = 0;
       }

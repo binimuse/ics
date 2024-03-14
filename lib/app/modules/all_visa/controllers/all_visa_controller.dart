@@ -141,7 +141,7 @@ class ALLVisaController extends GetxController
         .tr,
     'Please use the below Screenshot for Photograph Tips.'.tr,
   ];
-
+  var countryCode = "+251";
   //tab
   late TabController tabController;
 
@@ -359,7 +359,7 @@ class ALLVisaController extends GetxController
         'occupation_id': occupationvalue.value!.id,
         'street_address': addresscityController.text,
         'city': addresscityController.text,
-        'phone_number': phonenumber.text,
+        'phone_number': countryCode.toString() + phonenumber.text,
         'abroad_country_id': adresscountryvalue.value!.id,
         'arrival_date': arrivaldDateController.text,
         'departure_country_id': departurecountry.value!.id,

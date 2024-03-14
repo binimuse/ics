@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -22,6 +23,7 @@ import 'package:ics/services/graphql_conf.dart';
 
 class ComplainPageController extends GetxController {
   final TextEditingController complaint = TextEditingController();
+  final complainFromKey = GlobalKey<FormBuilderState>();
   var rating;
   List<DocPathModel> documents = [];
 
@@ -128,7 +130,15 @@ class ComplainPageController extends GetxController {
     AppColors.secondary,
     AppColors.primaryDark,
   ];
-
+  void check() {
+    final isValid = complainFromKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    } else {
+      complainFromKey.currentState!.save();
+      send(); // Call report() when the form is valid
+    }
+  }
   final Rxn<ComplaintType> complaintTypevalue = Rxn<ComplaintType>();
   Rx<NetworkStatus> networkStatus = Rx(NetworkStatus.IDLE);
 

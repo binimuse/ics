@@ -544,12 +544,13 @@ class RenewOriginIdController extends GetxController
         print(result.exception.toString());
       } else {
         isUpdateSuccess(true);
+        Get.delete<RenewOriginIdController>();
         AppToasts.showSuccess("OrginId request Sent successfully");
         MyOrderController myOrderController = Get.put(MyOrderController());
 
         myOrderController.getOrginOrder();
 
-        Get.toNamed(Routes.MAIN_PAGE);
+        Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
         Get.find<MainPageController>().changeBottomPage(1);
         myOrderController.tabController.index = 1;
       }

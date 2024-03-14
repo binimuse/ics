@@ -360,7 +360,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
-                Get.offAllNamed(Routes.MAIN_PAGE);
+                Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -436,7 +436,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
   void getDataForStep2() {
     final citizenModel = widget.visaApplicationModel;
     final address = citizenModel!.streetAddress!;
-    final phoneNumber = citizenModel.phoneNumber!;
+    var phoneNumber = citizenModel.phoneNumber!;
     final addresscontry = citizenModel.abroadCountry!;
 
     controller.adresscountryvalue.value =
@@ -445,6 +445,13 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
     controller.addresscityController.text = address;
     controller.streetaddressController.text = address;
     controller.phonenumber.text = phoneNumber;
+
+    phoneNumber = phoneNumber.replaceAll(" ", ""); // Remove spaces
+    int digitsCount =
+        10; // Number of digits in the phone number excluding country code
+    String extractedNumber =
+        phoneNumber.substring(phoneNumber.length - digitsCount);
+    controller.phonenumber.text = extractedNumber;
   }
 
   void getDataForStep3() {
