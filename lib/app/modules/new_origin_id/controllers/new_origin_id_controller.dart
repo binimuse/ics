@@ -591,6 +591,10 @@ class NewOriginIdController extends GetxController
             .map((e) => IcsApplicationModelOrginId.fromJson(e))
             .toList();
 
+        icsCitizens.forEach((element) {
+          print(element.newOriginIdApplications.length);
+        });
+
         // countLabours.value = getlabour.value.length;
       }
 

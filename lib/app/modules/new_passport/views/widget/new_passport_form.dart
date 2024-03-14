@@ -483,7 +483,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     final abroadCountryId = citizenModel!.abroadCountryId;
 
     final abroadAddress = citizenModel.abroadAddress!;
-    final abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
+    var abroadPhoneNumber = citizenModel.abroadPhoneNumber!;
 
     if (citizenModel.embassy_id.isNotEmpty) {
       embassyId = citizenModel.embassy_id;
@@ -505,6 +505,13 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
 
     controller.addressController.text = abroadAddress;
     controller.phonenumber.text = abroadPhoneNumber;
+
+    abroadPhoneNumber = abroadPhoneNumber.replaceAll(" ", ""); // Remove spaces
+    int digitsCount =
+        10; // Number of digits in the phone number excluding country code
+    String extractedNumber =
+        abroadPhoneNumber.substring(abroadPhoneNumber.length - digitsCount);
+    controller.phonenumber.text = extractedNumber;
   }
 
   void getDataForStep4() {
