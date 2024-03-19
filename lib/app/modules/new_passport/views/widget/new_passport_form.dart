@@ -18,6 +18,7 @@ import 'package:ics/app/data/enums.dart';
 
 import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
 import 'package:ics/app/modules/new_passport/data/model/citizens_model.dart';
+import 'package:ics/app/modules/new_passport/views/widget/pdfPage.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_five.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_four.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
@@ -33,8 +34,6 @@ import 'package:sizer/sizer.dart';
 
 import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'summery_newPassport.dart';
 
 class NewPassportForm extends StatefulWidget {
   final IcsApplicationModel? citizenModel;
@@ -80,7 +79,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        stoppop: true,
+        stoppop: false,
         title: 'New',
         title2: "Passport Form",
         showLeading: true,
@@ -111,188 +110,174 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   }
 
   Widget buildForm(BuildContext context) {
-    return Container(
-      color: AppColors.grayLighter.withOpacity(0.2),
-      height: 87.h,
-      child: Column(
-        children: [
-          IconStepper(
-            activeStep: controller.currentStep,
-            lineColor: AppColors.secondary,
-            stepColor: AppColors.grayDefault,
-            activeStepColor: AppColors.primary,
-            icons: [
-              Icon(
-                Icons.person,
-                color: AppColors.whiteOff,
-              ),
-              Icon(
-                Icons.person,
-                color: AppColors.whiteOff,
-              ),
-              Icon(
-                Icons.location_on,
-                color: AppColors.whiteOff,
-              ),
-              Icon(
-                Icons.family_restroom,
-                color: AppColors.whiteOff,
-              ),
-              Icon(
-                Icons.edit_document,
-                color: AppColors.whiteOff,
-              ),
-              Icon(
-                Icons.calendar_month,
-                color: AppColors.whiteOff,
-              ),
-            ],
-            onStepReached: (index) {
-              setState(() {
-                controller.currentStep = index;
-              });
-            },
-            enableNextPreviousButtons: false,
-            enableStepTapping: false,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: FormBuilder(
-                key: controller.newPassportformKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                skipDisabled: true,
-                canPop: false,
-                onPopInvoked: (didPop) {
-                  _showAreYouSureDialog(context);
+    return Obx(() => Container(
+          color: AppColors.grayLighter.withOpacity(0.2),
+          height: 87.h,
+          child: Column(
+            children: [
+              IconStepper(
+                activeStep: controller.currentStep.value,
+                lineColor: AppColors.secondary,
+                stepColor: AppColors.grayDefault,
+                activeStepColor: AppColors.primary,
+                icons: [
+                  Icon(
+                    Icons.person,
+                    color: AppColors.whiteOff,
+                  ),
+                  Icon(
+                    Icons.person,
+                    color: AppColors.whiteOff,
+                  ),
+                  Icon(
+                    Icons.location_on,
+                    color: AppColors.whiteOff,
+                  ),
+                  Icon(
+                    Icons.family_restroom,
+                    color: AppColors.whiteOff,
+                  ),
+                  Icon(
+                    Icons.edit_document,
+                    color: AppColors.whiteOff,
+                  ),
+                  Icon(
+                    Icons.calendar_month,
+                    color: AppColors.whiteOff,
+                  ),
+                ],
+                onStepReached: (index) {
+                  controller.currentStep.value = index;
                 },
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    children: [
-                      if (controller.currentStep == 0)
-                        Step1(
-                          citizenModel: widget.citizenModel,
-                          controller: controller,
-                        ),
+                enableNextPreviousButtons: false,
+                enableStepTapping: false,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: FormBuilder(
+                    key: controller.newPassportformKey,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    skipDisabled: true,
+                    canPop: true,
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        children: [
+                          if (controller.currentStep.value == 0)
+                            Step1(
+                              citizenModel: widget.citizenModel,
+                              controller: controller,
+                            ),
 
-                      if (controller.currentStep == 1)
-                        Step2(
-                          citizenModel: widget.citizenModel,
-                          controller: controller,
-                        ),
-                      if (controller.currentStep == 2)
-                        Step3(
-                          citizenModel: widget.citizenModel,
-                          controller: controller,
-                        ),
-                      if (controller.currentStep == 3)
-                        Step4(
-                          citizenModel: widget.citizenModel,
-                          controller: controller,
-                        ),
+                          if (controller.currentStep.value == 1)
+                            Step2(
+                              citizenModel: widget.citizenModel,
+                              controller: controller,
+                            ),
+                          if (controller.currentStep.value == 2)
+                            Step3(
+                              citizenModel: widget.citizenModel,
+                              controller: controller,
+                            ),
+                          if (controller.currentStep.value == 3)
+                            Step4(
+                              citizenModel: widget.citizenModel,
+                              controller: controller,
+                            ),
 
-                      if (controller.currentStep == 4) Step5(),
+                          if (controller.currentStep.value == 4) Step5(),
 
-                      if (controller.currentStep == 5) Step6(),
+                          if (controller.currentStep.value == 5) Step6(),
 
-                      // Add more form fields as needed for each step
-                    ],
+                          // Add more form fields as needed for each step
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Container(
-            color: AppColors.whiteOff,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (controller.currentStep > 0)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CustomNormalButton(
-                      text: 'Back',
-                      textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                        color: AppColors.whiteOff,
-                      ),
-                      textcolor: AppColors.whiteOff,
-                      buttoncolor: controller.areAllTermsSelected()
-                          ? AppColors.grayLight
-                          : AppColors.grayLight,
-                      borderRadius: AppSizes.radius_16,
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppSizes.mp_v_1,
-                        horizontal: AppSizes.mp_w_6,
-                      ),
-                      onPressed: () {
-                        if (controller.currentStep > 0) {
-                          setState(() {
-                            controller.currentStep--;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CustomNormalButton(
-                        text: controller.currentStep == 5 ? 'Submit' : 'Next',
-                        textStyle: AppTextStyles.bodyLargeBold.copyWith(
-                          color: AppColors.whiteOff,
+              Container(
+                color: AppColors.whiteOff,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (controller.currentStep.value > 0)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomNormalButton(
+                          text: 'Back',
+                          textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                            color: AppColors.whiteOff,
+                          ),
+                          textcolor: AppColors.whiteOff,
+                          buttoncolor: controller.areAllTermsSelected()
+                              ? AppColors.grayLight
+                              : AppColors.grayLight,
+                          borderRadius: AppSizes.radius_16,
+                          padding: EdgeInsets.symmetric(
+                            vertical: AppSizes.mp_v_1,
+                            horizontal: AppSizes.mp_w_6,
+                          ),
+                          onPressed: () {
+                            if (controller.currentStep.value > 0) {
+                              controller.currentStep.value--;
+                            }
+                          },
                         ),
-                        textcolor: AppColors.whiteOff,
-                        buttoncolor: controller.currentStep == 5
-                            ? AppColors.primary
-                            : AppColors.primary,
-                        borderRadius: AppSizes.radius_16,
-                        padding: EdgeInsets.symmetric(
-                          vertical: AppSizes.mp_v_1,
-                          horizontal: AppSizes.mp_w_6,
-                        ),
-                        onPressed: () async {
-                          if (controller.currentStep == 1) {
-                            if (controller.newPassportformKey.currentState!
-                                .saveAndValidate()) {
-                              if (controller.selectedImages.isNotEmpty) {
-                                setState(() {
-                                  controller.currentStep++;
-                                });
+                      ),
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomNormalButton(
+                            text: controller.currentStep.value == 5
+                                ? 'Submit'
+                                : 'Next',
+                            textStyle: AppTextStyles.bodyLargeBold.copyWith(
+                              color: AppColors.whiteOff,
+                            ),
+                            textcolor: AppColors.whiteOff,
+                            buttoncolor: controller.currentStep.value == 5
+                                ? AppColors.primary
+                                : AppColors.primary,
+                            borderRadius: AppSizes.radius_16,
+                            padding: EdgeInsets.symmetric(
+                              vertical: AppSizes.mp_v_1,
+                              horizontal: AppSizes.mp_w_6,
+                            ),
+                            onPressed: () async {
+                              if (controller.currentStep.value == 1) {
+                                if (controller.newPassportformKey.currentState!
+                                    .saveAndValidate()) {
+                                  if (controller.selectedImages.isNotEmpty) {
+                                    controller.currentStep.value++;
+                                  } else {
+                                    _scrollToBottom();
+                                    AppToasts.showError(
+                                        "Please upload a photo.");
+                                  }
+                                } else {
+                                  _scrollToBottom();
+                                }
+                              } else if (controller.currentStep.value == 4) {
+                                checkdoc();
+                              } else if (controller.currentStep.value == 5) {
+                                finalstep(context);
                               } else {
-                                _scrollToBottom();
-                                AppToasts.showError("Please upload a photo.");
+                                if (controller.newPassportformKey.currentState!
+                                    .saveAndValidate()) {
+                                  controller.currentStep.value++;
+                                } else {
+                                  _scrollToBottom();
+                                }
                               }
-                            } else {
-                              _scrollToBottom();
-                            }
-                          } else if (controller.currentStep == 3) {
-                            // controller.handleDrawFinish();
-                            controller.newPassportformKey.currentState!
-                                    .saveAndValidate()
-                                ? _showSummeryDiloag(context)
-                                : SizedBox();
-                          } else if (controller.currentStep == 4) {
-                            checkdoc();
-                          } else if (controller.currentStep == 5) {
-                            finalstep(context);
-                          } else {
-                            if (controller.newPassportformKey.currentState!
-                                .saveAndValidate()) {
-                              setState(() {
-                                controller.currentStep++;
-                              });
-                            } else {
-                              _scrollToBottom();
-                            }
-                          }
-                        }))
-              ],
-            ),
+                            }))
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   void checkdoc() async {
@@ -304,15 +289,9 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      setState(() {
-        controller.currentStep++;
-      });
-      // await controller.updateNewApplication();
-      // if (controller.isUpdateSuccess.value) {
-      //   setState(() {
-      //     controller.currentStep++;
-      //   });
-      // }
+      controller.newPassportformKey.currentState!.saveAndValidate()
+          ? _showSummeryDiloag(context)
+          : SizedBox();
     }
   }
 
@@ -351,8 +330,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
           actions: [
             GestureDetector(
               onTap: () {
-                Navigator.of(context)
-                    .pop(false); // Return false if cancel is pressed
+                Get.back();
               },
               child: Container(
                 alignment: Alignment.center,
@@ -382,7 +360,9 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Get.delete<NewPassportController>();
+                Get.back();
+
                 Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
               },
               child: Container(
@@ -519,20 +499,14 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
   }
 
   _showSummeryDiloag(BuildContext context) {
-    showDialog(
+    Get.to(PdfPage(
       context: context,
-      builder: (BuildContext context) {
-        return SummaryDialogNewPassport(
-          context: context,
-          controller: controller,
-          onTap: () {
-            Navigator.pop(context);
-            setState(() {
-              controller.currentStep++;
-            });
-          },
-        );
+      controller: controller,
+      onTap: () {
+        Navigator.pop(context);
+
+        controller.currentStep.value++;
       },
-    );
+    ));
   }
 }

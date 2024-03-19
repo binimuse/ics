@@ -72,12 +72,13 @@ class ToastSuccessWidget extends StatelessWidget {
             SizedBox(
               width: AppSizes.mp_w_2,
             ),
-            Text(
+            Expanded(
+                child: Text(
               text,
               style: AppTextStyles.bodySmallBold.copyWith(
-                color: AppColors.whiteOff,
+                color: AppColors.backgroundDark,
               ),
-            ),
+            ))
           ],
         ),
       ),
@@ -120,12 +121,13 @@ class ToastErrorWidget extends StatelessWidget {
             SizedBox(
               width: AppSizes.mp_w_2,
             ),
-            Text(
+            Expanded(
+                child: Text(
               text,
               style: AppTextStyles.bodySmallBold.copyWith(
-                color: AppColors.whiteOff,
+                color: AppColors.backgroundDark,
               ),
-            ),
+            ))
           ],
         ),
       ),

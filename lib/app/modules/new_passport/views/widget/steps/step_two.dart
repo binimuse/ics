@@ -56,14 +56,8 @@ class Step2 extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator: (CommonModel? value) {
-            if (value == null) {
-              return 'Please select Occupation'; // Return an error message if no value is selected
-            }
-            return null; // Return null if the value is valid
-          },
           decoration: ReusableInputDecoration.getDecoration('Occupation',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.occupations.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -85,14 +79,8 @@ class Step2 extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator: (CommonModel? value) {
-            if (value == null) {
-              return 'Please select Hair Color'; // Return an error message if no value is selected
-            }
-            return null; // Return null if the value is valid
-          },
           decoration: ReusableInputDecoration.getDecoration('Hair Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.haircolor.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -114,14 +102,8 @@ class Step2 extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator: (CommonModel? value) {
-            if (value == null) {
-              return 'Please select a Eye Color'; // Return an error message if no value is selected
-            }
-            return null; // Return null if the value is valid
-          },
           decoration: ReusableInputDecoration.getDecoration('Eye Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.eyecolor.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -143,9 +125,9 @@ class Step2 extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator: ValidationBuilder().required('Skin Color').build(),
+        
           decoration: ReusableInputDecoration.getDecoration('Skin Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.SkinColor.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -196,8 +178,7 @@ class Step2 extends StatelessWidget {
           height: 2.h,
         ),
         TextFormBuilder(
-          validator: ValidationBuilder().required('Height(cm)').build(),
-          isMandatory: true,
+          isMandatory: false,
           inputFormatters: [
             HeightInputFormatter(),
           ],

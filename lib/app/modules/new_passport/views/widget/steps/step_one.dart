@@ -225,7 +225,14 @@ class Step1 extends StatelessWidget {
           //   keepSuggestionsOnLoading: false,
           // ),
           FormBuilderDropdown(
-            decoration: ReusableInputDecoration.getDecoration('Nationality'),
+            decoration: ReusableInputDecoration.getDecoration('Nationality',
+                isMandatory: true),
+            validator: (CommonModel? value) {
+              if (value == null) {
+                return 'Please select Nationality'; // Return an error message if no value is selected
+              }
+              return null; // Return null if the value is valid
+            },
             items: controller.natinality.map((CommonModel value) {
               return DropdownMenuItem<CommonModel>(
                 value: value,
@@ -271,7 +278,6 @@ class Step1 extends StatelessWidget {
           ),
           TextFormBuilder(
             isMandatory: true,
-            validator: ValidationBuilder().required('Birth place').build(),
             labelText: "Birth place",
             controller: controller.birthplace,
             inputFormatters: [
@@ -286,7 +292,14 @@ class Step1 extends StatelessWidget {
             height: 2.h,
           ),
           FormBuilderDropdown(
-            decoration: ReusableInputDecoration.getDecoration('Gender'),
+            decoration: ReusableInputDecoration.getDecoration('Gender',
+                isMandatory: true),
+            validator: (CommonModel? value) {
+              if (value == null) {
+                return 'Please select Gender'; // Return an error message if no value is selected
+              }
+              return null; // Return null if the value is valid
+            },
             items: controller.gender.map((CommonModel value) {
               return DropdownMenuItem<CommonModel>(
                 value: value,

@@ -66,6 +66,12 @@ class _Step3State extends State<Step3> {
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Current Country',
               isMandatory: true),
+          validator: (AllowedContreyModel? value) {
+            if (value == null) {
+              return 'Please Current Country'; // Return an error message if no value is selected
+            }
+            return null; // Return null if the value is valid
+          },
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
               value: value,
@@ -90,6 +96,12 @@ class _Step3State extends State<Step3> {
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Collaction place',
               isMandatory: true),
+          validator: (AllowedContreyModel? value) {
+            if (value == null) {
+              return 'Please Collaction place'; // Return an error message if no value is selected
+            }
+            return null; // Return null if the value is valid
+          },
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
               value: value,
@@ -121,6 +133,7 @@ class _Step3State extends State<Step3> {
                     controller.countryvalue.value!.name == "Ethiopia"
                         ? "Branch"
                         : "Embassies",
+                        
                     isMandatory: true),
                 items: controller.base_embassies.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(
@@ -219,6 +232,7 @@ class _Step3State extends State<Step3> {
     return PhoneNumberInput(
       isMandatory: true,
       hint: 'Phone number',
+      
       labelText: "Phone number",
       focusNode: controller.phoneFocusNode,
       autofocus: false,

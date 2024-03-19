@@ -67,7 +67,7 @@ class NewPassportController extends GetxController
   final Rxn<AllowedContreyModel> currentcountryvalue =
       Rxn<AllowedContreyModel>();
 
-  int currentStep = 0;
+  var currentStep = 0.obs;
   final TextEditingController dateofbirth = TextEditingController();
   final TextEditingController dayController = TextEditingController();
   final Rxn<CommonModel> eyecolorvalue = Rxn<CommonModel>();
@@ -425,7 +425,8 @@ class NewPassportController extends GetxController
     networkStatus.value = NetworkStatus.ERROR;
     print('Error sending data: $e');
     if (!e.toString().contains("Null")) {
-      AppToasts.showError("An error occurred while sending data.");
+      AppToasts.showError(
+          "An error occurred while sending data.please check your form and try again");
     }
   }
 
