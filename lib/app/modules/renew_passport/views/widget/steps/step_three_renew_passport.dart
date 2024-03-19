@@ -68,6 +68,7 @@ class _Step3State extends State<Step3RenewPassport> {
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Current Country',
               isMandatory: true),
+          validator: FormBuilderValidators.required(),
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
               value: value,
@@ -92,6 +93,7 @@ class _Step3State extends State<Step3RenewPassport> {
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Collaction place',
               isMandatory: true),
+          validator: FormBuilderValidators.required(),
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
               value: value,

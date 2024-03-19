@@ -124,8 +124,7 @@ class Step1RenewPassport extends StatelessWidget {
             height: 2.h,
           ),
           TextFormBuilder(
-            isMandatory: true,
-            validator: ValidationBuilder().required('Birth place').build(),
+            isMandatory: false,
             labelText: "Birth place",
             controller: controller.birthplace,
             inputFormatters: [
@@ -163,7 +162,7 @@ class Step1RenewPassport extends StatelessWidget {
       ],
       hint: 'First name',
       showClearButton: false,
-      autoFocus: false,
+      autoFocus: true,
       onChanged: (value) {},
     );
   }
@@ -266,6 +265,12 @@ class Step1RenewPassport extends StatelessWidget {
     return FormBuilderDropdown(
       decoration: ReusableInputDecoration.getDecoration('Nationality',
           isMandatory: true),
+      validator: (CommonModel? value) {
+        if (value == null) {
+          return 'Please select Nationality'; // Return an error message if no value is selected
+        }
+        return null; // Return null if the value is valid
+      },
       items: controller.natinality.map((CommonModel value) {
         return DropdownMenuItem<CommonModel>(
           value: value,
@@ -289,6 +294,12 @@ class Step1RenewPassport extends StatelessWidget {
     return FormBuilderDropdown(
       decoration:
           ReusableInputDecoration.getDecoration('Gender', isMandatory: true),
+      validator: (CommonModel? value) {
+        if (value == null) {
+          return 'Please select Gender'; // Return an error message if no value is selected
+        }
+        return null; // Return null if the value is valid
+      },
       items: controller.gender.map((CommonModel value) {
         return DropdownMenuItem<CommonModel>(
           value: value,
@@ -311,6 +322,12 @@ class Step1RenewPassport extends StatelessWidget {
     return FormBuilderDropdown(
       decoration: ReusableInputDecoration.getDecoration('Birth Country',
           isMandatory: true),
+      validator: (CommonModel? value) {
+        if (value == null) {
+          return 'Please select Birth Country'; // Return an error message if no value is selected
+        }
+        return null; // Return null if the value is valid
+      },
       items: controller.bcountries.map((CommonModel value) {
         return DropdownMenuItem<CommonModel>(
           value: value,

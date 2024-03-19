@@ -104,7 +104,7 @@ class RenewPassportController extends GetxController
   final Rxn<AllowedContreyModel> currentcountryvalue =
       Rxn<AllowedContreyModel>();
 
-  int currentStep = 0;
+  var currentStep = 0.obs;
 
   final TextEditingController dateofbirth = TextEditingController();
 

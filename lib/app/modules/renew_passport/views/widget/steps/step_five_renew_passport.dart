@@ -67,6 +67,7 @@ class _Step4State extends State<Step5RenewPassport> {
         ),
         TextFormBuilder(
           isMandatory: true,
+          maxlength: 20,
           controller: controller.passportNumberContoller,
           hint: 'Old Passport number',
           labelText: 'Old Passport number',
@@ -74,10 +75,7 @@ class _Step4State extends State<Step5RenewPassport> {
               .required('Passport number is required')
               .build(),
           showClearButton: false,
-          inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp(r"\s")),
-          ],
-          autoFocus: false,
+          autoFocus: true,
         ),
         SizedBox(
           height: 2.h,

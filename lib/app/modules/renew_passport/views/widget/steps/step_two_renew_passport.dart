@@ -57,7 +57,7 @@ class Step2RenewPassport extends StatelessWidget {
         ),
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Occupation',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.occupations.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -80,7 +80,7 @@ class Step2RenewPassport extends StatelessWidget {
         ),
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Hair Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.haircolor.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -103,7 +103,7 @@ class Step2RenewPassport extends StatelessWidget {
         ),
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Eye Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.eyecolor.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -125,13 +125,8 @@ class Step2RenewPassport extends StatelessWidget {
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator: ValidationBuilder()
-              .required(
-                'Skin Color',
-              )
-              .build(),
           decoration: ReusableInputDecoration.getDecoration('Skin Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.SkinColor.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -154,6 +149,12 @@ class Step2RenewPassport extends StatelessWidget {
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Martial status',
               isMandatory: true),
+          validator: (CommonModel? value) {
+            if (value == null) {
+              return 'Please select a marital status'; // Return an error message if no value is selected
+            }
+            return null; // Return null if the value is valid
+          },
           items: controller.martial.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -176,7 +177,7 @@ class Step2RenewPassport extends StatelessWidget {
           height: 2.h,
         ),
         TextFormBuilder(
-          isMandatory: true,
+          isMandatory: false,
           inputFormatters: [
             HeightInputFormatter(),
           ],
