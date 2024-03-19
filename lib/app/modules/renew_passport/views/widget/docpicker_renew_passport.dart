@@ -217,8 +217,6 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
     );
 
     if (confirmDelete == true) {
-      widget.controller.deleteDoc(widget.documentType.id);
-
       setState(() {
         widget.controller.documents
             .where(
@@ -226,6 +224,8 @@ class _BuildDocState extends State<BuildDocRenewPassport> {
             .forEach((element) {
           element.files.removeAt(index);
         });
+
+        widget.controller.deleteDoc(widget.documentType.id);
       });
     }
   }

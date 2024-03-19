@@ -436,7 +436,7 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     final hairColour = citizenModel.hairColour;
     final eyeColour = citizenModel.eyeColour;
     final skinColour = citizenModel.skinColour!;
-    final height = citizenModel.height!;
+    final height = citizenModel.height;
     final maritalStatus = citizenModel.maritalStatus;
     final photo = citizenModel.photo;
 
@@ -444,12 +444,20 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     controller.selectedImages.add(File(Constants.fileViewer + photo));
     // controller.selectedImages.add(photo!);
 
-    controller.occupationvalue.value =
-        controller.occupations.firstWhere((e) => e.id == occupationId);
-    controller.haircolorvalue.value =
-        controller.haircolor.firstWhere((e) => e.name == hairColour);
-    controller.eyecolorvalue.value =
-        controller.eyecolor.firstWhere((e) => e.name == eyeColour);
+    if (occupationId != null) {
+      controller.occupationvalue.value =
+          controller.occupations.firstWhere((e) => e.id == occupationId);
+    }
+
+    if (hairColour != null) {
+      controller.haircolorvalue.value =
+          controller.haircolor.firstWhere((e) => e.name == hairColour);
+    }
+
+    if (eyeColour != null) {
+      controller.eyecolorvalue.value =
+          controller.eyecolor.firstWhere((e) => e.name == eyeColour);
+    }
     controller.skincolorvalue.value = skinColour.toString();
     controller.height.text = height.toString();
     controller.maritalstatusvalue.value =

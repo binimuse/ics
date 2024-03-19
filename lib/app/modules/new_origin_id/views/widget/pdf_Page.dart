@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
+import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
 
 import 'package:sizer/sizer.dart';
 
-class PdfPage extends StatelessWidget {
+class PdfPageNewOriginId extends StatelessWidget {
   final BuildContext context;
-  final NewPassportController controller;
+  final NewOriginIdController controller;
   final VoidCallback onTap;
 
-  PdfPage(
+  PdfPageNewOriginId(
       {required this.context, required this.onTap, required this.controller});
 
   @override
@@ -150,22 +150,24 @@ class PdfPage extends StatelessWidget {
                             textText(
                                 subtitle: "Occupation",
                                 title:
-                                    '${controller.occupationvalue.value!.name}'),
+                                    '${controller.occupationvalue.value?.name ?? ""}'),
                             textText(
                                 subtitle: "Hair color",
                                 title:
-                                    '${controller.haircolorvalue.value!.name}'),
+                                    '${controller.haircolorvalue.value?.name ?? ""}'),
                             textText(
                                 subtitle: "eye color",
-                                title:
-                                    '${controller.eyecolorvalue.value!.name}'),
+                                title: controller.eyecolorvalue.value == null
+                                    ? ""
+                                    : '${controller.eyecolorvalue.value!.name.toString()}'),
                             textText(
                                 subtitle: "Skin color",
                                 title: '${controller.skincolorvalue.value}'),
                             textText(
                                 subtitle: "Marital Status",
-                                title:
-                                    '${controller.maritalstatusvalue.value!.name}'),
+                                title: controller.eyecolorvalue.value == null
+                                    ? ""
+                                    : '${controller.maritalstatusvalue.value!.name}'),
                             textText(
                                 subtitle: "height",
                                 title: '${controller.height.text}'),
@@ -182,11 +184,40 @@ class PdfPage extends StatelessWidget {
                                 subtitle: "Phone Number",
                                 title: '${controller.phonenumber.text}'),
                             SizedBox(height: 2.h),
-                            controller.familyModelvalue.isNotEmpty
-                                ? headLines(number: '03', title: 'Family Type')
-                                : SizedBox(),
-                            buildFamilyType(),
+                            headLines(number: '03', title: 'Passport Detail'),
+                            textText(
+                                subtitle: "Current Passport number",
+                                title: '${controller.phonenumber.text}'),
+                            textText(
+                                subtitle: "Passport issue date",
+                                title: '${controller.phonenumber.text}'),
+                            textText(
+                                subtitle: "Passport expiry date",
+                                title: '${controller.phonenumber.text}'),
+                            textText(
+                                subtitle: "Visa acquiring method",
+                                title: '${controller.phonenumber.text}'),
+                            textText(
+                                subtitle: "visa  number",
+                                title: '${controller.phonenumber.text}'),
                             SizedBox(height: 4.h),
+                            headLines(number: '04', title: 'Signature'),
+                            SizedBox(height: 4.h),
+                            Obx(
+                              () => controller.showImage.value
+                                  ? Container(
+                                      height: 15.h,
+                                      width: 55.w,
+                                      child: controller.signatureImage != null
+                                          ? Image(
+                                              image: controller.signatureImage!,
+                                              fit: BoxFit.contain,
+                                            )
+                                          : Placeholder(), // Placeholder or any other widget to show when image is null
+                                    )
+                                  : SizedBox(),
+                            ),
+                            SizedBox(height: 2.h),
                             buildButton(),
                             Container(
                               height: 100,
@@ -201,59 +232,6 @@ class PdfPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  buildFamilyType() {
-    return Column(
-      children: controller.familyModelvalue.map((element) {
-        final firstName = element.first_name ?? '';
-        final fatherName = element.father_name ?? '';
-        final type = element.family_type!.name;
-
-        return Column(
-          children: [
-            _buildExperienceRow(company: "Type", position: type, duration: ""),
-            _buildExperienceRow(
-                company: "Full Name",
-                position: "${firstName}  ${fatherName}",
-                duration: ""),
-          ],
-        );
-      }).toList(),
-    );
-  }
-
-  ListTile _buildExperienceRow({
-    required String company,
-    String? position,
-    String? duration,
-  }) {
-    return ListTile(
-      visualDensity:
-          VisualDensity.compact, // Add this line to reduce the vertical spacing
-      contentPadding: EdgeInsets.symmetric(
-          vertical: 0.0,
-          horizontal: 0), // Add this line to adjust the vertical padding
-      leading: Icon(
-        Icons.circle,
-        size: 8.0, // Adjust the size of the icon here
-        color: Colors.black54,
-      ),
-      title: Text(
-        company,
-        style: AppTextStyles.bodyLargeBold.copyWith(
-          color: AppColors.black,
-          fontSize: 12,
-        ),
-      ),
-      subtitle: Text(
-        "$position",
-        style: AppTextStyles.bodySmallRegular.copyWith(
-          color: AppColors.black,
-          fontSize: 12,
-        ),
       ),
     );
   }

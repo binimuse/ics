@@ -418,7 +418,8 @@ class _HomeViewState extends State<DetailPassportWidget> {
                 duration: ""),
             _buildExperienceRow(
                 company: "Occupation",
-                position: widget.icsApplication.occupation.name.toString(),
+                position:
+                    widget.icsApplication.occupation?.name.toString() ?? "",
                 duration: ""),
             _buildExperienceRow(
                 company: "Hair color",

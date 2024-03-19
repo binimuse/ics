@@ -17,6 +17,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/new_origin_id/controllers/new_origin_id_controller.dart';
 import 'package:ics/app/modules/new_origin_id/data/model/citizens_model_orginId.dart';
+import 'package:ics/app/modules/new_origin_id/views/widget/pdf_Page.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_five_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_four_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_one_orginid.dart';
@@ -24,7 +25,6 @@ import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_seven_orgi
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_six_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_three_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_two_orginid.dart';
-import 'package:ics/app/modules/new_origin_id/views/widget/summery_new_originid.dart';
 
 import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/utils/constants.dart';
@@ -71,7 +71,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        stoppop: true,
+        stoppop: false,
         title: 'New',
         title2: "Origin ID Form",
         showLeading: true,
@@ -157,10 +157,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                 key: controller.neworginIdformKey,
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
-                canPop: false,
-                onPopInvoked: (didPop) {
-                  _showAreYouSureDialog(context);
-                },
+                canPop: true,
                 child: SingleChildScrollView(
                   controller: controller.scrollController,
                   child: Column(
@@ -268,10 +265,9 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                         } else if (controller.currentStep == 3) {
                           if (controller.signatureController.isNotEmpty) {
                             controller.handleDrawFinish();
-                            controller.neworginIdformKey.currentState!
-                                    .saveAndValidate()
-                                ? _showSummeryDiloag(context)
-                                : SizedBox();
+                            setState(() {
+                              controller.currentStep++;
+                            });
                           } else {
                             AppToasts.showError("Please sign your signature");
                           }
@@ -280,7 +276,6 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
                         } else if (controller.currentStep == 5) {
                           finalstep(context);
                         } else {
-                          print(controller.currentStep);
                           if (controller.neworginIdformKey.currentState!
                               .saveAndValidate()) {
                             setState(() {
@@ -301,21 +296,16 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
   }
 
   _showSummeryDiloag(BuildContext context) {
-    showDialog(
+    Get.to(PdfPageNewOriginId(
       context: context,
-      builder: (BuildContext context) {
-        return SummaryDialogNewOriginId(
-          context: context,
-          controller: controller,
-          onTap: () {
-            Navigator.pop(context);
-            setState(() {
-              controller.currentStep++;
-            });
-          },
-        );
+      controller: controller,
+      onTap: () {
+        Navigator.pop(context);
+        setState(() {
+          controller.currentStep++;
+        });
       },
-    );
+    ));
   }
 
   void checkdoc() async {
@@ -327,9 +317,9 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      setState(() {
-        controller.currentStep++;
-      });
+      controller.neworginIdformKey.currentState!.saveAndValidate()
+          ? _showSummeryDiloag(context)
+          : SizedBox();
     }
   }
 
@@ -464,7 +454,7 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     final hairColour = citizenModel.hairColour;
     final eyeColour = citizenModel.eyeColour;
     final skinColour = citizenModel.skinColour!;
-    final height = citizenModel.height!;
+    final height = citizenModel.height;
     final maritalStatus = citizenModel.maritalStatus;
 
     final photo = citizenModel.photo;
@@ -472,12 +462,20 @@ class _StepperWithFormExampleState extends State<NewOrginIdForm> {
     controller.photoPath.add(photo!);
     controller.selectedImages.add(File(Constants.fileViewer + photo));
 
-    controller.occupationvalue.value =
-        controller.occupations.firstWhere((e) => e.id == occupationId);
-    controller.haircolorvalue.value =
-        controller.haircolor.firstWhere((e) => e.name == hairColour);
-    controller.eyecolorvalue.value =
-        controller.eyecolor.firstWhere((e) => e.name == eyeColour);
+    if (occupationId != null) {
+      controller.occupationvalue.value =
+          controller.occupations.firstWhere((e) => e.id == occupationId);
+    }
+
+    if (hairColour != null) {
+      controller.haircolorvalue.value =
+          controller.haircolor.firstWhere((e) => e.name == hairColour);
+    }
+
+    if (eyeColour != null) {
+      controller.eyecolorvalue.value =
+          controller.eyecolor.firstWhere((e) => e.name == eyeColour);
+    }
     controller.skincolorvalue.value = skinColour.toString();
     controller.height.text = height.toString();
     controller.maritalstatusvalue.value =

@@ -148,17 +148,18 @@ class PdfPageRenew extends StatelessWidget {
                                 title:
                                     '${controller.isAdoption.value == true ? 'yes' : 'no'}'),
                             textText(
-                                subtitle: "Occupation",
-                                title:
-                                    '${controller.occupationvalue.value!.name}'),
+                              subtitle: "Occupation",
+                              title:
+                                  '${controller.occupationvalue.value?.name ?? ""}',
+                            ),
                             textText(
                                 subtitle: "Hair color",
                                 title:
-                                    '${controller.haircolorvalue.value!.name}'),
+                                    '${controller.haircolorvalue.value?.name ?? ""}'),
                             textText(
                                 subtitle: "eye color",
                                 title:
-                                    '${controller.eyecolorvalue.value!.name}'),
+                                    '${controller.eyecolorvalue.value?.name ?? ""}'),
                             textText(
                                 subtitle: "Skin color",
                                 title: '${controller.skincolorvalue.value}'),
@@ -374,10 +375,7 @@ class PdfPageRenew extends StatelessWidget {
       }
     } else {
       // Invalid image path or URL
-      imageWidget = Container(
-        color: AppColors.accent,
-        child: Text("dfsdf"),
-      ); // or any other placeholder widget
+      imageWidget = SizedBox(); // or any other placeholder widget
     }
 
     return imageWidget;

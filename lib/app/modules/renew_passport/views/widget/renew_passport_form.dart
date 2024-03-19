@@ -25,7 +25,6 @@ import 'package:ics/app/modules/renew_passport/views/widget/steps/step_eight_ren
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_seven_renew_passport.dart';
 import 'package:ics/app/modules/renew_passport/views/widget/steps/step_two_renew_passport.dart';
 
-import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/utils/constants.dart';
 
 import 'package:im_stepper/stepper.dart';
@@ -360,18 +359,26 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
     final hairColour = citizenModel.hairColour;
     final eyeColour = citizenModel.eyeColour;
     final skinColour = citizenModel.skinColour!;
-    final height = citizenModel.height!;
+    final height = citizenModel.height;
     final maritalStatus = citizenModel.maritalStatus;
     final photo = citizenModel.photo;
     controller.photoPath.add(photo!);
     controller.selectedImages.add(File(Constants.fileViewer + photo));
 
-    controller.occupationvalue.value =
-        controller.occupations.firstWhere((e) => e.id == occupationId);
-    controller.haircolorvalue.value =
-        controller.haircolor.firstWhere((e) => e.name == hairColour);
-    controller.eyecolorvalue.value =
-        controller.eyecolor.firstWhere((e) => e.name == eyeColour);
+    if (occupationId != null) {
+      controller.occupationvalue.value =
+          controller.occupations.firstWhere((e) => e.id == occupationId);
+    }
+
+    if (hairColour != null) {
+      controller.haircolorvalue.value =
+          controller.haircolor.firstWhere((e) => e.name == hairColour);
+    }
+
+    if (eyeColour != null) {
+      controller.eyecolorvalue.value =
+          controller.eyecolor.firstWhere((e) => e.name == eyeColour);
+    }
     controller.skincolorvalue.value = skinColour.toString();
     controller.height.text = height.toString();
     controller.maritalstatusvalue.value =

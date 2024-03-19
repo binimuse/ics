@@ -68,6 +68,12 @@ class _Step3State extends State<Step3RenewOrginId> {
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Current Country',
               isMandatory: true),
+          validator: (AllowedContreyModel? value) {
+            if (value == null) {
+              return 'Please Current Country'; // Return an error message if no value is selected
+            }
+            return null; // Return null if the value is valid
+          },
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
               value: value,
@@ -82,10 +88,9 @@ class _Step3State extends State<Step3RenewOrginId> {
             controller.currentcountryvalue.value = value!;
           },
           name: 'Current Country',
-          initialValue:
-              widget.citizenModel!.renewOriginIdApplications.isNotEmpty
-                  ? controller.currentcountryvalue.value!
-                  : null,
+          initialValue: widget.citizenModel != null
+              ? controller.currentcountryvalue.value!
+              : null,
         ),
         SizedBox(
           height: 2.h,
@@ -94,6 +99,12 @@ class _Step3State extends State<Step3RenewOrginId> {
           decoration: ReusableInputDecoration.getDecoration(
               'Collaction Country',
               isMandatory: true),
+          validator: (AllowedContreyModel? value) {
+            if (value == null) {
+              return 'Please Collaction place'; // Return an error message if no value is selected
+            }
+            return null; // Return null if the value is valid
+          },
           items: controller.allwoedCountries.map((AllowedContreyModel value) {
             return DropdownMenuItem<AllowedContreyModel>(
               value: value,

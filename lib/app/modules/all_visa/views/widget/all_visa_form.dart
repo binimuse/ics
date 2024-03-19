@@ -77,7 +77,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        stoppop: true,
+        stoppop: false,
         title: controller.baseVisaTypeModel.name.toString(),
         title2: "Form",
         showLeading: true,
@@ -159,10 +159,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                 key: controller.newPassportformKey,
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
-                canPop: false,
-                onPopInvoked: (didPop) {
-                  _showAreYouSureDialog(context);
-                },
+                canPop: true,
                 child: SingleChildScrollView(
                   controller: _scrollController,
                   child: Column(
@@ -307,90 +304,6 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
       _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
-    );
-  }
-
-  void _showAreYouSureDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Column(
-              children: [
-                Text(
-                  "Are you sure You want to exit ",
-                  style: AppTextStyles.bodyLargeBold,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context)
-                    .pop(false); // Return false if cancel is pressed
-              },
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 5.h,
-                width: 25.w,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.primary,
-                      AppColors.primary,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(22)),
-                ),
-                child: Center(
-                  child: Text(
-                    "Cancel".tr,
-                    style: AppTextStyles.bodyLargeBold
-                        .copyWith(color: AppColors.whiteOff),
-                  ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
-              },
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 5.h,
-                width: 25.w,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.danger,
-                      AppColors.danger,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(22)),
-                ),
-                child: Center(
-                  child: Text(
-                    "Yes".tr,
-                    style: AppTextStyles.bodyLargeBold
-                        .copyWith(color: AppColors.whiteOff),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 

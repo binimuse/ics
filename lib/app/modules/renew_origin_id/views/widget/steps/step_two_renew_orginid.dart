@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_validator/form_validator.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/common/photo_upload/photo_upload.dart';
@@ -57,7 +56,7 @@ class Step2RenewOrginID extends StatelessWidget {
         ),
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Occupation',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.occupations.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -73,14 +72,14 @@ class Step2RenewOrginID extends StatelessWidget {
           },
           name: 'Occupation',
           initialValue:
-              citizenModel != null ? controller.occupationvalue.value! : null,
+              citizenModel != null ? controller.occupationvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Hair Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.haircolor.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -96,14 +95,14 @@ class Step2RenewOrginID extends StatelessWidget {
           },
           name: 'Hair Color',
           initialValue:
-              citizenModel != null ? controller.haircolorvalue.value! : null,
+              citizenModel != null ? controller.haircolorvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Eye Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.eyecolor.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -119,19 +118,14 @@ class Step2RenewOrginID extends StatelessWidget {
           },
           name: 'Eye Color',
           initialValue:
-              citizenModel != null ? controller.eyecolorvalue.value! : null,
+              citizenModel != null ? controller.eyecolorvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
-          validator: ValidationBuilder()
-              .required(
-                'Skin Color',
-              )
-              .build(),
           decoration: ReusableInputDecoration.getDecoration('Skin Color',
-              isMandatory: true),
+              isMandatory: false),
           items: controller.SkinColor.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -154,6 +148,12 @@ class Step2RenewOrginID extends StatelessWidget {
         FormBuilderDropdown(
           decoration: ReusableInputDecoration.getDecoration('Martial status',
               isMandatory: true),
+          validator: (CommonModel? value) {
+            if (value == null) {
+              return 'Please select a marital status'; // Return an error message if no value is selected
+            }
+            return null; // Return null if the value is valid
+          },
           items: controller.martial.map((CommonModel value) {
             return DropdownMenuItem<CommonModel>(
               value: value,
@@ -176,7 +176,7 @@ class Step2RenewOrginID extends StatelessWidget {
           height: 2.h,
         ),
         TextFormBuilder(
-          isMandatory: true,
+          isMandatory: false,
           inputFormatters: [
             HeightInputFormatter(),
           ],

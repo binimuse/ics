@@ -73,8 +73,9 @@ class _Step4State extends State<Step4RenewOrginId> {
           controller: controller.passportNumberContoller,
           hint: 'Passport number',
           labelText: 'Current Passport number',
-          validator:
-              ValidationBuilder().required('Birthdate is required').build(),
+          validator: ValidationBuilder()
+              .required('Passport number is required')
+              .build(),
           showClearButton: false,
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp(r"\s")),
@@ -86,6 +87,12 @@ class _Step4State extends State<Step4RenewOrginId> {
         ),
         FormBuilderDateTimePicker(
           name: 'date_established',
+          validator: (DateTime? value) {
+            if (value == null) {
+              return 'Please add Passport Issue Date(GC)'; // Return an error message if no value is selected
+            }
+            return null; // Return null if the value is valid
+          },
           initialValue:
               widget.citizenModel?.renewOriginIdApplications.isNotEmpty ?? false
                   ? DateTime.parse(controller.passportIssueDateController.text)
@@ -115,6 +122,12 @@ class _Step4State extends State<Step4RenewOrginId> {
                   widget.citizenModel!.renewOriginIdApplications.isNotEmpty
               ? DateTime.parse(controller.passportExpiryDateController.text)
               : null,
+          validator: (DateTime? value) {
+            if (value == null) {
+              return 'Please add Passport Expiry Date(GC)'; // Return an error message if no value is selected
+            }
+            return null; // Return null if the value is valid
+          },
           onChanged: (value) {
             controller.passportExpiryDateController.value = TextEditingValue(
               text: value.toString(),
@@ -140,7 +153,7 @@ class _Step4State extends State<Step4RenewOrginId> {
               child: FormBuilderDropdown(
                 decoration: ReusableInputDecoration.getDecoration(
                     'Visa acquiring method',
-                    isMandatory: true),
+                    isMandatory: false),
                 items: controller.visaType.map((CommonModel value) {
                   return DropdownMenuItem<CommonModel>(
                     value: value,
@@ -188,6 +201,12 @@ class _Step4State extends State<Step4RenewOrginId> {
                 controller.currentcountryvalue.value!.name == 'Ethiopia',
             child: FormBuilderDateTimePicker(
               name: 'date_established3',
+              validator: (DateTime? value) {
+                if (value == null) {
+                  return 'Please add Visa Issue Date(GC)'; // Return an error message if no value is selected
+                }
+                return null; // Return null if the value is valid
+              },
               initialValue:
                   widget.citizenModel?.renewOriginIdApplications.isNotEmpty ??
                           false
@@ -221,6 +240,12 @@ class _Step4State extends State<Step4RenewOrginId> {
                       widget.citizenModel!.renewOriginIdApplications.isNotEmpty
                   ? DateTime.parse(controller.visaExpiryDateController.text)
                   : null,
+              validator: (DateTime? value) {
+                if (value == null) {
+                  return 'Please add Visa Expiry Date(GC)'; // Return an error message if no value is selected
+                }
+                return null; // Return null if the value is valid
+              },
               onChanged: (value) {
                 controller.visaExpiryDateController.value = TextEditingValue(
                   text: value.toString(),

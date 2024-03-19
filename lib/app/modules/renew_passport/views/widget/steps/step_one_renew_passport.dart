@@ -124,7 +124,13 @@ class Step1RenewPassport extends StatelessWidget {
             height: 2.h,
           ),
           TextFormBuilder(
-            isMandatory: false,
+            isMandatory: true,
+            validator: (String? value) {
+              if (value == null) {
+                return 'Please add Birth place'; // Return an error message if no value is selected
+              }
+              return null; // Return null if the value is valid
+            },
             labelText: "Birth place",
             controller: controller.birthplace,
             inputFormatters: [

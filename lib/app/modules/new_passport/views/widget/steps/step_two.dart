@@ -72,7 +72,7 @@ class Step2 extends StatelessWidget {
           },
           name: 'Occupation',
           initialValue:
-              citizenModel != null ? controller.occupationvalue.value! : null,
+              citizenModel != null ? controller.occupationvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
@@ -95,7 +95,7 @@ class Step2 extends StatelessWidget {
           },
           name: 'Hair Color',
           initialValue:
-              citizenModel != null ? controller.haircolorvalue.value! : null,
+              citizenModel != null ? controller.haircolorvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
@@ -118,13 +118,12 @@ class Step2 extends StatelessWidget {
           },
           name: 'Eye Color',
           initialValue:
-              citizenModel != null ? controller.eyecolorvalue.value! : null,
+              citizenModel != null ? controller.eyecolorvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
         ),
         FormBuilderDropdown(
-        
           decoration: ReusableInputDecoration.getDecoration('Skin Color',
               isMandatory: false),
           items: controller.SkinColor.map((String value) {

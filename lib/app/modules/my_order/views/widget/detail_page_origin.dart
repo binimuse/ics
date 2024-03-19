@@ -467,7 +467,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
                 duration: ""),
             _buildExperienceRow(
                 company: "Occupation",
-                position: widget.icsApplication.occupation.name.toString(),
+                position: widget.icsApplication.occupation?.name ?? "",
                 duration: ""),
             _buildExperienceRow(
                 company: "Hair color",

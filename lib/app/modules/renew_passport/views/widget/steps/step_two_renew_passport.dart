@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_validator/form_validator.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/common/photo_upload/photo_upload.dart';
@@ -73,7 +72,7 @@ class Step2RenewPassport extends StatelessWidget {
           },
           name: 'Occupation',
           initialValue:
-              citizenModel != null ? controller.occupationvalue.value! : null,
+              citizenModel != null ? controller.occupationvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
@@ -96,7 +95,7 @@ class Step2RenewPassport extends StatelessWidget {
           },
           name: 'Hair Color',
           initialValue:
-              citizenModel != null ? controller.haircolorvalue.value! : null,
+              citizenModel != null ? controller.haircolorvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
@@ -119,7 +118,7 @@ class Step2RenewPassport extends StatelessWidget {
           },
           name: 'Eye Color',
           initialValue:
-              citizenModel != null ? controller.eyecolorvalue.value! : null,
+              citizenModel != null ? controller.eyecolorvalue.value : null,
         ),
         SizedBox(
           height: 2.h,
