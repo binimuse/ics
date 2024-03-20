@@ -1,10 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
 import 'package:ics/app/modules/my_order/data/model/ics_visa_application.dart';
+import 'package:ics/app/modules/my_order/views/widget/detail_page_visa.dart';
 
 import 'package:ics/gen/assets.gen.dart';
 
@@ -40,10 +42,10 @@ class VisaWidget extends StatelessWidget {
   Widget buildCard(IcsVisaApplication icsApplication) {
     return GestureDetector(
       onTap: () {
-        controller.groupDocumnats(icsApplication.id);
-        // Get.to(DetailPassportWidget(
-        //   icsApplication: icsApplication,
-        // ));
+        controller.groupDocumnatsForVisa(icsApplication.id);
+        Get.to(DetailVisaWidget(
+          icsApplication: icsApplication,
+        ));
       },
       child: Container(
         height: 23.5.h,
@@ -112,33 +114,33 @@ class VisaWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Container(
-                    //     height: 4.h,
-                    //     width: 30.w,
-                    //     decoration: BoxDecoration(
-                    //       color:
-                    //           icsApplication.reviewStatus.contains("REJECTED")
-                    //               ? AppColors.danger
-                    //               : AppColors.warning,
-                    //       borderRadius: BorderRadius.circular(12.0),
-                    //     ),
-                    //     child: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: [
-                    //         Text(
-                    //           icsApplication.reviewStatus.toString(),
-                    //           style: AppTextStyles.bodySmallBold.copyWith(
-                    //             color: AppColors.whiteOff,
-                    //             fontSize: AppSizes.font_10,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 4.h,
+                        width: 30.w,
+                        decoration: BoxDecoration(
+                          color:
+                              icsApplication.reviewStatus.contains("REJECTED")
+                                  ? AppColors.danger
+                                  : AppColors.warning,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              icsApplication.reviewStatus.toString(),
+                              style: AppTextStyles.bodySmallBold.copyWith(
+                                color: AppColors.whiteOff,
+                                fontSize: AppSizes.font_10,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(

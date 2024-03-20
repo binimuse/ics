@@ -20,9 +20,11 @@ class AllVisaTerms extends GetView<ALLVisaController> {
   const AllVisaTerms({
     super.key,
     required this.isTourst,
+    required this.price,
   });
 
   final bool isTourst;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
@@ -91,38 +93,71 @@ class AllVisaTerms extends GetView<ALLVisaController> {
   }
 
   Widget buildAdditionalCard() {
-    return GestureDetector(
-      onTap: () {
-        // controller.toggleTerm(index);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Please ensure that you input Company Reference number',
-                style: AppTextStyles.bodySmallRegular.copyWith(
-                  color: AppColors.grayDark,
-                )),
-            SizedBox(height: 2.h),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormBuilder(
-                isMandatory: isTourst ? false : true,
-                controller: controller.companyreference,
-                hint: 'Company Reference number',
-                labelText: 'Company Reference number',
-                validator: ValidationBuilder()
-                    .required('Company Reference number is required')
-                    .build(),
-                showClearButton: false,
-                autoFocus: false,
-                onChanged: (value) {},
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Please ensure that you input Company Reference number',
+              style: AppTextStyles.bodySmallRegular.copyWith(
+                color: AppColors.grayDark,
+              )),
+          SizedBox(height: 2.h),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormBuilder(
+              isMandatory: isTourst ? false : true,
+              controller: controller.companyreference,
+              hint: 'Company Reference number',
+              labelText: 'Company Reference number',
+              validator: ValidationBuilder()
+                  .required('Company Reference number is required')
+                  .build(),
+              showClearButton: false,
+              autoFocus: false,
+              onChanged: (value) {},
             ),
-            SizedBox(height: 2.h),
-          ],
-        ),
+          ),
+          SizedBox(height: 2.h),
+          Center(
+            child: Text(
+              "Visa Fee : \$$price",
+              style: AppTextStyles.bodySmallRegular.copyWith(
+                color: AppColors.secondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: Icon(
+                  Icons.info,
+                  size: 19.2,
+                  color: AppColors.primary,
+                ),
+              ),
+              SizedBox(
+                width: 70.w,
+                child: Text(
+                  'How to create Company Reference number?',
+                  style: AppTextStyles.bodySmallUnderlineRegular
+                      .copyWith(fontSize: 14),
+                ),
+              ),
+              SizedBox(
+                width: 2.h,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

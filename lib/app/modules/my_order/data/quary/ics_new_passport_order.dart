@@ -63,6 +63,8 @@ class GetOrginOrder {
     }
     application_documents(order_by: {created_at: desc}) {
       document_status
+      rejected
+      rejection_reason
       document_type {
         name
         id

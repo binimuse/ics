@@ -33,6 +33,7 @@ class MyOrderController extends GetxController
   var selectedRating = 0.obs;
   late TabController tabController;
   late TabController tabControllerorgin;
+  late TabController tabControllervisa;
   late TabController tabControllerPassport;
   final TextEditingController complaint = TextEditingController();
   @override
@@ -44,6 +45,7 @@ class MyOrderController extends GetxController
     // getDoc();
     tabController = TabController(length: 5, vsync: this);
     tabControllerorgin = TabController(length: 6, vsync: this);
+    tabControllervisa = TabController(length: 7, vsync: this);
     tabControllerPassport = TabController(length: 6, vsync: this);
 
     super.onInit();
@@ -199,6 +201,36 @@ class MyOrderController extends GetxController
     });
   }
 
+  RxList<GroupedAppliactionVisa> groupedAppliactionvisa =
+      List<GroupedAppliactionVisa>.of([]).obs;
+
+  groupDocumnatsForVisa(String applicationid) {
+    groupedAppliactionvisa.clear();
+
+    allVisaApplicationModel.forEach((element) {
+      if (element.id == applicationid) {
+        element.visaApplicationDocuments.forEach((element) {
+          final docTypeID = element.documentType.id;
+          int existingIndex = groupedAppliactionvisa
+              .indexWhere((group) => group.documentType.id == docTypeID);
+
+          if (existingIndex != -1) {
+            // If an existing OrderGroup is found, add the order to its list of orders
+            groupedAppliactionvisa[existingIndex].document.add(element);
+          } else {
+            // If no existing OrderGroup is found, create a new OrderGroup and add it to the list
+            GroupedAppliactionVisa newGroup = GroupedAppliactionVisa(
+              documentType: element.documentType,
+              document: [element],
+            );
+
+            groupedAppliactionvisa.add(newGroup);
+          }
+        });
+      }
+    });
+  }
+
   @override
   void onReady() {
     super.onReady();
@@ -219,40 +251,18 @@ class MyOrderController extends GetxController
     var documentTypeId,
     var path,
     var newApplicationId,
+    bool isVisa,
   ) async {
     try {
       // file upload
 
-      GraphQLClient graphQLClient;
-
-      graphQLClient = GraphQLConfiguration().clientToQuery();
-
-      final QueryResult result = await graphQLClient.mutate(
-        MutationOptions(
-          document: gql(NewDocApplications.newDoc),
-          variables: <String, dynamic>{
-            'objects': {
-              'application_id': newApplicationId,
-              'files': {
-                'path': path,
-              },
-              'document_type_id': documentTypeId,
-            }
-          },
-        ),
-      );
-
-      if (result.hasException) {
-        print(result.exception.toString());
+      if (isVisa == false) {
+        forpassportAndOrgin(documentTypeId, path, newApplicationId);
       } else {
-        isSendDocSuccess(true);
-
-        AppToasts.showSuccess("Document uploaded successfully");
-        documents.clear();
-        getOrginOrder();
-        Get.back();
+        forVisa(documentTypeId, path, newApplicationId);
       }
     } catch (e) {
+      networkStatus.value = NetworkStatus.ERROR;
       isSendDocSuccess(false);
       print('Error: $e');
     }
@@ -290,6 +300,81 @@ class MyOrderController extends GetxController
       print(e.toString());
 
       print('Error: $e');
+    }
+  }
+
+  void forpassportAndOrgin(documentTypeId, path, newApplicationId) async {
+    GraphQLClient graphQLClient;
+
+    graphQLClient = GraphQLConfiguration().clientToQuery();
+
+    final QueryResult result = await graphQLClient.mutate(
+      MutationOptions(
+        document: gql(NewDocApplications.newDoc),
+        variables: <String, dynamic>{
+          'objects': {
+            'application_id': newApplicationId,
+            'files': {
+              'path': path,
+            },
+            'document_type_id': documentTypeId,
+          }
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      networkStatus.value = NetworkStatus.ERROR;
+      print(result.exception.toString());
+    } else {
+      networkStatus.value = NetworkStatus.SUCCESS;
+      isSendDocSuccess(true);
+
+      AppToasts.showSuccess("Document uploaded successfully");
+
+      documents.clear();
+
+      Get.back();
+
+      getOrginOrder();
+    }
+  }
+
+  void forVisa(documentTypeId, path, newApplicationId) async {
+    GraphQLClient graphQLClient;
+
+    graphQLClient = GraphQLConfiguration().clientToQuery();
+
+    final QueryResult result = await graphQLClient.mutate(
+      MutationOptions(
+        document: gql(NewDocApplicationsVisa.newDoc),
+        variables: <String, dynamic>{
+          'objects': {
+            'visa_application_id': newApplicationId,
+            'files': {
+              'path': path,
+            },
+            'document_type_id': documentTypeId,
+          }
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      networkStatus.value = NetworkStatus.ERROR;
+      print(result.exception.toString());
+    } else {
+      networkStatus.value = NetworkStatus.SUCCESS;
+      isSendDocSuccess(true);
+
+      AppToasts.showSuccess("Document uploaded successfully");
+
+      documents.clear();
+
+      Get.back();
+      // groupDocumnats(newApplicationId);
+
+      getVisaApplication();
     }
   }
 }

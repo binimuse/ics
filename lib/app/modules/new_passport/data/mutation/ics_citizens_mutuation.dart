@@ -41,6 +41,19 @@ class NewDocApplications {
   ''';
 }
 
+class NewDocApplicationsVisa {
+  static const String newDoc = r'''
+   mutation($objects: [ics_visa_application_documents_insert_input!]!) {
+      insert_ics_visa_application_documents(objects: $objects) {
+         returning {
+            id
+      
+    }
+      }
+    }
+  ''';
+}
+
 class DeleteDocApplications {
   static String deleteDoc(String documentTypeId) {
     return '''

@@ -11,12 +11,13 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
+import 'package:ics/app/modules/my_order/data/model/ics_visa_application.dart';
 import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
 import 'package:ics/app/modules/my_order/views/widget/doc_viewer.dart';
 import 'package:ics/gen/assets.gen.dart';
 
-class ItemDoc extends StatefulWidget {
-  const ItemDoc({
+class ItemDocVisa extends StatefulWidget {
+  const ItemDocVisa({
     super.key,
     required this.title,
     required this.listOfDoc,
@@ -27,18 +28,17 @@ class ItemDoc extends StatefulWidget {
 
   final String title;
 
-  final List<ApplicationDocument> listOfDoc;
+  final List<VisaApplicationDocument> listOfDoc;
 
   final MyOrderController controller;
   final String applicationId;
-
   final CurrentCountry documentType;
 
   @override
-  State<ItemDoc> createState() => _ItemFaqState();
+  State<ItemDocVisa> createState() => _ItemFaqState();
 }
 
-class _ItemFaqState extends State<ItemDoc> {
+class _ItemFaqState extends State<ItemDocVisa> {
   bool isExpanded = false;
 
   @override
@@ -96,7 +96,7 @@ class _ItemFaqState extends State<ItemDoc> {
                     ),
             ),
           ),
-          widget.listOfDoc[0].documentStatus.contains("REJECTED")
+          widget.listOfDoc[0].reviewStatus.contains("REJECTED")
               ? GestureDetector(
                   onTap: () {
                     openPdfPicker();
@@ -167,19 +167,20 @@ class _ItemFaqState extends State<ItemDoc> {
         : const SizedBox();
   }
 
-  buildPDFViewer(ApplicationDocument document) {
+  buildPDFViewer(VisaApplicationDocument document) {
     return BuildDocViewer(
       pdfPath: document.files.path,
-      reviewStatus: document.documentStatus,
+      reviewStatus: document.reviewStatus,
       documentType: document.documentType,
       controller: widget.controller,
       applicationId: widget.applicationId,
-      rejected_reason: document.rejectionReason.toString(),
+      rejected_reason: document.rejecterNote.toString(),
     );
   }
 
   openPdfPicker() async {
     widget.controller.isSendStared.value = true;
+
     widget.controller.networkStatus.value = NetworkStatus.LOADING;
     try {
       PlatformFile? pickedFile = await PdfPicker.pickPdfFile();
@@ -215,7 +216,7 @@ class _ItemFaqState extends State<ItemDoc> {
     if (responseUrl.isNotEmpty) {
       // Response is successful
       widget.controller.sendDoc(
-          widget.documentType.id, responseUrl, widget.applicationId, false);
+          widget.documentType.id, responseUrl, widget.applicationId, true);
     } else {
       widget.controller.networkStatus.value = NetworkStatus.ERROR;
       // Response is not successful

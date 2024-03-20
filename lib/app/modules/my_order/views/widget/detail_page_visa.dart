@@ -1,10 +1,8 @@
 // ignore_for_file: deprecated_member_use, unnecessary_null_comparison
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
@@ -14,31 +12,29 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/controllers/my_order_controller.dart';
-import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
+import 'package:ics/app/modules/my_order/data/model/ics_visa_application.dart';
+import 'package:ics/app/modules/my_order/views/widget/doc_causolevisa.dart';
 
-import 'package:ics/app/modules/my_order/views/widget/doc_causole.dart';
 import 'package:ics/gen/assets.gen.dart';
-import 'package:ics/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sizer/sizer.dart';
-import 'package:intl/intl.dart';
 
-class DetailPassportWidget extends StatefulWidget {
-  final IcsApplication icsApplication;
+class DetailVisaWidget extends StatefulWidget {
+  final IcsVisaApplication icsApplication;
 
-  DetailPassportWidget({
+  DetailVisaWidget({
     required this.icsApplication,
   });
 
   @override
-  State<DetailPassportWidget> createState() => _HomeViewState();
+  State<DetailVisaWidget> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<DetailPassportWidget> {
+class _HomeViewState extends State<DetailVisaWidget> {
   late MyOrderController controller;
   @override
   void initState() {
-    controller = Get.find<MyOrderController>();
+    controller = Get.put(MyOrderController());
 
     super.initState();
   }
@@ -47,40 +43,36 @@ class _HomeViewState extends State<DetailPassportWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
-          title: 'Orders',
+          title: 'Order',
           title2: 'Status',
           showActions: true,
           showLeading: true,
           actionIcon: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Obx(
-                () => controller.isfechedorder.value
-                    ? Container(
-                        height: 4.h,
-                        width: 20.w,
-                        decoration: BoxDecoration(
-                          color: widget.icsApplication.reviewStatus
-                                  .contains("REJECTED")
-                              ? AppColors.danger
-                              : AppColors.warning,
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.icsApplication.reviewStatus,
-                              style: AppTextStyles.bodySmallBold.copyWith(
-                                color: AppColors.whiteOff,
-                                fontSize: 9,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : SizedBox(),
-              )),
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 4.h,
+              width: 25.w,
+              decoration: BoxDecoration(
+                color: widget.icsApplication.reviewStatus.contains("REJECTED")
+                    ? AppColors.danger
+                    : AppColors.warning,
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.icsApplication.reviewStatus,
+                    style: AppTextStyles.bodySmallBold.copyWith(
+                      color: AppColors.whiteOff,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
         backgroundColor: AppColors.whiteOff,
         body: Obx(
@@ -92,20 +84,13 @@ class _HomeViewState extends State<DetailPassportWidget> {
                       height: 1.h,
                     ),
                     TabBar(
-                      controller: controller.tabControllerPassport,
+                      controller: controller.tabControllervisa,
                       tabAlignment: TabAlignment.center,
                       isScrollable: true,
                       labelStyle: AppTextStyles.bodyLargeBold.copyWith(
                           fontSize: AppSizes.font_10, color: AppColors.primary),
                       tabs: [
                         Tab(text: 'Status', icon: Icon(Icons.check_circle)),
-                        Tab(
-                            text: 'Profile',
-                            icon: SvgPicture.asset(
-                              Assets.icons.profileDefault,
-                              color: AppColors.primary,
-                              fit: BoxFit.contain,
-                            )),
                         Tab(
                             text: 'Profile',
                             icon: SvgPicture.asset(
@@ -121,7 +106,21 @@ class _HomeViewState extends State<DetailPassportWidget> {
                               fit: BoxFit.contain,
                             )),
                         Tab(
-                            text: 'Passport',
+                            text: 'Arrival Info',
+                            icon: SvgPicture.asset(
+                              Assets.icons.flagrounded,
+                              color: AppColors.primary,
+                              fit: BoxFit.contain,
+                            )),
+                        Tab(
+                            text: 'Address In Ethiopa',
+                            icon: SvgPicture.asset(
+                              Assets.icons.location,
+                              color: AppColors.primary,
+                              fit: BoxFit.contain,
+                            )),
+                        Tab(
+                            text: 'Passport Info',
                             icon: SvgPicture.asset(
                               Assets.icons.paper,
                               color: AppColors.primary,
@@ -139,9 +138,10 @@ class _HomeViewState extends State<DetailPassportWidget> {
                     Expanded(
                       child: EasyRefresh(
                         onRefresh: () async {
-                          await controller.getOrginOrder();
+                          print("object");
+                          await controller.getVisaApplication();
                           await controller
-                              .groupDocumnats(widget.icsApplication.id);
+                              .groupDocumnatsForVisa(widget.icsApplication.id);
                         },
                         header: MaterialHeader(),
                         child: SizedBox(
@@ -149,12 +149,13 @@ class _HomeViewState extends State<DetailPassportWidget> {
                           width: double
                               .infinity, // Set the width to occupy all available space
                           child: TabBarView(
-                            controller: controller.tabControllerPassport,
+                            controller: controller.tabControllervisa,
                             children: [
                               buildStatus(),
                               buildProfile(),
-                              buildProfile2(),
                               buildAddress(),
+                              buildArrivalInfo(),
+                              buildAddressInEthiopa(),
                               buildPassportInfo(),
                               buildDocument(),
                             ],
@@ -170,10 +171,8 @@ class _HomeViewState extends State<DetailPassportWidget> {
   Widget buildStatus() {
     return Container(
       padding: const EdgeInsets.all(20),
-      child: Column(
+      child: ListView(
         children: [
-          _buildTitle("status"),
-          _buildAppointemnt(),
           MyTimeLineTiles(
             isFirst: true,
             isLast: false,
@@ -182,12 +181,12 @@ class _HomeViewState extends State<DetailPassportWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Passport Order Placed",
+                  "Visa Order Placed",
                   style: AppTextStyles.menuBold
                       .copyWith(color: AppColors.whiteOff),
                 ),
                 Text(
-                  "Your Passport order is placed",
+                  "Your Visa order is placed",
                   style: AppTextStyles.menuRegular
                       .copyWith(color: AppColors.whiteOff),
                 ),
@@ -269,12 +268,13 @@ class _HomeViewState extends State<DetailPassportWidget> {
         child: Column(
           children: [
             _buildTitle("Personal Detail"),
+            _buildCompanyNumber(),
             SizedBox(height: 2.h),
             Container(
                 width: 80.0,
                 height: 80.0,
                 child: QrImageView(
-                  data: getQrData(widget.icsApplication),
+                  data: widget.icsApplication.applicationNo,
                   version: QrVersions.auto,
                   size: 200.0,
                 )),
@@ -283,64 +283,19 @@ class _HomeViewState extends State<DetailPassportWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const SizedBox(width: 20.0),
-                Container(
-                    width: 80.0,
-                    height: 80.0,
-                    child: widget.icsApplication.photo != null
-                        ? CachedNetworkImage(
-                            imageUrl: Constants.fileViewer +
-                                widget.icsApplication.photo,
-                            fit: BoxFit.contain,
-                            height: 28.h,
-                            width: double.infinity,
-                            placeholder: (context, str) => Container(
-                              color: AppColors.whiteOff,
-                              height: 28.h,
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: AppColors.whiteOff,
-                              height: 28.h,
-                            ),
-                          )
-                        : Container(
-                            color: AppColors.danger,
-                            height: 28.h,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'No image found',
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.menuBold
-                                  .copyWith(color: AppColors.whiteOff),
-                            ),
-                          )),
+                SizedBox(width: 2.h),
                 const SizedBox(width: 20.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      widget.icsApplication.firstName.toString() +
-                          "" +
-                          widget.icsApplication.fatherName.toString() +
-                          widget.icsApplication.grandFatherName.toString() +
-                          "",
-                      style: AppTextStyles.bodyLargeRegular
+                      widget.icsApplication.givenName.toString() +
+                          " " +
+                          widget.icsApplication.surname.toString(),
+                      style: AppTextStyles.bodyLargeBold
                           .copyWith(color: AppColors.primary),
                     ),
                     SizedBox(height: 1.h),
-                    Text(
-                      widget.icsApplication.firstNameJson.am.toString() +
-                          "" +
-                          widget.icsApplication.fatherNameJson.am.toString() +
-                          widget.icsApplication.grandFatherNameJson.am
-                              .toString() +
-                          "",
-                      style: AppTextStyles.bodyLargeBold.copyWith(
-                        color: AppColors.black,
-                        fontSize: AppSizes.font_14,
-                      ),
-                    ),
-                    const SizedBox(height: 5.0),
                     Row(
                       children: <Widget>[
                         Icon(
@@ -363,27 +318,57 @@ class _HomeViewState extends State<DetailPassportWidget> {
               ],
             ),
             _buildExperienceRow(
-                company: "Date of birth(GC)",
-                position: widget.icsApplication.dateOfBirth.toString(),
+                company: "Gender",
+                position: widget.icsApplication.gender.toString(),
                 duration: ""),
             _buildExperienceRow(
-                company: "Nationality",
-                position: widget.icsApplication.nationality.toString(),
+                company: "Citizenship",
+                position: widget.icsApplication.nationality.name,
                 duration: ""),
             _buildExperienceRow(
                 company: "Birth Country",
-                position: widget.icsApplication.birthCountry.toString(),
+                position: widget.icsApplication.birthCountry.name,
                 duration: ""),
             _buildExperienceRow(
                 company: "Birth Place",
                 position: widget.icsApplication.birthPlace.toString(),
                 duration: ""),
             _buildExperienceRow(
-                company: "Gender",
-                position: widget.icsApplication.gender.toString(),
+                company: "Email",
+                position: widget.icsApplication.email.toString(),
+                duration: ""),
+            _buildExperienceRow(
+                company: "Occupation",
+                position: widget.icsApplication.occupation.name,
                 duration: ""),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCompanyNumber() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "Company Reference Number :- ",
+            style: AppTextStyles.bodyLargeBold.copyWith(
+              color: AppColors.black,
+              fontSize: AppSizes.font_12,
+            ),
+          ),
+          Text(
+            widget.icsApplication.companyReferenceNumber,
+            //, getAppointmentdate(widget.icsApplication),
+            style: AppTextStyles.bodyLargeBold.copyWith(
+              color: AppColors.black,
+              fontSize: AppSizes.font_12,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -397,8 +382,29 @@ class _HomeViewState extends State<DetailPassportWidget> {
             _buildTitle("Passport Information"),
             SizedBox(height: 2.h),
             _buildExperienceRow(
-                company: "Current Passport number",
-                position: getnumber(widget.icsApplication),
+                company: "Passport Type",
+                position: widget.icsApplication.passportType.name,
+                duration: ""),
+            _buildExperienceRow(
+                company: "Passport number",
+                position: widget.icsApplication.passportNumber,
+                duration: ""),
+            _buildExperienceRow(
+                company: "Passport Issue date",
+                position: widget.icsApplication.passportIssuedDate.toString(),
+                duration: ""),
+            _buildExperienceRow(
+                company: "Passport Expiry date",
+                position: widget.icsApplication.passportExpiryDate.toString(),
+                duration: ""),
+            _buildExperienceRow(
+                company: "Passport Issusing country",
+                position: widget.icsApplication.passportIssuingCountry.name,
+                duration: ""),
+            _buildExperienceRow(
+                company: "Passport Issusing authority",
+                position:
+                    widget.icsApplication.passportIssuingAuthority.toString(),
                 duration: ""),
           ],
         ),
@@ -406,42 +412,70 @@ class _HomeViewState extends State<DetailPassportWidget> {
     );
   }
 
-  buildProfile2() {
+  buildArrivalInfo() {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            _buildTitle("More Personal Detail "),
+            _buildTitle("Arrival information"),
             SizedBox(height: 2.h),
             _buildExperienceRow(
-                company: "Adoption",
-                position: widget.icsApplication.isAdopted.toString(),
+                company: "Arrival  Date(GC)",
+                position: widget.icsApplication.arrivalDate.toString(),
                 duration: ""),
             _buildExperienceRow(
-                company: "Occupation",
+                company: "Departure Country",
+                position: widget.icsApplication.departureCountry.name,
+                duration: ""),
+            _buildExperienceRow(
+                company: "Departure City",
+                position: widget.icsApplication.departureCity.toString(),
+                duration: ""),
+            _buildExperienceRow(
+                company: "Airline",
+                position: widget.icsApplication.airline.toString(),
+                duration: ""),
+            _buildExperienceRow(
+                company: "Flight Number",
+                position: widget.icsApplication.flightNumber.toString(),
+                duration: ""),
+          ],
+        ),
+      ),
+    );
+  }
+
+  buildAddressInEthiopa() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            _buildTitle("Address in Ethiopia"),
+            SizedBox(height: 2.h),
+            _buildExperienceRow(
+                company: "Accommodation Type",
                 position:
-                    widget.icsApplication.occupation?.name.toString() ?? "",
+                    widget.icsApplication.accommodationType.name.toString(),
                 duration: ""),
             _buildExperienceRow(
-                company: "Hair color",
-                position: widget.icsApplication.hairColour.toString(),
+                company: "Accommodation name",
+                position: widget.icsApplication.accommodationName.toString(),
                 duration: ""),
             _buildExperienceRow(
-                company: "eye color",
-                position: widget.icsApplication.eyeColour.toString(),
+                company: "Accommodation City",
+                position: widget.icsApplication.accommodationCity.toString(),
                 duration: ""),
             _buildExperienceRow(
-                company: "Skin color",
-                position: widget.icsApplication.skinColour.toString(),
+                company: "Accommodation Street Address",
+                position:
+                    widget.icsApplication.accommodationStreetAddress.toString(),
                 duration: ""),
             _buildExperienceRow(
-                company: "Marital Status",
-                position: widget.icsApplication.maritalStatus.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "height",
-                position: widget.icsApplication.height.toString(),
+                company: "Accommodation Telephone",
+                position:
+                    widget.icsApplication.accommodationTelephone.toString(),
                 duration: ""),
           ],
         ),
@@ -458,12 +492,16 @@ class _HomeViewState extends State<DetailPassportWidget> {
             _buildTitle("Address Detail"),
             SizedBox(height: 2.h),
             _buildExperienceRow(
-                company: "Current Country",
-                position: widget.icsApplication.currentCountry.name.toString(),
+                company: "Address Country",
+                position: widget.icsApplication.abroadCountry.name.toString(),
                 duration: ""),
             _buildExperienceRow(
-                company: "Address Detail",
-                position: widget.icsApplication.abroadAddress.toString(),
+                company: "Address city",
+                position: widget.icsApplication.city.toString(),
+                duration: ""),
+            _buildExperienceRow(
+                company: "Street Address",
+                position: widget.icsApplication.streetAddress.toString(),
                 duration: ""),
             _buildExperienceRow(
                 company: "Phone Number",
@@ -473,40 +511,6 @@ class _HomeViewState extends State<DetailPassportWidget> {
         ),
       ),
     );
-  }
-
-  Widget _buildAppointemnt() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "Appointemnt date :- ",
-            style: AppTextStyles.bodyLargeBold.copyWith(
-              color: AppColors.black,
-              fontSize: AppSizes.font_12,
-            ),
-          ),
-          Text(
-            getAppointmentdate(widget.icsApplication),
-            style: AppTextStyles.bodyLargeBold.copyWith(
-              color: AppColors.black,
-              fontSize: AppSizes.font_12,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String getAppointmentdate(IcsApplication icsApplication) {
-    if (icsApplication.applicationAppointments.isNotEmpty) {
-      String formattedDateTime = DateFormat("EEE/d/yyyy")
-          .format(icsApplication.applicationAppointments.first.date);
-      return formattedDateTime;
-    }
-    return "";
   }
 
   Widget _buildTitle(String title) {
@@ -564,48 +568,25 @@ class _HomeViewState extends State<DetailPassportWidget> {
   }
 
   buildDocument() {
-    return ListView.separated(
-      physics: const NeverScrollableScrollPhysics(),
-      separatorBuilder: (context, index) => const Divider(
-        height: 1.0,
-      ),
-      itemCount: controller.groupedAppliaction.length,
-      itemBuilder: (context, index) {
-        return ItemDoc(
-          title: controller.groupedAppliaction[index].documentType.name,
-          documentType: controller.groupedAppliaction[index].documentType,
-          controller: controller,
-          listOfDoc: controller.groupedAppliaction[index].document,
-          applicationId: widget.icsApplication.id,
-        );
-      },
-    );
-  }
-
-  getQrData(IcsApplication icsNewApplicationModel) {
-    {
-      if (icsNewApplicationModel.renewPassportApplications.isNotEmpty) {
-        return icsNewApplicationModel
-            .renewPassportApplications.first.applicationNo
-            .toString();
-      } else if (icsNewApplicationModel.newPassportApplications.isNotEmpty) {
-        return icsNewApplicationModel
-            .newPassportApplications.first.applicationNo
-            .toString();
-      } else {
-        return "";
-      }
-    }
-  }
-
-  getnumber(IcsApplication icsApplication) {
-    if (icsApplication.renewPassportApplications.isNotEmpty) {
-      return icsApplication.renewPassportApplications.first.passportNumber
-          .toString();
-    } else if (icsApplication.newPassportApplications.isNotEmpty) {
-      return "";
-    } else {
-      return "";
-    }
+    return controller.groupedAppliactionvisa.length != 0
+        ? ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (context, index) => const Divider(
+              height: 1.0,
+            ),
+            itemCount: controller.groupedAppliactionvisa.length,
+            itemBuilder: (context, index) {
+              return ItemDocVisa(
+                title:
+                    controller.groupedAppliactionvisa[index].documentType.name,
+                documentType:
+                    controller.groupedAppliactionvisa[index].documentType,
+                controller: controller,
+                listOfDoc: controller.groupedAppliactionvisa[index].document,
+                applicationId: widget.icsApplication.id,
+              );
+            },
+          )
+        : SizedBox();
   }
 }

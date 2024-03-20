@@ -82,10 +82,12 @@ class AllVisaView extends GetView<ALLVisaController> {
                     if (controller.baseVisaTypeModel.name == "Tourist Visa") {
                       Get.to(AllVisaTerms(
                         isTourst: true,
+                        price: confirmation.price.toString(),
                       ));
                     } else {
                       Get.to(AllVisaTerms(
                         isTourst: false,
+                        price: confirmation.price.toString(),
                       ));
                     }
                   },
@@ -152,15 +154,17 @@ class AllVisaView extends GetView<ALLVisaController> {
                                   controller.getDoctype(doccode);
                                   controller.visa_category_validity_type_id =
                                       confirmation.id;
-                                  print(controller.baseVisaTypeModel.name);
+
                                   if (controller.baseVisaTypeModel.name ==
                                       "Tourist Visa") {
                                     Get.to(AllVisaTerms(
                                       isTourst: true,
+                                      price: confirmation.price.toString(),
                                     ));
                                   } else {
                                     Get.to(AllVisaTerms(
                                       isTourst: false,
+                                      price: confirmation.price.toString(),
                                     ));
                                   }
                                 },

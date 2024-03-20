@@ -197,6 +197,7 @@ class ApplicationAppointment {
 class ApplicationDocument {
   String documentStatus;
   CurrentCountry documentType;
+  String? rejectionReason;
   Files files;
   dynamic rejected;
   String id;
@@ -204,6 +205,7 @@ class ApplicationDocument {
   ApplicationDocument({
     required this.documentStatus,
     required this.documentType,
+    required this.rejectionReason,
     required this.files,
     required this.rejected,
     required this.id,
@@ -212,6 +214,7 @@ class ApplicationDocument {
   factory ApplicationDocument.fromMap(Map<String, dynamic> json) =>
       ApplicationDocument(
         documentStatus: json["document_status"],
+        rejectionReason: json["rejection_reason"],
         documentType: CurrentCountry.fromMap(json["document_type"]),
         files: Files.fromMap(json["files"]),
         rejected: json["rejected"],
@@ -221,6 +224,7 @@ class ApplicationDocument {
   Map<String, dynamic> toMap() => {
         "document_status": documentStatus,
         "document_type": documentType.toMap(),
+        "rejection_reason": rejectionReason,
         "files": files.toMap(),
         "rejected": rejected,
         "id": id,

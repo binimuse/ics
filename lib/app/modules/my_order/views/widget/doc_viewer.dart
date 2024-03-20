@@ -13,6 +13,7 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 class BuildDocViewer extends StatefulWidget {
   final String pdfPath;
   final String reviewStatus;
+  final String rejected_reason;
   final String applicationId;
   final CurrentCountry documentType;
   final MyOrderController controller;
@@ -20,6 +21,7 @@ class BuildDocViewer extends StatefulWidget {
   const BuildDocViewer(
       {required this.pdfPath,
       required this.reviewStatus,
+      required this.rejected_reason,
       required this.controller,
       required this.applicationId,
       required this.documentType});
@@ -88,29 +90,31 @@ class _BuildDocState extends State<BuildDocViewer> {
                   ],
                 ),
               ),
-              // widget.reviewStatus.toString().contains("REJECTED")
-              //     ? GestureDetector(
-              //         onTap: () {
-              //           openPdfPicker();
-              //         },
-              //         child: Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: Column(
-              //             crossAxisAlignment: CrossAxisAlignment.center,
-              //             children: <Widget>[
-              //               Icon(
-              //                 Icons.upload,
-              //                 color: AppColors.primary,
-              //               ),
-              //               Text("Re-Upload",
-              //                   style: AppTextStyles.menuRegular.copyWith(
-              //                     color: AppColors.primary,
-              //                   )),
-              //             ],
-              //           ),
-              //         ),
-              //       )
-              //     : SizedBox(),
+              widget.reviewStatus.toString().contains("REJECTED")
+                  ? GestureDetector(
+                      onTap: () {
+                        _showreasonDialog(
+                          context,
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.quiz_sharp,
+                              color: AppColors.primary,
+                            ),
+                            Text("Rejected reason",
+                                style: AppTextStyles.menuRegular.copyWith(
+                                  color: AppColors.primary,
+                                )),
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
               GestureDetector(
                 onTap: () {
                   _showAreYouSureDialog(context, widget.pdfPath);
@@ -180,6 +184,47 @@ class _BuildDocState extends State<BuildDocViewer> {
                 Constants.fileViewer + pdfPath,
                 placeholder: (progress) => Center(child: Text('$progress %')),
                 errorWidget: (error) => Center(child: Text('PDF Not Found')),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _showreasonDialog(
+    BuildContext context,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: AppColors.danger,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            Container(
+              height: 20.h,
+              child: Center(
+                child: Text(
+                    widget.rejected_reason == "null"
+                        ? ""
+                        : widget.rejected_reason.toString(),
+                    style: AppTextStyles.menuRegular.copyWith(
+                      color: AppColors.primary,
+                    )),
               ),
             )
           ],
