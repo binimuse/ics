@@ -320,8 +320,8 @@ class ALLVisaController extends GetxController
   var visa_category_validity_type_id;
   RxList<String> photoPath = <String>[].obs;
   Future<void> send() async {
+    networkStatus.value = NetworkStatus.LOADING;
     try {
-      networkStatus.value = NetworkStatus.LOADING;
       DateTime dateOfBirth = DateTime(
         int.parse(yearController.text),
         int.parse(monthController.text),
@@ -340,6 +340,7 @@ class ALLVisaController extends GetxController
 
       handleMutationResult(result);
     } catch (e) {
+      ;
       handleSendException(e);
     } finally {
       networkStatus.value = NetworkStatus.ERROR;

@@ -1,22 +1,19 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
-import 'package:ics/app/modules/new_passport/controllers/new_passport_controller.dart';
-
+import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
-class PdfPage extends StatelessWidget {
+class PdfPageAllVisa extends StatelessWidget {
   final BuildContext context;
-  final NewPassportController controller;
+  final ALLVisaController controller;
   final VoidCallback onTap;
 
-  PdfPage(
+  PdfPageAllVisa(
       {required this.context, required this.onTap, required this.controller});
 
   @override
@@ -100,96 +97,127 @@ class PdfPage extends StatelessWidget {
                         child: Column(
                           children: [
                             SizedBox(height: 2.h),
-                            headLines(number: '01', title: 'Profile'),
-                            showImage(controller.selectedImages.first),
+                            headLines(
+                                number: '01', title: 'Personal information'),
                             SizedBox(height: 2.h),
                             textText(
-                                subtitle: 'First Name',
+                                subtitle: 'Given Name',
                                 title:
-                                    '${controller.firstNameController.text}'),
+                                    '${controller.givenNameController.text}'),
                             textText(
-                                subtitle: 'Father Name',
+                                subtitle: 'Sur Name',
+                                title: '${controller.surNameController.text}'),
+                            textText(
+                                subtitle: 'Gender',
                                 title:
-                                    '${controller.fatherNameController.text}'),
+                                    '${controller.gendervalue.value?.name ?? ""}'),
                             textText(
-                                subtitle: 'Grand Father Name',
+                                subtitle: 'Citizens',
                                 title:
-                                    '${controller.grandFatherNameController.text}'),
+                                    '${controller.citizenship.value?.name.toString() ?? ""}'),
                             textText(
-                                subtitle: 'የመጀመሪያ ስም',
-                                title:
-                                    '${controller.AmfirstNameController.text}'),
-                            textText(
-                                subtitle: 'የአባት ስም',
-                                title:
-                                    '${controller.AmfatherNameController.text}'),
-                            textText(
-                                subtitle: 'የአያት ስም',
-                                title:
-                                    '${controller.AmgrandFatherNameController.text}'),
-                            textText(
-                                subtitle: "Birth date",
+                                subtitle: "Date of birth(GC)",
                                 title:
                                     '${controller.dayController.text}/ ${controller.monthController.text}/${controller.yearController.text}'),
                             textText(
-                                subtitle: "Nationality",
-                                title:
-                                    '${controller.natinalityvalue.value!.name}'),
-                            textText(
                                 subtitle: "Birth Country",
                                 title:
-                                    '${controller.birthCountryvalue.value!.name}'),
+                                    '${controller.birthCountryvalue.value?.name ?? ""}'),
                             textText(
                                 subtitle: "Birth place",
                                 title: '${controller.birthplace.text}'),
                             textText(
-                                subtitle: "Gender",
-                                title:
-                                    '${controller.gendervalue.value?.name ?? ""}'),
+                                subtitle: "Email",
+                                title: '${controller.emailAdress.text}'),
                             textText(
-                                subtitle: "Adoption ?",
-                                title:
-                                    '${controller.isAdoption.value == true ? 'yes' : 'no'}'),
-                            textText(
-                                subtitle: "Occupation",
-                                title:
-                                    '${controller.occupationvalue.value?.name ?? ""}'),
-                            textText(
-                                subtitle: "Hair color",
-                                title:
-                                    '${controller.haircolorvalue.value?.name ?? ""}'),
-                            textText(
-                                subtitle: "eye color",
-                                title:
-                                    '${controller.eyecolorvalue.value?.name ?? ""}'),
-                            textText(
-                                subtitle: "Skin color",
-                                title: '${controller.skincolorvalue.value}'),
-                            textText(
-                                subtitle: "Marital Status",
-                                title:
-                                    '${controller.maritalstatusvalue.value?.name ?? ""}'),
-                            textText(
-                                subtitle: "height",
-                                title: '${controller.height.text}'),
+                              subtitle: "Occupation",
+                              title:
+                                  '${controller.occupationvalue.value?.name ?? ""}',
+                            ),
                             SizedBox(height: 2.h),
                             headLines(number: '02', title: 'Address'),
                             textText(
-                                subtitle: "Current Country",
+                                subtitle: "Address Country",
                                 title:
-                                    '${controller.currentcountryvalue.value?.name.toString() ?? ""}'),
+                                    '${controller.adresscountryvalue.value?.name.toString() ?? ""}'),
                             textText(
                                 subtitle: "Address Detail",
-                                title: '${controller.addressController.text}'),
+                                title:
+                                    '${controller.addresscityController.text}'),
+                            textText(
+                                subtitle: "Street address",
+                                title:
+                                    '${controller.streetaddressController.text}'),
                             textText(
                                 subtitle: "Phone Number",
                                 title: '${controller.phonenumber.text}'),
                             SizedBox(height: 2.h),
-                            controller.familyModelvalue.isNotEmpty
-                                ? headLines(number: '03', title: 'Family Type')
-                                : SizedBox(),
-                            buildFamilyType(),
-                            SizedBox(height: 4.h),
+                            headLines(
+                                number: '03', title: 'Arrival Information'),
+                            textText(
+                                subtitle: "Arrival Date",
+                                title: removeHourFromDateTimeString(
+                                    controller.arrivaldDateController.text)),
+                            textText(
+                                subtitle: "Departure  Country",
+                                title:
+                                    '${controller.departurecountry.value?.name ?? ""}'),
+                            textText(
+                                subtitle: "Departure  City",
+                                title: '${controller.departurecity.text}'),
+                            textText(
+                                subtitle: "Airline",
+                                title: '${controller.airline.text}'),
+                            textText(
+                                subtitle: "Flight Number",
+                                title: '${controller.flight_Number.text}'),
+                            SizedBox(height: 2.h),
+                            headLines(
+                                number: '04', title: 'Address in Ethiopia'),
+                            textText(
+                                subtitle: "Accommodation Type",
+                                title:
+                                    '${controller.accommodationtypevalue.value?.name.toString() ?? ""}'),
+                            textText(
+                                subtitle: "Accommodation name",
+                                title: '${controller.accommodation_name.text}'),
+                            textText(
+                                subtitle: "Accommodation City",
+                                title: '${controller.accommodation_city.text}'),
+                            textText(
+                                subtitle: "Accommodation Street Address",
+                                title:
+                                    '${controller.accommodation_street_address.text}'),
+                            textText(
+                                subtitle: "Accommodation Telephone",
+                                title:
+                                    '${controller.accommodation_Telephone.text}'),
+                            SizedBox(height: 2.h),
+                            headLines(number: '05', title: 'Passport Type'),
+                            textText(
+                                subtitle: "Passport Type",
+                                title:
+                                    '${controller.passporttypevalue.value?.name.toString() ?? ""}'),
+                            textText(
+                                subtitle: "Passport  number",
+                                title: '${controller.passport_number.text}'),
+                            textText(
+                                subtitle: "Passport issue date",
+                                title: removeHourFromDateTimeString(
+                                    controller.passportIssueDate.text)),
+                            textText(
+                                subtitle: "Passport expiry date",
+                                title: removeHourFromDateTimeString(
+                                    controller.passportexpiryDate.text)),
+                            textText(
+                                subtitle: "Passport Issuing Country",
+                                title:
+                                    '${controller.passportIssueCountry.value?.name.toString() ?? ""}'),
+                            textText(
+                                subtitle: "Passport Issuing Authority",
+                                title:
+                                    '${controller.passportIssueAuthority.text}'),
+                            SizedBox(height: 2.h),
                             buildButton(),
                             Container(
                               height: 100,
@@ -207,61 +235,8 @@ class PdfPage extends StatelessWidget {
             () => controller.networkStatus.value == NetworkStatus.LOADING
                 ? Center(child: CustomLoadingWidget())
                 : SizedBox(),
-          ),
+          )
         ],
-      ),
-    );
-  }
-
-  buildFamilyType() {
-    return Column(
-      children: controller.familyModelvalue.map((element) {
-        final firstName = element.first_name ?? '';
-        final fatherName = element.father_name ?? '';
-        final type = element.family_type!.name;
-
-        return Column(
-          children: [
-            _buildExperienceRow(company: "Type", position: type, duration: ""),
-            _buildExperienceRow(
-                company: "Full Name",
-                position: "${firstName}  ${fatherName}",
-                duration: ""),
-          ],
-        );
-      }).toList(),
-    );
-  }
-
-  ListTile _buildExperienceRow({
-    required String company,
-    String? position,
-    String? duration,
-  }) {
-    return ListTile(
-      visualDensity:
-          VisualDensity.compact, // Add this line to reduce the vertical spacing
-      contentPadding: EdgeInsets.symmetric(
-          vertical: 0.0,
-          horizontal: 0), // Add this line to adjust the vertical padding
-      leading: Icon(
-        Icons.circle,
-        size: 8.0, // Adjust the size of the icon here
-        color: Colors.black54,
-      ),
-      title: Text(
-        company,
-        style: AppTextStyles.bodyLargeBold.copyWith(
-          color: AppColors.black,
-          fontSize: 12,
-        ),
-      ),
-      subtitle: Text(
-        "$position",
-        style: AppTextStyles.bodySmallRegular.copyWith(
-          color: AppColors.black,
-          fontSize: 12,
-        ),
       ),
     );
   }
@@ -324,56 +299,6 @@ class PdfPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  showImage(dynamic path) {
-    Widget imageWidget;
-
-    if (path is File) {
-      // Determine if the path is a local file or network URL
-      Uri? uri;
-      try {
-        uri = Uri.parse(path.path);
-      } catch (e) {
-        uri = null;
-      }
-
-      if (uri != null && uri.isAbsolute) {
-        // Selected image is from a network URL
-        imageWidget = Container(
-          width: 26.w,
-          height: 15.h,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: CachedNetworkImage(
-              imageUrl: uri.toString(),
-              fit: BoxFit.cover,
-              placeholder: (context, url) =>
-                  Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-          ),
-        );
-      } else {
-        // Selected image is from a local file
-        imageWidget = Container(
-          width: 26.w,
-          height: 15.h,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Image.file(
-              path,
-              fit: BoxFit.cover,
-            ),
-          ),
-        );
-      }
-    } else {
-      // Invalid image path or URL
-      imageWidget = SizedBox(); // or any other placeholder widget
-    }
-
-    return imageWidget;
   }
 
   buildButton() {
@@ -443,5 +368,11 @@ class PdfPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String removeHourFromDateTimeString(String dateTimeString) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    String formattedDateTime = DateFormat('yyyy-MM-dd').format(dateTime);
+    return formattedDateTime;
   }
 }

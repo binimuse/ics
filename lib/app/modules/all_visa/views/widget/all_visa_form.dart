@@ -14,6 +14,7 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
+import 'package:ics/app/modules/all_visa/views/widget/pdf_Page_visa.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_five_i_visa.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_four_i_visa.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_one_i_visa.dart';
@@ -21,9 +22,6 @@ import 'package:ics/app/modules/all_visa/views/widget/steps/step_six_i_visa.dart
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_three_I_Visa.dart';
 import 'package:ics/app/modules/all_visa/views/widget/steps/step_two_i_visa.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
-import 'package:ics/app/modules/all_visa/views/widget/summery_all_visa.dart';
-
-import 'package:ics/app/routes/app_pages.dart';
 
 import 'package:im_stepper/stepper.dart';
 
@@ -249,13 +247,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                         ),
                         onPressed: () async {
                           print(controller.currentStep);
-                          if (controller.currentStep == 4) {
-                            // controller.handleDrawFinish();
-                            controller.newPassportformKey.currentState!
-                                    .saveAndValidate()
-                                ? _showSummeryDiloag(context)
-                                : SizedBox();
-                          } else if (controller.currentStep == 5) {
+                          if (controller.currentStep == 5) {
                             checkdoc();
                           } else {
                             if (controller.newPassportformKey.currentState!
@@ -285,7 +277,10 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      finalstep(context);
+      controller.newPassportformKey.currentState!.saveAndValidate()
+          ? _showSummeryDiloag(context)
+          : SizedBox();
+
       // await controller.updateNewApplication();
       // if (controller.isUpdateSuccess.value) {
       //   setState(() {
@@ -362,9 +357,15 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
     phoneNumber = phoneNumber.replaceAll(" ", ""); // Remove spaces
     int digitsCount =
         10; // Number of digits in the phone number excluding country code
-    String extractedNumber =
-        phoneNumber.substring(phoneNumber.length - digitsCount);
-    controller.phonenumber.text = extractedNumber;
+
+    if (phoneNumber.length >= digitsCount) {
+      String extractedNumber =
+          phoneNumber.substring(phoneNumber.length - digitsCount);
+      controller.phonenumber.text = extractedNumber;
+    } else {
+      // Handle the case where the phoneNumber length is less than digitsCount
+      // You can throw an exception, display an error message, or handle it in any other appropriate way.
+    }
   }
 
   void getDataForStep3() {
@@ -422,20 +423,12 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
   }
 
   _showSummeryDiloag(BuildContext context) {
-    showDialog(
+    Get.to(PdfPageAllVisa(
       context: context,
-      builder: (BuildContext context) {
-        return SummaryAllVisa(
-          context: context,
-          controller: controller,
-          onTap: () {
-            Navigator.pop(context);
-            setState(() {
-              controller.currentStep++;
-            });
-          },
-        );
+      controller: controller,
+      onTap: () {
+        finalstep(context);
       },
-    );
+    ));
   }
 }

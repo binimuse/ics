@@ -415,9 +415,15 @@ class _StepperWithFormExampleState extends State<ReNewPassportForm> {
     abroadPhoneNumber = abroadPhoneNumber.replaceAll(" ", ""); // Remove spaces
     int digitsCount =
         10; // Number of digits in the phone number excluding country code
-    String extractedNumber =
-        abroadPhoneNumber.substring(abroadPhoneNumber.length - digitsCount);
-    controller.phonenumber.text = extractedNumber;
+
+    if (abroadPhoneNumber.length >= digitsCount) {
+      String extractedNumber =
+          abroadPhoneNumber.substring(abroadPhoneNumber.length - digitsCount);
+      controller.phonenumber.text = extractedNumber;
+    } else {
+      // Handle the case where the phoneNumber length is less than digitsCount
+      // You can throw an exception, display an error message, or handle it in any other appropriate way.
+    }
   }
 
   void getDataForStep4() {
