@@ -63,7 +63,11 @@ class _Step3State extends State<Step3_I_Visa> {
           height: 4.h,
         ),
         FormBuilderDateTimePicker(
+          initialDatePickerMode: DatePickerMode.year,
           name: 'date_Arrival',
+          firstDate: DateTime.now(),
+          initialDate: DateTime.now(),
+          lastDate: controller.oneWeekFromNow,
           initialValue: widget.citizenModel != null
               ? DateTime.parse(controller.arrivaldDateController.text)
               : null,
@@ -74,7 +78,6 @@ class _Step3State extends State<Step3_I_Visa> {
           },
           inputType: InputType.date,
           format: DateFormat('dd/MM/yyyy'),
-          enabled: true,
           decoration: ReusableInputDecoration.getDecoration('Arrival  Date(GC)',
               isMandatory: true),
           style: AppTextStyles.titleBold.copyWith(

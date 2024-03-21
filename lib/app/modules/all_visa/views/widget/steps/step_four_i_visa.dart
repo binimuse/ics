@@ -145,6 +145,7 @@ class _Step3State extends State<Step4_I_Visa> {
         ),
         TextFormBuilder(
           isMandatory: true,
+          keyboardType: TextInputType.number,
           controller: controller.accommodation_Telephone,
           hint: 'Accommodation Telephone',
           labelText: 'Accommodation Telephone',

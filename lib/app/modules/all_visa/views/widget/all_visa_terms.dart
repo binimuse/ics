@@ -7,8 +7,10 @@ import 'package:ics/app/common/button/custom_normal_button.dart';
 
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
+import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/all_visa/views/widget/profile_view_i_visa.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
 
@@ -35,21 +37,28 @@ class AllVisaTerms extends GetView<ALLVisaController> {
         showLeading: true,
       ),
       backgroundColor: AppColors.whiteOff,
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 1.h,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 1.h,
+                ),
+                !isTourst ? buildAdditionalCard() : SizedBox(),
+                Expanded(
+                  child: SizedBox(),
+                ),
+                buildCheckboxFormField(),
+                buildActionButtons(),
+              ],
             ),
-
-            !isTourst ? buildAdditionalCard() : SizedBox(),
-
-            buildCheckboxFormField(),
-            // Spacer(),
-            buildActionButtons(),
-          ],
-        ),
+          ),
+          Obx(() => controller.networkStatus.value == NetworkStatus.LOADING
+              ? Center(child: CustomLoadingWidget())
+              : SizedBox()),
+        ],
       ),
     );
   }
@@ -76,7 +85,7 @@ class AllVisaTerms extends GetView<ALLVisaController> {
                 onPressed: () {
                   if (controller.companyreference.text.isNotEmpty &&
                       controller.isAgreedToTerms.value) {
-                    Get.to(ProfileViewInvestmentvisa());
+                    checktheNumber();
                   } else {
                     if (isTourst && controller.isAgreedToTerms.value) {
                       Get.to(ProfileViewInvestmentvisa());
@@ -186,5 +195,9 @@ class AllVisaTerms extends GetView<ALLVisaController> {
           controlAffinity: ListTileControlAffinity.leading,
           contentPadding: EdgeInsets.zero,
         ));
+  }
+
+  void checktheNumber() async {
+    await controller.checkTheNumber();
   }
 }

@@ -86,6 +86,7 @@ class _Step4State extends State<Step4RenewOrginId> {
           height: 2.h,
         ),
         FormBuilderDateTimePicker(
+          initialDatePickerMode: DatePickerMode.year,
           name: 'date_established',
           validator: (DateTime? value) {
             if (value == null) {

@@ -14,6 +14,21 @@ mutation ($objects: [ics_visa_applications_insert_input!]!) {
   ''';
 }
 
+class CheckreferenceNumber {
+  dynamic check(String reference_number) {
+    return """
+{
+  ics_companies(where: {reference_number: {_iregex: "$reference_number"}})
+  {
+    id
+    name
+    email
+  }
+}
+   """;
+  }
+}
+
 class UpdateAllVisa {
   static String update(String applicationId) {
     return '''

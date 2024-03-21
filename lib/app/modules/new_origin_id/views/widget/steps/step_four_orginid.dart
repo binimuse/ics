@@ -83,6 +83,7 @@ class _Step4State extends State<Step4OrginId> {
           height: 2.h,
         ),
         FormBuilderDateTimePicker(
+          initialDatePickerMode: DatePickerMode.year,
           name: 'date_established',
           initialValue:
               widget.citizenModel?.newOriginIdApplications.isNotEmpty ?? false

@@ -107,6 +107,9 @@ class _Step3State extends State<Step5_I_Visa> {
         ),
         FormBuilderDateTimePicker(
           name: 'Pasport_Issue_Date',
+          initialDate: DateTime.now(),
+          lastDate: DateTime.now(),
+          initialDatePickerMode: DatePickerMode.year,
           initialValue: widget.citizenModel != null
               ? DateTime.parse(controller.passportIssueDate.text)
               : null,
@@ -131,6 +134,7 @@ class _Step3State extends State<Step5_I_Visa> {
         ),
         FormBuilderDateTimePicker(
           name: 'Pasport_Expiry_Date',
+          initialDatePickerMode: DatePickerMode.year,
           initialValue: widget.citizenModel != null
               ? DateTime.parse(controller.passportexpiryDate.text)
               : null,

@@ -3,10 +3,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/all_visa/data/model/all_visa_model.dart';
+import 'package:ics/app/modules/all_visa/data/model/ics_companies.dart';
 import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
 import 'package:ics/app/modules/all_visa/data/mutation/all_visa_mutuation.dart';
 import 'package:ics/app/modules/all_visa/data/query/get_all_renew_orginid.dart';
 import 'package:ics/app/modules/all_visa/data/query/ics_visa_application.dart';
+import 'package:ics/app/modules/all_visa/views/widget/profile_view_i_visa.dart';
 
 import 'package:ics/app/modules/evisa/data/models/base_visatype_model.dart';
 import 'package:ics/app/modules/main_page/controllers/main_page_controller.dart';
@@ -142,6 +144,8 @@ class ALLVisaController extends GetxController
     'Please use the below Screenshot for Photograph Tips.'.tr,
   ];
   var countryCode = "+251";
+
+  DateTime oneWeekFromNow = DateTime.now().add(Duration(days: 7));
   //tab
   late TabController tabController;
 
@@ -278,6 +282,7 @@ class ALLVisaController extends GetxController
   late DateTime? selectedDateTime;
   var isUpdateSuccess = false.obs;
   Future<void> updateNewApplication() async {
+    print(">>>>>>>>>>>>>>>>>> updateNewApplication");
     try {
       //file upload
       networkStatus.value = NetworkStatus.LOADING;
@@ -444,6 +449,41 @@ class ALLVisaController extends GetxController
     } catch (e) {
       print(e.toString());
       isDeleteDocSuccess(false);
+      print('Error: $e');
+    }
+  }
+
+  CheckreferenceNumber checkreferenceNumber = CheckreferenceNumber();
+
+  RxList<IcsCompanies> icsCompanies = List<IcsCompanies>.of([]).obs;
+  checkTheNumber() async {
+    try {
+      // File upload
+      networkStatus.value = NetworkStatus.LOADING;
+
+      dynamic result = await graphQLCommonApi.query(
+        checkreferenceNumber.check(companyreference.text),
+        {},
+      );
+
+      icsCompanies.value = (result!['ics_companies'] as List)
+          .map((e) => IcsCompanies.fromJson(e))
+          .toList();
+
+      // Check if the ics_companies list within the result is empty
+      if (icsCompanies.isEmpty) {
+        networkStatus.value = NetworkStatus.ERROR;
+        AppToasts.showError("Companies reference number not found");
+      } else {
+        Get.to(ProfileViewInvestmentvisa(
+          icsCompanies: icsCompanies,
+        ));
+        networkStatus.value = NetworkStatus.SUCCESS;
+      }
+    } catch (e) {
+      networkStatus.value = NetworkStatus.ERROR;
+      print(e.toString());
+      isUpdateSuccess(false);
       print('Error: $e');
     }
   }

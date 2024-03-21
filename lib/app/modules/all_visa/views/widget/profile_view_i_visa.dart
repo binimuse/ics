@@ -8,6 +8,7 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/modules/all_visa/data/model/ics_companies.dart';
 import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
 import 'package:ics/app/modules/all_visa/views/widget/all_visa_form.dart';
 import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
@@ -17,7 +18,11 @@ import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
-  const ProfileViewInvestmentvisa({Key? key}) : super(key: key);
+  final List<IcsCompanies>? icsCompanies;
+
+  ProfileViewInvestmentvisa({
+    this.icsCompanies,
+  });
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
@@ -44,21 +49,53 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
   }
 
   buildDiscription(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 80.w,
-          child: Text(
-            'Your Visa  is an essential document for ...',
-            style: AppTextStyles.captionRegular.copyWith(
-                fontSize: AppSizes.font_14, color: AppColors.grayDark),
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 80.w,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.apartment,
+                  color: AppColors.primary,
+                  size: AppSizes.icon_size_8 * 0.8,
+                ),
+                SizedBox(
+                  width: 2.h,
+                ),
+                Text(
+                  icsCompanies?.first.name ?? "",
+                  style: AppTextStyles.captionRegular.copyWith(
+                      fontSize: AppSizes.font_18, color: AppColors.primary),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          Divider(color: AppColors.primaryDark),
+          SizedBox(
+            height: 2.h,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox(
+              width: 80.w,
+              child: Text(
+                'Your Visa  is an essential document for ...',
+                style: AppTextStyles.captionRegular.copyWith(
+                    fontSize: AppSizes.font_14, color: AppColors.grayDark),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -202,6 +202,7 @@ class Step1_I_Visa extends StatelessWidget {
             isMandatory: true,
             validator: ValidationBuilder()
                 .required('Email address is required')
+                .email('Invalid email address')
                 .build(),
             labelText: "Email address",
             controller: controller.emailAdress,
