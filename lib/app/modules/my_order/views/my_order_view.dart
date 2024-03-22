@@ -6,6 +6,7 @@ import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
+import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/views/widget/view_widget/complaint_widget.dart';
 import 'package:ics/app/modules/my_order/views/widget/view_widget/orgin_widget.dart';
 import 'package:ics/app/modules/my_order/views/widget/view_widget/passport_widget.dart';
@@ -41,11 +42,19 @@ class _MyOrderViewState extends State<MyOrderView> {
       appBar: CustomAppBar(
         title: 'My',
         title2: 'Orders',
-        showActions: false,
+        showActions: true,
+        actionIcon: Icon(
+          Icons.refresh,
+          color: AppColors.primary,
+        ),
+        routeName: () async {
+          controller.getVisaApplication();
+          controller.getOrginOrder();
+        },
         showLeading: false,
       ),
       backgroundColor: AppColors.whiteOff,
-      body: Obx(() => controller.isfechedorder.isTrue
+      body: Obx(() => controller.networkStatus.value != NetworkStatus.LOADING
           ? buildBodyContent(context)
           : Center(child: CustomLoadingWidget())),
     );

@@ -44,9 +44,9 @@ class MyOrderController extends GetxController
     getComplaint();
     // getDoc();
     tabController = TabController(length: 5, vsync: this);
-    tabControllerorgin = TabController(length: 6, vsync: this);
-    tabControllervisa = TabController(length: 7, vsync: this);
-    tabControllerPassport = TabController(length: 6, vsync: this);
+    tabControllerorgin = TabController(length: 3, vsync: this);
+    tabControllervisa = TabController(length: 3, vsync: this);
+    tabControllerPassport = TabController(length: 3, vsync: this);
 
     super.onInit();
   }

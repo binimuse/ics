@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/common/timeline/timeline.dart';
+import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -102,27 +103,6 @@ class _HomeViewState extends State<DetailOriginWidget> {
                               fit: BoxFit.contain,
                             )),
                         Tab(
-                            text: 'Profile',
-                            icon: SvgPicture.asset(
-                              Assets.icons.profileDefault,
-                              color: AppColors.primary,
-                              fit: BoxFit.contain,
-                            )),
-                        Tab(
-                            text: 'Address',
-                            icon: SvgPicture.asset(
-                              Assets.icons.location,
-                              color: AppColors.primary,
-                              fit: BoxFit.contain,
-                            )),
-                        Tab(
-                            text: 'Passport',
-                            icon: SvgPicture.asset(
-                              Assets.icons.paper,
-                              color: AppColors.primary,
-                              fit: BoxFit.contain,
-                            )),
-                        Tab(
                             text: 'Document',
                             icon: SvgPicture.asset(
                               Assets.icons.memo,
@@ -132,29 +112,13 @@ class _HomeViewState extends State<DetailOriginWidget> {
                       ],
                     ),
                     Expanded(
-                      child: EasyRefresh(
-                        onRefresh: () async {
-                          await controller.getOrginOrder();
-                          await controller
-                              .groupDocumnats(widget.icsApplication.id);
-                        },
-                        header: MaterialHeader(),
-                        child: SizedBox(
-                          height: 100.h,
-                          width: double
-                              .infinity, // Set the width to occupy all available space
-                          child: TabBarView(
-                            controller: controller.tabControllerorgin,
-                            children: [
-                              buildStatus(),
-                              buildProfile(),
-                              buildProfile2(),
-                              buildAddress(),
-                              buildPassportInfo(),
-                              buildDocument(),
-                            ],
-                          ),
-                        ),
+                      child: TabBarView(
+                        controller: controller.tabControllerorgin,
+                        children: [
+                          buildStatus(),
+                          buildForm(),
+                          buildDocument(),
+                        ],
                       ),
                     ),
                   ],
@@ -242,11 +206,7 @@ class _HomeViewState extends State<DetailOriginWidget> {
                   style: AppTextStyles.menuBold
                       .copyWith(color: AppColors.whiteOff),
                 ),
-                Text(
-                  "",
-                  style: AppTextStyles.menuRegular
-                      .copyWith(color: AppColors.whiteOff),
-                ),
+                _buildAppointemnt(),
               ],
             ),
           ),
@@ -255,28 +215,38 @@ class _HomeViewState extends State<DetailOriginWidget> {
     );
   }
 
-  buildProfile() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
+  buildForm() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+      child: SingleChildScrollView(
+        // physics: const NeverScrollableScrollPhysics(),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _buildTitle("Personal Detail"),
-            _buildAppointemnt(),
-            SizedBox(height: 2.h),
-            Container(
-                width: 80.0,
-                height: 80.0,
-                child: QrImageView(
-                  data: getQrData(widget.icsApplication),
-                  version: QrVersions.auto,
-                  size: 200.0,
-                )),
+            Image.asset(
+              AppAssets.splasehimage2,
+              height: 5.h,
+              width: 55.w,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(
+              height: 3.h,
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(width: 2.h),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    width: 80.0,
+                    height: 80.0,
+                    child: QrImageView(
+                      data: widget.icsApplication.id,
+                      version: QrVersions.auto,
+                      size: 400.0,
+                    )),
+                SizedBox(
+                  width: 5.w,
+                ),
                 Container(
                     width: 80.0,
                     height: 80.0,
@@ -307,78 +277,205 @@ class _HomeViewState extends State<DetailOriginWidget> {
                                   .copyWith(color: AppColors.whiteOff),
                             ),
                           )),
-                const SizedBox(width: 20.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      widget.icsApplication.firstName.toString() +
-                          "" +
-                          widget.icsApplication.fatherName.toString() +
-                          widget.icsApplication.grandFatherName.toString() +
-                          "",
-                      style: AppTextStyles.bodyLargeBold
-                          .copyWith(color: AppColors.primary),
-                    ),
-                    SizedBox(height: 1.h),
-                    Text(
-                      widget.icsApplication.firstNameJson.am.toString() +
-                          "" +
-                          widget.icsApplication.fatherNameJson.am.toString() +
-                          widget.icsApplication.grandFatherNameJson.am
-                              .toString() +
-                          "",
-                      style: AppTextStyles.bodyLargeBold.copyWith(
-                        color: AppColors.black,
-                        fontSize: AppSizes.font_14,
-                      ),
-                    ),
-                    const SizedBox(height: 5.0),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.map,
-                          size: 12.0,
-                          color: Colors.black54,
-                        ),
-                        SizedBox(width: 10.0),
-                        Text(
-                          widget.icsApplication.birthCountry.name.toString(),
-                          style: AppTextStyles.bodySmallRegular.copyWith(
-                            color: AppColors.black,
-                            fontSize: AppSizes.font_10,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
               ],
             ),
-            _buildExperienceRow(
-                company: "Date of birth(GC)",
-                position: widget.icsApplication.dateOfBirth.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Nationality",
-                position: widget.icsApplication.nationality.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Birth Country",
-                position: widget.icsApplication.birthCountry.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Birth Place",
-                position: widget.icsApplication.birthPlace.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Gender",
-                position: widget.icsApplication.gender.toString(),
-                duration: ""),
+            SizedBox(
+              height: 3.h,
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                headLines(number: '01', title: 'Personal information'),
+                SizedBox(height: 2.h),
+                textText(
+                    subtitle: 'First name',
+                    title: '${widget.icsApplication.firstName.toString()}'),
+                textText(
+                    subtitle: 'Father Name',
+                    title: '${widget.icsApplication.fatherName.toString()}'),
+                textText(
+                    subtitle: 'Grand Father Name',
+                    title:
+                        '${widget.icsApplication.grandFatherName.toString()}'),
+                textText(
+                    subtitle: 'የመጀመሪያ ስም',
+                    title:
+                        '${widget.icsApplication.firstNameJson.am.toString()}'),
+                textText(
+                    subtitle: "የአባት ስም",
+                    title:
+                        '${widget.icsApplication.fatherNameJson.am.toString()}'),
+                textText(
+                    subtitle: "የአያት ስም",
+                    title: '${widget.icsApplication.grandFatherNameJson.am}'),
+                textText(
+                  subtitle: "Gender",
+                  title: '${widget.icsApplication.gender.toString()}',
+                ),
+                textText(
+                    subtitle: "Birth place",
+                    title: '${widget.icsApplication.birthPlace.toString()}'),
+                textText(
+                    subtitle: "Birth Country",
+                    title:
+                        '${widget.icsApplication.birthCountry.name.toString()}'),
+                textText(
+                    subtitle: "Date of birth(GC)",
+                    title: removeHourFromDateTimeString(
+                        widget.icsApplication.dateOfBirth.toString())),
+                textText(
+                  subtitle: "Nationality",
+                  title: '${widget.icsApplication.nationality.toString()}',
+                ),
+                textText(
+                  subtitle: "Adoption",
+                  title: '${widget.icsApplication.isAdopted.toString()}',
+                ),
+                textText(
+                  subtitle: "Occupation",
+                  title:
+                      '${widget.icsApplication.occupation?.name.toString() ?? ""}',
+                ),
+                textText(
+                  subtitle: "Hair color",
+                  title: '${widget.icsApplication.hairColour}',
+                ),
+                textText(
+                  subtitle: "eye color",
+                  title: '${widget.icsApplication.eyeColour}',
+                ),
+                textText(
+                  subtitle: "Skin color",
+                  title: '${widget.icsApplication.skinColour}',
+                ),
+                textText(
+                  subtitle: "Marital Status",
+                  title: '${widget.icsApplication.maritalStatus}',
+                ),
+                textText(
+                  subtitle: "height",
+                  title: '${widget.icsApplication.height}',
+                ),
+                SizedBox(height: 2.h),
+                headLines(number: '02', title: 'Address'),
+                textText(
+                    subtitle: "Current Country",
+                    title:
+                        '${widget.icsApplication.currentCountry.name.toString()}'),
+                textText(
+                    subtitle: "Address Detail",
+                    title: '${widget.icsApplication.abroadAddress.toString()}'),
+                textText(
+                    subtitle: "Phone Number",
+                    title: '${widget.icsApplication.phoneNumber.toString()}'),
+                SizedBox(height: 2.h),
+                headLines(number: '03', title: 'Passport Information'),
+                textText(
+                    subtitle: "Current Passport number",
+                    title: getnumber(widget.icsApplication)),
+                textText(
+                  subtitle: "Passport Issue date",
+                  title: getIssuedate(widget.icsApplication),
+                ),
+                textText(
+                  subtitle: "Passport Expiry date",
+                  title: getExpirydate(widget.icsApplication),
+                ),
+                textText(
+                    subtitle: "Visa type",
+                    title: getVisaType(widget.icsApplication)),
+                textText(
+                  subtitle: "Visa Number",
+                  title: getVisaNumber(widget.icsApplication),
+                ),
+                textText(
+                  subtitle: "Visa Issue date",
+                  title: getVisaIssuedDate(widget.icsApplication),
+                ),
+                textText(
+                  subtitle: "Visa Expiry date",
+                  title: getVisaExpiryDate(widget.icsApplication),
+                ),
+                textText(
+                  subtitle: "origin Id number",
+                  title: getOriginnumber(widget.icsApplication),
+                ),
+                SizedBox(height: 2.h),
+                Container(
+                  height: 100,
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Widget headLines({required String number, required String title}) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              number,
+              style: AppTextStyles.titleBold,
+            ),
+            const SizedBox(width: 10),
+            Container(
+              height: 25,
+              width: 3,
+              color: AppColors.primary,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: AppTextStyles.titleBold.copyWith(color: AppColors.primary),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
+    );
+  }
+
+  Widget textText({required String subtitle, required String title}) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: Row(
+                children: [
+                  Text(
+                    '$subtitle :  ',
+                    style: AppTextStyles.bodyLargeBold.copyWith(fontSize: 18),
+                  ),
+                  Flexible(
+                    child: Text(
+                      title,
+                      style: AppTextStyles.bodyLargeRegular,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Divider(color: AppColors.primaryDark),
+        ],
+      ),
+    );
+  }
+
+  String removeHourFromDateTimeString(String dateTimeString) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    String formattedDateTime = DateFormat('yyyy-MM-dd').format(dateTime);
+    return formattedDateTime;
   }
 
   Widget _buildAppointemnt() {
@@ -403,174 +500,6 @@ class _HomeViewState extends State<DetailOriginWidget> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  buildPassportInfo() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            _buildTitle("Passport Information"),
-            SizedBox(height: 2.h),
-            _buildExperienceRow(
-                company: "Current Passport number",
-                position: getnumber(widget.icsApplication),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Passport Issue date",
-                position: getIssuedate(widget.icsApplication),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Passport Expiry date",
-                position: getExpirydate(widget.icsApplication),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Visa type",
-                position: getVisaType(widget.icsApplication),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Visa Number",
-                position: getVisaNumber(widget.icsApplication),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Visa Issue date",
-                position: getVisaIssuedDate(widget.icsApplication),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Visa Expiry date",
-                position: getVisaExpiryDate(widget.icsApplication),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Origin Id number",
-                position: getOriginnumber(widget.icsApplication),
-                duration: ""),
-          ],
-        ),
-      ),
-    );
-  }
-
-  buildProfile2() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            _buildTitle("More Personal Detail "),
-            SizedBox(height: 2.h),
-            _buildExperienceRow(
-                company: "Adoption",
-                position: widget.icsApplication.isAdopted.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Occupation",
-                position: widget.icsApplication.occupation?.name ?? "",
-                duration: ""),
-            _buildExperienceRow(
-                company: "Hair color",
-                position: widget.icsApplication.hairColour.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "eye color",
-                position: widget.icsApplication.eyeColour.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Skin color",
-                position: widget.icsApplication.skinColour.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Marital Status",
-                position: widget.icsApplication.maritalStatus.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "height",
-                position: widget.icsApplication.height.toString(),
-                duration: ""),
-          ],
-        ),
-      ),
-    );
-  }
-
-  buildAddress() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            _buildTitle("Address Detail"),
-            SizedBox(height: 2.h),
-            _buildExperienceRow(
-                company: "Current Country",
-                position: widget.icsApplication.currentCountry.name.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Address Detail",
-                position: widget.icsApplication.abroadAddress.toString(),
-                duration: ""),
-            _buildExperienceRow(
-                company: "Phone Number",
-                position: widget.icsApplication.phoneNumber.toString(),
-                duration: ""),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title.toUpperCase(),
-            style: AppTextStyles.bodyLargeBold.copyWith(
-              color: AppColors.black,
-              fontSize: AppSizes.font_14,
-            ),
-          ),
-          const Divider(
-            color: Colors.black54,
-          ),
-        ],
-      ),
-    );
-  }
-
-  ListTile _buildExperienceRow({
-    required String company,
-    String? position,
-    String? duration,
-  }) {
-    return ListTile(
-      visualDensity:
-          VisualDensity.compact, // Add this line to reduce the vertical spacing
-      contentPadding: EdgeInsets.symmetric(
-          vertical: 1.0,
-          horizontal: 5.0), // Add this line to adjust the vertical padding
-      leading: Icon(
-        Icons.circle,
-        size: 8.0, // Adjust the size of the icon here
-        color: Colors.black54,
-      ),
-      title: Text(
-        company,
-        style: AppTextStyles.bodyLargeBold.copyWith(
-          color: AppColors.black,
-          fontSize: AppSizes.font_10,
-        ),
-      ),
-      subtitle: Text(
-        "$position",
-        style: AppTextStyles.bodySmallRegular.copyWith(
-          color: AppColors.black,
-          fontSize: AppSizes.font_10,
-        ),
       ),
     );
   }

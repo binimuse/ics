@@ -18,8 +18,8 @@ import 'package:sizer/sizer.dart';
 
 import 'package:ics/app/config/theme/app_sizes.dart';
 
-class AllVisaTerms extends GetView<ALLVisaController> {
-  const AllVisaTerms({
+class AllVisaTerms extends StatelessWidget {
+  AllVisaTerms({
     super.key,
     required this.isTourst,
     required this.price,
@@ -27,6 +27,8 @@ class AllVisaTerms extends GetView<ALLVisaController> {
 
   final bool isTourst;
   final String price;
+
+  final ALLVisaController controller = Get.find<ALLVisaController>();
 
   @override
   Widget build(BuildContext context) {

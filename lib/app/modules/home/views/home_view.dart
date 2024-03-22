@@ -46,7 +46,9 @@ class _HomeViewState extends State<HomeView> {
             Icons.language,
             color: AppColors.primary,
           ),
-          routeName: Routes.LANGUAGE,
+          routeName: () {
+            Get.toNamed(Routes.LANGUAGE);
+          },
           showLeading: false,
         ),
         backgroundColor: AppColors.whiteOff.withOpacity(0.9),

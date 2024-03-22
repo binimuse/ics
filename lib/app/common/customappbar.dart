@@ -9,7 +9,7 @@ import 'package:sizer/sizer.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String title2;
-  final String? routeName;
+  final VoidCallback? routeName;
   final bool showLeading;
   final bool showActions;
   final Widget? actionIcon;
@@ -77,11 +77,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: showActions
           ? [
               IconButton(
-                  onPressed: () {
-                    if (routeName != null) {
-                      Get.toNamed(routeName!);
-                    }
-                  },
+                  onPressed: routeName,
                   padding: EdgeInsets.only(right: AppSizes.mp_w_3),
                   icon: actionIcon!),
             ]
