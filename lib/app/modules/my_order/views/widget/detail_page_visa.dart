@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/customappbar.dart';
@@ -443,31 +442,6 @@ class _HomeViewState extends State<DetailVisaWidget> {
     return formattedDateTime;
   }
 
-  Widget _buildCompanyNumber() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "Company Reference Number :- ",
-            style: AppTextStyles.bodyLargeBold.copyWith(
-              color: AppColors.black,
-              fontSize: AppSizes.font_12,
-            ),
-          ),
-          Text(
-            widget.icsApplication.companyReferenceNumber,
-            //, getAppointmentdate(widget.icsApplication),
-            style: AppTextStyles.bodyLargeBold.copyWith(
-              color: AppColors.black,
-              fontSize: AppSizes.font_12,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   buildDocument() {
     return controller.groupedAppliactionvisa.length != 0

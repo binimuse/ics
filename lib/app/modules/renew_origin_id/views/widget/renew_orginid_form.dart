@@ -27,7 +27,6 @@ import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_five_ren
 import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_six_renew_orginid.dart';
 import 'package:ics/app/modules/renew_origin_id/views/widget/steps/step_two_renew_orginid.dart';
 
-import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/utils/constants.dart';
 
 import 'package:im_stepper/stepper.dart';
@@ -332,89 +331,6 @@ class _StepperWithFormExampleState extends State<ReNewOrginIdForm> {
     );
   }
 
-  void _showAreYouSureDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Column(
-              children: [
-                Text(
-                  "Are you sure You want to exit ",
-                  style: AppTextStyles.bodyLargeBold,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context)
-                    .pop(false); // Return false if cancel is pressed
-              },
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 5.h,
-                width: 25.w,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.primary,
-                      AppColors.primary,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(22)),
-                ),
-                child: Center(
-                  child: Text(
-                    "Cancel".tr,
-                    style: AppTextStyles.bodyLargeBold
-                        .copyWith(color: AppColors.whiteOff),
-                  ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
-              },
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 5.h,
-                width: 25.w,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.danger,
-                      AppColors.danger,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(22)),
-                ),
-                child: Center(
-                  child: Text(
-                    "Yes".tr,
-                    style: AppTextStyles.bodyLargeBold
-                        .copyWith(color: AppColors.whiteOff),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   void getDataForStep1() {
     final citizenModel = widget.citizenModel;

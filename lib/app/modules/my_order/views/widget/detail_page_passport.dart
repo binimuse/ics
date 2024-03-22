@@ -2,7 +2,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
@@ -220,26 +219,6 @@ class _HomeViewState extends State<DetailPassportWidget> {
     );
   }
 
-  Widget _buildTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title.toUpperCase(),
-            style: AppTextStyles.bodyLargeBold.copyWith(
-              color: AppColors.black,
-              fontSize: AppSizes.font_14,
-            ),
-          ),
-          const Divider(
-            color: Colors.black54,
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildAppointemnt() {
     return Column(

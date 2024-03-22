@@ -5,12 +5,12 @@ import 'package:ics/app/data/enums.dart';
 
 class ScreenUtil {
   static DeviceType getDeviceType() {
-    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    final data = MediaQueryData.fromView(WidgetsBinding.instance.window);
     return data.size.shortestSide < 600 ? DeviceType.phone : DeviceType.tablet;
   }
 
   bool isPhone() {
-    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    final data = MediaQueryData.fromView(WidgetsBinding.instance.window);
     DeviceType deviceType =
         data.size.shortestSide < 600 ? DeviceType.phone : DeviceType.tablet;
     if (deviceType == DeviceType.tablet) {

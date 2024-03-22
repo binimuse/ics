@@ -25,7 +25,6 @@ import 'package:ics/app/modules/new_passport/views/widget/steps/step_one.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_six.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_three.dart';
 import 'package:ics/app/modules/new_passport/views/widget/steps/step_two.dart';
-import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/utils/constants.dart';
 
 import 'package:im_stepper/stepper.dart';
@@ -312,90 +311,6 @@ class _StepperWithFormExampleState extends State<NewPassportForm> {
     );
   }
 
-  void _showAreYouSureDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Column(
-              children: [
-                Text(
-                  "Are you sure You want to exit ",
-                  style: AppTextStyles.bodyLargeBold,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 5.h,
-                width: 25.w,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.primary,
-                      AppColors.primary,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(22)),
-                ),
-                child: Center(
-                  child: Text(
-                    "Cancel".tr,
-                    style: AppTextStyles.bodyLargeBold
-                        .copyWith(color: AppColors.whiteOff),
-                  ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Get.delete<NewPassportController>();
-                Get.back();
-
-                Get.offNamedUntil(Routes.MAIN_PAGE, (route) => true);
-              },
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 5.h,
-                width: 25.w,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.danger,
-                      AppColors.danger,
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(22)),
-                ),
-                child: Center(
-                  child: Text(
-                    "Yes".tr,
-                    style: AppTextStyles.bodyLargeBold
-                        .copyWith(color: AppColors.whiteOff),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   void getDataForStep1() {
     final citizenModel = widget.citizenModel;
