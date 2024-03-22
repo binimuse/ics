@@ -26,7 +26,6 @@ import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_six_orgini
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_three_orginid.dart';
 import 'package:ics/app/modules/new_origin_id/views/widget/steps/step_two_orginid.dart';
 
-import 'package:ics/app/routes/app_pages.dart';
 import 'package:ics/utils/constants.dart';
 
 import 'package:im_stepper/stepper.dart';

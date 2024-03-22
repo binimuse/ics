@@ -214,23 +214,23 @@ class PdfPageReNewOriginId extends StatelessWidget {
                                 title:
                                     '${controller.orginIdnumberContoller.text.toString()}'),
                             SizedBox(height: 4.h),
-                            headLines(number: '04', title: 'Signature'),
-                            SizedBox(height: 4.h),
-                            Obx(
-                              () => controller.showImage.value
-                                  ? Container(
-                                      height: 15.h,
-                                      width: 55.w,
-                                      child: controller.signatureImage != null
-                                          ? Image(
-                                              image: controller.signatureImage!,
-                                              fit: BoxFit.contain,
-                                            )
-                                          : Placeholder(), // Placeholder or any other widget to show when image is null
-                                    )
-                                  : SizedBox(),
-                            ),
-                            SizedBox(height: 2.h),
+                            // headLines(number: '04', title: 'Signature'),
+                            // SizedBox(height: 4.h),
+                            // Obx(
+                            //   () => controller.showImage.value
+                            //       ? Container(
+                            //           height: 15.h,
+                            //           width: 55.w,
+                            //           child: controller.signatureImage != null
+                            //               ? Image(
+                            //                   image: controller.signatureImage!,
+                            //                   fit: BoxFit.contain,
+                            //                 )
+                            //               : Placeholder(), // Placeholder or any other widget to show when image is null
+                            //         )
+                            //       : SizedBox(),
+                            // ),
+                            // SizedBox(height: 2.h),
                             buildButton(),
                             Container(
                               height: 100,
