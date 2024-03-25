@@ -10,10 +10,13 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
+import 'package:ics/app/common/dialogs/upload_dilaog.dart';
+import 'package:ics/app/common/dialogs/upload_dilaog_file.dart';
 import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
+import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -66,7 +69,7 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
       final size = await myRaw.length() / 1024; // Size in KB
 
       // Validate file size before adding to the list
-      final int maxSizeInBytes = 50000; // 10 MB
+      final int maxSizeInBytes = 50000; // 50 MB
 
       if (size <= maxSizeInBytes) {
         Uint8List myfile = await myRaw.readAsBytes();
@@ -292,7 +295,7 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
   }
 
   Widget _buildFileSizeWarning(double fileSize) {
-    if (fileSize > 20000) {
+    if (fileSize > 50000) {
       return Padding(
         padding: EdgeInsets.only(right: 39.w),
         child: Container(
@@ -386,7 +389,7 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
         },
         onTap: () async {
           if (meFile.length < 5) {
-            await _pickFile();
+            showUploadDialog(context);
           } else {
             AppToasts.showError("Upload limited to 5 files");
           }
@@ -444,6 +447,30 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
           }
         },
       ),
+    );
+  }
+
+  // void showDialogs() async {
+  //   await _pickFile();
+  // }
+
+  void showUploadDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return UploadDialogFile(
+          onUpload: () async {
+            await _pickFile();
+          },
+          title: 'Note info:'.tr,
+          contentTexts: [
+            'You can send videos, images, audio, files, PDFs, and documents.'
+                .tr,
+            'Each file must not exceed 50 MB'.tr,
+            'You can only select up to 5 files.'.tr,
+          ],
+        );
+      },
     );
   }
 }

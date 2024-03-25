@@ -1,14 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
-import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
@@ -17,11 +13,8 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 
-import 'package:dotted_border/dotted_border.dart';
 import 'package:ics/app/modules/feedback_page/controllers/feedback_page_controller.dart';
-import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter/foundation.dart';
 
 class ComplainFeedBackInquiryScreen extends StatefulWidget {
   final ComplainType complainType;
@@ -54,25 +47,6 @@ class _ComplainInquiryScreenState extends State<ComplainFeedBackInquiryScreen> {
     meFile.removeAt(index);
     fileName.removeAt(index);
     fileSize.removeAt(index);
-  }
-
-  Future<void> _pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    if (result != null && result.files.single.path != null) {
-      final myRaw = File(result.files.single.path!);
-      final size = await myRaw.length() / 1024;
-      Uint8List myfile = await myRaw.readAsBytes();
-      String base64String = base64Encode(myfile);
-      getFileType(myRaw);
-
-      setState(() {
-        meFile.add(base64String);
-        fileName.add(result.files.single.name);
-        fileSize.add(size);
-        uploaded = true;
-      });
-    }
   }
 
   void getFileType(File file) {
@@ -143,22 +117,6 @@ class _ComplainInquiryScreenState extends State<ComplainFeedBackInquiryScreen> {
                       //   controller.rating = rating.toInt();
                     },
                   ),
-                  // SizedBox(height: 2.h),
-                  // buildFilePicker(),
-                  Visibility(
-                    visible: fileName.isNotEmpty,
-                    child: SizedBox(
-                      height: 30.h,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 3.w),
-                        child: ListView.builder(
-                          itemCount: fileName.length,
-                          itemBuilder: (context, index) =>
-                              _buildListItem(index),
-                        ),
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 3.h),
                 ],
               ),
@@ -168,91 +126,6 @@ class _ComplainInquiryScreenState extends State<ComplainFeedBackInquiryScreen> {
         ],
       ),
     );
-  }
-
-  Widget _buildListItem(int index) {
-    final String leadIcon = _getLeadIcon(fileExtension[index]);
-
-    return ListTile(
-      leading: SvgPicture.asset(leadIcon),
-      trailing: _buildTrailingIcon(index),
-      title: SingleChildScrollView(
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Column(
-            children: [
-              _buildFileInfo(fileName[index], fileSize[index]),
-              _buildFileSizeWarning(fileSize[index]),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _getLeadIcon(String extension) {
-    switch (extension) {
-      case 'mp4':
-        return Assets.icons.video;
-      case 'm4a':
-      case 'mp3':
-      case 'aac':
-        return Assets.icons.voice;
-      case 'jpeg':
-      case 'jpg':
-      case 'png':
-        return Assets.icons.image;
-      default:
-        return Assets.icons.paper;
-    }
-  }
-
-  Widget _buildTrailingIcon(int index) {
-    return GestureDetector(
-      onTap: () {
-        removeAttachment(index);
-        setState(() {});
-      },
-      child: SvgPicture.asset(
-        Assets.icons.cancel,
-        colorFilter: ColorFilter.mode(AppColors.danger, BlendMode.srcIn),
-      ),
-    );
-  }
-
-  Widget _buildFileInfo(String fileName, double fileSize) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            "${fileName.length > 30 ? fileName.substring(0, 10).split(".")[0] : fileName.split(".")[0]}\n${fileSize.toStringAsFixed(1)} KB",
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFileSizeWarning(double fileSize) {
-    if (fileSize > 20000) {
-      return Padding(
-        padding: EdgeInsets.only(right: 39.w),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.red,
-            border: Border.all(color: Colors.red),
-            borderRadius: BorderRadius.all(Radius.circular(1.w)),
-          ),
-          child: const Text(
-            "Too large",
-            style: TextStyle(color: Colors.white, fontSize: 11),
-          ),
-        ),
-      );
-    }
-    return SizedBox.shrink();
   }
 
   buildDropDown() {
@@ -288,58 +161,6 @@ class _ComplainInquiryScreenState extends State<ComplainFeedBackInquiryScreen> {
       validator: ValidationBuilder().required('feedback required').build(),
       showClearButton: false,
       autoFocus: false,
-    );
-  }
-
-  buildFilePicker() {
-    return SizedBox(
-      width: 85.w,
-      height: 14.h,
-      child: GestureDetector(
-        onLongPress: () {
-          setState(() {
-            clicked = true;
-          });
-        },
-        onLongPressEnd: (d) {
-          setState(() {
-            clicked = false;
-          });
-        },
-        onTap: () async {
-          if (meFile.length < 5) {
-            await _pickFile();
-          } else {
-            AppToasts.showError("Upload limited to 5 files");
-          }
-        },
-        child: Container(
-          color: !clicked ? Colors.white : AppColors.primary,
-          child: DottedBorder(
-            color: Colors.black38,
-            dashPattern: const <double>[8, 5],
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 2.5.h,
-                  ),
-                  SvgPicture.asset(
-                    Assets.icons.upload,
-                    colorFilter:
-                        ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
-                  ),
-                  Text(
-                    "Click to Upload",
-                    style: AppTextStyles.captionRegular.copyWith(
-                        fontSize: AppSizes.font_12, color: AppColors.grayDark),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 
