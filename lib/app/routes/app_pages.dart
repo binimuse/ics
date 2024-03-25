@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/All_residency/bindings/all_residency_binding.dart';
+import '../modules/All_residency/views/all_residency_view.dart';
 import '../modules/about_us/bindings/about_us_binding.dart';
 import '../modules/about_us/views/about_us_view.dart';
 import '../modules/account/bindings/account_binding.dart';
@@ -46,6 +48,8 @@ import '../modules/renew_origin_id/bindings/renew_origin_id_binding.dart';
 import '../modules/renew_origin_id/views/renew_origin_id_view.dart';
 import '../modules/renew_passport/bindings/renew_passport_binding.dart';
 import '../modules/renew_passport/views/renew_passport_view.dart';
+import '../modules/residency/bindings/residency_binding.dart';
+import '../modules/residency/views/residency_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
 import '../modules/setting/views/setting_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
@@ -197,6 +201,16 @@ class AppPages {
       name: _Paths.FEEDBACK_PAGE,
       page: () => const FeedbackPageView(),
       binding: FeedbackPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESIDENCY,
+      page: () => const ResidencyView(),
+      binding: ResidencyBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_RESIDENCY,
+      page: () => const AllResidencyView(),
+      binding: AllResidencyBinding(),
     ),
   ];
 }

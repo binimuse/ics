@@ -390,7 +390,9 @@ class _HomeViewState extends State<HomeView> {
               title: controller.REtitles[index],
               iconColor: controller.color[index],
               onPressed: () {
+                print(index);
                 if (index == 0) {
+                  Get.toNamed(Routes.RESIDENCY);
                 } else if (index == 1) {}
               });
         },

@@ -32,6 +32,8 @@ abstract class Routes {
   static const ALL_VISA = _Paths.ALL_VISA;
   static const COMPLAIN_PAGE = _Paths.COMPLAIN_PAGE;
   static const FEEDBACK_PAGE = _Paths.FEEDBACK_PAGE;
+  static const RESIDENCY = _Paths.RESIDENCY;
+  static const ALL_RESIDENCY = _Paths.ALL_RESIDENCY;
 }
 
 abstract class _Paths {
@@ -65,4 +67,6 @@ abstract class _Paths {
   static const ALL_VISA = '/investment-visa';
   static const COMPLAIN_PAGE = '/complain-page';
   static const FEEDBACK_PAGE = '/feedback-page';
+  static const RESIDENCY = '/residency';
+  static const ALL_RESIDENCY = '/all-residency';
 }

@@ -8,25 +8,25 @@ import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
-import 'package:ics/app/modules/all_visa/data/model/ics_companies.dart';
-import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
-import 'package:ics/app/modules/all_visa/views/widget/all_visa_form.dart';
-import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ics/app/modules/All_residency/controllers/all_residency_controller.dart';
+import 'package:ics/app/modules/All_residency/data/model/residency_appliaction_model.dart';
+import 'package:ics/app/modules/All_residency/views/widget/all_visa_form.dart';
+import 'package:ics/app/modules/all_visa/data/model/ics_companies.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
 
-class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
+class ProfileViewResidency extends GetView<AllResidencyController> {
   final List<IcsCompanies>? icsCompanies;
 
-  ProfileViewInvestmentvisa({
+  ProfileViewResidency({
     this.icsCompanies,
   });
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Visa',
+        title: 'Residency',
         title2: "Applications",
         showLeading: true,
       ),
@@ -39,7 +39,7 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
             SizedBox(
               height: 1.h,
             ),
-            buildDiscription(context),
+            icsCompanies != null ? buildDiscription(context) : SizedBox(),
             buildCard(),
             buildActionButtons(),
           ],
@@ -128,7 +128,7 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
                 clearforstep2();
                 clearforstep3();
 
-                Get.to(() => AllVisaForm());
+                Get.to(() => AllResidencyForm());
               },
             ),
           ),
@@ -153,18 +153,19 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(height: AppSizes.mp_v_2 * 1.5),
-                          controller.icsVisaApplicationModel.isEmpty
-                              ? EmpityWidget(title: "No visa Application Found")
+                          controller.icsResidencyApplication.isEmpty
+                              ? EmpityWidget(
+                                  title: "No Residency Application Found")
                               : ListView.separated(
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
                                   itemCount:
-                                      controller.icsVisaApplicationModel.length,
+                                      controller.icsResidencyApplication.length,
                                   separatorBuilder: (context, index) =>
                                       SizedBox(height: AppSizes.mp_v_2 * 1.5),
                                   itemBuilder: (context, index) {
                                     var citizen = controller
-                                        .icsVisaApplicationModel[index];
+                                        .icsResidencyApplication[index];
                                     return buildInfoItem(citizen);
                                   },
                                 ),
@@ -180,13 +181,13 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
   }
 
   Widget buildInfoItem(
-    IcsVisaApplicationModel citizen,
+    IcsResidencyApplication citizen,
   ) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => AllVisaForm(
-              visaApplicationModel: citizen,
-            ));
+        // Get.to(() => AllVisaForm(
+        //       visaApplicationModel: citizen,
+        //     ));
       },
       child: Container(
         height: 15.h,
@@ -224,9 +225,9 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
                     width: AppSizes.mp_v_1,
                   ),
                   Text(
-                    citizen.givenName.toString() +
+                    citizen.firstName.toString() +
                         " " +
-                        citizen.surname.toString(),
+                        citizen.fatherName.toString(),
                     style: AppTextStyles.bodySmallBold.copyWith(
                         color: AppColors.grayDark,
                         fontSize: AppSizes.font_12 * 1.0),
@@ -261,7 +262,7 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
                         width: 1.w,
                       ),
                       Text(
-                        citizen.abroadCountry!.name.toString(),
+                        citizen.country.name.toString(),
                         style: AppTextStyles.bodySmallRegular.copyWith(
                           color: AppColors.grayDark,
                         ),
@@ -299,27 +300,27 @@ class ProfileViewInvestmentvisa extends GetView<ALLVisaController> {
   }
 
   void clearforstep1() {
-    controller.givenNameController.clear();
-    controller.surNameController.clear();
+    // controller.givenNameController.clear();
+    // controller.surNameController.clear();
 
-    controller.birthplace.clear();
-    controller.emailAdress.clear();
+    // controller.birthplace.clear();
+    // controller.emailAdress.clear();
 
-    controller.dayController.clear();
-    controller.monthController.clear();
-    controller.yearController.clear();
+    // controller.dayController.clear();
+    // controller.monthController.clear();
+    // controller.yearController.clear();
   }
 
   void clearforstep2() {
-    controller.streetaddressController.clear();
-    controller.addresscityController.clear();
-    controller.phonenumber.clear();
+    // controller.streetaddressController.clear();
+    // controller.addresscityController.clear();
+    // controller.phonenumber.clear();
   }
 
   void clearforstep3() {
-    controller.arrivaldDateController.clear();
-    controller.departurecity.clear();
-    controller.airline.clear();
-    controller.flight_Number.clear();
+    // controller.arrivaldDateController.clear();
+    // controller.departurecity.clear();
+    // controller.airline.clear();
+    // controller.flight_Number.clear();
   }
 }

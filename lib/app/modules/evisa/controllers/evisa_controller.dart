@@ -29,25 +29,24 @@ class EvisaController extends GetxController {
 
   void getVisatype() async {
     startGettype(true);
-
-    dynamic result =
-        await graphQLCommonApi.query(getVisaTypeQuery.fetchData(), {});
-
-    startGettype(false);
-
-    if (result != null) {
-      baseVisaTypeModel.value = (result['base_visa_categories'] as List)
-          .map((e) => BaseVisaTypeModel.fromJson(e))
-          .toList();
-
-      hasgettype(true);
-    } else {
-      hasgettype(false);
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getVisaTypeQuery.fetchData(), {});
 
       startGettype(false);
-    }
 
-    try {} catch (e) {
+      if (result != null) {
+        baseVisaTypeModel.value = (result['base_visa_categories'] as List)
+            .map((e) => BaseVisaTypeModel.fromJson(e))
+            .toList();
+
+        hasgettype(true);
+      } else {
+        hasgettype(false);
+
+        startGettype(false);
+      }
+    } catch (e) {
       print(e);
 
       hasgettype(false);
