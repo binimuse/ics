@@ -4,7 +4,6 @@ import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
-import 'package:ics/app/common/forms/check_box.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
@@ -18,8 +17,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../controllers/all_residency_controller.dart';
 
 class AllResidencyView extends GetView<AllResidencyController> {
-  const AllResidencyView({Key? key}) : super(key: key);
-
+  AllResidencyView({Key? key}) : super(key: key);
+  final AllResidencyController controller = Get.find<AllResidencyController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -286,6 +285,6 @@ class AllResidencyView extends GetView<AllResidencyController> {
   }
 
   void checktheNumber() async {
-   await controller.checkTheNumber();
+    await controller.checkTheNumber();
   }
 }

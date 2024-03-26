@@ -25,8 +25,9 @@ class GetallQueryResidency {
     name
     description
   }
-  base_allowed_countries {
+  base_allowed_countries(where: {_not: {country: {country_code: {_eq: "ETH"}}}}) {
     country {
+      country_code
       description
       name
       id

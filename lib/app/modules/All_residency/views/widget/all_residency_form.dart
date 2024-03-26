@@ -13,15 +13,15 @@ import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
-import 'package:ics/app/modules/all_visa/data/model/visa_appliaction_model.dart';
-import 'package:ics/app/modules/all_visa/views/widget/pdf_Page_visa.dart';
-import 'package:ics/app/modules/all_visa/views/widget/steps/step_five_i_visa.dart';
-import 'package:ics/app/modules/all_visa/views/widget/steps/step_four_i_visa.dart';
-import 'package:ics/app/modules/all_visa/views/widget/steps/step_one_i_visa.dart';
-import 'package:ics/app/modules/all_visa/views/widget/steps/step_six_i_visa.dart';
-import 'package:ics/app/modules/all_visa/views/widget/steps/step_three_I_Visa.dart';
-import 'package:ics/app/modules/all_visa/views/widget/steps/step_two_i_visa.dart';
-import 'package:ics/app/modules/all_visa/controllers/all_visa_controller.dart';
+import 'package:ics/app/modules/All_residency/controllers/all_residency_controller.dart';
+import 'package:ics/app/modules/All_residency/data/model/residency_appliaction_model.dart';
+import 'package:ics/app/modules/All_residency/views/widget/pdf_Page_residency.dart';
+import 'package:ics/app/modules/All_residency/views/widget/steps/step_five_residency.dart';
+
+import 'package:ics/app/modules/All_residency/views/widget/steps/step_four_residency.dart';
+import 'package:ics/app/modules/All_residency/views/widget/steps/step_one_residency.dart';
+import 'package:ics/app/modules/All_residency/views/widget/steps/step_three_residency.dart';
+import 'package:ics/app/modules/All_residency/views/widget/steps/step_two_residency.dart';
 
 import 'package:im_stepper/stepper.dart';
 
@@ -31,17 +31,17 @@ import 'package:signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AllResidencyForm extends StatefulWidget {
-  final IcsVisaApplicationModel? visaApplicationModel;
+  final IcsResidencyApplication? residencyApplicationModel;
 
   const AllResidencyForm({
-    this.visaApplicationModel,
+    this.residencyApplicationModel,
   });
   @override
   _StepperWithFormExampleState createState() => _StepperWithFormExampleState();
 }
 
 class _StepperWithFormExampleState extends State<AllResidencyForm> {
-  final ALLVisaController controller = Get.find<ALLVisaController>();
+  final AllResidencyController controller = Get.find<AllResidencyController>();
   final ScrollController _scrollController = ScrollController();
 
   XFile? image;
@@ -54,12 +54,10 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
 
   void initState() {
     super.initState();
-    if (widget.visaApplicationModel != null) {
+    if (widget.residencyApplicationModel != null) {
       getDataForStep1();
       getDataForStep2();
       getDataForStep3();
-      getDataForStep4();
-      getDataForStep5();
     }
   }
 
@@ -76,7 +74,7 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
     return Scaffold(
       appBar: CustomAppBar(
         stoppop: false,
-        title: controller.baseVisaTypeModel.name.toString(),
+        title: controller.baseResidencyTypeModel.name.toString(),
         title2: "Form",
         showLeading: true,
       ),
@@ -122,23 +120,19 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
                 color: AppColors.whiteOff,
               ),
               Icon(
-                Icons.person,
-                color: AppColors.whiteOff,
-              ),
-              Icon(
                 Icons.location_on,
                 color: AppColors.whiteOff,
               ),
               Icon(
-                Icons.family_restroom,
+                Icons.file_copy,
+                color: AppColors.whiteOff,
+              ),
+              Icon(
+                Icons.delivery_dining,
                 color: AppColors.whiteOff,
               ),
               Icon(
                 Icons.edit_document,
-                color: AppColors.whiteOff,
-              ),
-              Icon(
-                Icons.file_copy,
                 color: AppColors.whiteOff,
               ),
             ],
@@ -154,7 +148,7 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
             child: Padding(
               padding: EdgeInsets.all(16.0),
               child: FormBuilder(
-                key: controller.newPassportformKey,
+                key: controller.residentformKey,
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
                 canPop: true,
@@ -163,34 +157,28 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
                   child: Column(
                     children: [
                       if (controller.currentStep == 0)
-                        Step1_I_Visa(
-                          citizenModel: widget.visaApplicationModel,
+                        Step1_residency(
+                          citizenModel: widget.residencyApplicationModel,
                           controller: controller,
                         ),
-
+                      //wal aseer enen en salalselefi uuser enelezina amenu wamainsali hayti  watable haqi watabale seber
                       if (controller.currentStep == 1)
-                        Step2_I_Visa(
-                          citizenModel: widget.visaApplicationModel,
+                        Step2_Residency(
+                          citizenModel: widget.residencyApplicationModel,
                           controller: controller,
                         ),
                       if (controller.currentStep == 2)
-                        Step3_I_Visa(
-                          citizenModel: widget.visaApplicationModel,
+                        Step3_Residency(
+                          citizenModel: widget.residencyApplicationModel,
                           controller: controller,
                         ),
                       if (controller.currentStep == 3)
-                        Step4_I_Visa(
-                          citizenModel: widget.visaApplicationModel,
+                        Step4_Residency(
+                          citizenModel: widget.residencyApplicationModel,
                           controller: controller,
                         ),
 
-                      if (controller.currentStep == 4)
-                        Step5_I_Visa(
-                          citizenModel: widget.visaApplicationModel,
-                          controller: controller,
-                        ),
-
-                      if (controller.currentStep == 5) Step6_I_Visa(),
+                      if (controller.currentStep == 4) Step5_Residency(),
 
                       // Add more form fields as needed for each step
                     ],
@@ -232,7 +220,7 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomNormalButton(
-                        text: controller.currentStep == 5 ? 'Submit' : 'Next',
+                        text: controller.currentStep == 4 ? 'Submit' : 'Next',
                         textStyle: AppTextStyles.bodyLargeBold.copyWith(
                           color: AppColors.whiteOff,
                         ),
@@ -246,12 +234,11 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
                           horizontal: AppSizes.mp_w_6,
                         ),
                         onPressed: () async {
-                          print(controller.currentStep);
-                          if (controller.currentStep == 5) {
+                          if (controller.currentStep == 4) {
                             checkdoc();
                           } else {
-                            if (controller.newPassportformKey.currentState!
-                                .saveAndValidate()) {
+                            if (controller.residentformKey.currentState!
+                                .validate()) {
                               setState(() {
                                 controller.currentStep++;
                               });
@@ -277,16 +264,9 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      controller.newPassportformKey.currentState!.saveAndValidate()
+      controller.residentformKey.currentState!.saveAndValidate()
           ? _showSummeryDiloag(context)
           : SizedBox();
-
-      // await controller.updateNewApplication();
-      // if (controller.isUpdateSuccess.value) {
-      //   setState(() {
-      //     controller.currentStep++;
-      //   });
-      // }
     }
   }
 
@@ -303,64 +283,31 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
   }
 
   void getDataForStep1() {
-    final visaApplication = widget.visaApplicationModel;
-    final firstName = visaApplication!.givenName!;
-    final fatherName = visaApplication.surname!;
-    final gender = visaApplication.gender;
-    final occupationId = visaApplication.occupationId;
-    final email = visaApplication.email;
-    final citizenshipId = visaApplication.birthCountryId;
-    controller.citizenship.value =
-        controller.natinality.firstWhere((e) => e.id == citizenshipId);
+    final residencyApplication = widget.residencyApplicationModel;
+    final firstName = residencyApplication!.firstName;
+    final fatherName = residencyApplication.fatherName;
+    final grandfathername = residencyApplication.grandFatherName;
+    final gender = residencyApplication.gender;
+    final occupationId = residencyApplication.occupation.id;
+    final email = residencyApplication.emailAddress;
+    final phone = residencyApplication.phoneNumber;
 
-    final birthplace = visaApplication.birthPlace!;
-
-    final birthCountryId = visaApplication.birthCountryId;
-    final nationalityId = visaApplication.nationalityId;
-
-    final dateOfBirth = visaApplication.birthDate!;
-
-    controller.givenNameController.text = firstName;
-    controller.surNameController.text = fatherName;
-    controller.emailAdress.text = email!;
+    controller.firstName.text = firstName;
+    controller.lastName.text = grandfathername;
+    controller.middleName.text = fatherName;
     controller.gendervalue.value =
         controller.gender.firstWhere((e) => e.name == gender);
 
-    controller.birthplace.text = birthplace;
-
-    controller.birthCountryvalue.value =
-        controller.bcountries.firstWhere((e) => e.id == birthCountryId);
-    controller.natinalityvalue.value =
-        controller.natinality.firstWhere((e) => e.id == nationalityId);
-
-    controller.dayController.text = dateOfBirth.day.toString();
-    controller.monthController.text = dateOfBirth.month.toString();
-    controller.yearController.text = dateOfBirth.year.toString();
-
+    controller.emailAdress.text = email;
     controller.occupationvalue.value =
         controller.occupations.firstWhere((e) => e.id == occupationId);
-  }
 
-  void getDataForStep2() {
-    final citizenModel = widget.visaApplicationModel;
-    final address = citizenModel!.streetAddress!;
-    var phoneNumber = citizenModel.phoneNumber!;
-    final addresscontry = citizenModel.abroadCountry!;
-
-    controller.adresscountryvalue.value =
-        controller.allwoedCountries.firstWhere((e) => e.id == addresscontry.id);
-
-    controller.addresscityController.text = address;
-    controller.streetaddressController.text = address;
-    controller.phonenumber.text = phoneNumber;
-
-    phoneNumber = phoneNumber.replaceAll(" ", ""); // Remove spaces
+    phone.replaceAll(" ", ""); // Remove spaces
     int digitsCount =
         10; // Number of digits in the phone number excluding country code
 
-    if (phoneNumber.length >= digitsCount) {
-      String extractedNumber =
-          phoneNumber.substring(phoneNumber.length - digitsCount);
+    if (phone.length >= digitsCount) {
+      String extractedNumber = phone.substring(phone.length - digitsCount);
       controller.phonenumber.text = extractedNumber;
     } else {
       // Handle the case where the phoneNumber length is less than digitsCount
@@ -368,62 +315,60 @@ class _StepperWithFormExampleState extends State<AllResidencyForm> {
     }
   }
 
+  void getDataForStep2() {
+    final residencyApplication = widget.residencyApplicationModel;
+    final citizenshipId = residencyApplication!.nationality.id;
+    final abrodCountry = residencyApplication.abroadCountry.id;
+    final localAddress = residencyApplication.localAddress;
+    final region = residencyApplication.region.id;
+    final woreda = residencyApplication.woreda;
+    final keble = residencyApplication.kebele;
+    controller.natinalityvalue.value =
+        controller.natinality.firstWhere((e) => e.id == citizenshipId);
+
+    controller.abrodcountryvalue.value =
+        controller.allwoedCountries.firstWhere((e) => e.id == abrodCountry);
+
+    controller.regionvalue.value =
+        controller.regsions.firstWhere((e) => e.id == region);
+    controller.localAddressController.text = localAddress;
+    if (woreda != null) {
+      controller.woredaContoller.text = woreda;
+    } else {
+      // Handle the case where woreda is null
+    }
+
+    if (keble != null) {
+      controller.kebeleContoller.text = keble;
+    } else {
+      // Handle the case where keble is null
+    }
+
+    // controller.regionvalue.value =
+    //     controller.region.firstWhere((e) => e.id == region);
+  }
+
   void getDataForStep3() {
-    final visaApplication = widget.visaApplicationModel;
-    final arrivaldDate = visaApplication!.arrivalDate!;
-    final departurecountry = visaApplication.departureCountry!;
-    final departurecity = visaApplication.city!;
-    final airline = visaApplication.airline!;
-    final flightnumber = visaApplication.flightNumber!;
+    final residencyApplication = widget.residencyApplicationModel;
 
-    controller.departurecountry.value = controller.allwoedCountries
-        .firstWhere((e) => e.id == departurecountry.id);
-    controller.arrivaldDateController.text = arrivaldDate.toString();
-    controller.arrivaldDateController.text = arrivaldDate.toString();
-    controller.departurecity.text = departurecity.toString();
-    controller.flight_Number.text = flightnumber.toString();
-    controller.airline.text = airline.toString();
-  }
+    final passpornumber = residencyApplication!.passportNumber;
+    final visanumber = residencyApplication.visaNumber;
+    final passporissueDate = residencyApplication.passportIssuedDate;
+    final passporexpiryDate = residencyApplication.passportExpiryDate;
+    final workVsa = residencyApplication.visaWorkpermitIssuedDate;
+    final visaRefernceNumber = residencyApplication.visaNumber;
 
-  void getDataForStep4() {
-    final visaApplication = widget.visaApplicationModel;
-    final accommodation = visaApplication!.accommodationTypeId;
-
-    controller.accommodationtypevalue.value =
-        controller.accommodationTypes.firstWhere((e) => e.id == accommodation);
-    final accommodationname = visaApplication.accommodationName!;
-    final accommodationcity = visaApplication.accommodationCity!;
-    final accommodationaddress = visaApplication.accommodationCity!;
-    final accommodationphone = visaApplication.accommodationTelephone!;
-
-    controller.accommodation_name.text = accommodationname.toString();
-    controller.accommodation_city.text = accommodationcity.toString();
-    controller.accommodation_street_address.text =
-        accommodationaddress.toString();
-
-    controller.accommodation_Telephone.text = accommodationphone.toString();
-  }
-
-  void getDataForStep5() {
-    final visaApplication = widget.visaApplicationModel;
-    final passporttype = visaApplication!.passportType;
-    final passpornumber = visaApplication.passportNumber!;
-    final passporissueDate = visaApplication.passportIssuedDate!;
-    final passporexpiryDate = visaApplication.passportExpiryDate!;
-    final passportissueAuthority = visaApplication.passportIssuingAuthority!;
-    final passportIssueCountry = visaApplication.passportIssuingCountryId!;
-    controller.passporttypevalue.value =
-        controller.passportTypes.firstWhere((e) => e.id == passporttype!.id);
     controller.passport_number.text = passpornumber.toString();
+    controller.visa_number.text = visanumber.toString();
+    controller.visa_Refernce_number.text = visaRefernceNumber.toString();
+
     controller.passportIssueDate.text = passporissueDate.toString();
     controller.passportexpiryDate.text = passporexpiryDate.toString();
-    controller.passportIssueCountry.value = controller.allwoedCountries
-        .firstWhere((e) => e.id == passportIssueCountry);
-    controller.passportIssueAuthority.text = passportissueAuthority.toString();
+    controller.workvisaIssueDate.text = workVsa.toString();
   }
 
   _showSummeryDiloag(BuildContext context) {
-    Get.to(PdfPageAllVisa(
+    Get.to(PdfPageAllResidency(
       context: context,
       controller: controller,
       onTap: () {

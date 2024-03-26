@@ -11,6 +11,7 @@ query MyQuery {
     phone_number
     created_at
     passport_expiry_date
+    gender
     passport_issued_date
     passport_number
     email_address
@@ -28,10 +29,7 @@ query MyQuery {
       id
       name
     }
-    country {
-      id
-      name
-    }
+ 
     embassy {
       id
       name
@@ -40,6 +38,10 @@ query MyQuery {
       name
     }
     region {
+      id
+      name
+    }
+    abroad_country {
       id
       name
     }

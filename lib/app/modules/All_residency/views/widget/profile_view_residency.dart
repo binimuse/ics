@@ -12,7 +12,7 @@ import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ics/app/modules/All_residency/controllers/all_residency_controller.dart';
 import 'package:ics/app/modules/All_residency/data/model/residency_appliaction_model.dart';
-import 'package:ics/app/modules/All_residency/views/widget/all_visa_form.dart';
+import 'package:ics/app/modules/All_residency/views/widget/all_residency_form.dart';
 import 'package:ics/app/modules/all_visa/data/model/ics_companies.dart';
 import 'package:ics/gen/assets.gen.dart';
 import 'package:sizer/sizer.dart';
@@ -23,6 +23,8 @@ class ProfileViewResidency extends GetView<AllResidencyController> {
   ProfileViewResidency({
     this.icsCompanies,
   });
+
+  final AllResidencyController controller = Get.find<AllResidencyController>();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
@@ -185,9 +187,9 @@ class ProfileViewResidency extends GetView<AllResidencyController> {
   ) {
     return GestureDetector(
       onTap: () {
-        // Get.to(() => AllVisaForm(
-        //       visaApplicationModel: citizen,
-        //     ));
+        Get.to(() => AllResidencyForm(
+              residencyApplicationModel: citizen,
+            ));
       },
       child: Container(
         height: 15.h,
@@ -262,7 +264,7 @@ class ProfileViewResidency extends GetView<AllResidencyController> {
                         width: 1.w,
                       ),
                       Text(
-                        citizen.country.name.toString(),
+                        citizen.abroadCountry.name.toString(),
                         style: AppTextStyles.bodySmallRegular.copyWith(
                           color: AppColors.grayDark,
                         ),
@@ -300,27 +302,27 @@ class ProfileViewResidency extends GetView<AllResidencyController> {
   }
 
   void clearforstep1() {
-    // controller.givenNameController.clear();
-    // controller.surNameController.clear();
-
-    // controller.birthplace.clear();
-    // controller.emailAdress.clear();
-
-    // controller.dayController.clear();
-    // controller.monthController.clear();
-    // controller.yearController.clear();
+    controller.firstName.clear();
+    controller.lastName.clear();
+    controller.middleName.clear();
+    controller.phonenumber.clear();
+    controller.emailAdress.clear();
   }
 
   void clearforstep2() {
-    // controller.streetaddressController.clear();
-    // controller.addresscityController.clear();
+    controller.localAddressController.clear();
+    controller.woredaContoller.clear();
+    controller.kebeleContoller.clear();
+
     // controller.phonenumber.clear();
   }
 
   void clearforstep3() {
-    // controller.arrivaldDateController.clear();
-    // controller.departurecity.clear();
-    // controller.airline.clear();
-    // controller.flight_Number.clear();
+    controller.passport_number.clear();
+    controller.visa_number.clear();
+    controller.visa_Refernce_number.clear();
+    controller.passportIssueDate.clear();
+    controller.passportexpiryDate.clear();
+    controller.workvisaIssueDate.clear();
   }
 }

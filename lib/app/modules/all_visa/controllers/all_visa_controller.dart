@@ -149,7 +149,7 @@ class ALLVisaController extends GetxController
   //tab
   late TabController tabController;
 
-  final newPassportformKey = GlobalKey<FormBuilderState>();
+  final visaformKey = GlobalKey<FormBuilderState>();
   RxList<File> selectedImages = <File>[].obs;
   final phoneFocusNode = FocusNode();
   var isPhoneValid = false.obs;

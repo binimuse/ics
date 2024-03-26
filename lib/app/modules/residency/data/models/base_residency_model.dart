@@ -1,19 +1,23 @@
 class BaseResidencyTypeModel {
+  String? id;
   String? name;
   DocumentCategory? documentCategory;
 
   BaseResidencyTypeModel({
-     this.name,
-     this.documentCategory,
+    this.id,
+    this.name,
+    this.documentCategory,
   });
 
   factory BaseResidencyTypeModel.fromJson(Map<String, dynamic> json) =>
       BaseResidencyTypeModel(
+        id: json["id"],
         name: json["name"],
         documentCategory: DocumentCategory.fromJson(json["document_category"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "document_category": documentCategory!.toJson(),
       };

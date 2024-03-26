@@ -13,6 +13,7 @@ import 'package:ics/app/config/theme/app_sizes.dart';
 
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/data/enums.dart';
+import 'package:ics/app/modules/All_residency/controllers/all_residency_controller.dart';
 
 import 'package:ics/app/modules/residency/controllers/residency_controller.dart';
 
@@ -62,7 +63,6 @@ class ResidencyView extends GetView<ResidencyController> {
     );
   }
 
-
   Widget buildAdditionalCard() {
     return GestureDetector(
       onTap: () {
@@ -73,7 +73,7 @@ class ResidencyView extends GetView<ResidencyController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Selelct Residency type',
+            Text('Select  Residency type',
                 style: AppTextStyles.bodySmallRegular.copyWith(
                   color: AppColors.grayDark,
                 )),
@@ -89,6 +89,11 @@ class ResidencyView extends GetView<ResidencyController> {
                       onTap: () {
                         Get.toNamed(Routes.ALL_RESIDENCY,
                             arguments: {"ResidencyType": type});
+
+                        AllResidencyController allResidencyController =
+                            Get.put(AllResidencyController());
+                        final doccode = type.documentCategory!.code;
+                        allResidencyController.getDoctype(doccode);
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(vertical: 8.0),

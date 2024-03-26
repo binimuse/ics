@@ -154,7 +154,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
             child: Padding(
               padding: EdgeInsets.all(16.0),
               child: FormBuilder(
-                key: controller.newPassportformKey,
+                key: controller.visaformKey,
                 autovalidateMode: AutovalidateMode.disabled,
                 skipDisabled: true,
                 canPop: true,
@@ -250,7 +250,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
                           if (controller.currentStep == 5) {
                             checkdoc();
                           } else {
-                            if (controller.newPassportformKey.currentState!
+                            if (controller.visaformKey.currentState!
                                 .saveAndValidate()) {
                               setState(() {
                                 controller.currentStep++;
@@ -277,7 +277,7 @@ class _StepperWithFormExampleState extends State<AllVisaForm> {
       AppToasts.showError("Document must not be empty");
       return;
     } else {
-      controller.newPassportformKey.currentState!.saveAndValidate()
+      controller.visaformKey.currentState!.saveAndValidate()
           ? _showSummeryDiloag(context)
           : SizedBox();
 
