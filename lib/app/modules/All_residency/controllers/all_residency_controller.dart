@@ -66,6 +66,8 @@ class AllResidencyController extends GetxController {
   //setp 4
   final Rxn<CommonModel> embassiesvalue = Rxn<CommonModel>();
   final Rxn<CommonModel> countryvalue = Rxn<CommonModel>();
+  final Rxn<BaseResidencyApplicationUrgencyLevel> urgencylevelvalue =
+      Rxn<BaseResidencyApplicationUrgencyLevel>();
   final Rxn<CommonModel> currentcountryvalue = Rxn<CommonModel>();
   var isAgreedToTerms = false.obs;
   final residentformKey = GlobalKey<FormBuilderState>();
@@ -147,6 +149,7 @@ class AllResidencyController extends GetxController {
   List<CommonModel> accommodationTypes = [];
   List<CommonModel> bcountries = [];
   List<CommonModel> regsions = [];
+  List<BaseResidencyApplicationUrgencyLevel> urgencyLevel = [];
 
   List<AllowedContreyModel> allwoedCountries = [];
   void mapBaseDataToLists() {
@@ -160,6 +163,8 @@ class AllResidencyController extends GetxController {
     natinality = baseResidencyModel.value!.baseCountries!;
     allwoedCountries = baseResidencyModel.value!.baseAllowedCountries!;
     regsions = baseResidencyModel.value!.baseRegions!;
+    urgencyLevel =
+        baseResidencyModel.value!.baseResidencyApplicationUrgencyLevels;
   }
 
   GetallQueryInvestemntResidency getallQueryInvestemntResidency =
@@ -374,6 +379,7 @@ class AllResidencyController extends GetxController {
         'visa_workpermit_issued_date': workvisaIssueDate.text,
         'embassy_id': embassiesvalue.value!.id,
         'visa_reference_no': companyreference.text,
+        'residency_application_urgency_level_id': urgencylevelvalue.value!.id,
         'residency_application_documents': {
           "data": docList.map((e) => e.toJson()).toList()
         },

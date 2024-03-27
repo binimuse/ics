@@ -8,6 +8,7 @@ import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
 import 'package:ics/app/modules/All_residency/controllers/all_residency_controller.dart';
+import 'package:ics/app/modules/All_residency/data/model/all_base_residency_model.dart';
 import 'package:ics/app/modules/All_residency/data/model/residency_appliaction_model.dart';
 
 import 'package:ics/app/modules/new_passport/data/model/basemodel.dart';
@@ -116,6 +117,46 @@ class _Step3State extends State<Step4_Residency> {
                 validator: FormBuilderValidators.required(),
               )
             : SizedBox()),
+        SizedBox(
+          height: 2.h,
+        ),
+        FormBuilderDropdown(
+          decoration: ReusableInputDecoration.getDecoration('Urgency Level',
+              isMandatory: true),
+          validator: FormBuilderValidators.required(),
+          items: controller.urgencyLevel
+              .map((BaseResidencyApplicationUrgencyLevel value) {
+            return DropdownMenuItem<BaseResidencyApplicationUrgencyLevel>(
+              value: value,
+              child: Text(
+                value.name,
+                style: AppTextStyles.captionBold
+                    .copyWith(color: AppColors.grayDark),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            controller.urgencylevelvalue.value = value;
+          },
+          name: 'Urgency Level',
+          initialValue: widget.citizenModel != null
+              ? controller.urgencylevelvalue.value
+              : null,
+        ),
+        SizedBox(
+          height: 2.h,
+        ),
+        Obx(
+          () => Center(
+            child: Text(
+              "Residency Fee \$${(controller.urgencylevelvalue.value?.price ?? "")}",
+              style: AppTextStyles.bodySmallRegular.copyWith(
+                color: AppColors.secondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
         SizedBox(
           height: 2.h,
         ),

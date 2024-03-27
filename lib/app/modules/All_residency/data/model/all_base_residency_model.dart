@@ -9,6 +9,8 @@ class BaseResidencyModel {
   List<CommonModel>? basePassportTypes;
   List<CommonModel>? baseRegions;
   List<CommonModel>? baseOccupations;
+  List<BaseResidencyApplicationUrgencyLevel>
+      baseResidencyApplicationUrgencyLevels;
 
   BaseResidencyModel({
     this.baseGenders,
@@ -19,6 +21,7 @@ class BaseResidencyModel {
     this.basePassportTypes,
     this.baseRegions,
     this.baseOccupations,
+    required this.baseResidencyApplicationUrgencyLevels,
   });
 
   factory BaseResidencyModel.fromMap(Map<String, dynamic> json) =>
@@ -52,6 +55,10 @@ class BaseResidencyModel {
             ? []
             : List<CommonModel>.from(
                 json["base_occupations"]!.map((x) => CommonModel.fromJson(x))),
+        baseResidencyApplicationUrgencyLevels:
+            List<BaseResidencyApplicationUrgencyLevel>.from(
+                json["base_residency_application_urgency_levels"].map(
+                    (x) => BaseResidencyApplicationUrgencyLevel.fromJson(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -79,6 +86,8 @@ class BaseResidencyModel {
         "base_occupations": baseOccupations == null
             ? []
             : List<dynamic>.from(baseOccupations!.map((x) => x.toString())),
+        "base_residency_application_urgency_levels": List<dynamic>.from(
+            baseResidencyApplicationUrgencyLevels.map((x) => x.toJson())),
       };
 }
 
@@ -96,4 +105,34 @@ class BaseDocAllVisa {
           .toList(),
     );
   }
+}
+
+class BaseResidencyApplicationUrgencyLevel {
+  String code;
+  String name;
+  String id;
+  int price;
+
+  BaseResidencyApplicationUrgencyLevel({
+    required this.code,
+    required this.name,
+    required this.id,
+    required this.price,
+  });
+
+  factory BaseResidencyApplicationUrgencyLevel.fromJson(
+          Map<String, dynamic> json) =>
+      BaseResidencyApplicationUrgencyLevel(
+        code: json["code"],
+        name: json["name"],
+        id: json["id"],
+        price: json["price"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "name": name,
+        "id": id,
+        "price": price,
+      };
 }
