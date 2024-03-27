@@ -37,6 +37,12 @@ class GetallQueryResidency {
     id
     name
   }
+  base_residency_application_urgency_levels {
+    code
+    id
+    name
+    price
+  }
 }
 
 
