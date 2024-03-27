@@ -268,6 +268,15 @@ class NewPassportController extends GetxController
 
   final Rxn<GetUrlModel> getUrlModel = Rxn<GetUrlModel>();
 
+  void addtoDocumants(CommonModel pas) {
+    print(documents.length);
+    base_document_types.add(pas);
+  }
+
+  void removeFromDocumants(CommonModel pas) {
+    base_document_types.removeWhere((element) => element.id == pas.id);
+  }
+
   var isGetDocUrlStarted = false.obs;
 
   var isSend = false.obs;

@@ -10,13 +10,11 @@ import 'package:get/get.dart';
 import 'package:ics/app/common/app_toasts.dart';
 import 'package:ics/app/common/button/custom_normal_button.dart';
 import 'package:ics/app/common/customappbar.dart';
-import 'package:ics/app/common/dialogs/upload_dilaog.dart';
 import 'package:ics/app/common/dialogs/upload_dilaog_file.dart';
 import 'package:ics/app/common/fileupload/common_file_uploder.dart';
 import 'package:ics/app/common/forms/reusableDropdown.dart';
 import 'package:ics/app/common/forms/text_input_with_builder.dart';
 import 'package:ics/app/common/loading/custom_loading_widget.dart';
-import 'package:ics/app/config/theme/app_assets.dart';
 import 'package:ics/app/config/theme/app_colors.dart';
 import 'package:ics/app/config/theme/app_sizes.dart';
 import 'package:ics/app/config/theme/app_text_styles.dart';
@@ -168,11 +166,11 @@ class _ComplainInquiryScreenState extends State<ComplainInquiryScreen> {
                           ),
                           buildDropDown(),
                           SizedBox(
-                            height: 1.h,
+                            height: 2.h,
                           ),
                           buildDropDowncountry(),
                           SizedBox(
-                            height: 1.h,
+                            height: 2.h,
                           ),
                           Obx(() => controller.isfechedEmbassies.value
                               ? FormBuilderDropdown(

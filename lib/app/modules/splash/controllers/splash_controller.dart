@@ -14,7 +14,7 @@ class SplashController extends GetxController {
 
   @override
   void onInit() {
-    waitAndNavigate();
+    checkifSignedin();
 
     super.onInit();
   }

@@ -347,6 +347,17 @@ class Step1 extends StatelessWidget {
                   activeColor: AppColors.primary,
                   onChanged: (value) {
                     controller.isAdoption.value = value!;
+
+                    if (controller.isAdoption.value) {
+                      controller
+                          .addtoDocumants(CommonModel(name: "Ado", id: ""));
+
+                      controller.mapBaseDataToLists();
+                    } else {
+                      controller.mapBaseDataToLists();
+                      controller.removeFromDocumants(
+                          CommonModel(name: "Ado", id: ""));
+                    }
                   },
                 )
               : SizedBox())
