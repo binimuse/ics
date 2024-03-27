@@ -10,6 +10,7 @@ import 'package:ics/app/data/enums.dart';
 import 'package:ics/app/modules/my_order/views/widget/view_widget/complaint_widget.dart';
 import 'package:ics/app/modules/my_order/views/widget/view_widget/orgin_widget.dart';
 import 'package:ics/app/modules/my_order/views/widget/view_widget/passport_widget.dart';
+import 'package:ics/app/modules/my_order/views/widget/view_widget/residency_widget.dart';
 import 'package:ics/app/modules/my_order/views/widget/view_widget/visa_widget.dart';
 import 'package:sizer/sizer.dart';
 import '../../../common/loading/custom_loading_widget.dart';
@@ -50,6 +51,8 @@ class _MyOrderViewState extends State<MyOrderView> {
         routeName: () async {
           controller.getVisaApplication();
           controller.getOrginOrder();
+          controller.getComplaint();
+          controller.getResidencyApplication();
         },
         showLeading: false,
       ),
@@ -164,7 +167,18 @@ class _MyOrderViewState extends State<MyOrderView> {
               ),
             ),
 
-            Container(height: 100.h, child: SizedBox()),
+            Container(
+              height: 100.h,
+              child: ListView.builder(
+                itemCount: controller.residencyModel.length,
+                itemBuilder: (context, index) {
+                  return ResidencyWidget(
+                    icsApplication: controller.residencyModel[index],
+                    controller: controller,
+                  );
+                },
+              ),
+            ),
             Container(
               height: 100.h,
               child: ListView.builder(

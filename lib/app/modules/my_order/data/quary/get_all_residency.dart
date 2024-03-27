@@ -1,8 +1,8 @@
-class GetAllresidencyplication {
+class GetResidencyQuery {
   dynamic fetchData() {
     return """
 query MyQuery {
-  ics_residency_applications(order_by: {created_at: desc}, limit: 3) {
+  ics_residency_applications(order_by: {created_at: desc}) {
     id
     phone_number
     created_at
@@ -44,6 +44,7 @@ query MyQuery {
     residency_application_documents {
       files
       document_status
+      rejecter_note
       created_at
       document_type {
         name
@@ -65,7 +66,21 @@ query MyQuery {
 
 
 
+   """;
+  }
+}
 
+class GetallQueryInvestemntResidency {
+  dynamic fetchData(String type) {
+    return """
+{
+  base_document_types(where: {document_category: {code: {_eq: "$type"}}}) {
+    id
+    name
+    description
+  }
+
+}
    """;
   }
 }

@@ -4,13 +4,16 @@ import 'package:ics/app/common/app_toasts.dart';
 
 import 'package:ics/app/common/data/graphql_common_api.dart';
 import 'package:ics/app/data/enums.dart';
+
 import 'package:ics/app/modules/my_order/data/model/doc_type_model.dart';
 import 'package:ics/app/modules/my_order/data/model/grouped_application.dart';
 import 'package:ics/app/modules/my_order/data/model/ics_complaint_model.dart';
 import 'package:ics/app/modules/my_order/data/model/ics_visa_application.dart';
 
 import 'package:ics/app/modules/my_order/data/model/order_model_all_appllication.dart';
+import 'package:ics/app/modules/my_order/data/model/residency_appliaction_model.dart';
 import 'package:ics/app/modules/my_order/data/mutation/update_rating.dart';
+import 'package:ics/app/modules/my_order/data/quary/get_all_residency.dart';
 import 'package:ics/app/modules/my_order/data/quary/ics_complaint.dart';
 
 import 'package:ics/app/modules/my_order/data/quary/ics_new_passport_order.dart';
@@ -42,6 +45,7 @@ class MyOrderController extends GetxController
 
     getVisaApplication();
     getComplaint();
+    getResidencyApplication();
     // getDoc();
     tabController = TabController(length: 5, vsync: this);
     tabControllerorgin = TabController(length: 3, vsync: this);
@@ -105,6 +109,34 @@ class MyOrderController extends GetxController
             (result['ics_service_complaints'] as List)
                 .map((e) => IcsServiceComplaintModel.fromJson(e))
                 .toList();
+
+        networkStatus.value = NetworkStatus.SUCCESS;
+
+        isfechedorder.value = true;
+      }
+    } catch (e, s) {
+      networkStatus.value = NetworkStatus.ERROR;
+      isfechedorder.value = false;
+
+      print(">>>>>>>>>>>>>>>>>> $e");
+
+      print(">>>>>>>>>>>>>>>>>> $s");
+    }
+  }
+
+  RxList<ResidencyModel> residencyModel = List<ResidencyModel>.of([]).obs;
+  GetResidencyQuery getResidencyQuery = GetResidencyQuery();
+  getResidencyApplication() async {
+    networkStatus.value = NetworkStatus.LOADING;
+    try {
+      dynamic result =
+          await graphQLCommonApi.query(getResidencyQuery.fetchData(), {});
+
+      if (result != null) {
+        residencyModel.clear();
+        residencyModel.value = (result['ics_residency_applications'] as List)
+            .map((e) => ResidencyModel.fromJson(e))
+            .toList();
 
         networkStatus.value = NetworkStatus.SUCCESS;
 
@@ -195,6 +227,36 @@ class MyOrderController extends GetxController
             );
 
             groupedAppliaction.add(newGroup);
+          }
+        });
+      }
+    });
+  }
+
+  RxList<GroupedAppliactionResidency> groupedAppliactionResidency =
+      List<GroupedAppliactionResidency>.of([]).obs;
+
+  groupDocumnatsForResidency(String applicationid) {
+    groupedAppliactionResidency.clear();
+
+    residencyModel.forEach((element) {
+      if (element.id == applicationid) {
+        element.residencyApplicationDocuments.forEach((element) {
+          final docTypeID = element.documentType.id;
+          int existingIndex = groupedAppliactionResidency
+              .indexWhere((group) => group.documentType.id == docTypeID);
+
+          if (existingIndex != -1) {
+            // If an existing OrderGroup is found, add the order to its list of orders
+            groupedAppliactionResidency[existingIndex].document.add(element);
+          } else {
+            // If no existing OrderGroup is found, create a new OrderGroup and add it to the list
+            GroupedAppliactionResidency newGroup = GroupedAppliactionResidency(
+              documentType: element.documentType,
+              document: [element],
+            );
+
+            groupedAppliactionResidency.add(newGroup);
           }
         });
       }
